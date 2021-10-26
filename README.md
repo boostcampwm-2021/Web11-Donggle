@@ -2,7 +2,7 @@
 - [🗺 프로젝트 소개](#-프로젝트-소개)
 - [🏗 프로젝트 구조](#-프로젝트-구조)
 - [🛠 기술 스택](#-기술-스택)
-- [💂‍♀️ 프로젝트 멤버](#-프로젝트-멤버)
+- [🗿 프로젝트 멤버](#-프로젝트-멤버)
 - [📚 위키](#-위키)
 
 # 🗺 프로젝트 소개
@@ -20,7 +20,7 @@
 # 🛠 기술 스택
 - 뱃지로 달기
 
-# 💂‍♀️ 프로젝트 멤버
+# 🗿 프로젝트 멤버
 |[<img src="https://avatars.githubusercontent.com/u/55529617?v=4" width="100px">](https://github.com/ChipmunkForLove)|[<img src="https://github.com/mhsong95.png" width="100px">](https://github.com/gidskql6671)|[<img src="https://github.com/isanghaessi.png" width="100px">](https://github.com/isanghaessi)|[<img src="https://github.com/hongjw1938.png" width="100px">](https://github.com/hongjw1938)|
 |:---:|:---:|:---:|:---:|
 |[J077 문혜현](https://github.com/ChipmunkForLove) | [J107_송명회](https://github.com/gidskql6671) | [J218 홍승용](https://github.com/K-moovie) | [J219 홍종우](https://github.com/hongjw1938)
