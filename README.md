@@ -23,7 +23,7 @@
 # 🗿 프로젝트 멤버
 |[<img src="https://avatars.githubusercontent.com/u/55529617?v=4" width="100px">](https://github.com/ChipmunkForLove)|[<img src="https://github.com/mhsong95.png" width="100px">](https://github.com/gidskql6671)|[<img src="https://github.com/isanghaessi.png" width="100px">](https://github.com/isanghaessi)|[<img src="https://github.com/hongjw1938.png" width="100px">](https://github.com/hongjw1938)|
 |:---:|:---:|:---:|:---:|
-|[J077 문혜현](https://github.com/ChipmunkForLove) | [J107_송명회](https://github.com/gidskql6671) | [J218 홍승용](https://github.com/K-moovie) | [J219 홍종우](https://github.com/hongjw1938)
+|[J077 문혜현](https://github.com/ChipmunkForLove) | [J107_송명회](https://github.com/mhsong95) | [J218 홍승용](https://github.com/isanghaessi) | [J219 홍종우](https://github.com/hongjw1938)
 
 # 📚 위키
 <h2>🤝 규칙</h2>
@@ -32,7 +32,7 @@
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/그라운드-룰">그라운드 룰</a></li>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/git-전략">git 전략</a></li>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/네이밍-룰">네이밍 룰</a></li>
-  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/React-코드-포맥">React 코드 포맷</a></li>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/React-코드-포맷">React 코드 포맷</a></li>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/ESLint&Prettier">ESLint&Prettier</a></li>
 </ul>
 <h2>📝 명세서</h2>
