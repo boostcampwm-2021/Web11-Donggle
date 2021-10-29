@@ -17,8 +17,10 @@
 # 🏗 프로젝트 구조
 - 내용 : Front/Backend 폴더 구조(+설명), 추후 추가
 
+# 기술적인 도전
+
 # 🛠 기술 스택
-  - FE    
+  - FE
     ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)    
     ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)    
     ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)    
@@ -48,13 +50,15 @@
       - https
     ```
 
+# 기술적 도전
+
 # 🗿 프로젝트 멤버
 |[<img src="https://avatars.githubusercontent.com/u/55529617?v=4" width="100px">](https://github.com/ChipmunkForLove)|[<img src="https://github.com/mhsong95.png" width="100px">](https://github.com/gidskql6671)|[<img src="https://github.com/isanghaessi.png" width="100px">](https://github.com/isanghaessi)|[<img src="https://github.com/hongjw1938.png" width="100px">](https://github.com/hongjw1938)|
 |:---:|:---:|:---:|:---:|
 |[J077 문혜현](https://github.com/ChipmunkForLove) | [J107_송명회](https://github.com/mhsong95) | [J218 홍승용](https://github.com/isanghaessi) | [J219 홍종우](https://github.com/hongjw1938)
 
 # 📚 위키
-<h2>🤝 규칙</h2>
+## 🤝 규칙
 <ul>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/팀-목표">팀 목표</a></li>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/그라운드-룰">그라운드 룰</a></li>
@@ -63,19 +67,31 @@
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/React-코드-포맷">React 코드 포맷</a></li>
   <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/ESLint&Prettier">ESLint&Prettier</a></li>
 </ul>
-<h2>📝 명세서</h2>
+
+## 📝 명세서
 <ul>
+  <li><a href="https://www.figma.com/file/Jnu0QBCLdbRJ94G5jhzl8F/%EB%8F%99%EB%84%A4%ED%9B%84%EA%B8%B0?node-id=0%3A1">디자인 명세서</a></li>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/ERD">ERD</a></li>
 </ul>
-<h2>🗂 백로그</h2>
+
+## 🗂 백로그
 <ul>
+  <li><a href="https://docs.google.com/spreadsheets/d/1dt-VD4Iwxucy0ygJFUK-5dqbiBJOHNPNBY00G2yfRPo/edit#gid=0">백로그 스프레드 시트</a></li>
 </ul>
-<h2>🙋‍♂️ 회의록</h2>
+
+## 🙋‍♂️ 회의록
 <ul>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/1주차 회의록">1주차 회의록</a></li>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/2주차 회의록">2주차 회의록</a></li>
 </ul>
-<h2>👯‍♀️ 스크럼</h2>
+
+## 👯‍♀️ 스크럼
 <ul>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/데일리 스크럼">1주차 스크럼</a></li>
+  <li><a href="https://github.com/boostcampwm-2021/WEB11/wiki/2주차 스크럼">2주차 스크럼</a></li>
 </ul>
-<h2>✍️ 학습 자료</h2>
+
+## ✍️ 학습 자료
 <ul>
 </ul>
 </ul>
