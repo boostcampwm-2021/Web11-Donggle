@@ -26,6 +26,7 @@ const colors: ThemeComponent = {
   black: '#000080',
   lightgrey: '#C4C4C4',
   yellow: '#F5C244',
+  white: '#FFFFFF',
 };
 
 const common: ThemeComponent = {
