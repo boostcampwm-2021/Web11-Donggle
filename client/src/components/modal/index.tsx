@@ -5,7 +5,7 @@ import closeButton from '@assets/closeButton.png';
 
 // "상위 컴포넌트에서는 클릭하면 무조건 추가한다"로 로직을 구성
 // recoil에서 전역ㅇ로 관리하는 것도 생각해 볼 수 있으려나..
-function Modal(): JSX.Element {
+const Modal: React.FC = ({ children }) => {
   const [isActive, setIsActive] = useState(true);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -51,11 +51,12 @@ function Modal(): JSX.Element {
         <ModalOverlay>
           <ModalWrapper ref={modalRef}>
             <img src={closeButton} alt="모달창닫기" onClick={onClick}></img>
+            {children}
           </ModalWrapper>
         </ModalOverlay>
       )}
     </>
   );
-}
+};
 
 export default Modal;
