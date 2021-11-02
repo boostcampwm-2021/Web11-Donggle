@@ -20,16 +20,14 @@ export const ModalWrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-60%, -50%);
-  display: flex;
-  flex-direction: column;
+  ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
-  align-items: center;
 
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(51, 51, 51, 0.1),
     0px 0px 4px rgba(51, 51, 51, 0.05);
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.white};
 
   z-index: 100;
 `;
