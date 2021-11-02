@@ -4,7 +4,6 @@ import { NotFoundPage, MainPage } from '@pages/index';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/globalStyle';
 
-<<<<<<< HEAD
 const App: React.FC = () => {
   return (
     <>
@@ -20,16 +19,5 @@ const App: React.FC = () => {
     </>
   );
 };
-=======
-import Modal from '@components/modal/index';
-
-function App() {
-  return (
-    <div className="App">
-      <Modal></Modal>
-    </div>
-  );
-}
->>>>>>> b91f94b (Feat: #2 - 모달창 레이아웃 만들기)
 
 export default App;
