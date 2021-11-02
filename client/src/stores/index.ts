@@ -1,3 +1,3 @@
-import GlobalStore from '@stores/GlobalStore';
+import GlobalStore from '@stores/globalStore';
 
 export { GlobalStore };
