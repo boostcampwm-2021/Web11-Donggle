@@ -5,6 +5,8 @@ import { useRecoilState } from 'recoil';
 import { tempState } from '@stores/atoms';
 import { TempCounter } from '@components/index';
 
+import Modal from '@components/modal/index';
+
 const TempMainPage = styled.div`
   width: 100vh;
   height: 100vh;
@@ -25,6 +27,7 @@ const MainPage: React.FC = (props: RouteComponentProps) => {
     <TempMainPage>
       {temp}
       <TempCounter />
+      <Modal></Modal>
     </TempMainPage>
   );
 };
