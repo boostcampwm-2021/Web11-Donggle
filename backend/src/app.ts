@@ -11,7 +11,6 @@ function startServer() {
 
   http
     .listen(config.port, () => {
-      //Logger.info(`
       console.log(`
     ################################################
     🛡️  Server listening on port: ${config.port} 🛡️
@@ -19,7 +18,6 @@ function startServer() {
     `);
     })
     .on('error', (err) => {
-      // Logger.error(err);
       console.error(err);
       process.exit(1);
     });

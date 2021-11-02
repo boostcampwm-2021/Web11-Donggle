@@ -1,3 +1,4 @@
 import expressLoader from './expressLoader';
+import loggerLoader from './loggerLoader';
 
-export { expressLoader };
+export { expressLoader, loggerLoader };
