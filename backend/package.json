@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "./src/app.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development && nodemon -r tsconfig-paths/register ./src/app.ts",
+    "prod": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist && cross-env NODE_ENV=production && pm2 start ./dist/app.js",
+    "reload": "pm2 reload ./dist/app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "pm2": "^5.1.2",
+    "tsconfig-paths": "^3.11.0",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.11.6",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.4.0",
+    "tscpaths": "^0.0.9",
+    "typescript": "^4.4.4"
+  }
+}
