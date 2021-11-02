@@ -1,13 +1,13 @@
 import express from 'express';
 import _http from 'http';
 
-import loaders from '@loaders/index';
+import { expressLoader } from '@loaders/index';
 import config from '@config/index';
 
 async function startServer() {
   const app = express();
 	const http = _http.createServer(app);
-	await loaders({ expressApp: app, http });
+	expressLoader({ app });
 
 	http.listen(config.port, () => {
 		//Logger.info(`
