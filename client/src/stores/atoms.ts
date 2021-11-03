@@ -10,4 +10,9 @@ const tempState = atom({
   default: 1, // default value (aka initial value)
 });
 
-export { tempState };
+const authState = atom({
+  key: 'authentication',
+  default: false,
+});
+
+export { tempState, authState };
