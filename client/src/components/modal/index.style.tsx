@@ -19,7 +19,7 @@ export const ModalWrapper = styled.div`
   height: auto;
   top: 50%;
   left: 50%;
-  transform: translate(-60%, -50%);
+  transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
 
