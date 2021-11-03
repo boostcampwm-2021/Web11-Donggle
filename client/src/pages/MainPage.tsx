@@ -7,6 +7,7 @@ import { TempCounter } from '@components/index';
 
 import Header from '@components/Header';
 import Modal from '@components/modal/index';
+import Map from '@components/Map/index';
 
 const TempMainPage = styled.div`
   width: 100vw;
@@ -26,7 +27,7 @@ const MainPage: React.FC = (props: RouteComponentProps) => {
   return (
     <TempMainPage>
       <Header></Header>
-      <Modal></Modal>
+      <Map></Map>
     </TempMainPage>
   );
 };
