@@ -5,12 +5,12 @@ import { useRecoilState } from 'recoil';
 import { tempState } from '@stores/atoms';
 import { TempCounter } from '@components/index';
 
+import Header from '@components/Header';
 import Modal from '@components/modal/index';
 
 const TempMainPage = styled.div`
-  width: 100vh;
+  width: 100vw;
   height: 100vh;
-  background: green;
 `;
 
 /*
@@ -25,8 +25,7 @@ const MainPage: React.FC = (props: RouteComponentProps) => {
 
   return (
     <TempMainPage>
-      {temp}
-      <TempCounter />
+      <Header></Header>
       <Modal></Modal>
     </TempMainPage>
   );
