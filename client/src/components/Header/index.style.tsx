@@ -77,6 +77,7 @@ const LogoutBtn = styled.button`
   height: 40px;
   text-align: center;
   cursor: pointer;
+  margin-right: 10px;
 `;
 
 const UserProfile = styled.button`

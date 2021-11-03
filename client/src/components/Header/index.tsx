@@ -1,4 +1,6 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
+import { authState } from '@stores/atoms';
 import logo from '@assets/images/logo.png';
 import {
   Layout,
@@ -16,6 +18,8 @@ import {
 } from './index.style';
 
 const Header: React.FC = ({}) => {
+  const [isAuth, setIsAuth] = useRecoilState(authState);
+
   return (
     <>
       <Layout>
@@ -39,7 +43,14 @@ const Header: React.FC = ({}) => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            <LoginBtn>로그인</LoginBtn>
+            {isAuth ? (
+              <>
+                <LogoutBtn>로그아웃</LogoutBtn>
+                <UserProfile>프로필</UserProfile>
+              </>
+            ) : (
+              <LoginBtn>로그인</LoginBtn>
+            )}
           </ProfileWrapper>
         </Background>
       </Layout>
