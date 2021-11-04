@@ -105,10 +105,9 @@ async function recursiveGetCoords(code: string, accessToken: string) {
   }
   const collection: CollectionType = await getDistrictCoord(code, accessToken);
 
-  const regions = Array<Map>();
+  // const regions = Array<Map>();
 
   for (const feature of collection.features) {
-    console.log(feature.properties.adm_nm);
     const [lat, lng] = transCoord([
       Number(feature.properties.x),
       Number(feature.properties.y),
@@ -129,28 +128,26 @@ async function recursiveGetCoords(code: string, accessToken: string) {
       code: feature.properties.adm_cd,
       name: feature.properties.adm_nm,
       center: [lat, lng],
-      children: Array<Map>(),
+      // children: Array<Map>(),
     };
+
+    MapModel.create(regionData).catch((err) => {
+      logger.error(err);
+    });
 
     const coordsData = await recursiveGetCoords(
       feature.properties.adm_cd,
       accessToken,
     );
-    if (coordsData !== null) regionData.children.push(...coordsData);
-    regions.push(regionData);
+
+    // if (coordsData !== null) regionData.children.push(...coordsData);
+    // regions.push(regionData);
   }
 
-  return regions;
+  // return regions;
 }
 
 async function populateMap() {
-  const accessToken = await getAuthToken();
-  const regionList = await recursiveGetCoords('', accessToken);
-  fs.writeFileSync(
-    path.resolve() + '/test.json',
-    JSON.stringify(regionList, null, 2),
-  );
-
   await MapModel.collection
     .drop()
     .then((result) => {
@@ -160,13 +157,21 @@ async function populateMap() {
       logger.error('Error! : ', err);
     });
 
-  void MapModel.insertMany(regionList as Map[], {})
-    .then((result) => {
-      logger.info('result ', result);
-    })
-    .catch((err) => {
-      logger.error('error ', err);
-    });
+  const accessToken = await getAuthToken();
+  recursiveGetCoords('', accessToken);
+  // const regionList = await recursiveGetCoords('', accessToken);
+  // fs.writeFileSync(
+  //   path.resolve() + '/test.json',
+  //   JSON.stringify(regionList, null, 2),
+  // );
+
+  // void MapModel.insertMany(regionList as Map[], {})
+  //   .then((result) => {
+  //     logger.info('result ', result);
+  //   })
+  //   .catch((err) => {
+  //     logger.error('error ', err);
+  //   });
 }
 
 export default populateMap;
