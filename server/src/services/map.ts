@@ -1,4 +1,4 @@
-import { MapModel } from '@models/Map';
+import { Map, MapModel } from '@models/Map';
 
 interface RegionCode {
   big: string;
@@ -18,7 +18,7 @@ const parseCode = (code: string): RegionCode => {
 };
 
 const queryPolygon = async (scale: number, regionCode: RegionCode) => {
-  let result: any;
+  let result: Map[] = [];
 
   switch (true) {
     case scale < 6:

@@ -158,7 +158,7 @@ async function populateMap() {
     });
 
   const accessToken = await getAuthToken();
-  recursiveGetCoords('', accessToken);
+  await recursiveGetCoords('', accessToken);
   // const regionList = await recursiveGetCoords('', accessToken);
   // fs.writeFileSync(
   //   path.resolve() + '/test.json',
