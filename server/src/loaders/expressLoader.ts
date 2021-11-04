@@ -3,6 +3,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { logger } from '@loaders/index';
+import cors from 'cors';
 
 import api from '@api/index';
 import admin from '@api/admin';
@@ -20,6 +21,12 @@ export default ({ app }: { app: Application }) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+  const allowedOrigins = [`${process.env.REACT_URL as string}`];
+  const options: cors.CorsOptions = {
+    origin: allowedOrigins,
+  };
+
+  app.use(cors(options));
   app.use(express.static(path.join(__dirname, 'public')));
 
   app.use('/api', api);

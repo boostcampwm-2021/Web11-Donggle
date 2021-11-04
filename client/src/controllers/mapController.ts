@@ -46,20 +46,27 @@ function coordToRegionCode(wtmX: number, wtmY: number) {
       coord.getLng(),
       coord.getLat(),
       function (result, status) {
+        console.log(result);
         if (status === kakao.maps.services.Status.OK)
-          resolve({ result: result[0].code, status });
-        else reject({ result: NaN, status });
+          resolve({
+            result: [
+              result[1].region_1depth_name,
+              result[1].region_2depth_name,
+              result[1].region_3depth_name,
+            ],
+            status,
+          });
+        else reject({ result: null, status });
       },
     );
   });
 }
 
 // backend에 polygon 정보 요청
-async function requestCoord(scale: number, regionCode: string) {
+async function requestCoord(scale: number, region: Array<string>) {
   return await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/api/map/polygon?scale=${scale}&regionCode=${regionCode}`,
+    `http://localhost:3001/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   ).then(async function (response) {
-    console.log(await response.json());
     return response.json();
   });
 }

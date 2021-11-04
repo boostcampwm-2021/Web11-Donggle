@@ -1,43 +1,39 @@
-import { MapModel } from '@models/Map';
+import { Map, MapModel } from '@models/Map';
 
-interface RegionCode {
+interface RegionName {
   big: string;
   medium: string;
   small: string;
 }
 
-const parseCode = (code: string): RegionCode => {
-  const big = code.slice(0, 2);
-  const medium = code.slice(0, 5);
-  const small = code.slice(0, 7);
-  return {
-    big,
-    medium,
-    small,
-  };
-};
-
-const queryPolygon = async (scale: number, regionCode: RegionCode) => {
-  let result: any;
+const queryPolygon = async (
+  scale: number,
+  big: string,
+  medium: string,
+  small: string,
+) => {
+  let result: Map[] = [];
 
   switch (true) {
     case scale < 6:
       result = await MapModel.find({
-        code: { $regex: new RegExp(`^${regionCode.medium}..$`) },
+        name: { $regex: new RegExp(`^${big} ${medium}`) },
+        code: { $regex: /^.......$/ },
       });
       break;
     case 6 <= scale && scale < 8:
       result = await MapModel.find({
-        code: { $regex: new RegExp(`^${regionCode.big}...$`) },
+        name: { $regex: new RegExp(`^${big}`) },
+        code: { $regex: /^.....$/ },
       });
       break;
     case 9 <= scale:
       result = await MapModel.find({
-        code: { $regex: new RegExp(`^..$`) },
+        code: { $regex: /^..$/ },
       });
       break;
   }
   return result;
 };
 
-export { parseCode, queryPolygon };
+export { queryPolygon };
