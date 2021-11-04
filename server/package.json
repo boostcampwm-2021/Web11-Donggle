@@ -8,18 +8,22 @@
     "node": "16.x"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && nodemon -r tsconfig-paths/register ./src/app.ts",
+    "dev": "cross-env NODE_ENV=development && nodemon --ignore test.json -r tsconfig-paths/register ./src/app.ts",
     "prod": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist && cross-env NODE_ENV=production && pm2 start ./dist/app.js -i 0",
     "reload": "pm2 reload ./dist/app.js"
   },
   "dependencies": {
+    "@types/proj4": "^2.5.2",
+    "axios": "^0.24.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongoose": "^6.0.12",
     "morgan": "^1.10.0",
     "pm2": "^5.1.2",
+    "proj4": "^2.7.5",
     "tsconfig-paths": "^3.11.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
@@ -27,6 +31,7 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.3.0",

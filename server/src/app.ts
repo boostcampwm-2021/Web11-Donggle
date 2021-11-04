@@ -1,26 +1,33 @@
 import express from 'express';
 import _http from 'http';
 
-import { expressLoader } from '@loaders/index';
+import { expressLoader, logger, dbLoader } from '@loaders/index';
 import config from '@config/index';
 
-function startServer() {
+const startServer = async () => {
   const app = express();
   const http = _http.createServer(app);
   expressLoader({ app });
 
   http
     .listen(config.port, () => {
-      console.log(`
+      logger.info(`
     ################################################
     🛡️  Server listening on port: ${config.port} 🛡️
     ################################################
     `);
     })
     .on('error', (err) => {
-      console.error(err);
+      logger.error(err);
       process.exit(1);
     });
-}
 
-startServer();
+  try {
+    const db = await dbLoader();
+    app.set('db', db);
+  } catch (e) {
+    logger.error(e);
+  }
+};
+
+void startServer();
