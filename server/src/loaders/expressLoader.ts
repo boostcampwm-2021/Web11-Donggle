@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { logger } from '@loaders/index';
 
 import api from '@api/index';
+import admin from '@api/admin';
 
 const stream = {
   write: (message) => {
@@ -22,6 +23,7 @@ export default ({ app }: { app: Application }) => {
   app.use(express.static(path.join(__dirname, 'public')));
 
   app.use('/api', api);
+  app.use('/admin', admin);
 
   // 404 에러 처리
   app.use((req: Request, res: Response, next: NextFunction) => {

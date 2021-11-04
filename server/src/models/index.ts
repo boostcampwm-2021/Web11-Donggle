@@ -1,3 +1,3 @@
-import mongoose from 'mongoose';
+import MapModel from './Map';
 
-mongoose;
+export { MapModel };
