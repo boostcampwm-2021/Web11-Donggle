@@ -8,7 +8,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development && nodemon -r tsconfig-paths/register ./src/app.ts",
+    "dev": "cross-env NODE_ENV=development && nodemon --ignore test.json -r tsconfig-paths/register ./src/app.ts",
     "prod": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist && cross-env NODE_ENV=production && pm2 start ./dist/app.js -i 0",
     "reload": "pm2 reload ./dist/app.js"
   },

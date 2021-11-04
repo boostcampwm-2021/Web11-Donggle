@@ -1,16 +1,22 @@
 import { Document, Schema, model } from 'mongoose';
 
-interface Map extends Document {
+type CoordType = [number, number];
+
+interface Map {
   name: string;
-  path: Array<[number, number]>;
-  center: [number, number];
-  children?: Map[];
+  path: CoordType[] | CoordType[][];
+  code: string;
+  center: CoordType;
+  type: 'Polygon' | 'MultiPolygon';
+  children: Map[];
 }
 
 const mapSchema = new Schema<Map>({
   name: { type: String, required: true },
-  path: { type: [[Number, Number]], required: true },
+  path: { type: [], required: true },
+  code: { type: String, required: true },
   center: { type: [Number, Number], required: true },
+  type: { type: String },
 });
 mapSchema.add({
   children: [mapSchema],
@@ -18,4 +24,4 @@ mapSchema.add({
 
 const MapModel = model<Map>('Map', mapSchema);
 
-export default MapModel;
+export { Map, MapModel };

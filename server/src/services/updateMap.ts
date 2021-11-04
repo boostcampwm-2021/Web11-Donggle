@@ -1,5 +1,5 @@
 import logger from '@loaders/loggerLoader';
-import { MapModel } from '@models/index';
+import { Map, MapModel } from '@models/Map';
 import axios from 'axios';
 import fs from 'fs';
 import proj4 from 'proj4';
@@ -33,15 +33,6 @@ interface CollectionType {
   errCd: number;
   trId: string;
   features: FeatureType[];
-}
-
-interface RegionType {
-  name: string;
-  path: CoordType[] | CoordType[][];
-  code: string;
-  center: CoordType;
-  type: 'Polygon' | 'MultiPolygon';
-  children: RegionType[];
 }
 
 interface ChangedCoords {
@@ -114,7 +105,7 @@ async function recursiveGetCoords(code: string, accessToken: string) {
   }
   const collection: CollectionType = await getDistrictCoord(code, accessToken);
 
-  const regions = Array<RegionType>();
+  const regions = Array<Map>();
 
   for (const feature of collection.features) {
     console.log(feature.properties.adm_nm);
@@ -132,13 +123,13 @@ async function recursiveGetCoords(code: string, accessToken: string) {
       );
     }
 
-    const regionData: RegionType = {
+    const regionData: Map = {
       type: feature.geometry.type,
       path,
       code: feature.properties.adm_cd,
       name: feature.properties.adm_nm,
       center: [lat, lng],
-      children: Array<RegionType>(),
+      children: Array<Map>(),
     };
 
     const coordsData = await recursiveGetCoords(
@@ -152,13 +143,30 @@ async function recursiveGetCoords(code: string, accessToken: string) {
   return regions;
 }
 
-async function testRecursive() {
+async function populateMap() {
   const accessToken = await getAuthToken();
   const regionList = await recursiveGetCoords('', accessToken);
   fs.writeFileSync(
     path.resolve() + '/test.json',
     JSON.stringify(regionList, null, 2),
   );
+
+  await MapModel.collection
+    .drop()
+    .then((result) => {
+      logger.info('Dropped maps collection');
+    })
+    .catch((err) => {
+      logger.error('Error! : ', err);
+    });
+
+  void MapModel.insertMany(regionList as Map[], {})
+    .then((result) => {
+      logger.info('result ', result);
+    })
+    .catch((err) => {
+      logger.error('error ', err);
+    });
 }
 
-export default testRecursive;
+export default populateMap;
