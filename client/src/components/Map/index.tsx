@@ -77,16 +77,16 @@ const Map: React.FC = () => {
     let polygonInstances = Array<kakao.maps.Polygon>();
     const managePolygon = async () => {
       // 중심 좌표의 주소 가져오기
-      const regionCode: { result: string; status: string } =
+      const region: { result: Array<string>; status: string } =
         (await coordToRegionCode(latitude, longitude)) as {
-          result: string;
+          result: Array<string>;
           status: string;
         };
 
-      if (regionCode.status !== 'OK') return;
-      console.log(regionCode);
+      if (region.status !== 'OK') return;
+      console.log(region);
       // 백엔드 요청
-      const regions = await requestCoord(scale, regionCode.result);
+      const regions = await requestCoord(scale, region.result);
       // 폴리곤 그리기
       polygonInstances = drawPolygon(map, regions);
     };
