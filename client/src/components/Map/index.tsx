@@ -85,54 +85,18 @@ const Map: React.FC = () => {
         };
 
       if (region.status !== 'OK') return;
-      console.log(region);
       // 백엔드 요청
       const regions = await requestCoord(scale, region.result);
       // 폴리곤 그리기
       polygonInstances = drawPolygon(map, regions);
     };
 
-    managePolygon().then(() => console.log('Polygon이 그려졌습니다.'));
+    managePolygon();
 
     return () => {
       deletePolygon(polygonInstances);
     };
   }, [map, scale, latitude, longitude]);
-
-  // useEffect(() => {
-  //   if (!map) return;
-
-  //   // (async () => {
-  //   //   // const originCoords = await transCoord();
-
-  //   //   const convertGeoJson = (origin) =>
-  //   //     origin.map((region) => ({
-  //   //       name: region.name,
-  //   //       path: region.path.map(
-  //   //         (coord: [number, number]) => new kakao.maps.LatLng(...coord),
-  //   //       ),
-  //   //     }));
-
-  //   //   const displayArea = (area) => {
-  //   //     console.log('ArEA!!', area);
-
-  //   //     return new kakao.maps.Polygon({
-  //   //       map: map,
-  //   //       path: area.path,
-  //   //       strokeWeight: 2,
-  //   //       strokeColor: '#004c80',
-  //   //       strokeOpacity: 0.8,
-  //   //       fillColor: '#fff',
-  //   //       fillOpacity: 0.7,
-  //   //     });
-  //   //   };
-
-  //   //   const convertedAreas = await convertGeoJson(originCoords);
-  //   //   console.log(convertedAreas);
-  //   //   convertedAreas.forEach(displayArea);
-  //   // })();
-  // }, [map]);
-
   return <MapWrapper ref={mapWrapper} />;
 };
 

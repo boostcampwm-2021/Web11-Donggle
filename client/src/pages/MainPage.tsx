@@ -22,8 +22,6 @@ const TempMainPage = styled.div`
 const MainPage: React.FC = (props: RouteComponentProps) => {
   const [temp, setTemp] = useRecoilState(tempState);
 
-  console.log(props.history);
-
   return (
     <TempMainPage>
       <Header></Header>

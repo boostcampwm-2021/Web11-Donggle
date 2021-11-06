@@ -46,7 +46,6 @@ const coordToRegionCode = (wtmX: number, wtmY: number) => {
       coord.getLng(),
       coord.getLat(),
       function (result, status) {
-        console.log(result);
         if (status === kakao.maps.services.Status.OK)
           resolve({
             result: [
@@ -68,7 +67,6 @@ const requestCoord = async (scale: number, region: Array<string>) => {
     `http://${process.env.REACT_APP_SERVER_HOST}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
     .then(async function (response) {
-      console.log(response);
       return await response.json();
     })
     .catch((err) => {
