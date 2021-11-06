@@ -74,8 +74,11 @@ const requestCoord = async (scale: number, region: Array<string>) => {
     });
 };
 
-const drawPolygon = (map, regions) => {
-  const polygonInstances: Array<kakao.maps.Polygon> = [];
+const drawPolygon = (map, regions, polygonInstances) => {
+  if (polygonInstances !== null) {
+    deletePolygon(polygonInstances);
+  }
+  polygonInstances = Array<kakao.maps.Polygon>();
   regions.forEach((region) => {
     let polygon;
     if (region.type === 'Polygon') polygon = makeSinglePolygon(region.path);

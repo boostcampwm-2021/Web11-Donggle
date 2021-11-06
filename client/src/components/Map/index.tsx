@@ -10,16 +10,7 @@ import {
 
 import React, { useRef, useEffect, useState } from 'react';
 
-// 처음 접속할 때, 가져와야 함
-// 드래그 앤 드랍할 때, 축척 변경할 때, 가져와야 함
-
-interface latlng {
-  latitude: number;
-  longitude: number;
-}
-
 const DEFAULT_SCALE = 7;
-const polygonInstances: Array<kakao.maps.Polygon> = [];
 
 const Map: React.FC = () => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
@@ -28,6 +19,7 @@ const Map: React.FC = () => {
     latitude: 33.450701,
     longitude: 126.570667,
   });
+  const polygonInstances = useRef<Array<kakao.maps.Polygon> | null>(null);
   const [scale, setScale] = useState(DEFAULT_SCALE);
 
   useEffect(() => {
@@ -75,7 +67,7 @@ const Map: React.FC = () => {
 
   useEffect(() => {
     if (!map) return;
-    let polygonInstances = Array<kakao.maps.Polygon>();
+
     const managePolygon = async () => {
       // 중심 좌표의 주소 가져오기
       const region: { result: Array<string>; status: string } =
@@ -88,13 +80,19 @@ const Map: React.FC = () => {
       // 백엔드 요청
       const regions = await requestCoord(scale, region.result);
       // 폴리곤 그리기
-      polygonInstances = drawPolygon(map, regions);
+      polygonInstances.current = drawPolygon(
+        map,
+        regions,
+        polygonInstances.current,
+      );
     };
 
     managePolygon();
 
     return () => {
-      deletePolygon(polygonInstances);
+      if (polygonInstances.current !== null) {
+        deletePolygon(polygonInstances.current);
+      }
     };
   }, [map, scale, latitude, longitude]);
   return <MapWrapper ref={mapWrapper} />;
