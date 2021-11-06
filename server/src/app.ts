@@ -1,13 +1,19 @@
-import express from 'express';
-import _http from 'http';
-
 import { expressLoader, logger, dbLoader } from '@loaders/index';
 import config from '@config/index';
+
+import express from 'express';
+import _http from 'http';
 
 const startServer = async () => {
   const app = express();
   const http = _http.createServer(app);
   expressLoader({ app });
+
+  try {
+    await dbLoader();
+  } catch (e) {
+    logger.error(e);
+  }
 
   http
     .listen(config.port, () => {
@@ -21,13 +27,6 @@ const startServer = async () => {
       logger.error(err);
       process.exit(1);
     });
-
-  try {
-    const db = await dbLoader();
-    app.set('db', db);
-  } catch (e) {
-    logger.error(e);
-  }
 };
 
 void startServer();

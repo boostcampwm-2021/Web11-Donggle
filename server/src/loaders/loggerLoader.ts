@@ -1,6 +1,7 @@
 import path from 'path';
 import { format, createLogger, transports } from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
+
 const { combine, timestamp, printf, colorize } = format;
 
 const logDir: string = path.join(path.resolve(), '/logs'); // logs 디렉토리 하위에 로그 파일 저장

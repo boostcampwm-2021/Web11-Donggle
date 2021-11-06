@@ -1,11 +1,5 @@
 import { Map, MapModel } from '@models/Map';
 
-interface RegionName {
-  big: string;
-  medium: string;
-  small: string;
-}
-
 const queryPolygon = async (
   scale: number,
   big: string,

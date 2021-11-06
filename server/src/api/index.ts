@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
-
 import map from '@api/map';
+
+import express, { Request, Response } from 'express';
 
 const router: express.Router = express.Router();
 
