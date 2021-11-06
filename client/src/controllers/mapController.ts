@@ -65,10 +65,15 @@ const coordToRegionCode = (wtmX: number, wtmY: number) => {
 // backend에 polygon 정보 요청
 const requestCoord = async (scale: number, region: Array<string>) => {
   return await fetch(
-    `http://localhost:3001/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
-  ).then(async function (response) {
-    return response.json();
-  });
+    `http://${process.env.REACT_APP_SERVER_HOST}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
+  )
+    .then(async function (response) {
+      console.log(response);
+      return await response.json();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 const drawPolygon = (map, regions) => {
