@@ -30,4 +30,4 @@ const queryPolygon = async (
   return result;
 };
 
-export { queryPolygon };
+export default { queryPolygon };

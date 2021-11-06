@@ -1,6 +1,6 @@
 import { logger } from '@loaders/index';
-import api from '@api/index';
-import admin from '@api/admin';
+import apiController from '@api/indexController';
+import adminController from '@api/adminController';
 
 import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
@@ -29,8 +29,8 @@ export default ({ app }: { app: Application }) => {
   app.use(cors(options));
   app.use(express.static(path.join(__dirname, 'public')));
 
-  app.use('/api', api);
-  app.use('/admin', admin);
+  app.use('/api', apiController);
+  app.use('/admin', adminController);
 
   // 404 에러 처리
   app.use((req: Request, res: Response, next: NextFunction) => {

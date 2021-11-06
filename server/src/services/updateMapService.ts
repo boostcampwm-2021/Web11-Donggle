@@ -1,10 +1,9 @@
 import logger from '@loaders/loggerLoader';
+
 import { Map, MapModel } from '@models/Map';
 
 import axios from 'axios';
-import fs from 'fs';
 import proj4 from 'proj4';
-import path from 'path';
 
 type CoordType = [number, number];
 
@@ -141,4 +140,4 @@ const populateMap = async () => {
   await recursiveGetCoords('', accessToken);
 };
 
-export default populateMap;
+export default { populateMap };
