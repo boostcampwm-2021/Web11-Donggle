@@ -1,3 +1,8 @@
+import Modal from '@components/modal';
+import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
+import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
+import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
+
 import React from 'react';
 import {
   ColumnFlex,
@@ -5,10 +10,6 @@ import {
   StretchingDiv,
   CenteredSpan,
 } from './index.style';
-import Modal from '@components/modal';
-import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
-import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
-import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
 
 type LoginButtonProps = {
   IconComponent: React.FC;

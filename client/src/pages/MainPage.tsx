@@ -1,13 +1,13 @@
+import Header from '@components/Header';
+import Modal from '@components/modal/index';
+import Map from '@components/Map/index';
+
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { tempState } from '@stores/atoms';
 import { TempCounter } from '@components/index';
-
-import Header from '@components/Header';
-import Modal from '@components/modal/index';
-import Map from '@components/Map/index';
 
 const TempMainPage = styled.div`
   width: 100vw;

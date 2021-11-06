@@ -1,5 +1,3 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
 import { authState } from '@stores/atoms';
 import logo from '@assets/images/logo.png';
 import {
@@ -16,6 +14,9 @@ import {
   UserProfile,
   ColorBar,
 } from './index.style';
+
+import React from 'react';
+import { useRecoilState } from 'recoil';
 
 const Header: React.FC = ({}) => {
   const [isAuth, setIsAuth] = useRecoilState(authState);

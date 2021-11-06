@@ -1,4 +1,3 @@
-import React, { useRef, useEffect, useState } from 'react';
 import MapWrapper from '@components/Map/index.style';
 import {
   getCurrentLocation,
@@ -8,6 +7,8 @@ import {
   drawPolygon,
   deletePolygon,
 } from '@controllers/mapController';
+
+import React, { useRef, useEffect, useState } from 'react';
 
 // 처음 접속할 때, 가져와야 함
 // 드래그 앤 드랍할 때, 축척 변경할 때, 가져와야 함
