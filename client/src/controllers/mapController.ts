@@ -87,10 +87,8 @@ const drawPolygon = (map, regions, polygonInstances) => {
     } else {
       const polygons = makeMultiPolygon(region.path);
       polygons.forEach((polygon) => {
-        if (polygon) {
-          polygon.setMap(map);
-          polygonInstances.push(polygon);
-        }
+        polygon.setMap(map);
+        polygonInstances.push(polygon);
       });
     }
   });
@@ -104,7 +102,7 @@ const makeSinglePolygon = (coords: [number, number][]) => {
   );
 
   return new kakao.maps.Polygon({
-    path: coordObjects.length === 2 ? [...coordObjects] : coordObjects,
+    path: coordObjects.length > 1 ? [...coordObjects] : coordObjects,
     strokeWeight: 2,
     strokeColor: '#004c80',
     strokeOpacity: 0.8,
@@ -121,16 +119,15 @@ const makeMultiPolygon = (coordsArray: [number, number][][][]) => {
   );
 
   return coordObjectsArray.map((coordObjects) => {
-    if (coordObjects.length < 3) {
-      return new kakao.maps.Polygon({
-        path: coordObjects.length === 2 ? [...coordObjects] : coordObjects,
-        strokeWeight: 2,
-        strokeColor: '#004c80',
-        strokeOpacity: 0.8,
-        fillColor: '#fff',
-        fillOpacity: 0.7,
-      });
-    }
+    console.log(coordObjects);
+    return new kakao.maps.Polygon({
+      path: coordObjects.length > 1 ? [...coordObjects] : coordObjects,
+      strokeWeight: 2,
+      strokeColor: '#004c80',
+      strokeOpacity: 0.8,
+      fillColor: '#fff',
+      fillOpacity: 0.7,
+    });
   });
 };
 
