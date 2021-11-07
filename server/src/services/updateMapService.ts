@@ -1,5 +1,4 @@
 import logger from '@loaders/loggerLoader';
-
 import { Map, MapModel } from '@models/Map';
 
 import axios from 'axios';
@@ -85,8 +84,10 @@ const transPolygon = (path: CoordType[]) => {
   return path.map((coord) => transCoord(coord));
 };
 
-const transMultiPolygon = (path: CoordType[][]) => {
-  return path.map((coords) => coords.map((coord) => transCoord(coord)));
+const transMultiPolygon = (path: CoordType[][][]) => {
+  return path.map((coords) =>
+    coords.map((coord) => coord.map((c) => transCoord(c))),
+  );
 };
 
 const recursiveGetCoords = async (code: string, accessToken: string) => {
@@ -101,13 +102,11 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       Number(feature.properties.y),
     ]);
 
-    let path: CoordType[] | CoordType[][];
+    let path: CoordType[] | CoordType[][][];
     if (feature.geometry.type === 'Polygon') {
       path = transPolygon(feature.geometry.coordinates[0] as CoordType[]);
     } else {
-      path = transMultiPolygon(
-        feature.geometry.coordinates[0] as CoordType[][],
-      );
+      path = transMultiPolygon(feature.geometry.coordinates as CoordType[][][]);
     }
 
     const regionData: Map = {
@@ -121,6 +120,7 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
     MapModel.create(regionData).catch((err) => {
       logger.error(err);
     });
+    logger.info(`insert -> ${regionData.name}`);
 
     void recursiveGetCoords(feature.properties.adm_cd, accessToken);
   }

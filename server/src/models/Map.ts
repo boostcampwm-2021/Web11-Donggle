@@ -4,7 +4,7 @@ type CoordType = [number, number];
 
 interface Map {
   name: string;
-  path: CoordType[] | CoordType[][];
+  path: CoordType[] | CoordType[][][];
   code: string;
   center: CoordType;
   type: 'Polygon' | 'MultiPolygon';
