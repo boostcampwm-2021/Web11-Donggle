@@ -27,11 +27,17 @@ const DEFAULT_POSITION = {
 const Map: React.FC = () => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
+<<<<<<< HEAD
 
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [range, setRange] = useState({
     region: Array<string>(),
     scale: DEFAULT_POSITION.scale,
+=======
+  const [latLng, setLatlng] = useState({
+    latitude: 33.450701,
+    longitude: 126.570667,
+>>>>>>> Fix: #36 - latitude, longitude 상태 합침
   });
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
@@ -96,12 +102,32 @@ const Map: React.FC = () => {
     updateRange();
   }, [position]);
 
+<<<<<<< HEAD
   useEffect(() => {
     const { scale, region } = range;
     const updatePolygons = async () => {
       const regions = await requestCoord(scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
+=======
+    const managePolygon = async () => {
+      // 중심 좌표의 주소 가져오기
+      const region: { result: Array<string>; status: string } =
+        (await coordToRegionCode(latLng.latitude, latLng.longitude)) as {
+          result: Array<string>;
+          status: string;
+        };
+
+      if (region.status !== 'OK') return;
+      // 백엔드 요청
+      const regions = await requestCoord(scale, region.result);
+      // 폴리곤 그리기
+      polygonInstances.current = drawPolygon(
+        map,
+        regions,
+        polygonInstances.current,
+      );
+>>>>>>> Fix: #36 - latitude, longitude 상태 합침
     };
     updatePolygons();
   }, [range]);
@@ -120,6 +146,7 @@ const Map: React.FC = () => {
       const markers = createMarkers(markerInfos);
       setMarkers(markers);
     };
+<<<<<<< HEAD
     updateMarkers();
   }, [range]);
 
@@ -129,6 +156,9 @@ const Map: React.FC = () => {
     displayMarkers(markers, map);
     return () => deleteMarkers(markers);
   }, [map, markers]);
+=======
+  }, [map, scale, latLng]);
+>>>>>>> Fix: #36 - latitude, longitude 상태 합침
 
   return <MapWrapper ref={mapWrapper} />;
 };
