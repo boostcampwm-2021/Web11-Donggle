@@ -3,10 +3,16 @@ import {
   getCurrentLocation,
   requestCoord,
   coordToRegionCode,
+<<<<<<< HEAD
   isRangeEqual,
   createPolygons,
   displayPolygons,
   deletePolygons,
+=======
+  drawPolygon,
+  deletePolygon,
+  LFURegions,
+>>>>>>> Feat: #36 - 폴리곤 LFU 캐싱
 } from '@controllers/mapController';
 
 import {
@@ -24,7 +30,7 @@ const DEFAULT_POSITION = {
   scale: 9,
 };
 
-const Map: React.FC = () => {
+const MapComponent: React.FC = () => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 <<<<<<< HEAD
@@ -39,9 +45,15 @@ const Map: React.FC = () => {
     longitude: 126.570667,
 >>>>>>> Fix: #36 - latitude, longitude 상태 합침
   });
+<<<<<<< HEAD
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
   const [polygons, setPolygons] = useState(Array<kakao.maps.Polygon>());
+=======
+  const polygonInstances = useRef<Array<kakao.maps.Polygon> | null>(null);
+  const [scale, setScale] = useState(DEFAULT_SCALE);
+  const cache = useRef(new Map());
+>>>>>>> Feat: #36 - 폴리곤 LFU 캐싱
 
   useEffect(() => {
     if (!mapWrapper.current) {
@@ -120,7 +132,7 @@ const Map: React.FC = () => {
 
       if (region.status !== 'OK') return;
       // 백엔드 요청
-      const regions = await requestCoord(scale, region.result);
+      const regions = await LFURegions(cache.current, scale, region.result);
       // 폴리곤 그리기
       polygonInstances.current = drawPolygon(
         map,
@@ -163,4 +175,4 @@ const Map: React.FC = () => {
   return <MapWrapper ref={mapWrapper} />;
 };
 
-export default Map;
+export default MapComponent;
