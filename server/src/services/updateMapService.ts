@@ -82,12 +82,16 @@ function transCoord(coord: CoordType): CoordType {
 }
 
 const transPolygon = (path: CoordType[]) => {
-  return path.map((coord) => transCoord(coord));
+  return path
+    .filter((coord, idx) => idx % 3 === 0)
+    .map((coord) => transCoord(coord));
 };
 
 const transMultiPolygon = (path: CoordType[][][]) => {
   return path.map((coords) =>
-    coords.map((coord) => coord.map((c) => transCoord(c))),
+    coords
+      .filter((coord, idx) => idx % 3 === 0)
+      .map((coord) => coord.map((c) => transCoord(c))),
   );
 };
 
