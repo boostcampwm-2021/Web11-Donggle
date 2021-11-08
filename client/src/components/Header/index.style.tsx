@@ -1,5 +1,22 @@
 import styled from 'styled-components';
 
+const LinkBtn = styled.button.attrs((props) => ({
+  className: props.className,
+}))`
+  border: none;
+  box-sizing: content-box;
+  width: 85px;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: normal;
+
+  &.link-selected {
+    color: #33ab74;
+    font-weight: 700;
+    text-decoration: solid underline #33ab74 2px;
+  }
+`;
+
 const Layout = styled.div`
   position: relative;
   top: 0;
@@ -96,6 +113,7 @@ const ColorBar = styled.div`
 `;
 
 export {
+  LinkBtn,
   Layout,
   Background,
   LogoMenuContainer,
