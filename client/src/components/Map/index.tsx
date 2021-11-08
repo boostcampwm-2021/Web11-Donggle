@@ -10,7 +10,7 @@ import {
 
 import React, { useRef, useEffect, useState } from 'react';
 
-const DEFAULT_SCALE = 7;
+const DEFAULT_SCALE = 9;
 
 const Map: React.FC = () => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);

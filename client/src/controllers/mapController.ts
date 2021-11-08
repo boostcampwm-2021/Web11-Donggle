@@ -80,12 +80,17 @@ const drawPolygon = (map, regions, polygonInstances) => {
   }
   polygonInstances = Array<kakao.maps.Polygon>();
   regions.forEach((region) => {
-    let polygon;
-    if (region.type === 'Polygon') polygon = makeSinglePolygon(region.path);
-    else polygon = makeMultiPolygon(region.path);
-
-    polygon.setMap(map);
-    polygonInstances.push(polygon);
+    if (region.type === 'Polygon') {
+      const polygon = makeSinglePolygon(region.path);
+      polygon.setMap(map);
+      polygonInstances.push(polygon);
+    } else {
+      const polygons = makeMultiPolygon(region.path);
+      polygons.forEach((polygon) => {
+        polygon.setMap(map);
+        polygonInstances.push(polygon);
+      });
+    }
   });
 
   return polygonInstances;
@@ -97,7 +102,7 @@ const makeSinglePolygon = (coords: [number, number][]) => {
   );
 
   return new kakao.maps.Polygon({
-    path: coordObjects,
+    path: coordObjects.length > 1 ? [...coordObjects] : coordObjects,
     strokeWeight: 2,
     strokeColor: '#004c80',
     strokeOpacity: 0.8,
@@ -106,20 +111,23 @@ const makeSinglePolygon = (coords: [number, number][]) => {
   });
 };
 
-const makeMultiPolygon = (coordsArray: [number, number][][]) => {
-  const coordObjects = coordsArray.map((coords: [number, number][]) => {
-    return coords.map((coord: [number, number]) => {
-      return new kakao.maps.LatLng(...coord);
-    });
-  });
+const makeMultiPolygon = (coordsArray: [number, number][][][]) => {
+  const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
+    coords.map((coord: [number, number][]) =>
+      coord.map((c: [number, number]) => new kakao.maps.LatLng(...c)),
+    ),
+  );
 
-  return new kakao.maps.Polygon({
-    path: coordObjects,
-    strokeWeight: 2,
-    strokeColor: '#004c80',
-    strokeOpacity: 0.8,
-    fillColor: '#fff',
-    fillOpacity: 0.7,
+  return coordObjectsArray.map((coordObjects) => {
+    console.log(coordObjects);
+    return new kakao.maps.Polygon({
+      path: coordObjects.length > 1 ? [...coordObjects] : coordObjects,
+      strokeWeight: 2,
+      strokeColor: '#004c80',
+      strokeOpacity: 0.8,
+      fillColor: '#fff',
+      fillOpacity: 0.7,
+    });
   });
 };
 
