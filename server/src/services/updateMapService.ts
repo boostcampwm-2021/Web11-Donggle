@@ -1,4 +1,5 @@
 import logger from '@loaders/loggerLoader';
+
 import { Map, MapModel } from '@models/Map';
 
 import axios from 'axios';
