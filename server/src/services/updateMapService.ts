@@ -1,11 +1,16 @@
 import logger from '@loaders/loggerLoader';
-
 import { Map, MapModel } from '@models/Map';
 
 import axios from 'axios';
 import proj4 from 'proj4';
+import simplify from 'simplify-js';
 
 type CoordType = [number, number];
+
+interface Point {
+  x: number;
+  y: number;
+}
 
 interface FeatureType {
   type: string;
@@ -82,17 +87,18 @@ function transCoord(coord: CoordType): CoordType {
 }
 
 const transPolygon = (path: CoordType[]) => {
-  return path
-    .filter((coord, idx) => idx % 3 === 0)
-    .map((coord) => transCoord(coord));
+  const simplifiedPath: Point[] = simplify(
+    path.map((coord) => ({ x: coord[0], y: coord[1] } as Point)),
+    5,
+    true,
+  );
+  return simplifiedPath.map((coord) =>
+    transCoord(Object.values(coord) as CoordType),
+  );
 };
 
 const transMultiPolygon = (path: CoordType[][][]) => {
-  return path.map((coords) =>
-    coords
-      .filter((coord, idx) => idx % 3 === 0)
-      .map((coord) => coord.map((c) => transCoord(c))),
-  );
+  return path.map((coords) => coords.map((coord) => transPolygon(coord)));
 };
 
 const recursiveGetCoords = async (code: string, accessToken: string) => {
