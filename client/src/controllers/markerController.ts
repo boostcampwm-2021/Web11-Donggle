@@ -1,3 +1,5 @@
+import { $marker, $largeMarker } from '@utils/marker';
+
 type MarkerInfo = {
   address: string;
   center: [number, number];
@@ -11,7 +13,7 @@ type MarkerInfo = {
 
 // test
 const random = (from: number, to: number) => {
-  return Math.random() * (to - from) + from;
+  return Number((Math.random() * (to - from) + from).toFixed(2));
 };
 
 const getRandomLatLng = () => {
@@ -20,11 +22,6 @@ const getRandomLatLng = () => {
 
 const getRandomRate = () => {
   return random(0, 5);
-};
-
-const average = (...values: number[]) => {
-  const sum = values.reduce((a, b) => a + b, 0);
-  return (sum / values.length || 0).toFixed(2);
 };
 
 // TODO: fetch 요청
@@ -53,25 +50,33 @@ const createMarkers = (
 ): kakao.maps.CustomOverlay[] => {
   return markerInfos.map((markerInfo) => {
     const { center } = markerInfo;
-    const content = markerTemplate(markerInfo);
-    return new kakao.maps.CustomOverlay({
-      content: content,
+    const marker = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(...center),
     });
+
+    const defaultMarker = markerDefault(markerInfo);
+    const largeMarker = markerMouseOver(markerInfo);
+
+    defaultMarker.addEventListener('mouseover', () => {
+      console.log(markerInfo.center);
+      marker.setContent(largeMarker);
+    });
+    largeMarker.addEventListener('mouseout', () =>
+      marker.setContent(defaultMarker),
+    );
+    marker.setContent(defaultMarker);
+    return marker;
   });
 };
 
-const markerTemplate = (markerInfo: MarkerInfo) => {
+const markerDefault = (markerInfo: MarkerInfo) => {
+  const { rates } = markerInfo;
+  return $marker(rates);
+};
+
+const markerMouseOver = (markerInfo: MarkerInfo) => {
   const { address, rates } = markerInfo;
-  const averageRate = average(
-    ...Object.keys(rates).map((category) => rates[category]),
-  );
-  return `
-    <div style="background-color: rgb(0, 0, 0, 0.6)">
-      <span>${address}</span>
-      <span>${averageRate}</span>
-    </div>
-  `;
+  return $largeMarker(address, rates);
 };
 
 const displayMarkers = (
