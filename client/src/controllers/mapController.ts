@@ -20,7 +20,7 @@ function getCurrentLocation(callback: (coord: [number, number]) => void) {
 }
 
 // 좌표 값에 해당하는 구 주소와 도로명 주소 정보 요청
-function coordToAddress(wtmX: number, wtmY: number) {
+const coordToAddress = (wtmX: number, wtmY: number) => {
   const geocoder = new kakao.maps.services.Geocoder();
   const coord = new kakao.maps.LatLng(wtmX, wtmY);
 
@@ -35,9 +35,9 @@ function coordToAddress(wtmX: number, wtmY: number) {
       },
     );
   });
-}
+};
 
-function coordToRegionCode(wtmX: number, wtmY: number) {
+const coordToRegionCode = (wtmX: number, wtmY: number) => {
   const geocoder = new kakao.maps.services.Geocoder();
   const coord = new kakao.maps.LatLng(wtmX, wtmY);
 
@@ -46,7 +46,6 @@ function coordToRegionCode(wtmX: number, wtmY: number) {
       coord.getLng(),
       coord.getLat(),
       function (result, status) {
-        console.log(result);
         if (status === kakao.maps.services.Status.OK)
           resolve({
             result: [
@@ -60,19 +59,26 @@ function coordToRegionCode(wtmX: number, wtmY: number) {
       },
     );
   });
-}
+};
 
 // backend에 polygon 정보 요청
-async function requestCoord(scale: number, region: Array<string>) {
+const requestCoord = async (scale: number, region: Array<string>) => {
   return await fetch(
-    `http://localhost:3001/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
-  ).then(async function (response) {
-    return response.json();
-  });
-}
+    `http://${process.env.REACT_APP_SERVER_HOST}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
+  )
+    .then(async function (response) {
+      return await response.json();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
-function drawPolygon(map, regions) {
-  const polygonInstances: Array<kakao.maps.Polygon> = [];
+const drawPolygon = (map, regions, polygonInstances) => {
+  if (polygonInstances !== null) {
+    deletePolygon(polygonInstances);
+  }
+  polygonInstances = Array<kakao.maps.Polygon>();
   regions.forEach((region) => {
     let polygon;
     if (region.type === 'Polygon') polygon = makeSinglePolygon(region.path);
@@ -83,9 +89,9 @@ function drawPolygon(map, regions) {
   });
 
   return polygonInstances;
-}
+};
 
-function makeSinglePolygon(coords: [number, number][]) {
+const makeSinglePolygon = (coords: [number, number][]) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
@@ -98,9 +104,9 @@ function makeSinglePolygon(coords: [number, number][]) {
     fillColor: '#fff',
     fillOpacity: 0.7,
   });
-}
+};
 
-function makeMultiPolygon(coordsArray: [number, number][][]) {
+const makeMultiPolygon = (coordsArray: [number, number][][]) => {
   const coordObjects = coordsArray.map((coords: [number, number][]) => {
     return coords.map((coord: [number, number]) => {
       return new kakao.maps.LatLng(...coord);
@@ -115,13 +121,13 @@ function makeMultiPolygon(coordsArray: [number, number][][]) {
     fillColor: '#fff',
     fillOpacity: 0.7,
   });
-}
+};
 
-function deletePolygon(polygonInstances: Array<kakao.maps.Polygon>) {
+const deletePolygon = (polygonInstances: Array<kakao.maps.Polygon>) => {
   polygonInstances.forEach((polygon) => {
     polygon.setMap(null);
   });
-}
+};
 
 export {
   getCurrentLocation,

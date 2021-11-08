@@ -35,10 +35,10 @@ export const CenteredSpan = styled.span<{ height?: string }>`
   font-size: ${(props) => props.theme.fontSizes.paragraph};
 `;
 
-function isWhite(color?: string) {
+const isWhite = (color?: string) => {
   if (color === undefined) return true;
   if (color === '#ffffff') return true;
   if (color === '#fff') return true;
   if (color === 'white') return true;
   return false;
-}
+};

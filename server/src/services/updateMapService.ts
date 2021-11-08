@@ -1,14 +1,9 @@
 import logger from '@loaders/loggerLoader';
-import { Map, MapModel } from '@models/Map';
-import axios from 'axios';
-import fs from 'fs';
-import proj4 from 'proj4';
-import path from 'path';
 
-interface ChangedCoords {
-  name: string;
-  path: Array<[number, number]>;
-}
+import { Map, MapModel } from '@models/Map';
+
+import axios from 'axios';
+import proj4 from 'proj4';
 
 type CoordType = [number, number];
 
@@ -35,12 +30,7 @@ interface CollectionType {
   features: FeatureType[];
 }
 
-interface ChangedCoords {
-  name: string;
-  path: Array<[number, number]>;
-}
-
-async function getAuthToken() {
+const getAuthToken = async () => {
   const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${
     process.env.KOSIS_CONSUMER_KEY as string
   }&consumer_secret=${process.env.KOSIS_CONSUMER_SECRET as string}`;
@@ -52,9 +42,9 @@ async function getAuthToken() {
     .then((res) => res.data.result.accessToken);
 
   return token;
-}
+};
 
-async function getDistrictCoord(code: string, accessToken: string) {
+const getDistrictCoord = async (code: string, accessToken: string) => {
   const year: number = new Date().getFullYear();
   const url = `https://sgisapi.kostat.go.kr/OpenAPI3/boundary/hadmarea.geojson?accessToken=${accessToken}&year=${year}&${
     code !== '' ? `&adm_cd=${code}` : ''
@@ -79,7 +69,7 @@ async function getDistrictCoord(code: string, accessToken: string) {
     );
 
   return collection;
-}
+};
 
 function transCoord(coord: CoordType): CoordType {
   const wgs84 =
@@ -91,21 +81,19 @@ function transCoord(coord: CoordType): CoordType {
   return [lat, lng];
 }
 
-function transPolygon(path: CoordType[]) {
+const transPolygon = (path: CoordType[]) => {
   return path.map((coord) => transCoord(coord));
-}
+};
 
-function transMultiPolygon(path: CoordType[][]) {
+const transMultiPolygon = (path: CoordType[][]) => {
   return path.map((coords) => coords.map((coord) => transCoord(coord)));
-}
+};
 
-async function recursiveGetCoords(code: string, accessToken: string) {
+const recursiveGetCoords = async (code: string, accessToken: string) => {
   if (code.length >= 7) {
     return null;
   }
   const collection: CollectionType = await getDistrictCoord(code, accessToken);
-
-  // const regions = Array<Map>();
 
   for (const feature of collection.features) {
     const [lat, lng] = transCoord([
@@ -128,26 +116,17 @@ async function recursiveGetCoords(code: string, accessToken: string) {
       code: feature.properties.adm_cd,
       name: feature.properties.adm_nm,
       center: [lat, lng],
-      // children: Array<Map>(),
     };
 
     MapModel.create(regionData).catch((err) => {
       logger.error(err);
     });
 
-    const coordsData = await recursiveGetCoords(
-      feature.properties.adm_cd,
-      accessToken,
-    );
-
-    // if (coordsData !== null) regionData.children.push(...coordsData);
-    // regions.push(regionData);
+    void recursiveGetCoords(feature.properties.adm_cd, accessToken);
   }
+};
 
-  // return regions;
-}
-
-async function populateMap() {
+const populateMap = async () => {
   await MapModel.collection
     .drop()
     .then((result) => {
@@ -159,19 +138,6 @@ async function populateMap() {
 
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
-  // const regionList = await recursiveGetCoords('', accessToken);
-  // fs.writeFileSync(
-  //   path.resolve() + '/test.json',
-  //   JSON.stringify(regionList, null, 2),
-  // );
+};
 
-  // void MapModel.insertMany(regionList as Map[], {})
-  //   .then((result) => {
-  //     logger.info('result ', result);
-  //   })
-  //   .catch((err) => {
-  //     logger.error('error ', err);
-  //   });
-}
-
-export default populateMap;
+export default { populateMap };

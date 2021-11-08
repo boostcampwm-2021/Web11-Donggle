@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 type CoordType = [number, number];
 
@@ -8,7 +8,6 @@ interface Map {
   code: string;
   center: CoordType;
   type: 'Polygon' | 'MultiPolygon';
-  // children: Map[];
 }
 
 const mapSchema = new Schema<Map>({
@@ -18,9 +17,6 @@ const mapSchema = new Schema<Map>({
   center: { type: [Number, Number], required: true },
   type: { type: String },
 });
-// mapSchema.add({
-//   children: [mapSchema],
-// });
 
 const MapModel = model<Map>('Map', mapSchema);
 
