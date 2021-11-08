@@ -2,11 +2,17 @@ import MapWrapper from '@components/Map/index.style';
 import {
   getCurrentLocation,
   requestCoord,
-  coordToAddress,
   coordToRegionCode,
   drawPolygon,
   deletePolygon,
 } from '@controllers/mapController';
+
+import {
+  requestMarkerInfo,
+  createMarkers,
+  displayMarkers,
+  hideMarkers,
+} from '@controllers/markerController';
 
 import React, { useRef, useEffect, useState } from 'react';
 
@@ -20,6 +26,7 @@ const Map: React.FC = () => {
     longitude: 126.570667,
   });
   const polygonInstances = useRef<Array<kakao.maps.Polygon> | null>(null);
+  const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
   const [scale, setScale] = useState(DEFAULT_SCALE);
 
   useEffect(() => {
@@ -95,6 +102,28 @@ const Map: React.FC = () => {
       }
     };
   }, [map, scale, latitude, longitude]);
+
+  useEffect(() => {
+    (async () => {
+      const markerInfos = await requestMarkerInfo(scale, [
+        '서울특별시',
+        '용산구',
+      ]);
+      const markers = createMarkers(markerInfos);
+      setMarkers(markers);
+    })();
+  }, [scale]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    displayMarkers(markers, map);
+    return () => {
+      console.log(markers);
+      hideMarkers(markers);
+    };
+  }, [map, markers]);
+
   return <MapWrapper ref={mapWrapper} />;
 };
 
