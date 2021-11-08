@@ -32,12 +32,11 @@ const requestMarkerInfo = async (
   scale: number,
   region: string[],
 ): Promise<MarkerInfo[]> => {
-  console.log(scale, region);
-  return Array(20)
+  return Array(100)
     .fill(0)
     .map(() => {
       return {
-        address: '서울특별시 송파구',
+        address: region.join(' ') + ` ${scale}`,
         center: getRandomLatLng() as [number, number],
         rates: {
           safety: getRandomRate(),
@@ -82,8 +81,8 @@ const displayMarkers = (
   markers.forEach((marker) => marker.setMap(map));
 };
 
-const hideMarkers = (markers: kakao.maps.CustomOverlay[]) => {
+const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
   markers.forEach((marker) => marker.setMap(null));
 };
 
-export { requestMarkerInfo, createMarkers, displayMarkers, hideMarkers };
+export { requestMarkerInfo, createMarkers, displayMarkers, deleteMarkers };
