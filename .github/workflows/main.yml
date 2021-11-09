@@ -6,9 +6,9 @@ name: Node.js CD
 
 on:
   push:
-    branches: [release]
+    branches: [main]
   pull_request:
-    branches: [release]
+    branches: [main]
 
 jobs:
   deploy:
@@ -24,6 +24,15 @@ jobs:
         with:
           node-version: "16"
           cache: "yarn"
+          cache-dependency-path: |
+            client/yarn.lock
+
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.production
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+        working-directory: ${{env.client-directory}}
 
       - name: Client yarn install
         run: yarn install
@@ -42,7 +51,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             rm -rf /usr/share/nginx/prod/*
-            cd p4/server && find . -maxdepth 1 ! -name public -exec rm -rf "{}" \;
+            cd donggle-server/server && find . -maxdepth 1 ! -name public -exec rm -rf "{}" \;
+
       - name: copy client file to deploy server
         uses: appleboy/scp-action@master
         with:
@@ -61,7 +71,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "./server"
-          target: "p4"
+          target: "donggle-server"
 
       - name: start app server
         uses: appleboy/ssh-action@master
@@ -71,4 +81,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "Github Action Success"
+            cp server-env/.env.development donggle-server/server/
+            cp server-env/.env.production donggle-server/server/
+            cd donggle-server/server/
+            yarn install
+            pm2 kill
+            yarn prod
