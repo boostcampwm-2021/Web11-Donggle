@@ -1,0 +1,90 @@
+.star-ratings {
+  color: #aaa9a9;
+  position: relative;
+  unicode-bidi: bidi-override;
+  width: max-content;
+  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2b2a29;
+}
+
+.star-ratings-fill {
+  color: #fff58c;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  -webkit-text-fill-color: gold;
+}
+
+.star-ratings-base {
+  z-index: 0;
+  padding: 0;
+}
+
+.star-rating-single {
+  color: #fff58c;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2b2a29;
+  -webkit-text-fill-color: gold;
+}
+
+.customoverlay {
+  position: relative;
+  bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ddd;
+  background: #fff;
+  font-weight: bold;
+  float: left;
+}
+
+.customoverlay_large {
+  bottom: 75px;
+}
+
+.customoverlay:nth-of-type(n) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+
+.customoverlay .title {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+}
+
+.customoverlay .content {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 5px 15px;
+}
+
+.customoverlay .content:last-child {
+  margin-bottom: 5px;
+}
+
+.customoverlay .content > span {
+  width: 50px;
+  flex: 1;
+}
+
+.customoverlay .content > *:not(:last-child) {
+  margin-right: 10px;
+}
+
+.customoverlay:after {
+  content: '';
+  position: absolute;
+  margin-left: -12px;
+  left: 50%;
+  bottom: -12px;
+  width: 22px;
+  height: 12px;
+  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+}

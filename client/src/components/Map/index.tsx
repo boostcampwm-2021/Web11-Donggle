@@ -2,7 +2,6 @@ import MapWrapper from '@components/Map/index.style';
 
 import {
   getCurrentLocation,
-  requestCoord,
   coordToRegionCode,
   isRangeEqual,
   createPolygons,
@@ -17,6 +16,8 @@ import {
   displayMarkers,
   deleteMarkers,
 } from '@controllers/markerController';
+
+import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
 
