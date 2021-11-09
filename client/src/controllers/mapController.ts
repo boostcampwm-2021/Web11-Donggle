@@ -169,13 +169,9 @@ const LFURegions = async (
   }
 
   if (cache.has(key)) {
-    console.log(`${key} hitted!`);
-
     cache.get(key).count++;
     return cache.get(key);
   } else {
-    console.log(`${key} cached!`);
-
     const regions = await requestCoord(scale, region);
     regions.count = 1;
     if (cache.size > 10) {
@@ -183,7 +179,6 @@ const LFURegions = async (
         (a, b) => a[1].count - b[1].count,
       )[0][0];
 
-      console.log(`${mostUnusedRegions} deleted!`);
       cache.delete(mostUnusedRegions);
     }
     cache.set(key, regions);
