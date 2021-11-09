@@ -30,5 +30,36 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
   }
 };
 
-export { spreadDropdown };
+const moveTo = (
+  map: kakao.maps.Map | null,
+  to: SimpleMap,
+  setResults,
+  inputTagRef,
+) => {
+  if (map === null) {
+    return;
+  }
+  const [x, y] = to.center;
+  const newCenter = new kakao.maps.LatLng(x, y);
+  map.setCenter(newCenter);
+  let newLevel = 9;
+  switch (to.codeLength) {
+    case 2:
+      newLevel = 11;
+      break;
+    case 5:
+      newLevel = 8;
+      break;
+    case 7:
+      newLevel = 6;
+      break;
+    default:
+      break;
+  }
+  map.setLevel(newLevel);
+  inputTagRef.value = '';
+  setResults([]);
+};
+
+export { spreadDropdown, moveTo };
 export type { SimpleMap };

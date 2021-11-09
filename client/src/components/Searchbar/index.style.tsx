@@ -31,7 +31,6 @@ const SearchbarButton = styled.button`
   border-radius: 20px;
   border: none;
   background-color: #33ab74;
-  cursor: pointer;
 `;
 
 const SearchImg = styled.img`
@@ -70,6 +69,10 @@ const DropdownItem = styled.div`
   padding: 10px 10px;
   background: #fff;
   z-index: 1000;
+  cursor: pointer;
+  :hover {
+    background: #c5c5c5;
+  }
   ::after {
     margin-top: 20px;
     display: block;
