@@ -6,7 +6,7 @@ import {
   DropdownWrapper,
   DropdownItem,
 } from '@components/Searchbar/index.style';
-import { spreadDropdown } from '@controllers/searchbarController';
+import { SimpleMap, spreadDropdown } from '@controllers/searchbarController';
 
 import React, { useEffect, useState, useRef } from 'react';
 
@@ -16,7 +16,7 @@ interface SearchbarProps {
 
 const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
   const [input, setInput] = useState('');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SimpleMap[]>([]);
   const isSpread = useRef(false);
 
   const places = useRef<kakao.maps.services.Places | null>(null);
@@ -28,9 +28,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
   }, [map]);
 
   useEffect(() => {
-    if (places.current !== null) {
-      spreadDropdown(places.current, input, isSpread.current, setResults);
-    }
+    spreadDropdown(input, isSpread.current, setResults);
   }, [input]);
 
   return (
@@ -44,7 +42,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
       <DropdownWrapper>
         {results.length > 0 &&
           results.map((result, i) => (
-            <DropdownItem key={i}>{result}</DropdownItem>
+            <DropdownItem key={i}>{result.name}</DropdownItem>
           ))}
       </DropdownWrapper>
     </>

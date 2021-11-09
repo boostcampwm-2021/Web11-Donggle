@@ -1,15 +1,20 @@
-interface SearchResult {
-  status: kakao.maps.services.Status;
-  result: any;
+type CoordType = [number, number];
+
+interface SimpleMap {
+  name: string;
+  codeLength: number;
+  center: CoordType;
 }
 
-const spreadDropdown = async (ps, keyword, isSpread, setResults) => {
-  const searchRegions = async (): Promise<SearchResult> => {
-    return await new Promise((resolve, reject) => {
-      ps.keywordSearch(keyword, (result, status) => {
-        resolve({ status, result });
+const spreadDropdown = async (keyword, isSpread, setResults) => {
+  const searchRegions = async (): Promise<SimpleMap[] | []> => {
+    return await fetch(
+      `http://${process.env.REACT_APP_SERVER_HOST}/api/map/search?keyword=${keyword}`,
+    )
+      .then(async (response) => await response.json())
+      .catch((err) => {
+        console.error(err);
       });
-    });
   };
 
   const setDropdown = (_results, _isSpread) => {
@@ -17,18 +22,13 @@ const spreadDropdown = async (ps, keyword, isSpread, setResults) => {
     isSpread = _isSpread;
   };
 
-  if (keyword.length === 0) {
-    return setDropdown([], false);
-  }
-  const { status, result }: SearchResult = await searchRegions();
-  if (status === kakao.maps.services.Status.OK) {
-    setDropdown(
-      result.map((r) => `${r.place_name}\n${r.address_name}`),
-      true,
-    );
+  const result: SimpleMap[] | [] = await searchRegions();
+  if (result.length > 0) {
+    setDropdown(result, true);
   } else {
     setDropdown([], false);
   }
 };
 
 export { spreadDropdown };
+export type { SimpleMap };
