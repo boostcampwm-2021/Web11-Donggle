@@ -136,7 +136,7 @@ const MapComponent: React.FC = () => {
 
   return (
     <MapWrapper ref={mapWrapper}>
-      <Searchbar />
+      <Searchbar map={map} />
     </MapWrapper>
   );
 };

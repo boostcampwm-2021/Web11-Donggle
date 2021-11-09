@@ -40,4 +40,51 @@ const SearchImg = styled.img`
 `;
 SearchImg.defaultProps = { src: search };
 
-export { SearchbarWrapper, SearchbarInput, SearchbarButton, SearchImg };
+const DropdownWrapper = styled.div`
+  position: relative;
+  top: 20px;
+  left: 40px;
+  width: 310px;
+  height: auto;
+  background: #fff;
+  border-radius: 10px;
+  border: solid 1px #c5c5c5;
+  z-index: 1000;
+  max-height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 999px;
+  }
+`;
+
+const DropdownItem = styled.div`
+  position: relative;
+  width: 300px;
+  height: 50px;
+  padding: 10px 10px;
+  background: #fff;
+  z-index: 1000;
+  ::after {
+    margin-top: 20px;
+    display: block;
+    top: 50px;
+    content: '';
+    width: 280px;
+    border-bottom: solid 1px #c5c5c5;
+  }
+`;
+
+export {
+  SearchbarWrapper,
+  SearchbarInput,
+  SearchbarButton,
+  SearchImg,
+  DropdownWrapper,
+  DropdownItem,
+};
