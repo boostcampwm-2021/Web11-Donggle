@@ -175,10 +175,9 @@ const populateMapAndSimpleMap = async () => {
     });
 
   await MapModel.collection.createIndex({ codeLength: 1, name: 'text' });
-  await SimpleMapModel.collection.createIndex({ codeLength: 1, name: 'text' });
+  await SimpleMapModel.collection.createIndex({ name: 1 });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
-  logger.info('populate finish!');
 };
 
 export default { populateMapAndSimpleMap };
