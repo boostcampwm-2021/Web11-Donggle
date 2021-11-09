@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
   position: absolute;
@@ -38,10 +38,11 @@ const SpanText = styled.span`
   font-size: 18px;
 `;
 
-const SpanBackArrow = styled(SpanText)`
+const SpanBackArrow = styled(SpanText)<{ onClick: () => void }>`
   font-size: 20px;
   text-align: left;
   margin-left: 10px;
+  cursor: pointer;
 `;
 
 const SpanTitle = styled(SpanText)`
@@ -52,13 +53,13 @@ const SpanTitle = styled(SpanText)`
 
 const SpanReviewTitle = styled(SpanTitle)`
   width: 100%;
-  line-height: 50px;
+  line-height: 40px;
 `;
 
 const RateDiv = styled(WrapperDiv)`
   flex-direction: column;
   width: 100%;
-  padding: 10px 60px;
+  padding: 0 60px;
 `;
 
 const RateNumStarDiv = styled.div`
@@ -76,12 +77,10 @@ const RateSpanText = styled(SpanText)`
   margin-right: 50px;
 `;
 
-const RateStarDiv = styled.div`
+const RateStarDiv = styled(RateNumStarDiv)`
   width: 100%;
   position: relative;
   overflow: hidden;
-  display: flex;
-  justify-content: start;
 `;
 
 const RateStarBaseDiv = styled.div`
@@ -98,7 +97,6 @@ const RateStarFillDiv = styled.div<{ starRate: number }>`
   padding: 0;
   position: absolute;
   z-index: 1;
-  top: 20px;
   left: 0.5px;
   display: flex;
   width: ${(props) => props.starRate * 12 - 1}%;
@@ -109,7 +107,6 @@ const RateStarFillDiv = styled.div<{ starRate: number }>`
 const RateCategoryDiv = styled(RateNumStarDiv)`
   flex-direction: column;
   height: 100%;
-  margin-top: 20px;
 `;
 
 const RateCategoryGroup = styled.div`
@@ -152,11 +149,24 @@ const RateCategoryNum = styled(SpanText)`
   font-size: 12px;
 `;
 
-const SidebarWrapper = styled.div`
-  display: relative;
+const HashTagDiv = styled(WrapperDiv)`
   width: 100%;
-  height: 100%;
-  background-color: red;
+  padding: 10px 60px;
+  flex-wrap: wrap;
+  justify-content: start;
+`;
+
+const HashTag = styled.span`
+  display: inline-block;
+  border: 1px solid ${(props) => props.theme.colors.green};
+  color: ${(props) => props.theme.colors.darkblue};
+  font-size: 10px;
+  border-radius: 10px;
+  line-height: 1;
+  padding: 6px;
+  margin: 2px 3px;
+  box-sizing: content-box;
+  white-space: nowrap;
 `;
 
 export {
@@ -178,4 +188,6 @@ export {
   RateCategoryUnit,
   RateCategoryBar,
   RateCategoryNum,
+  HashTagDiv,
+  HashTag,
 };

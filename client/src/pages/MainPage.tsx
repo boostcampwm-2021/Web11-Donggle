@@ -32,13 +32,15 @@ const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean | null>(null);
 
   const toggleSidebar = (e) => {
-    console.log(e.target, sidebar);
     if (sidebar === null || !sidebar) {
-      console.log('열어');
       setSidebar(!sidebar);
     } else {
       setSidebar(false);
     }
+  };
+
+  const closeSidebar = () => {
+    if (sidebar) setSidebar(false);
   };
 
   return (
@@ -48,13 +50,14 @@ const MainPage: React.FC = () => {
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
         <Sidebar
           sidebar={sidebar}
-          starRate={3}
+          starRate={1.7}
           categoryRate={{
             safety: 3.6,
             traffic: 4.1,
             food: 2.7,
             entertainment: 1.5,
           }}
+          closeSidebar={closeSidebar}
         ></Sidebar>
       </FlexContainer>
     </MainDiv>

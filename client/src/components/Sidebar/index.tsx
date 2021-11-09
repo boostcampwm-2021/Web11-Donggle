@@ -7,9 +7,9 @@ import {
   Layout,
   WrapperDiv,
   SpanBackArrow,
-  SpanText,
+  // SpanText,
   SpanTitle,
-  SpanReviewTitle,
+  // SpanReviewTitle,
   RateDiv,
   RateSpanText,
   RateNumStarDiv,
@@ -22,6 +22,8 @@ import {
   RateCategoryUnit,
   RateCategoryBar,
   RateCategoryNum,
+  HashTagDiv,
+  HashTag,
 } from './index.style';
 
 export interface RateProps {
@@ -33,6 +35,7 @@ export interface RateProps {
     food: number;
     entertainment: number;
   };
+  closeSidebar: () => void;
 }
 
 const Sidebar: React.FC<RateProps> = (props: RateProps) => {
@@ -42,12 +45,12 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
       sidebar={props.sidebar}
     >
       <WrapperDiv>
-        <SpanBackArrow>❮</SpanBackArrow>
+        <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
         <SpanTitle>서울특별시 용산구 후암동</SpanTitle>
       </WrapperDiv>
-      <WrapperDiv>
+      {/* <WrapperDiv>
         <SpanReviewTitle>동네 평점</SpanReviewTitle>
-      </WrapperDiv>
+      </WrapperDiv> */}
       <RateDiv>
         <RateNumStarDiv>
           <RateSpanText>{props.starRate.toFixed(1)}</RateSpanText>
@@ -103,6 +106,13 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
           </RateCategoryGroup>
         </RateCategoryDiv>
       </RateDiv>
+      <HashTagDiv>
+        <HashTag>소음이 적은</HashTag>
+        <HashTag>경관이 좋은</HashTag>
+        <HashTag>문화시설이 가까운</HashTag>
+        <HashTag>체육시설이 많은</HashTag>
+        <HashTag>역이 가까운</HashTag>
+      </HashTagDiv>
     </Layout>
   );
 };
