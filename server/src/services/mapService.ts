@@ -12,7 +12,7 @@ const queryPolygon = async (
   switch (true) {
     case scale < 9:
       result = await MapModel.find({
-        $text: { $search: `${big} ${medium}` },
+        $text: { $search: `${medium}` },
         codeLength: 7,
       });
       break;
