@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
 import {
   Layout,
   WrapperDiv,
@@ -10,10 +13,13 @@ import {
   RateSpanText,
   RateNumStarDiv,
   RateStarDiv,
+  RateStarBaseDiv,
+  RateStarFillDiv,
 } from './index.style';
 
 interface IProps {
   sidebar: boolean | null;
+  starRate: number;
 }
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
@@ -31,13 +37,22 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       </WrapperDiv>
       <RateDiv>
         <RateNumStarDiv>
-          <RateSpanText>4.4</RateSpanText>
+          <RateSpanText>{props.starRate}</RateSpanText>
           <RateStarDiv>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
+            <RateStarBaseDiv>
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+            </RateStarBaseDiv>
+            <RateStarFillDiv starRate={props.starRate}>
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+              <FontAwesomeIcon icon={faStar} size="lg" />
+            </RateStarFillDiv>
           </RateStarDiv>
         </RateNumStarDiv>
       </RateDiv>

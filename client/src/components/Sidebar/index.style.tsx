@@ -60,7 +60,7 @@ const RateDiv = styled(WrapperDiv)`
   flex-direction: column;
   width: 100%;
   height: 290px;
-  padding: 10px 100px;
+  padding: 10px 60px;
 `;
 
 const RateNumStarDiv = styled.div`
@@ -71,16 +71,42 @@ const RateNumStarDiv = styled.div`
 `;
 
 const RateSpanText = styled(SpanText)`
+  display: block;
+  width: 10%;
   font-size: 34px;
   font-weight: bold;
-  margin-right: 20px;
+  margin-right: 50px;
 `;
 
 const RateStarDiv = styled.div`
   width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: start;
 `;
 
-// const RateStarSpan = styled
+const RateStarBaseDiv = styled.div`
+  color: ${(props) => props.theme.colors.lightgrey};
+  z-index: 0;
+  padding: 0;
+  position: relative;
+  top: 0px;
+  left: 0px;
+`;
+
+const RateStarFillDiv = styled.div<{ starRate: number }>`
+  color: gold;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  left: 0.5px;
+  display: flex;
+  width: ${(props) => props.starRate * 12 - 1}%;
+  overflow: hidden;
+  -webkit-text-fill-color: gold;
+`;
 
 const SidebarWrapper = styled.div`
   display: relative;
@@ -100,4 +126,6 @@ export {
   RateSpanText,
   RateNumStarDiv,
   RateStarDiv,
+  RateStarBaseDiv,
+  RateStarFillDiv,
 };
