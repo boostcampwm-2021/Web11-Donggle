@@ -78,7 +78,7 @@ const ratingToPercent = (rate: number) => {
   return (rate / 5) * 100;
 };
 
-const $starRate = (rate: number) => {
+const starRateEl = (rate: number) => {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = `
     <style scoped>${rateStyle}</style>
@@ -94,7 +94,7 @@ const $starRate = (rate: number) => {
   return wrapper;
 };
 
-const $marker = (rates: RateType) => {
+const markerEl = (rates: RateType) => {
   const wrapper = document.createElement('div');
   const averageRate = average(
     ...Object.keys(rates).map((category) => rates[category]),
@@ -105,11 +105,11 @@ const $marker = (rates: RateType) => {
       <div class="title"></div>
     </div>
   `;
-  wrapper.querySelector('.title')?.append($starRate(averageRate));
+  wrapper.querySelector('.title')?.append(starRateEl(averageRate));
   return wrapper;
 };
 
-const $largeMarker = (address: string, rates: RateType) => {
+const largeMarkerEl = (address: string, rates: RateType) => {
   const wrapper = document.createElement('div');
   const averageRate = average(
     ...Object.keys(rates).map((category) => rates[category]),
@@ -118,10 +118,10 @@ const $largeMarker = (address: string, rates: RateType) => {
     <div class="customoverlay">
       <style scoped>${markerStyle}</style>
       <div class="title">${address}</div>
-      <div class="title">${address}</div>
+      <div class="title">${averageRate}</div>
     </div>
   `;
   return wrapper;
 };
 
-export { $marker, $largeMarker };
+export { markerEl, largeMarkerEl };

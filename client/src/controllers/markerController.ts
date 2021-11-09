@@ -1,4 +1,4 @@
-import { $marker, $largeMarker } from '@utils/marker';
+import { markerEl, largeMarkerEl } from '@utils/marker';
 
 type MarkerInfo = {
   address: string;
@@ -71,12 +71,12 @@ const createMarkers = (
 
 const markerDefault = (markerInfo: MarkerInfo) => {
   const { rates } = markerInfo;
-  return $marker(rates);
+  return markerEl(rates);
 };
 
 const markerMouseOver = (markerInfo: MarkerInfo) => {
   const { address, rates } = markerInfo;
-  return $largeMarker(address, rates);
+  return largeMarkerEl(address, rates);
 };
 
 const displayMarkers = (
