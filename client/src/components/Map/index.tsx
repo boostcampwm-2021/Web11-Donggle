@@ -3,7 +3,6 @@ import Searchbar from '@components/Searchbar/index';
 
 import {
   getCurrentLocation,
-  requestCoord,
   coordToRegionCode,
   isRangeEqual,
   createPolygons,
