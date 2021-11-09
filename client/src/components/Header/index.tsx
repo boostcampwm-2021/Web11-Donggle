@@ -20,13 +20,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
+// export interface MainIProps {
+//   showSidebar(): void;
+//   hideSidebar(): void;
+// }
+
 const Header: React.FC = withRouter(({ history, location }) => {
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [isAuth, setIsAuth] = useRecoilState(authState);
 
-  const openSideBar = useCallback(() => {
-    console.log('test');
-  }, []);
+  // const openSideBar = useCallback(() => {
+  //   console.log('test');
+  //   props.showSidebar();
+  // }, []);
 
   const routeHistory = useCallback(
     (path: string, state: { [index: string]: string }) => {
@@ -83,7 +89,6 @@ const Header: React.FC = withRouter(({ history, location }) => {
                   </LinkBtn>
                 </Menu>
               </MenuList>
-              <LinkBtn onClick={() => openSideBar()}>사이드바 열기</LinkBtn>
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>

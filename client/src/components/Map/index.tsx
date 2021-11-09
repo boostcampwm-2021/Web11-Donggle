@@ -1,4 +1,4 @@
-import MapWrapper from '@components/Map/index.style';
+import MapWrapper, { TestDiv } from '@components/Map/index.style';
 import {
   getCurrentLocation,
   requestCoord,
@@ -11,8 +11,12 @@ import {
 import React, { useRef, useEffect, useState } from 'react';
 
 const DEFAULT_SCALE = 9;
+interface IProps {
+  sidebar: boolean | null;
+  toggleSidebar(e: React.MouseEvent): void;
+}
 
-const Map: React.FC = () => {
+const Map: React.FC<IProps> = (props: IProps) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [{ latitude, longitude }, setLatlng] = useState({
@@ -95,7 +99,11 @@ const Map: React.FC = () => {
       }
     };
   }, [map, scale, latitude, longitude]);
-  return <MapWrapper ref={mapWrapper} />;
+  return (
+    <MapWrapper ref={mapWrapper}>
+      <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
+    </MapWrapper>
+  );
 };
 
 export default Map;

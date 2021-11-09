@@ -5,4 +5,14 @@ const MapWrapper = styled.div`
   height: 100%;
 `;
 
+export const TestDiv = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline;
+  z-index: 10;
+  cursor: pointer;
+  background-color: white;
+`;
+
 export default MapWrapper;
