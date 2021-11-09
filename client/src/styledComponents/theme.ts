@@ -23,13 +23,15 @@ const colors: ThemeComponent = {
   green: '#33AB74',
   lightgreen: '#70C49D',
   grey: '#E5E5E5',
-  black: '#000080',
+  black: '#000000',
   lightgrey: '#C4C4C4',
+  ashgrey: '#666362',
   yellow: '#F5C244',
   white: '#FFFFFF',
   blue: '#0000FF',
   darkblue: '#00008B',
   deepseablue: '#123456',
+  lightwhite: '#FFFFF7',
 };
 
 const common: ThemeComponent = {

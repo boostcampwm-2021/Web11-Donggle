@@ -32,11 +32,13 @@ const Background = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  min-width: 700px;
 `;
 
 const LogoMenuContainer = styled.div`
   width: 50%;
   display: flex;
+  justify-content: start;
 `;
 
 const LogoWrapper = styled.div`
@@ -80,29 +82,36 @@ const ProfileWrapper = styled.div`
 
 const LoginBtn = styled.button`
   border: 1px solid ${(props) => props.theme.colors.lightgreen};
+  border-radius: 10px;
   background: ${(props) => props.theme.colors.white};
   width: 100px;
   height: 40px;
   text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.lightgreen};
+    color: ${(props) => props.theme.colors.white};
+  }
 `;
 
 const LogoutBtn = styled.button`
   border: 1px solid ${(props) => props.theme.colors.lightgreen};
+  border-radius: 10px;
   background: ${(props) => props.theme.colors.white};
   width: 100px;
   height: 40px;
   text-align: center;
   cursor: pointer;
   margin-right: 10px;
+  &:hover {
+    background: ${(props) => props.theme.colors.lightgreen};
+    color: ${(props) => props.theme.colors.white};
+  }
 `;
 
-const UserProfile = styled.button`
-  border: 1px solid ${(props) => props.theme.colors.lightgreen};
-  background: ${(props) => props.theme.colors.white};
-  width: 100px;
-  height: 40px;
-  text-align: center;
+const UserProfile = styled.div`
+  margin: 0 15px;
   cursor: pointer;
 `;
 

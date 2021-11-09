@@ -19,7 +19,7 @@ const FlexContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  flex: 2 1 0;
+  flex: 1 1 0;
 `;
 
 /*
@@ -50,12 +50,12 @@ const MainPage: React.FC = () => {
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
         <Sidebar
           sidebar={sidebar}
-          starRate={1.7}
+          starRate={4}
           categoryRate={{
             safety: 3.6,
             traffic: 4.1,
             food: 2.7,
-            entertainment: 1.5,
+            entertainment: 2.5,
           }}
           closeSidebar={closeSidebar}
         ></Sidebar>

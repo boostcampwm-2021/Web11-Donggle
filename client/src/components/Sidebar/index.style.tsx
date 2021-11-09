@@ -1,32 +1,55 @@
 import styled from 'styled-components';
 
+const Container = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
 const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
   position: absolute;
-  width: 400px;
-  height: 100%;
-  top: 0;
-  right: 0px;
-  z-index: 1;
-  background-color: white;
+  display: flex;
   flex-direction: column;
-  overflow: hidden;
+  width: 400px;
+  height: 100vh;
+  right: 0;
+  z-index: 1;
+  overflow-y: scroll;
+  background-color: white;
   -webkit-transform: translateX(400px);
   transform: translateX(400px);
   -webkit-transition: all ease 0.3s 0s;
   transition: all ease 0.3s 0s;
+  padding-bottom: 6.3em;
   &.open {
     -webkit-transform: translateX(0px);
     transform: translateX(0px);
   }
+  &::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 8px;
+    background-color: ${(props) => props.theme.colors.lightgrey};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${(props) => props.theme.colors.ashgrey};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: ${(props) => props.theme.colors.lightgrey};
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
 `;
 
 const WrapperDiv = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.colors.grey};
   justify-content: space-between;
   align-items: center;
-  line-height: 60px;
+  line-height: 40px;
 
   &:after {
     content: ' ';
@@ -36,6 +59,11 @@ const WrapperDiv = styled.div`
 const SpanText = styled.span`
   display: block;
   font-size: 18px;
+`;
+
+const EmptySpan = styled(SpanText)`
+  min-height: 100%;
+  padding-right: 1px;
 `;
 
 const SpanBackArrow = styled(SpanText)<{ onClick: () => void }>`
@@ -72,36 +100,34 @@ const RateNumStarDiv = styled.div`
 const RateSpanText = styled(SpanText)`
   display: block;
   width: 10%;
-  font-size: 34px;
+  font-size: 35px;
   font-weight: bold;
-  margin-right: 50px;
+  margin-right: 40px;
 `;
 
 const RateStarDiv = styled(RateNumStarDiv)`
-  width: 100%;
+  width: fit-content;
   position: relative;
   overflow: hidden;
+  box-sizing: content-box;
 `;
 
 const RateStarBaseDiv = styled.div`
   color: ${(props) => props.theme.colors.lightgrey};
   z-index: 0;
   padding: 0;
-  position: relative;
-  top: 0px;
+  position: absolute;
   left: 0px;
 `;
 
 const RateStarFillDiv = styled.div<{ starRate: number }>`
   color: gold;
   padding: 0;
-  position: absolute;
+  position: relative;
   z-index: 1;
-  left: 0.5px;
   display: flex;
-  width: ${(props) => props.starRate * 12 - 1}%;
+  width: ${(props) => props.starRate * 20}%;
   overflow: hidden;
-  -webkit-text-fill-color: gold;
 `;
 
 const RateCategoryDiv = styled(RateNumStarDiv)`
@@ -110,8 +136,10 @@ const RateCategoryDiv = styled(RateNumStarDiv)`
 `;
 
 const RateCategoryGroup = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
+  margin-top: 10px;
   line-height: 1;
   flex-direction: column;
   justify-content: start;
@@ -144,12 +172,13 @@ const RateCategoryBar = styled.span<{ categoryRate: number }>`
 `;
 
 const RateCategoryNum = styled(SpanText)`
-  position: absolute;
+  position: relative;
   left: 105%;
   font-size: 12px;
 `;
 
 const HashTagDiv = styled(WrapperDiv)`
+  position: relative;
   width: 100%;
   padding: 10px 60px;
   flex-wrap: wrap;
@@ -169,10 +198,64 @@ const HashTag = styled.span`
   white-space: nowrap;
 `;
 
+const MenuBarDiv = styled(WrapperDiv)`
+  position: relative;
+  width: 100%;
+  justify-content: start;
+`;
+
+const Menu = styled.span`
+  font-size: 14px;
+  font-weight: normal;
+  color: ${(props) => props.theme.colors.black};
+  height: 100%;
+  margin: 0 15px;
+  &.menu-selected {
+    font-weight: bold;
+    color: ${(props) => props.theme.colors.green};
+    border-bottom: 1px solid ${(props) => props.theme.colors.green};
+  }
+  cursor: pointer;
+`;
+
+const ContentDiv = styled(WrapperDiv)`
+  position: relative;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1;
+`;
+
+const Content = styled(WrapperDiv)`
+  width: 100%;
+  height: 100px;
+`;
+
+const AddButtonDiv = styled(WrapperDiv)`
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  margin: 10px 0px;
+  justify-content: center;
+  line-height: 1;
+  background-color: ${(props) => props.theme.colors.lightgrey};
+`;
+
+const AddButton = styled.button`
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  background-color: transparent;
+  color: ${(props) => props.theme.colors.white};
+  cursor: pointer;
+`;
+
 export {
+  Container,
   Layout,
   WrapperDiv,
   SpanText,
+  EmptySpan,
   SpanBackArrow,
   SpanTitle,
   SpanReviewTitle,
@@ -190,4 +273,10 @@ export {
   RateCategoryNum,
   HashTagDiv,
   HashTag,
+  MenuBarDiv,
+  Menu,
+  ContentDiv,
+  Content,
+  AddButtonDiv,
+  AddButton,
 };

@@ -15,6 +15,8 @@ import {
   UserProfile,
   ColorBar,
 } from './index.style';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -54,7 +56,12 @@ const Header: React.FC = withRouter(({ history, location }) => {
         <Background>
           <LogoMenuContainer>
             <LogoWrapper>
-              <img src={logo} alt="logo" width="70px" />
+              <LinkBtn
+                onClick={() => routeHistory('/', {})}
+                className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
+              >
+                <img src={logo} alt="logo" width="70px" />
+              </LinkBtn>
             </LogoWrapper>
             <MenuWrapper>
               <MenuList>
@@ -95,7 +102,9 @@ const Header: React.FC = withRouter(({ history, location }) => {
             {isAuth ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
-                <UserProfile>프로필</UserProfile>
+                <UserProfile>
+                  <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
+                </UserProfile>
               </>
             ) : (
               <LoginBtn>로그인</LoginBtn>
