@@ -58,7 +58,6 @@ const createMarkers = (
     const largeMarker = markerMouseOver(markerInfo);
 
     defaultMarker.addEventListener('mouseover', () => {
-      console.log(markerInfo.center);
       marker.setContent(largeMarker);
     });
     largeMarker.addEventListener('mouseout', () =>

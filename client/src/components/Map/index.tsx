@@ -75,7 +75,7 @@ const Map: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
+    const updateRange = async () => {
       const { latitude, longitude, scale } = position;
       const region = (await coordToRegionCode(latitude, longitude)) as {
         result: Array<string>;
@@ -92,17 +92,18 @@ const Map: React.FC = () => {
         if (isRangeEqual(oldRange, newRange)) return oldRange;
         return newRange;
       });
-    })();
+    };
+    updateRange();
   }, [position]);
 
   useEffect(() => {
     const { scale, region } = range;
-    const managePolygon = async () => {
+    const updatePolygons = async () => {
       const regions = await requestCoord(scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
     };
-    managePolygon();
+    updatePolygons();
   }, [range]);
 
   useEffect(() => {
@@ -113,12 +114,13 @@ const Map: React.FC = () => {
   }, [map, polygons]);
 
   useEffect(() => {
-    (async () => {
+    const updateMarkers = async () => {
       const { scale, region } = range;
       const markerInfos = await requestMarkerInfo(scale, region);
       const markers = createMarkers(markerInfos);
       setMarkers(markers);
-    })();
+    };
+    updateMarkers();
   }, [range]);
 
   useEffect(() => {
