@@ -32,8 +32,9 @@ const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean | null>(null);
 
   const toggleSidebar = (e) => {
-    console.log(e.target);
+    console.log(e.target, sidebar);
     if (sidebar === null || !sidebar) {
+      console.log('열어');
       setSidebar(!sidebar);
     } else {
       setSidebar(false);
