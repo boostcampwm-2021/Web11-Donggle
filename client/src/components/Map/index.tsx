@@ -11,10 +11,11 @@ import {
 } from '@controllers/mapController';
 
 import {
-  requestMarkerInfo,
+  // requestMarkerInfo,
   createMarkers,
   displayMarkers,
   deleteMarkers,
+  regionToMarkerInfo,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
@@ -106,6 +107,11 @@ const MapComponent: React.FC = () => {
       const regions = await LFURegions(cache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
+
+      // test
+      const markerInfos = regions.map((region) => regionToMarkerInfo(region));
+      const markers = createMarkers(markerInfos);
+      setMarkers(markers);
     };
     updatePolygons();
   }, [range]);
@@ -117,15 +123,15 @@ const MapComponent: React.FC = () => {
     return () => deletePolygons(polygons);
   }, [map, polygons]);
 
-  useEffect(() => {
-    const updateMarkers = async () => {
-      const { scale, region } = range;
-      const markerInfos = await requestMarkerInfo(scale, region);
-      const markers = createMarkers(markerInfos);
-      setMarkers(markers);
-    };
-    updateMarkers();
-  }, [range]);
+  // useEffect(() => {
+  //   const updateMarkers = async () => {
+  //     const { scale, region } = range;
+  //     const markerInfos = await requestMarkerInfo(scale, region);
+  //     const markers = createMarkers(markerInfos);
+  //     setMarkers(markers);
+  //   };
+  //   updateMarkers();
+  // }, [range]);
 
   useEffect(() => {
     if (!map) return;

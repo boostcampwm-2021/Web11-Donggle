@@ -34,7 +34,7 @@
 
 .customoverlay {
   position: relative;
-  bottom: 15px;
+  bottom: 29px;
   border-radius: 6px;
   border: 1px solid #ccc;
   border-bottom: 2px solid #ddd;
@@ -44,7 +44,7 @@
 }
 
 .customoverlay_large {
-  bottom: 75px;
+  bottom: 88px;
 }
 
 .customoverlay:nth-of-type(n) {

@@ -13,16 +13,6 @@ type MarkerInfo = {
   rates: RateType;
 };
 
-// const $ = (query: string, root?: HTMLElement) => {
-//   if (!root) root = document.body;
-//   return root.querySelector(query);
-// };
-
-// const $$ = (query: string, root?: HTMLElement) => {
-//   if (!root) root = document.body;
-//   return root.querySelectorAll(query);
-// };
-
 const average = (...values: number[]) => {
   const sum = values.reduce((a, b) => a + b, 0);
   return Number((sum / values.length || 0).toFixed(2));
@@ -110,7 +100,20 @@ const getRandomLatLng = () => {
 };
 
 const getRandomRate = () => {
-  return random(0, 5);
+  return random(1, 5);
+};
+
+const regionToMarkerInfo = (region) => {
+  return {
+    address: region.name,
+    center: region.center,
+    rates: {
+      safety: getRandomRate(),
+      traffic: getRandomRate(),
+      food: getRandomRate(),
+      entertainment: getRandomRate(),
+    },
+  };
 };
 
 // TODO: fetch 요청
@@ -180,4 +183,10 @@ const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
   markers.forEach((marker) => marker.setMap(null));
 };
 
-export { requestMarkerInfo, createMarkers, displayMarkers, deleteMarkers };
+export {
+  requestMarkerInfo,
+  createMarkers,
+  displayMarkers,
+  deleteMarkers,
+  regionToMarkerInfo,
+};
