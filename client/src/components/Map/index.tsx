@@ -1,4 +1,5 @@
 import MapWrapper from '@components/Map/index.style';
+
 import {
   getCurrentLocation,
   requestCoord,
@@ -7,6 +8,7 @@ import {
   createPolygons,
   displayPolygons,
   deletePolygons,
+  LFURegions,
 } from '@controllers/mapController';
 
 import {
@@ -24,9 +26,10 @@ const DEFAULT_POSITION = {
   scale: 9,
 };
 
-const Map: React.FC = () => {
+const MapComponent: React.FC = () => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
+  const cache = useRef(new Map());
 
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [range, setRange] = useState({
@@ -99,7 +102,7 @@ const Map: React.FC = () => {
   useEffect(() => {
     const { scale, region } = range;
     const updatePolygons = async () => {
-      const regions = await requestCoord(scale, region);
+      const regions = await LFURegions(cache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
     };
@@ -133,4 +136,4 @@ const Map: React.FC = () => {
   return <MapWrapper ref={mapWrapper} />;
 };
 
-export default Map;
+export default MapComponent;

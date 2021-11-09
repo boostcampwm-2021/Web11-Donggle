@@ -4,8 +4,16 @@ import express, { Request, Response } from 'express';
 
 const router: express.Router = express.Router();
 
-router.post('/map-data/:password', (req: Request, res: Response) => {
-  if (req.params.password === process.env.ADMIN_PASSWORD) {
+interface UpdateMapService {
+  populateMap: () => Promise<void>;
+}
+
+interface MapRequest extends Request {
+  body: { [password: string]: string };
+}
+
+router.post('/map-data', (req: MapRequest, res: Response) => {
+  if (req.body.password === process.env.ADMIN_PASSWORD) {
     void updateMapService.populateMap();
     res.status(200).send('HAHA!');
   } else {

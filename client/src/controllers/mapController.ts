@@ -148,6 +148,44 @@ const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
   polygons.forEach((polygon) => polygon.setMap(null));
 };
 
+const LFURegions = async (
+  cache: Map<string, any>,
+  scale: number,
+  region: string[],
+) => {
+  const [big, medium, small] = region;
+  let key = '';
+
+  switch (true) {
+    case scale < 9:
+      key = `${big} ${medium}`;
+      break;
+    case 9 <= scale && scale < 12:
+      key = `${big}`;
+      break;
+    case 12 <= scale:
+      key = 'all';
+      break;
+  }
+
+  if (cache.has(key)) {
+    cache.get(key).count++;
+    return cache.get(key);
+  } else {
+    const regions = await requestCoord(scale, region);
+    regions.count = 1;
+    if (cache.size > 10) {
+      const mostUnusedRegions = Array.from(cache.entries()).sort(
+        (a, b) => a[1].count - b[1].count,
+      )[0][0];
+
+      cache.delete(mostUnusedRegions);
+    }
+    cache.set(key, regions);
+    return regions;
+  }
+};
+
 export {
   getCurrentLocation,
   coordToAddress,
@@ -157,4 +195,5 @@ export {
   createPolygons,
   displayPolygons,
   deletePolygons,
+  LFURegions,
 };

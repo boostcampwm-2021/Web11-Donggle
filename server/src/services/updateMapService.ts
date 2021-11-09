@@ -1,11 +1,16 @@
 import logger from '@loaders/loggerLoader';
-
 import { Map, MapModel } from '@models/Map';
 
 import axios from 'axios';
 import proj4 from 'proj4';
+import simplify from 'simplify-js';
 
 type CoordType = [number, number];
+
+interface Point {
+  x: number;
+  y: number;
+}
 
 interface FeatureType {
   type: string;
@@ -82,13 +87,18 @@ function transCoord(coord: CoordType): CoordType {
 }
 
 const transPolygon = (path: CoordType[]) => {
-  return path.map((coord) => transCoord(coord));
+  const simplifiedPath: Point[] = simplify(
+    path.map((coord) => ({ x: coord[0], y: coord[1] } as Point)),
+    5,
+    true,
+  );
+  return simplifiedPath.map((coord) =>
+    transCoord(Object.values(coord) as CoordType),
+  );
 };
 
 const transMultiPolygon = (path: CoordType[][][]) => {
-  return path.map((coords) =>
-    coords.map((coord) => coord.map((c) => transCoord(c))),
-  );
+  return path.map((coords) => coords.map((coord) => transPolygon(coord)));
 };
 
 const recursiveGetCoords = async (code: string, accessToken: string) => {
@@ -114,6 +124,7 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       type: feature.geometry.type,
       path,
       code: feature.properties.adm_cd,
+      codeLength: feature.properties.adm_cd.length,
       name: feature.properties.adm_nm,
       center: [lat, lng],
     };
@@ -136,7 +147,7 @@ const populateMap = async () => {
     .catch((err) => {
       logger.error('Error! : ', err);
     });
-
+  await MapModel.collection.createIndex({ codeLength: 1, name: 'text' });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
 };
