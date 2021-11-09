@@ -6,13 +6,19 @@ const router: express.Router = express.Router();
 
 router.get('/polygon', (async (req: Request, res: Response) => {
   const { scale, big, medium, small } = req.query;
-  const polygon = await mapService.queryPolygon(
-    Number(scale),
-    big as string,
-    medium as string,
-    small as string,
-  );
-  res.json(polygon);
+  if (scale && (big || medium || small)) {
+    const polygon = await mapService.queryPolygon(
+      Number(scale),
+      big as string,
+      medium as string,
+      small as string,
+    );
+    res.json(polygon);
+  } else {
+    res.json([
+      { name: '', path: [], code: '', codeLength: 0, center: [], type: '' },
+    ]);
+  }
 }) as RequestHandler);
 
 router.get('/search', (async (req: Request, res: Response) => {
