@@ -35,7 +35,6 @@ const WrapperDiv = styled.div`
 
 const SpanText = styled.span`
   display: block;
-  height: 100%;
   font-size: 18px;
 `;
 
@@ -59,7 +58,6 @@ const SpanReviewTitle = styled(SpanTitle)`
 const RateDiv = styled(WrapperDiv)`
   flex-direction: column;
   width: 100%;
-  height: 290px;
   padding: 10px 60px;
 `;
 
@@ -108,6 +106,52 @@ const RateStarFillDiv = styled.div<{ starRate: number }>`
   -webkit-text-fill-color: gold;
 `;
 
+const RateCategoryDiv = styled(RateNumStarDiv)`
+  flex-direction: column;
+  height: 100%;
+  margin-top: 20px;
+`;
+
+const RateCategoryGroup = styled.div`
+  width: 100%;
+  display: flex;
+  line-height: 1;
+  flex-direction: column;
+  justify-content: start;
+`;
+
+const RateCategoryTitle = styled(SpanText)`
+  font-size: 12px;
+`;
+
+const RateCategoryUnit = styled.div`
+  width: 80%;
+  height: 6px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: ${(props) => props.theme.colors.lightgrey};
+  border-radius: 5px;
+  margin: 5px 0 15px 0;
+`;
+
+const RateCategoryBar = styled.span<{ categoryRate: number }>`
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 6px;
+  width: ${(props) => props.categoryRate * 20}%;
+  background-color: ${(props) => props.theme.colors.green};
+  border-radius: 3px;
+  z-index: 1;
+`;
+
+const RateCategoryNum = styled(SpanText)`
+  position: absolute;
+  left: 105%;
+  font-size: 12px;
+`;
+
 const SidebarWrapper = styled.div`
   display: relative;
   width: 100%;
@@ -128,4 +172,10 @@ export {
   RateStarDiv,
   RateStarBaseDiv,
   RateStarFillDiv,
+  RateCategoryDiv,
+  RateCategoryGroup,
+  RateCategoryTitle,
+  RateCategoryUnit,
+  RateCategoryBar,
+  RateCategoryNum,
 };

@@ -7,6 +7,7 @@ import {
   Layout,
   WrapperDiv,
   SpanBackArrow,
+  SpanText,
   SpanTitle,
   SpanReviewTitle,
   RateDiv,
@@ -15,14 +16,26 @@ import {
   RateStarDiv,
   RateStarBaseDiv,
   RateStarFillDiv,
+  RateCategoryDiv,
+  RateCategoryGroup,
+  RateCategoryTitle,
+  RateCategoryUnit,
+  RateCategoryBar,
+  RateCategoryNum,
 } from './index.style';
 
-interface IProps {
+export interface RateProps {
   sidebar: boolean | null;
   starRate: number;
+  categoryRate: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
 }
 
-const Sidebar: React.FC<IProps> = (props: IProps) => {
+const Sidebar: React.FC<RateProps> = (props: RateProps) => {
   return (
     <Layout
       className={`${props.sidebar ? 'open' : ''}`}
@@ -37,7 +50,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       </WrapperDiv>
       <RateDiv>
         <RateNumStarDiv>
-          <RateSpanText>{props.starRate}</RateSpanText>
+          <RateSpanText>{props.starRate.toFixed(1)}</RateSpanText>
           <RateStarDiv>
             <RateStarBaseDiv>
               <FontAwesomeIcon icon={faStar} size="lg" />
@@ -55,6 +68,40 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
             </RateStarFillDiv>
           </RateStarDiv>
         </RateNumStarDiv>
+        <RateCategoryDiv>
+          <RateCategoryGroup>
+            <RateCategoryTitle>치안</RateCategoryTitle>
+            <RateCategoryUnit>
+              <RateCategoryBar
+                categoryRate={props.categoryRate.safety}
+              ></RateCategoryBar>
+              <RateCategoryNum>{props.categoryRate.safety}</RateCategoryNum>
+            </RateCategoryUnit>
+            <RateCategoryTitle>교통</RateCategoryTitle>
+            <RateCategoryUnit>
+              <RateCategoryBar
+                categoryRate={props.categoryRate.traffic}
+              ></RateCategoryBar>
+              <RateCategoryNum>{props.categoryRate.traffic}</RateCategoryNum>
+            </RateCategoryUnit>
+            <RateCategoryTitle>음식</RateCategoryTitle>
+            <RateCategoryUnit>
+              <RateCategoryBar
+                categoryRate={props.categoryRate.food}
+              ></RateCategoryBar>
+              <RateCategoryNum>{props.categoryRate.food}</RateCategoryNum>
+            </RateCategoryUnit>
+            <RateCategoryTitle>놀거리</RateCategoryTitle>
+            <RateCategoryUnit>
+              <RateCategoryBar
+                categoryRate={props.categoryRate.entertainment}
+              ></RateCategoryBar>
+              <RateCategoryNum>
+                {props.categoryRate.entertainment}
+              </RateCategoryNum>
+            </RateCategoryUnit>
+          </RateCategoryGroup>
+        </RateCategoryDiv>
       </RateDiv>
     </Layout>
   );

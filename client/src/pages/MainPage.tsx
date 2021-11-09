@@ -46,7 +46,16 @@ const MainPage: React.FC = () => {
       <Header></Header>
       <FlexContainer>
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
-        <Sidebar sidebar={sidebar} starRate={4.6}></Sidebar>
+        <Sidebar
+          sidebar={sidebar}
+          starRate={3}
+          categoryRate={{
+            safety: 3.6,
+            traffic: 4.1,
+            food: 2.7,
+            entertainment: 1.5,
+          }}
+        ></Sidebar>
       </FlexContainer>
     </MainDiv>
   );
