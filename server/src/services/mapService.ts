@@ -1,33 +1,38 @@
 import { Map, MapModel } from '@models/Map';
+import { SimpleMap, SimpleMapModel } from '@models/SimpleMap';
 
 const queryPolygon = async (
   scale: number,
   big: string,
   medium: string,
   small: string,
-) => {
+): Promise<Map[]> => {
   let result: Map[] = [];
 
   switch (true) {
     case scale < 9:
       result = await MapModel.find({
-        name: { $regex: new RegExp(`^${big} ${medium}`) },
-        code: { $regex: /^.......$/ },
+        $text: { $search: `${big} ${medium}` },
+        codeLength: 7,
       });
       break;
     case 9 <= scale && scale < 12:
       result = await MapModel.find({
-        name: { $regex: new RegExp(`^${big}`) },
-        code: { $regex: /^.....$/ },
+        $text: { $search: `${big}` },
+        codeLength: 5,
       });
       break;
     case 12 <= scale:
       result = await MapModel.find({
-        code: { $regex: /^..$/ },
+        codeLength: 2,
       });
       break;
   }
   return result;
 };
 
-export default { queryPolygon };
+const queryCenter = async (keyword: string): Promise<SimpleMap[]> => {
+  return await SimpleMapModel.find({ name: { $regex: RegExp(keyword, 'g') } });
+};
+
+export default { queryPolygon, queryCenter };

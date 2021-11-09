@@ -15,4 +15,12 @@ router.get('/polygon', (async (req: Request, res: Response) => {
   res.json(polygon);
 }) as RequestHandler);
 
+router.get('/search', (async (req: Request, res: Response) => {
+  const { keyword } = req.query;
+  if (typeof keyword === 'string') {
+    const center = await mapService.queryCenter(keyword);
+    res.json(center);
+  }
+}) as RequestHandler);
+
 export default router;
