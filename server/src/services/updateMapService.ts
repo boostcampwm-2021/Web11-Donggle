@@ -1,5 +1,6 @@
 import logger from '@loaders/loggerLoader';
 import { Map, MapModel } from '@models/Map';
+import { SimpleMap, SimpleMapModel } from '@models/SimpleMap';
 
 import axios from 'axios';
 import proj4 from 'proj4';
@@ -129,16 +130,33 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       center: [lat, lng],
     };
 
-    MapModel.create(regionData).catch((err) => {
-      logger.error(err);
-    });
-    logger.info(`insert -> ${regionData.name}`);
+    const simpleRegionData: SimpleMap = {
+      codeLength: feature.properties.adm_cd.length,
+      name: feature.properties.adm_nm,
+      center: [lat, lng],
+    };
+
+    MapModel.create(regionData)
+      .then(() => {
+        logger.info(`insert -> ${regionData.name}`);
+      })
+      .catch((err) => {
+        logger.error(err);
+      });
+
+    SimpleMapModel.create(simpleRegionData)
+      .then(() => {
+        logger.info(`insert -> ${simpleRegionData.name} -> simple`);
+      })
+      .catch((err) => {
+        logger.error(err);
+      });
 
     void recursiveGetCoords(feature.properties.adm_cd, accessToken);
   }
 };
 
-const populateMap = async () => {
+const populateMapAndSimpleMap = async () => {
   await MapModel.collection
     .drop()
     .then((result) => {
@@ -147,9 +165,19 @@ const populateMap = async () => {
     .catch((err) => {
       logger.error('Error! : ', err);
     });
+  await SimpleMapModel.collection
+    .drop()
+    .then((result) => {
+      logger.info('Dropped simpleMaps collection');
+    })
+    .catch((err) => {
+      logger.error('Error! : ', err);
+    });
+
   await MapModel.collection.createIndex({ codeLength: 1, name: 'text' });
+  await SimpleMapModel.collection.createIndex({ name: 1 });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
 };
 
-export default { populateMap };
+export default { populateMapAndSimpleMap };

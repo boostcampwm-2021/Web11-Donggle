@@ -1,4 +1,5 @@
 import MapWrapper from '@components/Map/index.style';
+import Searchbar from '@components/Searchbar/index';
 
 import {
   getCurrentLocation,
@@ -131,7 +132,11 @@ const MapComponent: React.FC = () => {
     return () => deleteMarkers(markers);
   }, [map, markers]);
 
-  return <MapWrapper ref={mapWrapper} />;
+  return (
+    <MapWrapper ref={mapWrapper}>
+      <Searchbar map={map} />
+    </MapWrapper>
+  );
 };
 
 export default MapComponent;
