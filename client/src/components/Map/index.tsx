@@ -1,4 +1,4 @@
-import MapWrapper, { TestDiv } from '@components/Map/index.style';
+import MapWrapper, { TestDiv, CenterMarker } from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 
 import {
@@ -141,6 +141,7 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
     <MapWrapper ref={mapWrapper}>
       <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
       <Searchbar map={map} />
+      <CenterMarker />
     </MapWrapper>
   );
 };
