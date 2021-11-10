@@ -80,12 +80,11 @@ const isRangeEqual = (
 
 // backend에 polygon 정보 요청
 const requestCoord = async (scale: number, region: Array<string>) => {
+  console.log(scale, region);
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
-    .then(async function (response) {
-      return await response.json();
-    })
+    .then(async (response) => await response.json())
     .catch((err) => {
       console.error(err);
     });
@@ -173,6 +172,7 @@ const LFURegions = async (
     return cache.get(key);
   } else {
     const regions = await requestCoord(scale, region);
+    console.log(regions);
     regions.count = 1;
     if (cache.size > 10) {
       const mostUnusedRegions = Array.from(cache.entries()).sort(

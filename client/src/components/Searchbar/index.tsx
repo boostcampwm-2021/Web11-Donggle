@@ -7,7 +7,7 @@ import {
   DropdownItem,
 } from '@components/Searchbar/index.style';
 import {
-  SimpleMap,
+  MapInfo,
   spreadDropdown,
   moveTo,
 } from '@controllers/searchbarController';
@@ -20,7 +20,7 @@ interface SearchbarProps {
 
 const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
   const [input, setInput] = useState('');
-  const [results, setResults] = useState<SimpleMap[]>([]);
+  const [results, setResults] = useState<MapInfo[]>([]);
   const isSpread = useRef(false);
 
   const inputTagRef = useRef<HTMLInputElement>(null);
@@ -49,7 +49,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
                 moveTo(map, results[i], setResults, inputTagRef.current)
               }
             >
-              {result.name}
+              {result.address}
             </DropdownItem>
           ))}
       </DropdownWrapper>
