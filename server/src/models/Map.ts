@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 type CoordType = [number, number];
 
 interface Map {
-  name: string;
+  address: string;
   path: CoordType[] | CoordType[][][];
   code: string;
   codeLength: number;
@@ -12,7 +12,7 @@ interface Map {
 }
 
 const mapSchema = new Schema<Map>({
-  name: { type: String, required: true, text: true },
+  address: { type: String, required: true, text: true },
   path: { type: [], required: true },
   code: { type: String, required: true },
   codeLength: { type: Number, required: true, index: true },

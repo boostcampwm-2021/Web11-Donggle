@@ -105,7 +105,7 @@ const getRandomRate = () => {
 
 const regionToMarkerInfo = (region) => {
   return {
-    address: region.name,
+    address: region.address,
     center: region.center,
     rates: {
       safety: getRandomRate(),
