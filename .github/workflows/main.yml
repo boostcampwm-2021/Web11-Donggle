@@ -6,7 +6,7 @@ name: Node.js CD
 
 on:
   push:
-    branches: [release]
+    branches: [main]
 
 jobs:
   deploy:
@@ -80,6 +80,5 @@ jobs:
             cp server-env/.env.production donggle-server/server/
             cd donggle-server/server/
             yarn install
-            pm2 kill
             yarn build
             yarn prod

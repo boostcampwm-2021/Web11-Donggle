@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --ignore test.json -r tsconfig-paths/register ./src/app.ts",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "prod": "cross-env NODE_ENV=production pm2 start ./dist/app.js -i 0"
+    "prod": "pm2 reload ecosystem.config.js --env production",
+    "test": "cross-env NODE_ENV=production pm2 reload ecosystem.config.js --update-env"
   },
   "dependencies": {
     "@types/proj4": "^2.5.2",
