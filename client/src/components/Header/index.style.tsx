@@ -95,19 +95,8 @@ const LoginBtn = styled.button`
   }
 `;
 
-const LogoutBtn = styled.button`
-  border: 1px solid ${(props) => props.theme.colors.lightgreen};
-  border-radius: 10px;
-  background: ${(props) => props.theme.colors.white};
-  width: 100px;
-  height: 40px;
-  text-align: center;
-  cursor: pointer;
+const LogoutBtn = styled(LoginBtn)`
   margin-right: 10px;
-  &:hover {
-    background: ${(props) => props.theme.colors.lightgreen};
-    color: ${(props) => props.theme.colors.white};
-  }
 `;
 
 const UserProfile = styled.div`
