@@ -102,7 +102,6 @@ const MapComponent: React.FC<IProps> = ({
       updateSidebarRate(rateData);
       openSidebar();
     };
-
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
 
     wrapper.addEventListener('click', onMarkerClicked);
