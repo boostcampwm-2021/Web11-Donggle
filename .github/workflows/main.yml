@@ -6,9 +6,7 @@ name: Node.js CD
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [release]
 
 jobs:
   deploy:
@@ -32,7 +30,7 @@ jobs:
           echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.production
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-        working-directory: ${{env.client-directory}}
+          working-directory: ${{env.client-directory}}
 
       - name: Client yarn install
         run: yarn install
@@ -81,9 +79,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cp server-env/.env.development donggle-server/server/
             cp server-env/.env.production donggle-server/server/
             cd donggle-server/server/
             yarn install
-            pm2 kill
+            yarn build
             yarn prod

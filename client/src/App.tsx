@@ -11,12 +11,17 @@ import GlobalStyle from '@styledComponents/GlobalStyle';
 import { ThemeProvider } from 'styled-components';
 import myTheme from '@styledComponents/theme';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 
 const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
+
+  useEffect(() => {
+    // 브라우저 API를 이용하여 문서 타이틀을 업데이트합니다.
+    console.log('파일이 업데이트되었습니다');
+  });
 
   return (
     <>
