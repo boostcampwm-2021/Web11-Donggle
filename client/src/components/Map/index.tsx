@@ -2,7 +2,6 @@ import MapWrapper from '@components/Map/index.style';
 
 import {
   getCurrentLocation,
-  requestCoord,
   coordToRegionCode,
   isRangeEqual,
   createPolygons,
@@ -12,11 +11,13 @@ import {
 } from '@controllers/mapController';
 
 import {
-  requestMarkerInfo,
   createMarkers,
   displayMarkers,
   deleteMarkers,
+  regionToMarkerInfo,
 } from '@controllers/markerController';
+
+import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
 
@@ -53,6 +54,8 @@ const MapComponent: React.FC = () => {
     };
 
     const kakaoMap = new kakao.maps.Map(wrapper, options);
+    const zoomControl = new kakao.maps.ZoomControl();
+    kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.BOTTOMRIGHT);
     setMap(kakaoMap);
 
     const onCurrentLocation = ([lat, lng]: [number, number]) => {
@@ -105,6 +108,11 @@ const MapComponent: React.FC = () => {
       const regions = await LFURegions(cache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
+
+      // temp
+      const markerInfos = regions.map((region) => regionToMarkerInfo(region));
+      const markers = createMarkers(markerInfos);
+      setMarkers(markers);
     };
     updatePolygons();
   }, [range]);
@@ -115,16 +123,6 @@ const MapComponent: React.FC = () => {
     displayPolygons(polygons, map);
     return () => deletePolygons(polygons);
   }, [map, polygons]);
-
-  useEffect(() => {
-    const updateMarkers = async () => {
-      const { scale, region } = range;
-      const markerInfos = await requestMarkerInfo(scale, region);
-      const markers = createMarkers(markerInfos);
-      setMarkers(markers);
-    };
-    updateMarkers();
-  }, [range]);
 
   useEffect(() => {
     if (!map) return;
