@@ -12,7 +12,13 @@ const queryPolygon = async (
   switch (true) {
     case scale < 9:
       result = await MapModel.find({
-        $text: { $search: `${medium}` },
+        /*
+        2921-11-10
+        홍승용
+        형태소가 아닌 문장을 쿼리하려면 escape 해야함
+        */
+        // eslint-disable-next-line no-useless-escape
+        $text: { $search: `\"${big} ${medium}\"` },
         codeLength: 7,
       });
       break;
