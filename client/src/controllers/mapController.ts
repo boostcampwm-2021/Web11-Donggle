@@ -95,7 +95,7 @@ const createPolygons = (regions) => {
   const polygons = Array<kakao.maps.Polygon>();
   const colorHash = new ColorHash();
   regions.forEach((region) => {
-    const colorString = colorHash.hex(region.name);
+    const colorString = colorHash.hex(region.address);
     if (region.type === 'Polygon') {
       polygons.push(makeSinglePolygon(region.path, colorString));
     } else {
