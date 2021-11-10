@@ -1,4 +1,4 @@
-import MapWrapper, { TestDiv, CenterMarker } from '@components/Map/index.style';
+import MapWrapper, { CenterMarker } from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 
 import {
@@ -16,11 +16,13 @@ import {
   displayMarkers,
   deleteMarkers,
   regionToMarkerInfo,
+  createMarkerClickListener,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
+import { RateType } from '@pages/MainPage';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -29,11 +31,17 @@ const DEFAULT_POSITION = {
 };
 
 interface IProps {
-  sidebar: boolean | null;
-  toggleSidebar(e: React.MouseEvent): void;
+  openSidebar: () => void;
+  closeSidebar: () => void;
+  updateSidebarRate: (rateData: RateType) => void;
+  toggleSidebar: () => void;
 }
 
-const MapComponent: React.FC<IProps> = (props: IProps) => {
+const MapComponent: React.FC<IProps> = ({
+  openSidebar,
+  closeSidebar,
+  updateSidebarRate,
+}) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const cache = useRef(new Map());
@@ -87,6 +95,21 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
   }, []);
 
   useEffect(() => {
+    if (!mapWrapper.current) return;
+
+    const wrapper = mapWrapper.current;
+    const onClick = (rateData: RateType) => {
+      updateSidebarRate(rateData);
+      openSidebar();
+    };
+
+    const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
+
+    wrapper.addEventListener('click', onMarkerClicked);
+    return () => wrapper.removeEventListener('click', onMarkerClicked);
+  }, [openSidebar, closeSidebar, updateSidebarRate]);
+
+  useEffect(() => {
     const updateRange = async () => {
       const { latitude, longitude, scale } = position;
       const region = (await coordToRegionCode(latitude, longitude)) as {
@@ -112,10 +135,10 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
     const { scale, region } = range;
     const updatePolygons = async () => {
       const regions = await LFURegions(cache.current, scale, region);
+      console.log(regions);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
 
-      // temp
       const markerInfos = regions.map((region) => regionToMarkerInfo(region));
       const markers = createMarkers(markerInfos);
       setMarkers(markers);
@@ -139,7 +162,6 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
 
   return (
     <MapWrapper ref={mapWrapper}>
-      <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
       <Searchbar map={map} />
       <CenterMarker />
     </MapWrapper>

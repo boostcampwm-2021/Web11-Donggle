@@ -1,8 +1,7 @@
 import Header from '@components/Header';
-import Modal from '@components/modal/index';
 import Map from '@components/Map/index';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Sidebar from '@components/Sidebar';
 
@@ -21,7 +20,7 @@ const FlexContainer = styled.div`
 `;
 
 // Rate, Review 는 Backend에서 아래와 같은 형식으로 반환한다고 가정
-export interface TempRateType {
+export interface RateType {
   address: string;
   code: string;
   codeLength: number;
@@ -36,7 +35,7 @@ export interface TempRateType {
   };
 }
 
-export interface TempReviewType {
+export interface ReviewType {
   categories: {
     safety: number;
     traffic: number;
@@ -47,23 +46,7 @@ export interface TempReviewType {
   user: string;
 }
 
-// Backend API 반환 데이터 가정
-const TemporaryRateData: TempRateType = {
-  address: '서울시 관악구 신림동',
-  code: '1121069',
-  codeLength: 7,
-  center: [37.48756349263078, 126.9283814947558],
-  total: 9,
-  count: 2,
-  categories: {
-    safety: 8,
-    traffic: 7,
-    food: 9,
-    entertainment: 9,
-  },
-};
-
-const TemporaryReviewData: TempReviewType[] = [
+const TemporaryReviewData: ReviewType[] = [
   {
     categories: {
       safety: 4,
@@ -94,29 +77,54 @@ const TemporaryHashTagData: string[] = [
   '역이 가까운',
 ];
 
+const DEFAULT_RATE_DATA: RateType = {
+  address: '',
+  code: '',
+  codeLength: 0,
+  center: [37.541, 126.986],
+  total: 9,
+  count: 2,
+  categories: {
+    safety: 8,
+    traffic: 7,
+    food: 9,
+    entertainment: 9,
+  },
+};
+
 const MainPage: React.FC = () => {
-  const [sidebar, setSidebar] = useState<boolean | null>(null);
+  const [sidebar, setSidebar] = useState<boolean>(false);
+  const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
 
-  const toggleSidebar = (e) => {
-    if (sidebar === null || !sidebar) {
-      setSidebar(!sidebar);
-    } else {
-      setSidebar(false);
-    }
+  const toggleSidebar = () => {
+    setSidebar((prev) => !prev);
   };
 
-  const closeSidebar = () => {
-    if (sidebar) setSidebar(false);
-  };
+  const openSidebar = useCallback(() => {
+    setSidebar(true);
+  }, []);
+
+  const closeSidebar = useCallback(() => {
+    setSidebar(false);
+  }, []);
+
+  const updateSidebarRate = useCallback((rateData: RateType) => {
+    setSidebarRate(rateData);
+  }, []);
 
   return (
     <MainDiv>
       <Header></Header>
       <FlexContainer>
-        <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
+        <Map
+          openSidebar={openSidebar}
+          closeSidebar={closeSidebar}
+          updateSidebarRate={updateSidebarRate}
+          toggleSidebar={toggleSidebar}
+        ></Map>
         <Sidebar
           sidebar={sidebar}
-          rateData={TemporaryRateData}
+          rateData={sidebarRate}
           reviewData={TemporaryReviewData}
           hashTagData={TemporaryHashTagData}
           closeSidebar={closeSidebar}

@@ -20,15 +20,15 @@ import {
   AddButtonDiv,
   AddButton,
 } from './index.style';
-import { TempRateType, TempReviewType } from '@pages/MainPage';
+import { RateType, ReviewType } from '@pages/MainPage';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
 
 export interface RateProps {
   sidebar: boolean | null;
-  rateData: TempRateType;
-  reviewData: TempReviewType[];
+  rateData: RateType;
+  reviewData: ReviewType[];
   hashTagData: string[];
   closeSidebar: () => void;
 }
@@ -42,10 +42,7 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
 
   return (
     <Container>
-      <Layout
-        className={`${props.sidebar ? 'open' : ''}`}
-        sidebar={props.sidebar}
-      >
+      <Layout className={`${props.sidebar ? 'open' : ''}`}>
         <TitleDiv>
           <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
           <SpanTitle>{props.rateData.address}</SpanTitle>
