@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --ignore test.json -r tsconfig-paths/register ./src/app.ts",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "prod": "cross-env NODE_ENV=production pm2 reload ./dist/app.js -i 0"
+    "prod": "cross-env NODE_ENV=production pm2 reload ./dist/app.js -i 0",
+    "bpd": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist && cross-env NODE_ENV=production pm2 reload ./dist/app.js -i 0"
   },
   "dependencies": {
     "@types/proj4": "^2.5.2",
