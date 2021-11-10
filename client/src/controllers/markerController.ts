@@ -19,7 +19,7 @@ const average = (...values: number[]) => {
 };
 
 const ratingToPercent = (rate: number) => {
-  return (rate / 5) * 100;
+  return rate * 20;
 };
 
 const starRateHTML = (rate: number) => {

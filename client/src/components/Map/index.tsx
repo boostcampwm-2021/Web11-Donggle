@@ -11,7 +11,6 @@ import {
 } from '@controllers/mapController';
 
 import {
-  // requestMarkerInfo,
   createMarkers,
   displayMarkers,
   deleteMarkers,
@@ -110,7 +109,7 @@ const MapComponent: React.FC = () => {
       const polygons = createPolygons(regions);
       setPolygons(polygons);
 
-      // test
+      // temp
       const markerInfos = regions.map((region) => regionToMarkerInfo(region));
       const markers = createMarkers(markerInfos);
       setMarkers(markers);
@@ -124,16 +123,6 @@ const MapComponent: React.FC = () => {
     displayPolygons(polygons, map);
     return () => deletePolygons(polygons);
   }, [map, polygons]);
-
-  // useEffect(() => {
-  //   const updateMarkers = async () => {
-  //     const { scale, region } = range;
-  //     const markerInfos = await requestMarkerInfo(scale, region);
-  //     const markers = createMarkers(markerInfos);
-  //     setMarkers(markers);
-  //   };
-  //   updateMarkers();
-  // }, [range]);
 
   useEffect(() => {
     if (!map) return;
