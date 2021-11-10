@@ -13,11 +13,6 @@ import {
   SpanTitle,
   // SpanReviewTitle,
   RateDiv,
-  RateSpanText,
-  RateNumStarDiv,
-  RateStarDiv,
-  RateStarBaseDiv,
-  RateStarFillDiv,
   RateCategoryDiv,
   RateCategoryGroup,
   RateCategoryTitle,
@@ -33,16 +28,13 @@ import {
   AddButtonDiv,
   AddButton,
 } from './index.style';
+import { TempRateType, TempReviewType } from '@pages/MainPage';
+import StarRateDiv from '@components/Common/StarRate';
 
 export interface RateProps {
   sidebar: boolean | null;
-  starRate: number;
-  categoryRate: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
+  rateData: TempRateType;
+  reviewData: TempReviewType[];
   closeSidebar: () => void;
 }
 
@@ -52,6 +44,7 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
     console.log(menu);
     setSelectedMenu(menu);
   };
+  console.log(props.rateData);
 
   return (
     <Container>
@@ -68,55 +61,37 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
           <SpanReviewTitle>동네 평점</SpanReviewTitle>
         </WrapperDiv> */}
         <RateDiv>
-          <RateNumStarDiv>
-            <RateSpanText>{props.starRate.toFixed(1)}</RateSpanText>
-            <RateStarDiv>
-              <RateStarFillDiv starRate={props.starRate}>
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-              </RateStarFillDiv>
-              <RateStarBaseDiv>
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-              </RateStarBaseDiv>
-            </RateStarDiv>
-          </RateNumStarDiv>
+          <StarRateDiv isLarge={true} total={props.rateData.total} />
           <RateCategoryDiv>
             <RateCategoryGroup>
               <RateCategoryTitle>치안</RateCategoryTitle>
               <RateCategoryUnit>
                 <RateCategoryBar
-                  categoryRate={props.categoryRate.safety}
+                  categoryRate={props.rateData.safety}
                 ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.safety}</RateCategoryNum>
+                <RateCategoryNum>{props.rateData.safety}</RateCategoryNum>
               </RateCategoryUnit>
               <RateCategoryTitle>교통</RateCategoryTitle>
               <RateCategoryUnit>
                 <RateCategoryBar
-                  categoryRate={props.categoryRate.traffic}
+                  categoryRate={props.rateData.traffic}
                 ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.traffic}</RateCategoryNum>
+                <RateCategoryNum>{props.rateData.traffic}</RateCategoryNum>
               </RateCategoryUnit>
               <RateCategoryTitle>음식</RateCategoryTitle>
               <RateCategoryUnit>
                 <RateCategoryBar
-                  categoryRate={props.categoryRate.food}
+                  categoryRate={props.rateData.food}
                 ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.food}</RateCategoryNum>
+                <RateCategoryNum>{props.rateData.food}</RateCategoryNum>
               </RateCategoryUnit>
               <RateCategoryTitle>놀거리</RateCategoryTitle>
               <RateCategoryUnit>
                 <RateCategoryBar
-                  categoryRate={props.categoryRate.entertainment}
+                  categoryRate={props.rateData.entertainment}
                 ></RateCategoryBar>
                 <RateCategoryNum>
-                  {props.categoryRate.entertainment}
+                  {props.rateData.entertainment}
                 </RateCategoryNum>
               </RateCategoryUnit>
             </RateCategoryGroup>
@@ -144,12 +119,17 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
           </Menu>
         </MenuBarDiv>
         <ContentDiv>
-          <Content>Test1</Content>
-          <Content>Test2</Content>
-          <Content>Test3</Content>
-          <Content>Test4</Content>
-          <Content>Test5</Content>
-          <Content>Test6</Content>
+          {props.reviewData.map((review) => (
+            <>
+              <div>
+                <span>{review.total}</span>
+                <span>{review.user}</span>
+              </div>
+              <div>
+                <span>{review.text}</span>
+              </div>
+            </>
+          ))}
         </ContentDiv>
         <AddButtonDiv>
           <AddButton>후기 작성하기</AddButton>

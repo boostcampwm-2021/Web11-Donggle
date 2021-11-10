@@ -15,13 +15,11 @@ const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
   z-index: 1;
   overflow-y: scroll;
   background-color: white;
-  -webkit-transform: translateX(400px);
   transform: translateX(400px);
-  -webkit-transition: all ease 0.3s 0s;
+
   transition: all ease 0.3s 0s;
   padding-bottom: 6.3em;
   &.open {
-    -webkit-transform: translateX(0px);
     transform: translateX(0px);
   }
   &::-webkit-scrollbar {

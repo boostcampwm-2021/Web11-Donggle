@@ -22,11 +22,63 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-/*
-  2021-11-02
-  홍승용
-  임시 예제 코드입니다. router내부에서 history객체를 활용하려면 props의 type으로 RouteComponentsProps를 사용해야 합니다.
-*/
+// Rate, Review 는 Backend에서 아래와 같은 형식으로 반환한다고 가정
+export interface TempRateType {
+  address: string;
+  code: string;
+  codeLength: number;
+  center: [number, number];
+  total: number;
+  safety: number;
+  traffic: number;
+  food: number;
+  entertainment: number;
+}
+
+export interface TempReviewType {
+  total: number;
+  safety: number;
+  traffic: number;
+  food: number;
+  entertainment: number;
+  text: string;
+  user: string;
+}
+
+// Backend API 반환 데이터 가정
+const TemporaryRateData: TempRateType = {
+  address: '서울시 관악구 신림동',
+  code: '1121069',
+  codeLength: 7,
+  center: [37.48756349263078, 126.9283814947558],
+  total: 4.4,
+  safety: 4.2,
+  traffic: 4.9,
+  food: 4.5,
+  entertainment: 4.8,
+};
+
+const TemporaryReviewData: TempReviewType[] = [
+  {
+    total: 4.3,
+    safety: 4.4,
+    traffic: 4.2,
+    food: 4.1,
+    entertainment: 4.9,
+    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
+    user: 'github:user1',
+  },
+  {
+    total: 4.7,
+    safety: 4.2,
+    traffic: 4.1,
+    food: 4.8,
+    entertainment: 4.5,
+    text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
+    user: 'github:user2',
+  },
+];
+
 const MainPage: React.FC = () => {
   const [temp, setTemp] = useRecoilState(tempState);
   const [sidebar, setSidebar] = useState<boolean | null>(null);
@@ -50,13 +102,8 @@ const MainPage: React.FC = () => {
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
         <Sidebar
           sidebar={sidebar}
-          starRate={3.3}
-          categoryRate={{
-            safety: 3.6,
-            traffic: 4.1,
-            food: 2.7,
-            entertainment: 2.5,
-          }}
+          rateData={TemporaryRateData}
+          reviewData={TemporaryReviewData}
           closeSidebar={closeSidebar}
         ></Sidebar>
       </FlexContainer>
