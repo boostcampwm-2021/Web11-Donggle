@@ -2,11 +2,11 @@ import { updateMapService } from '@services/index';
 
 import express, { Request, Response } from 'express';
 
-const router: express.Router = express.Router();
-
-interface UpdateMapService {
-  populateMap: () => Promise<void>;
+interface UpdateMapservice {
+  populateMapAndSimpleMap: () => void;
 }
+
+const router: express.Router = express.Router();
 
 interface MapRequest extends Request {
   body: { [password: string]: string };

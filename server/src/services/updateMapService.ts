@@ -1,6 +1,6 @@
 import logger from '@loaders/loggerLoader';
 import { Map, MapModel } from '@models/Map';
-import { SimpleMap, SimpleMapModel } from '@models/SimpleMap';
+import { MapInfo, MapInfoModel } from '@models/MapInfo';
 
 import axios from 'axios';
 import proj4 from 'proj4';
@@ -126,27 +126,28 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       path,
       code: feature.properties.adm_cd,
       codeLength: feature.properties.adm_cd.length,
-      name: feature.properties.adm_nm,
+      address: feature.properties.adm_nm,
       center: [lat, lng],
     };
 
-    const simpleRegionData: SimpleMap = {
+    const mapInfoData: MapInfo = {
       codeLength: feature.properties.adm_cd.length,
-      name: feature.properties.adm_nm,
+      code: feature.properties.adm_cd,
+      address: feature.properties.adm_nm,
       center: [lat, lng],
     };
 
     MapModel.create(regionData)
       .then(() => {
-        logger.info(`insert -> ${regionData.name}`);
+        logger.info(`insert -> ${regionData.address}`);
       })
       .catch((err) => {
         logger.error(err);
       });
 
-    SimpleMapModel.create(simpleRegionData)
+    MapInfoModel.create(mapInfoData)
       .then(() => {
-        logger.info(`insert -> ${simpleRegionData.name} -> simple`);
+        logger.info(`insert -> ${mapInfoData.address} -> simple`);
       })
       .catch((err) => {
         logger.error(err);
@@ -156,7 +157,7 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
   }
 };
 
-const populateMapAndSimpleMap = async () => {
+const populateMapAndSimpleMap = async (): Promise<void> => {
   await MapModel.collection
     .drop()
     .then((result) => {
@@ -165,17 +166,17 @@ const populateMapAndSimpleMap = async () => {
     .catch((err) => {
       logger.error('Error! : ', err);
     });
-  await SimpleMapModel.collection
+  await MapInfoModel.collection
     .drop()
     .then((result) => {
-      logger.info('Dropped simpleMaps collection');
+      logger.info('Dropped mapInfos collection');
     })
     .catch((err) => {
       logger.error('Error! : ', err);
     });
 
   await MapModel.collection.createIndex({ codeLength: 1, name: 'text' });
-  await SimpleMapModel.collection.createIndex({ name: 1 });
+  await MapInfoModel.collection.createIndex({ name: 1 });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
 };

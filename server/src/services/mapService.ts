@@ -1,5 +1,5 @@
 import { Map, MapModel } from '@models/Map';
-import { SimpleMap, SimpleMapModel } from '@models/SimpleMap';
+import { MapInfo, MapInfoModel } from '@models/MapInfo';
 
 const queryPolygon = async (
   scale: number,
@@ -31,8 +31,8 @@ const queryPolygon = async (
   return result;
 };
 
-const queryCenter = async (keyword: string): Promise<SimpleMap[]> => {
-  return await SimpleMapModel.find({ name: { $regex: RegExp(keyword, 'g') } });
+const queryCenter = async (keyword: string): Promise<MapInfo[]> => {
+  return await MapInfoModel.find({ address: { $regex: RegExp(keyword, 'g') } });
 };
 
 export default { queryPolygon, queryCenter };
