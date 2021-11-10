@@ -4,9 +4,6 @@ import Map from '@components/Map/index';
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { tempState } from '@stores/atoms';
-import { TempCounter } from '@components/index';
 import Sidebar from '@components/Sidebar';
 
 const MainDiv = styled.div`
@@ -99,7 +96,6 @@ const TemporaryHashTagData: string[] = [
 ];
 
 const MainPage: React.FC = () => {
-  const [temp, setTemp] = useRecoilState(tempState);
   const [sidebar, setSidebar] = useState<boolean | null>(null);
 
   const toggleSidebar = (e) => {
