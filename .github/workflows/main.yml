@@ -6,9 +6,7 @@ name: Node.js CD
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [release]
 
 jobs:
   deploy:
@@ -79,7 +77,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cp server-env/.env.development donggle-server/server/
             cp server-env/.env.production donggle-server/server/
             cd donggle-server/server/
             yarn install
