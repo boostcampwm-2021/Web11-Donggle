@@ -147,7 +147,7 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
 
     MapInfoModel.create(mapInfoData)
       .then(() => {
-        logger.info(`insert -> ${mapInfoData.address} -> simple`);
+        logger.info(`insert -> ${mapInfoData.address} -> mapInfo`);
       })
       .catch((err) => {
         logger.error(err);
@@ -175,8 +175,8 @@ const populateMapAndSimpleMap = async (): Promise<void> => {
       logger.error('Error! : ', err);
     });
 
-  await MapModel.collection.createIndex({ codeLength: 1, name: 'text' });
-  await MapInfoModel.collection.createIndex({ name: 1 });
+  await MapModel.collection.createIndex({ codeLength: 1, address: 'text' });
+  await MapInfoModel.collection.createIndex({ address: 1 });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
 };
