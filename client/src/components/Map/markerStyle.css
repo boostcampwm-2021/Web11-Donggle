@@ -34,17 +34,18 @@
 
 .customoverlay {
   position: relative;
-  bottom: 29px;
+  bottom: 25px;
   border-radius: 6px;
   border: 1px solid #ccc;
   border-bottom: 2px solid #ddd;
   background: #fff;
   font-weight: bold;
+  font-size: 14px;
   float: left;
 }
 
 .customoverlay_large {
-  bottom: 88px;
+  bottom: 75px;
 }
 
 .customoverlay:nth-of-type(n) {
@@ -55,22 +56,22 @@
 .customoverlay .title {
   display: block;
   text-align: center;
-  padding: 10px 15px;
+  padding: 8px 10px;
 }
 
 .customoverlay .content {
   display: flex;
   align-items: center;
   text-align: center;
-  padding: 5px 15px;
+  padding: 4px 10px;
 }
 
 .customoverlay .content:last-child {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .customoverlay .content > span {
-  width: 50px;
+  width: 45px;
   flex: 1;
 }
 
@@ -86,5 +87,5 @@
   bottom: -12px;
   width: 22px;
   height: 12px;
-  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+  background: url('@assets/images/vertex_white.png');
 }

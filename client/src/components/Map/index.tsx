@@ -55,6 +55,8 @@ const MapComponent: React.FC = () => {
     };
 
     const kakaoMap = new kakao.maps.Map(wrapper, options);
+    const zoomControl = new kakao.maps.ZoomControl();
+    kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.BOTTOMRIGHT);
     setMap(kakaoMap);
 
     const onCurrentLocation = ([lat, lng]: [number, number]) => {
