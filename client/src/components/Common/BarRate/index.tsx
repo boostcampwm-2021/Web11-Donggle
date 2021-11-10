@@ -39,7 +39,6 @@ const BarRateDiv: React.FC<IProps> = ({ categories }) => {
       );
     },
   );
-  console.log(bar);
 
   return (
     <RateCategoryDiv>

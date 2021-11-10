@@ -15,7 +15,7 @@ interface IProps {
   total: number;
 }
 
-const StarRateDiv: React.FC<IProps> = ({ isLarge, total, children }) => {
+const StarRateDiv: React.FC<IProps> = ({ isLarge, total }) => {
   return (
     <RateNumStarDiv>
       <RateSpanText isLarge={isLarge}>{total}</RateSpanText>
@@ -35,7 +35,6 @@ const StarRateDiv: React.FC<IProps> = ({ isLarge, total, children }) => {
           <FontAwesomeIcon icon={faStar} />
         </RateStarBaseDiv>
       </RateStarDiv>
-      {children}
     </RateNumStarDiv>
   );
 };

@@ -1,41 +1,35 @@
 import React, { useState } from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-
 import {
   Container,
   Layout,
-  WrapperDiv,
+  TitleDiv,
   SpanBackArrow,
-  // SpanText,
   EmptySpan,
   SpanTitle,
-  // SpanReviewTitle,
   RateDiv,
-  RateCategoryDiv,
-  RateCategoryGroup,
-  RateCategoryTitle,
-  RateCategoryUnit,
-  RateCategoryBar,
-  RateCategoryNum,
   HashTagDiv,
-  HashTag,
   MenuBarDiv,
   Menu,
   ContentDiv,
-  Content,
+  ContentTopDiv,
+  UserText,
+  ContentTextDiv,
+  ContentBottomDiv,
+  DetailBtn,
   AddButtonDiv,
   AddButton,
 } from './index.style';
 import { TempRateType, TempReviewType } from '@pages/MainPage';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
+import HashTagList from '@components/Common/HashTag';
 
 export interface RateProps {
   sidebar: boolean | null;
   rateData: TempRateType;
   reviewData: TempReviewType[];
+  hashTagData: string[];
   closeSidebar: () => void;
 }
 
@@ -52,24 +46,17 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
         className={`${props.sidebar ? 'open' : ''}`}
         sidebar={props.sidebar}
       >
-        <WrapperDiv>
+        <TitleDiv>
           <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
           <SpanTitle>서울특별시 용산구 후암동</SpanTitle>
           <EmptySpan></EmptySpan>
-        </WrapperDiv>
-        {/* <WrapperDiv>
-          <SpanReviewTitle>동네 평점</SpanReviewTitle>
-        </WrapperDiv> */}
+        </TitleDiv>
         <RateDiv>
           <StarRateDiv isLarge={true} total={props.rateData.total} />
           <BarRateDiv categories={props.rateData.categories} />
         </RateDiv>
         <HashTagDiv>
-          <HashTag>소음이 적은</HashTag>
-          <HashTag>경관이 좋은</HashTag>
-          <HashTag>문화시설이 가까운</HashTag>
-          <HashTag>체육시설이 많은</HashTag>
-          <HashTag>역이 가까운</HashTag>
+          <HashTagList hashTags={props.hashTagData} />
         </HashTagDiv>
         <MenuBarDiv>
           <Menu
@@ -85,21 +72,20 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
             동네정보
           </Menu>
         </MenuBarDiv>
-        <ContentDiv>
-          {props.reviewData.map((review) => (
-            <>
-              <div>
-                <span>{review.total}</span>
-                <span>{review.user}</span>
-              </div>
-              <div>
-                <span>{review.text}</span>
-              </div>
-            </>
-          ))}
-        </ContentDiv>
+        {props.reviewData.map((review, idx) => (
+          <ContentDiv key={idx}>
+            <ContentTopDiv>
+              <StarRateDiv isLarge={false} total={review.total} />
+              <UserText>{review.user}</UserText>
+            </ContentTopDiv>
+            <ContentTextDiv>{review.text}</ContentTextDiv>
+            <ContentBottomDiv>
+              <DetailBtn>자세히보기</DetailBtn>
+            </ContentBottomDiv>
+          </ContentDiv>
+        ))}
         <AddButtonDiv>
-          <AddButton>후기 작성하기</AddButton>
+          <AddButton>내 동네 후기 작성하기</AddButton>
         </AddButtonDiv>
       </Layout>
     </Container>

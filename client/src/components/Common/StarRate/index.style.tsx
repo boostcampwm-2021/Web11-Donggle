@@ -16,7 +16,7 @@ const RateNumStarDiv = styled(BaseDiv)`
 const RateSpanText = styled.span<{ isLarge: boolean }>`
   font-size: ${(props) => (props.isLarge ? 35 : 18)}px;
   font-weight: bold;
-  margin-right: ${(props) => (props.isLarge ? 20 : 15)}px; ;
+  margin-right: ${(props) => (props.isLarge ? 20 : 15)}px;
 `;
 
 const RateStarDiv = styled(RateNumStarDiv)`

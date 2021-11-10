@@ -18,6 +18,7 @@ const FlexContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
+  min-width: 1000px;
   height: 100%;
   flex: 1 1 0;
 `;
@@ -39,10 +40,12 @@ export interface TempRateType {
 
 export interface TempReviewType {
   total: number;
-  safety: number;
-  traffic: number;
-  food: number;
-  entertainment: number;
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
   text: string;
   user: string;
 }
@@ -65,22 +68,34 @@ const TemporaryRateData: TempRateType = {
 const TemporaryReviewData: TempReviewType[] = [
   {
     total: 4.3,
-    safety: 4.4,
-    traffic: 4.2,
-    food: 4.1,
-    entertainment: 4.9,
-    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
+    categories: {
+      safety: 4.4,
+      traffic: 4.2,
+      food: 4.1,
+      entertainment: 4.9,
+    },
+    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
     user: 'github:user1',
   },
   {
     total: 4.7,
-    safety: 4.2,
-    traffic: 4.1,
-    food: 4.8,
-    entertainment: 4.5,
+    categories: {
+      safety: 4.2,
+      traffic: 4.1,
+      food: 4.8,
+      entertainment: 4.5,
+    },
     text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
     user: 'github:user2',
   },
+];
+
+const TemporaryHashTagData: string[] = [
+  '소음이 적은',
+  '경관이 좋은',
+  '문화시설이 가까운',
+  '체육시설이 많은',
+  '역이 가까운',
 ];
 
 const MainPage: React.FC = () => {
@@ -108,6 +123,7 @@ const MainPage: React.FC = () => {
           sidebar={sidebar}
           rateData={TemporaryRateData}
           reviewData={TemporaryReviewData}
+          hashTagData={TemporaryHashTagData}
           closeSidebar={closeSidebar}
         ></Sidebar>
       </FlexContainer>
