@@ -105,12 +105,21 @@ const createPolygons = (regions) => {
   return polygons;
 };
 
+const addPolygonEvent = (
+  polygon: kakao.maps.Polygon,
+  callbackIn: () => void,
+  callbackOut: () => void,
+) => {
+  kakao.maps.event.addListener(polygon, 'mouseover', callbackIn);
+  kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
+};
+
 const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
 
-  return new kakao.maps.Polygon({
+  const polygon = new kakao.maps.Polygon({
     path: coordObjects,
     strokeWeight: 2,
     strokeColor: colorString,
@@ -118,6 +127,20 @@ const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
     fillColor: colorString,
     fillOpacity: 0.7,
   });
+
+  addPolygonEvent(
+    polygon,
+    () => {
+      polygon.setZIndex(1);
+      polygon.setOptions({ strokeColor: '#fff', fillOpacity: 1 });
+    },
+    () => {
+      polygon.setZIndex(0);
+      polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
+    },
+  );
+
+  return polygon;
 };
 
 const makeMultiPolygon = (
@@ -130,16 +153,35 @@ const makeMultiPolygon = (
     ),
   );
 
-  return coordObjectsArray.map((coordObjects) => {
-    return new kakao.maps.Polygon({
-      path: coordObjects,
-      strokeWeight: 2,
-      strokeColor: colorString,
-      strokeOpacity: 0.8,
-      fillColor: colorString,
-      fillOpacity: 0.7,
-    });
-  });
+  const polygons = coordObjectsArray.map(
+    (coordObjects) =>
+      new kakao.maps.Polygon({
+        path: coordObjects,
+        strokeWeight: 2,
+        strokeColor: colorString,
+        strokeOpacity: 0.8,
+        fillColor: colorString,
+        fillOpacity: 0.7,
+      }),
+  );
+
+  polygons.forEach((polygon) =>
+    addPolygonEvent(
+      polygon,
+      () =>
+        polygons.forEach((polygon) => {
+          polygon.setOptions({ strokeColor: '#fff', fillOpacity: 1 });
+          polygon.setZIndex(1);
+        }),
+      () =>
+        polygons.forEach((polygon) => {
+          polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
+          polygon.setZIndex(0);
+        }),
+    ),
+  );
+
+  return polygons;
 };
 
 const displayPolygons = (
