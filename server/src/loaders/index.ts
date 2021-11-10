@@ -1,4 +1,5 @@
 import expressLoader from './expressLoader';
-import loggerLoader from './loggerLoader';
+import logger from './loggerLoader';
+import dbLoader from './dbLoader';
 
-export { expressLoader, loggerLoader };
+export { expressLoader, logger, dbLoader };
