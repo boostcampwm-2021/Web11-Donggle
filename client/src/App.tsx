@@ -18,11 +18,6 @@ const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
 
-  useEffect(() => {
-    // 브라우저 API를 이용하여 문서 타이틀을 업데이트합니다.
-    console.log('합쳐져 있는데 reload 파일이 업데이트되었습니다');
-  });
-
   return (
     <>
       <GlobalStyle />
