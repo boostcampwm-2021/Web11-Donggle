@@ -81,11 +81,7 @@ const isRangeEqual = (
 // backend에 polygon 정보 요청
 const requestCoord = async (scale: number, region: Array<string>) => {
   return await fetch(
-<<<<<<< HEAD
-    `http://${process.env.REACT_APP_SERVER_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
-=======
     `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
->>>>>>> e83b2dd (Fix: #44 - env파일 수정 및 환경변수에 맞게 코드 수정)
   )
     .then(async function (response) {
       return await response.json();
