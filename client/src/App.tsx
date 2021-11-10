@@ -1,5 +1,11 @@
 /* eslint-disable react/no-children-prop */
-import { NotFoundPage, MainPage, ReviewPage, RankingPage } from '@pages/index';
+import {
+  NotFoundPage,
+  MainPage,
+  ReviewPage,
+  RankingPage,
+  LoginPage,
+} from '@pages/index';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import { ThemeProvider } from 'styled-components';
@@ -20,10 +26,12 @@ const App: React.FC = () => {
           <Switch location={background || location}>
             <Route exact path="/" component={MainPage} />
             <Route path="/review" component={ReviewPage} />
-            <Route path="/review" component={RankingPage} />
+            <Route path="/ranking" component={RankingPage} />
+            <Route path="/login" component={LoginPage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/ranking" component={RankingPage} />}
+          {background && <Route path="/login" component={LoginPage} />}
         </GlobalStore>
       </ThemeProvider>
     </>

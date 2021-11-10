@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const MapWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 110px);
 `;
 
 export const TestDiv = styled.div`

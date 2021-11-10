@@ -50,7 +50,7 @@ const MainPage: React.FC = () => {
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
         <Sidebar
           sidebar={sidebar}
-          starRate={4}
+          starRate={3.3}
           categoryRate={{
             safety: 3.6,
             traffic: 4.1,

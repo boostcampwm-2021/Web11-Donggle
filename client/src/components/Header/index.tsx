@@ -107,7 +107,11 @@ const Header: React.FC = withRouter(({ history, location }) => {
                 </UserProfile>
               </>
             ) : (
-              <LoginBtn>로그인</LoginBtn>
+              <LoginBtn
+                onClick={() => routeHistory('/login', { background: location })}
+              >
+                로그인
+              </LoginBtn>
             )}
           </ProfileWrapper>
         </Background>
