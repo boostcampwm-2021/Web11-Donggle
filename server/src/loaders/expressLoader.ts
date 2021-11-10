@@ -17,16 +17,18 @@ const stream = {
 const morganFormat = process.env.NODE_ENV !== 'production' ? 'dev' : 'combined';
 
 export default ({ app }: { app: Application }) => {
-  const allowedOrigins = [`${process.env.REACT_URL as string}`];
-  const options: cors.CorsOptions = {
-    origin: allowedOrigins,
-  };
+  if (morganFormat == 'dev') {
+    const allowedOrigins = [`${process.env.REACT_URL as string}`];
+    const options: cors.CorsOptions = {
+      origin: allowedOrigins,
+    };
+    app.use(cors(options));
+  }
 
   app.use(morgan(morganFormat, { stream }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(cors(options));
   app.use(express.static(path.join(__dirname, 'public')));
 
   app.use('/api', apiController);

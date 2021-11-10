@@ -9,7 +9,7 @@ interface SimpleMap {
 const spreadDropdown = async (keyword, isSpread, setResults) => {
   const searchRegions = async (): Promise<SimpleMap[] | []> => {
     return await fetch(
-      `http://${process.env.REACT_APP_SERVER_HOST}/api/map/search?keyword=${keyword}`,
+      `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}`,
     )
       .then(async (response) => await response.json())
       .catch((err) => {
