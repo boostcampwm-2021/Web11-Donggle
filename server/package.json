@@ -24,6 +24,7 @@
     "morgan": "^1.10.0",
     "pm2": "^5.1.2",
     "proj4": "^2.7.5",
+    "simplify-js": "^1.2.4",
     "tsconfig-paths": "^3.11.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
