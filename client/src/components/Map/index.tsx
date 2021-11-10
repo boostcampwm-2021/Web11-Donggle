@@ -1,7 +1,8 @@
 import MapWrapper, { TestDiv } from '@components/Map/index.style';
+import Searchbar from '@components/Searchbar/index';
+
 import {
   getCurrentLocation,
-  requestCoord,
   coordToRegionCode,
   isRangeEqual,
   createPolygons,
@@ -11,11 +12,13 @@ import {
 } from '@controllers/mapController';
 
 import {
-  requestMarkerInfo,
   createMarkers,
   displayMarkers,
   deleteMarkers,
+  regionToMarkerInfo,
 } from '@controllers/markerController';
+
+import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
 
@@ -57,6 +60,8 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
     };
 
     const kakaoMap = new kakao.maps.Map(wrapper, options);
+    const zoomControl = new kakao.maps.ZoomControl();
+    kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.BOTTOMRIGHT);
     setMap(kakaoMap);
 
     const onCurrentLocation = ([lat, lng]: [number, number]) => {
@@ -109,6 +114,11 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
       const regions = await LFURegions(cache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
+
+      // temp
+      const markerInfos = regions.map((region) => regionToMarkerInfo(region));
+      const markers = createMarkers(markerInfos);
+      setMarkers(markers);
     };
     updatePolygons();
   }, [range]);
@@ -121,16 +131,6 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
   }, [map, polygons]);
 
   useEffect(() => {
-    const updateMarkers = async () => {
-      const { scale, region } = range;
-      const markerInfos = await requestMarkerInfo(scale, region);
-      const markers = createMarkers(markerInfos);
-      setMarkers(markers);
-    };
-    updateMarkers();
-  }, [range]);
-
-  useEffect(() => {
     if (!map) return;
 
     displayMarkers(markers, map);
@@ -140,6 +140,7 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
   return (
     <MapWrapper ref={mapWrapper}>
       <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
+      <Searchbar map={map} />
     </MapWrapper>
   );
 };

@@ -153,7 +153,7 @@ const LFURegions = async (
   scale: number,
   region: string[],
 ) => {
-  const [big, medium, small] = region;
+  const [big, medium] = region;
   let key = '';
 
   switch (true) {
