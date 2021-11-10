@@ -5,7 +5,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
+const Layout = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-import MapWrapper, { TestDiv } from '@components/Map/index.style';
+import MapWrapper from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 
 import {
@@ -16,11 +16,23 @@ import {
   displayMarkers,
   deleteMarkers,
   regionToMarkerInfo,
+  createMarkerClickListener,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
+
+type SidebarContentType = {
+  address: string;
+  starRate: number;
+  categoryRate: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+};
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -29,11 +41,17 @@ const DEFAULT_POSITION = {
 };
 
 interface IProps {
-  sidebar: boolean | null;
-  toggleSidebar(e: React.MouseEvent): void;
+  openSidebar: () => void;
+  closeSidebar: () => void;
+  updateSidebarContent: (content: SidebarContentType) => void;
+  toggleSidebar: () => void;
 }
 
-const MapComponent: React.FC<IProps> = (props: IProps) => {
+const MapComponent: React.FC<IProps> = ({
+  openSidebar,
+  closeSidebar,
+  updateSidebarContent,
+}) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const cache = useRef(new Map());
@@ -87,6 +105,23 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
   }, []);
 
   useEffect(() => {
+    if (!mapWrapper.current) return;
+
+    console.log('props changed');
+    const wrapper = mapWrapper.current;
+
+    const onClick = (content: SidebarContentType) => {
+      updateSidebarContent(content);
+      openSidebar();
+    };
+
+    const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
+
+    wrapper.addEventListener('click', onMarkerClicked);
+    return () => wrapper.removeEventListener('click', onMarkerClicked);
+  }, [openSidebar, closeSidebar, updateSidebarContent]);
+
+  useEffect(() => {
     const updateRange = async () => {
       const { latitude, longitude, scale } = position;
       const region = (await coordToRegionCode(latitude, longitude)) as {
@@ -115,7 +150,6 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
       const polygons = createPolygons(regions);
       setPolygons(polygons);
 
-      // temp
       const markerInfos = regions.map((region) => regionToMarkerInfo(region));
       const markers = createMarkers(markerInfos);
       setMarkers(markers);
@@ -139,7 +173,6 @@ const MapComponent: React.FC<IProps> = (props: IProps) => {
 
   return (
     <MapWrapper ref={mapWrapper}>
-      <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
       <Searchbar map={map} />
     </MapWrapper>
   );

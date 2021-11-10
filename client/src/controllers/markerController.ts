@@ -60,6 +60,14 @@ const largeMarkerEl = (address: string, rates: RateType) => {
   const averageRate = average(
     ...Object.keys(rates).map((category) => rates[category]),
   );
+
+  wrapper.dataset.address = address;
+  wrapper.dataset.starRate = `${averageRate}`;
+  wrapper.dataset.safety = `${rates.safety}`;
+  wrapper.dataset.traffic = `${rates.traffic}`;
+  wrapper.dataset.food = `${rates.food}`;
+  wrapper.dataset.entertainment = `${rates.entertainment}`;
+
   wrapper.innerHTML = `
     <div class="title">
       <span>${address}</span>
@@ -90,7 +98,6 @@ const largeMarkerEl = (address: string, rates: RateType) => {
   return wrapper;
 };
 
-// test
 const random = (from: number, to: number) => {
   return Number((Math.random() * (to - from) + from).toFixed(2));
 };
@@ -183,10 +190,36 @@ const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
   markers.forEach((marker) => marker.setMap(null));
 };
 
+const createMarkerClickListener = (
+  onClick: (content) => void,
+  onOutsideClick: () => void,
+) => {
+  const onMarkerClicked = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const markerEl = target.closest('.customoverlay_large') as HTMLElement;
+    if (!markerEl) {
+      onOutsideClick();
+      return;
+    }
+    onClick({
+      address: markerEl.dataset.address,
+      starRate: Number(markerEl.dataset.starRate),
+      categoryRate: {
+        safety: Number(markerEl.dataset.safety),
+        traffic: Number(markerEl.dataset.traffic),
+        food: Number(markerEl.dataset.food),
+        entertainment: Number(markerEl.dataset.entertainment),
+      },
+    });
+  };
+  return onMarkerClicked;
+};
+
 export {
   requestMarkerInfo,
   createMarkers,
   displayMarkers,
   deleteMarkers,
   regionToMarkerInfo,
+  createMarkerClickListener,
 };

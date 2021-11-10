@@ -1,12 +1,8 @@
 import Header from '@components/Header';
-import Modal from '@components/modal/index';
 import Map from '@components/Map/index';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { tempState } from '@stores/atoms';
-import { TempCounter } from '@components/index';
 import Sidebar from '@components/Sidebar';
 
 const MainDiv = styled.div`
@@ -22,40 +18,74 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
+type SidebarContentType = {
+  address: string;
+  starRate: number;
+  categoryRate: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+};
+
+const DEFAULT_SIDEBAR_CONTENT = {
+  address: '',
+  starRate: 0,
+  categoryRate: {
+    safety: 0,
+    traffic: 0,
+    food: 0,
+    entertainment: 0,
+  },
+};
+
 /*
   2021-11-02
   홍승용
   임시 예제 코드입니다. router내부에서 history객체를 활용하려면 props의 type으로 RouteComponentsProps를 사용해야 합니다.
 */
 const MainPage: React.FC = () => {
-  const [temp, setTemp] = useRecoilState(tempState);
-  const [sidebar, setSidebar] = useState<boolean | null>(null);
+  const [sidebar, setSidebar] = useState<boolean>(false);
+  const [{ address, starRate, categoryRate }, setSidebarContent] = useState(
+    DEFAULT_SIDEBAR_CONTENT,
+  );
 
-  const toggleSidebar = (e) => {
-    if (sidebar === null || !sidebar) {
-      setSidebar(!sidebar);
-    } else {
-      setSidebar(false);
-    }
+  const toggleSidebar = () => {
+    setSidebar((prev) => !prev);
   };
 
-  const closeSidebar = () => {
-    if (sidebar) setSidebar(false);
-  };
+  const openSidebar = useCallback(() => {
+    setSidebar(true);
+  }, []);
+
+  const closeSidebar = useCallback(() => {
+    setSidebar(false);
+  }, []);
+
+  const updateSidebarContent = useCallback((content: SidebarContentType) => {
+    setSidebarContent(content);
+  }, []);
 
   return (
     <MainDiv>
       <Header></Header>
       <FlexContainer>
-        <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
+        <Map
+          openSidebar={openSidebar}
+          closeSidebar={closeSidebar}
+          updateSidebarContent={updateSidebarContent}
+          toggleSidebar={toggleSidebar}
+        ></Map>
         <Sidebar
+          address={address}
           sidebar={sidebar}
-          starRate={3.3}
+          starRate={starRate}
           categoryRate={{
-            safety: 3.6,
-            traffic: 4.1,
-            food: 2.7,
-            entertainment: 2.5,
+            safety: categoryRate.safety,
+            traffic: categoryRate.traffic,
+            food: categoryRate.food,
+            entertainment: categoryRate.entertainment,
           }}
           closeSidebar={closeSidebar}
         ></Sidebar>

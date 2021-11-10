@@ -35,7 +35,8 @@ import {
 } from './index.style';
 
 export interface RateProps {
-  sidebar: boolean | null;
+  sidebar: boolean;
+  address: string;
   starRate: number;
   categoryRate: {
     safety: number;
@@ -55,13 +56,10 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
 
   return (
     <Container>
-      <Layout
-        className={`${props.sidebar ? 'open' : ''}`}
-        sidebar={props.sidebar}
-      >
+      <Layout className={`${props.sidebar ? 'open' : ''}`}>
         <WrapperDiv>
           <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
-          <SpanTitle>서울특별시 용산구 후암동</SpanTitle>
+          <SpanTitle>{props.address}</SpanTitle>
           <EmptySpan></EmptySpan>
         </WrapperDiv>
         {/* <WrapperDiv>
