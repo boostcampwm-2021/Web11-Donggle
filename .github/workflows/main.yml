@@ -81,4 +81,5 @@ jobs:
             cd donggle-server/server/
             yarn install
             pm2 kill
-            yarn bpd
+            yarn build
+            yarn prod
