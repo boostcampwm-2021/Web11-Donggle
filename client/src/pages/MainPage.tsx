@@ -29,10 +29,12 @@ export interface TempRateType {
   codeLength: number;
   center: [number, number];
   total: number;
-  safety: number;
-  traffic: number;
-  food: number;
-  entertainment: number;
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
 }
 
 export interface TempReviewType {
@@ -52,10 +54,12 @@ const TemporaryRateData: TempRateType = {
   codeLength: 7,
   center: [37.48756349263078, 126.9283814947558],
   total: 4.4,
-  safety: 4.2,
-  traffic: 4.9,
-  food: 4.5,
-  entertainment: 4.8,
+  categories: {
+    safety: 4.2,
+    traffic: 4.9,
+    food: 4.5,
+    entertainment: 4.8,
+  },
 };
 
 const TemporaryReviewData: TempReviewType[] = [

@@ -30,6 +30,7 @@ import {
 } from './index.style';
 import { TempRateType, TempReviewType } from '@pages/MainPage';
 import StarRateDiv from '@components/Common/StarRate';
+import BarRateDiv from '@components/Common/BarRate';
 
 export interface RateProps {
   sidebar: boolean | null;
@@ -44,7 +45,6 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
     console.log(menu);
     setSelectedMenu(menu);
   };
-  console.log(props.rateData);
 
   return (
     <Container>
@@ -62,40 +62,7 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
         </WrapperDiv> */}
         <RateDiv>
           <StarRateDiv isLarge={true} total={props.rateData.total} />
-          <RateCategoryDiv>
-            <RateCategoryGroup>
-              <RateCategoryTitle>치안</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.rateData.safety}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.rateData.safety}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>교통</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.rateData.traffic}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.rateData.traffic}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>음식</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.rateData.food}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.rateData.food}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>놀거리</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.rateData.entertainment}
-                ></RateCategoryBar>
-                <RateCategoryNum>
-                  {props.rateData.entertainment}
-                </RateCategoryNum>
-              </RateCategoryUnit>
-            </RateCategoryGroup>
-          </RateCategoryDiv>
+          <BarRateDiv categories={props.rateData.categories} />
         </RateDiv>
         <HashTagDiv>
           <HashTag>소음이 적은</HashTag>
