@@ -82,5 +82,4 @@ jobs:
             cp server-env/.env.production donggle-server/server/
             cd donggle-server/server/
             yarn install
-            yarn build
-            yarn prod
+            yarn bpd
