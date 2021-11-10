@@ -166,6 +166,7 @@ const populateMapAndSimpleMap = async (): Promise<void> => {
     .catch((err) => {
       logger.error('Error! : ', err);
     });
+  //MapInfo는 업데이트 / 삭제 추후 결정
   await MapInfoModel.collection
     .drop()
     .then((result) => {
