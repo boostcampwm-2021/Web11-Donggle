@@ -1,6 +1,7 @@
 import { authState } from '@stores/atoms';
 import logo from '@assets/images/logo.png';
 import {
+  LinkBtn,
   Layout,
   Background,
   LogoMenuContainer,
@@ -14,12 +15,40 @@ import {
   UserProfile,
   ColorBar,
 } from './index.style';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-const Header: React.FC = ({}) => {
+// export interface MainIProps {
+//   showSidebar(): void;
+//   hideSidebar(): void;
+// }
+
+const Header: React.FC = withRouter(({ history, location }) => {
+  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [isAuth, setIsAuth] = useRecoilState(authState);
+
+  // const openSideBar = useCallback(() => {
+  //   console.log('test');
+  //   props.showSidebar();
+  // }, []);
+
+  const routeHistory = useCallback(
+    (path: string, state: { [index: string]: string }) => {
+      history.push({
+        pathname: path,
+        state: state,
+      });
+    },
+    [history],
+  );
+
+  useEffect(() => {
+    setClickedLinkBtnId(location.pathname);
+  }, [clickedLinkBtnId, location]);
 
   return (
     <>
@@ -27,18 +56,44 @@ const Header: React.FC = ({}) => {
         <Background>
           <LogoMenuContainer>
             <LogoWrapper>
-              <img src={logo} alt="logo" width="70px" />
+              <LinkBtn
+                onClick={() => routeHistory('/', {})}
+                className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
+              >
+                <img src={logo} alt="logo" width="70px" />
+              </LinkBtn>
             </LogoWrapper>
             <MenuWrapper>
               <MenuList>
                 <Menu>
-                  <a>동네 지도</a>
+                  <LinkBtn
+                    onClick={() => routeHistory('/', {})}
+                    className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
+                  >
+                    동네 지도
+                  </LinkBtn>
                 </Menu>
                 <Menu>
-                  <a>동네 후기</a>
+                  <LinkBtn
+                    onClick={() => routeHistory('/review', {})}
+                    className={`${
+                      clickedLinkBtnId === '/review' && 'link-selected'
+                    }`}
+                  >
+                    동네 후기
+                  </LinkBtn>
                 </Menu>
                 <Menu>
-                  <a>동네 랭킹</a>
+                  <LinkBtn
+                    onClick={() =>
+                      routeHistory('/ranking', { background: location })
+                    }
+                    className={`${
+                      clickedLinkBtnId === '/ranking' && 'link-selected'
+                    }`}
+                  >
+                    동네 랭킹
+                  </LinkBtn>
                 </Menu>
               </MenuList>
             </MenuWrapper>
@@ -47,10 +102,16 @@ const Header: React.FC = ({}) => {
             {isAuth ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
-                <UserProfile>프로필</UserProfile>
+                <UserProfile>
+                  <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
+                </UserProfile>
               </>
             ) : (
-              <LoginBtn>로그인</LoginBtn>
+              <LoginBtn
+                onClick={() => routeHistory('/login', { background: location })}
+              >
+                로그인
+              </LoginBtn>
             )}
           </ProfileWrapper>
         </Background>
@@ -58,6 +119,6 @@ const Header: React.FC = ({}) => {
       <ColorBar></ColorBar>
     </>
   );
-};
+});
 
 export default Header;

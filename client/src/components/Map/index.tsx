@@ -1,4 +1,4 @@
-import MapWrapper from '@components/Map/index.style';
+import MapWrapper, { TestDiv } from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 
 import {
@@ -28,7 +28,12 @@ const DEFAULT_POSITION = {
   scale: 9,
 };
 
-const MapComponent: React.FC = () => {
+interface IProps {
+  sidebar: boolean | null;
+  toggleSidebar(e: React.MouseEvent): void;
+}
+
+const MapComponent: React.FC<IProps> = (props: IProps) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const cache = useRef(new Map());
@@ -134,6 +139,7 @@ const MapComponent: React.FC = () => {
 
   return (
     <MapWrapper ref={mapWrapper}>
+      <TestDiv onClick={(e) => props.toggleSidebar(e)}>사이드바 열기</TestDiv>
       <Searchbar map={map} />
     </MapWrapper>
   );
