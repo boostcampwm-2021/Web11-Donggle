@@ -1,3 +1,5 @@
+import ColorHash from 'color-hash';
+
 function getCurrentLocation(callback: (coord: [number, number]) => void) {
   // const coord: [number, number] = [37.5642135, 127.0016985];
   let coord: [number, number] = [37.5642135, 127.0016985];
@@ -91,17 +93,19 @@ const requestCoord = async (scale: number, region: Array<string>) => {
 
 const createPolygons = (regions) => {
   const polygons = Array<kakao.maps.Polygon>();
+  const colorHash = new ColorHash();
   regions.forEach((region) => {
+    const colorString = colorHash.hex(region.name);
     if (region.type === 'Polygon') {
-      polygons.push(makeSinglePolygon(region.path));
+      polygons.push(makeSinglePolygon(region.path, colorString));
     } else {
-      polygons.push(...makeMultiPolygon(region.path));
+      polygons.push(...makeMultiPolygon(region.path, colorString));
     }
   });
   return polygons;
 };
 
-const makeSinglePolygon = (coords: [number, number][]) => {
+const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
@@ -109,14 +113,17 @@ const makeSinglePolygon = (coords: [number, number][]) => {
   return new kakao.maps.Polygon({
     path: coordObjects,
     strokeWeight: 2,
-    strokeColor: '#004c80',
+    strokeColor: colorString,
     strokeOpacity: 0.8,
-    fillColor: '#fff',
+    fillColor: colorString,
     fillOpacity: 0.7,
   });
 };
 
-const makeMultiPolygon = (coordsArray: [number, number][][][]) => {
+const makeMultiPolygon = (
+  coordsArray: [number, number][][][],
+  colorString: string,
+) => {
   const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
     coords.map((coord: [number, number][]) =>
       coord.map((c: [number, number]) => new kakao.maps.LatLng(...c)),
@@ -127,9 +134,9 @@ const makeMultiPolygon = (coordsArray: [number, number][][][]) => {
     return new kakao.maps.Polygon({
       path: coordObjects,
       strokeWeight: 2,
-      strokeColor: '#004c80',
+      strokeColor: colorString,
       strokeOpacity: 0.8,
-      fillColor: '#fff',
+      fillColor: colorString,
       fillOpacity: 0.7,
     });
   });
