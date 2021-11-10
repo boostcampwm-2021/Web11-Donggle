@@ -107,14 +107,11 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     if (!mapWrapper.current) return;
 
-    console.log('props changed');
     const wrapper = mapWrapper.current;
-
     const onClick = (content: SidebarContentType) => {
       updateSidebarContent(content);
       openSidebar();
     };
-
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
 
     wrapper.addEventListener('click', onMarkerClicked);
