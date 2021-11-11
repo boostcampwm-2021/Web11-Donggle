@@ -1,17 +1,18 @@
+import Profile from '@components/Profile/index';
+
 import React from 'react';
 import styled from 'styled-components';
 
-const ProfileDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
+const ProfileWrapper = styled.div`
+  width: 900px;
+  height: auto;
+  margin: 20px 0;
 `;
 
-const ProfilePage: React.FC = () => {
-  return (
-    <ProfileDiv>
-      <span>Profile Page 입니다.</span>
-    </ProfileDiv>
-  );
-};
+const ProfilePage: React.FC = () => (
+  <ProfileWrapper>
+    <Profile />
+  </ProfileWrapper>
+);
 
 export default ProfilePage;
