@@ -19,8 +19,10 @@ const ImageWrapper = styled.div`
 const UsernameWrapper = styled.div`
   width: 600px;
   height: 300px;
-  font-size: 50px;
-  background: blue;
+  font-size: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const AddressWrapper = styled.div`

@@ -22,20 +22,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-// export interface MainIProps {
-//   showSidebar(): void;
-//   hideSidebar(): void;
-// }
 const Header: React.FC = () => {
-  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const history = useHistory();
   const location = useLocation();
-  const [isAuth, setIsAuth] = useRecoilState(authState);
 
-  // const openSideBar = useCallback(() => {
-  //   console.log('test');
-  //   props.showSidebar();
-  // }, []);
+  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
+  const [auth, setAuth] = useRecoilState(authState);
 
   const routeHistory = useCallback(
     (path: string, state: { [index: string]: string } = {}) => {
@@ -100,7 +92,7 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            {isAuth.isLoggedin ? (
+            {auth.isLoggedin ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>
