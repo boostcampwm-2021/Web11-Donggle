@@ -17,18 +17,14 @@ import { submitReview } from '@controllers/reviewController';
 
 interface ReviewType extends CategoryRateType {
   address: string;
-  content: string;
+  text: string;
 }
 
-const ReviewModal: React.FC<ReviewType> = ({
-  address,
-  content,
-  categories,
-}) => {
+const ReviewModal: React.FC<ReviewType> = ({ address, text, categories }) => {
   const DEFAULT_ADDRESS = address || '대전시 서구 탄방동';
   const [reviewData, setReviewData] = useState<ReviewType>({
     address: DEFAULT_ADDRESS,
-    content: content || '',
+    text: text || '',
     categories: categories || {
       safety: 1,
       traffic: 1,
@@ -87,7 +83,7 @@ const ReviewModal: React.FC<ReviewType> = ({
           rows={3}
           cols={20}
           onChange={(e) => setText(e.target.value)}
-          value={reviewData.content}
+          value={reviewData.text}
         ></TextInput>
         <p
           style={{
@@ -97,7 +93,7 @@ const ReviewModal: React.FC<ReviewType> = ({
             color: 'red',
           }}
         >
-          {reviewData.content.length} / 400
+          {reviewData.text.length} / 400
         </p>
       </TextAreaDiv>
       <SubmitDiv>

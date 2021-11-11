@@ -3,7 +3,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface ReviewDataType {
   address: string;
-  content: string;
+  text: string;
 }
 
 const submitReview = (data: ReviewDataType) => {
