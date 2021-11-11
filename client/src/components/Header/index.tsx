@@ -19,16 +19,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 // export interface MainIProps {
 //   showSidebar(): void;
 //   hideSidebar(): void;
 // }
-
-const Header: React.FC = withRouter(({ history, location }) => {
+const Header: React.FC = () => {
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
+  const history = useHistory();
+  const location = useLocation();
   const [isAuth, setIsAuth] = useRecoilState(authState);
 
   // const openSideBar = useCallback(() => {
@@ -119,6 +120,6 @@ const Header: React.FC = withRouter(({ history, location }) => {
       <ColorBar></ColorBar>
     </>
   );
-});
+};
 
 export default Header;
