@@ -26,10 +26,10 @@ const ReviewModal: React.FC = () => {
     address: DEFAULT_ADDRESS,
     content: '',
     categories: {
-      safety: 0,
-      traffic: 0,
-      food: 0,
-      entertainment: 0,
+      safety: 1,
+      traffic: 1,
+      food: 1,
+      entertainment: 1,
     },
   });
 
@@ -39,21 +39,36 @@ const ReviewModal: React.FC = () => {
     });
   }, []);
 
-  const RatingStars = (Object.keys(Category) as (keyof typeof Category)[]).map(
-    (category, idx) => {
-      return (
-        <DynamicStarRateDiv
-          key={idx}
-          category={Category[category]}
-        ></DynamicStarRateDiv>
-      );
+  const setCategoryRate = useCallback(
+    (category: keyof CategoryRateType['categories'], rate: number) => {
+      setReviewData((prevData) => {
+        return {
+          ...prevData,
+          categories: { ...prevData.categories, [category]: rate },
+        };
+      });
     },
+    [],
   );
 
   const submitHandler = (e) => {
     e.preventDefault();
     submitReview(reviewData);
   };
+
+  const RatingStars = (Object.keys(Category) as (keyof typeof Category)[]).map(
+    (category) => {
+      return (
+        <DynamicStarRateDiv
+          key={category}
+          category={category}
+          name={Category[category]}
+          rate={reviewData.categories[category]}
+          setCategoryRate={setCategoryRate}
+        ></DynamicStarRateDiv>
+      );
+    },
+  );
 
   return (
     <Modal>

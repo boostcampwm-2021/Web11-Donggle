@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
@@ -7,21 +7,54 @@ import {
   CategorySpanDiv,
   CategorySpan,
   StarRateDiv,
+  StarBtn,
 } from './index.style';
 import { mouseOverStarHandler } from '@controllers/reviewController';
 
-const DynamicStarRateDiv: React.FC<{ category: string }> = ({ category }) => {
-  const faIconList = Array(5)
-    .fill(1)
-    .map((n) => {
-      return <FontAwesomeIcon key={n} icon={faStar} size="lg" />;
-    });
+interface IProps {
+  category: keyof CategoryRateType['categories'];
+  name: string;
+  rate: number;
+  setCategoryRate: (
+    category: keyof CategoryRateType['categories'],
+    rate: number,
+  ) => void;
+}
+
+const DynamicStarRateDiv: React.FC<IProps> = ({
+  category,
+  name,
+  rate,
+  setCategoryRate,
+}) => {
+  const [checkedNumber, setCheckedNumber] = useState(rate);
+  const [number, setNumber] = useState(rate);
+  const faIconList = Array.from({ length: 5 }, (_, index) => index + 1).map(
+    (n) => {
+      return (
+        <StarBtn key={n}>
+          <FontAwesomeIcon
+            style={n <= number ? { color: 'gold' } : { color: 'lightgrey' }}
+            icon={faStar}
+            size="lg"
+            onMouseOver={() => setNumber(n)}
+            onMouseLeave={() => setNumber(checkedNumber)}
+            onClick={() => {
+              setCheckedNumber(n);
+              setCategoryRate(category, n);
+            }}
+          />
+        </StarBtn>
+      );
+    },
+  );
+
   return (
     <RateStarDiv>
       <CategorySpanDiv>
-        <CategorySpan>{category}</CategorySpan>
+        <CategorySpan>{name}</CategorySpan>
       </CategorySpanDiv>
-      <StarRateDiv>{faIconList}</StarRateDiv>
+      <StarRateDiv className="test">{faIconList}</StarRateDiv>
     </RateStarDiv>
   );
 };

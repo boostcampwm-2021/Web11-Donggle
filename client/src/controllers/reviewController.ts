@@ -8,7 +8,7 @@ interface ReviewDataType {
 }
 
 const submitReview = (data: ReviewDataType) => {
-  console.log(data.address, data.content);
+  console.log(data);
 };
 
 export { mouseOverStarHandler, submitReview };

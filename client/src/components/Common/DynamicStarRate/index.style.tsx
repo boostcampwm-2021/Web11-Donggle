@@ -45,6 +45,22 @@ const CategorySpan = styled.span`
 const StarRateDiv = styled(BaseDiv)`
   justify-content: center;
   padding-right: 100px;
+
+  &.fa-star: {
+    &:hover: {
+      color: gold;
+    }
+  }
+`;
+
+const StarBtn = styled.button`
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  margin: 2px;
+  padding: 0px;
 `;
 
 export {
@@ -54,4 +70,5 @@ export {
   CategorySpanDiv,
   CategorySpan,
   StarRateDiv,
+  StarBtn,
 };
