@@ -1,4 +1,3 @@
-import { regionToScaled } from '@utils/address';
 import { RateType } from '@pages/MainPage';
 
 const ratingToPercent = (rate: number) => {
@@ -82,15 +81,11 @@ const random = (from: number, to: number) => {
   return Number((Math.random() * (to - from) + from).toFixed(2));
 };
 
-const getRandomLatLng = () => {
-  return [random(33, 38), random(124, 132)];
-};
-
 const getRandomRate = () => {
   return random(1, 5);
 };
 
-const regionToMarkerInfo = (region): RateType => {
+const regionToRates = (region): RateType => {
   const count = random(0, 100);
   const safety = getRandomRate() * count;
   const traffic = getRandomRate() * count;
@@ -114,28 +109,15 @@ const regionToMarkerInfo = (region): RateType => {
 };
 
 // TODO: fetch 요청
-const requestMarkerInfo = async (
+const requestRates = async (
   scale: number,
   region: string[],
 ): Promise<RateType[]> => {
-  return Array(100)
-    .fill(0)
-    .map(() => {
-      return {
-        address: regionToScaled(region, scale),
-        code: '',
-        codeLength: 0,
-        center: getRandomLatLng() as [number, number],
-        total: 0,
-        count: 0,
-        categories: {
-          safety: getRandomRate(),
-          traffic: getRandomRate(),
-          food: getRandomRate(),
-          entertainment: getRandomRate(),
-        },
-      };
-    });
+  return await fetch(
+    `${process.env.REACT_APP_API_URL}/api/map/rates?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
+  )
+    .then((response) => response.json())
+    .catch((err) => console.error(err));
 };
 
 const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
@@ -198,10 +180,10 @@ const createMarkerClickListener = (
 };
 
 export {
-  requestMarkerInfo,
+  requestRates,
   createMarkers,
   displayMarkers,
   deleteMarkers,
-  regionToMarkerInfo,
+  regionToRates,
   createMarkerClickListener,
 };

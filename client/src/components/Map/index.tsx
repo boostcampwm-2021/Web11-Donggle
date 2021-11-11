@@ -15,8 +15,8 @@ import {
   createMarkers,
   displayMarkers,
   deleteMarkers,
-  regionToMarkerInfo,
   createMarkerClickListener,
+  requestRates,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
@@ -134,13 +134,8 @@ const MapComponent: React.FC<IProps> = ({
     const { scale, region } = range;
     const updatePolygons = async () => {
       const regions = await LFURegions(cache.current, scale, region);
-      console.log(regions);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
-
-      const markerInfos = regions.map((region) => regionToMarkerInfo(region));
-      const markers = createMarkers(markerInfos);
-      setMarkers(markers);
     };
     updatePolygons();
   }, [range]);
@@ -151,6 +146,16 @@ const MapComponent: React.FC<IProps> = ({
     displayPolygons(polygons, map);
     return () => deletePolygons(polygons);
   }, [map, polygons]);
+
+  useEffect(() => {
+    const { scale, region } = range;
+    const updateMarkers = async () => {
+      const markerInfos = await requestRates(scale, region);
+      const markers = createMarkers(markerInfos);
+      setMarkers(markers);
+    };
+    updateMarkers();
+  }, [range]);
 
   useEffect(() => {
     if (!map) return;

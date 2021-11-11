@@ -21,4 +21,14 @@ router.post('/map-data', (req: MapRequest, res: Response) => {
   }
 });
 
+router.post('/rates', (req: MapRequest, res) => {
+  const { password } = req.body;
+  if (password === process.env.ADMIN_PASSWORD) {
+    void updateMapService.populateMapInfos();
+    res.status(200).send('HAHAHA!');
+  } else {
+    res.status(404).send('FXXK! 404 NOT FOUND.... GET OFF!');
+  }
+});
+
 export default router;

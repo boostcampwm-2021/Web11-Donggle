@@ -21,6 +21,36 @@ router.get('/polygon', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
+router.get('/rates', (async (req, res) => {
+  const { scale, big, medium, small } = req.query;
+  if (scale && (big || medium || small)) {
+    const rates = await mapService.queryRates(
+      Number(scale),
+      big as string,
+      medium as string,
+      small as string,
+    );
+    res.json(rates);
+  } else {
+    res.json([
+      {
+        address: '',
+        code: '',
+        codeLength: 0,
+        center: [],
+        total: 0,
+        count: 0,
+        categories: {
+          safety: 0,
+          traffic: 0,
+          food: 0,
+          entertainment: 0,
+        },
+      },
+    ]);
+  }
+}) as RequestHandler);
+
 router.get('/search', (async (req: Request, res: Response) => {
   const { keyword } = req.query;
   if (typeof keyword === 'string' && keyword.length > 0) {
