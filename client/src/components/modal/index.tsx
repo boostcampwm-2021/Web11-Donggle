@@ -35,6 +35,12 @@ const Modal: React.FC = ({ children }) => {
   useEffect(() => {
     const handleCloseModal = (e) => {
       if (
+        !e.target.closest('.overlay-confirmation-submit') &&
+        e.target.closest('.overlay-confirmation-alert')
+      ) {
+        return;
+      }
+      if (
         isActive &&
         (!modalRef.current || !modalRef.current.contains(e.target))
       ) {

@@ -20,12 +20,16 @@ interface ReviewType extends CategoryRateType {
   content: string;
 }
 
-const ReviewModal: React.FC = () => {
-  const DEFAULT_ADDRESS = '대전시 서구 탄방동';
+const ReviewModal: React.FC<ReviewType> = ({
+  address,
+  content,
+  categories,
+}) => {
+  const DEFAULT_ADDRESS = address || '대전시 서구 탄방동';
   const [reviewData, setReviewData] = useState<ReviewType>({
     address: DEFAULT_ADDRESS,
-    content: '',
-    categories: {
+    content: content || '',
+    categories: categories || {
       safety: 1,
       traffic: 1,
       food: 1,
