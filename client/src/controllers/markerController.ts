@@ -26,8 +26,8 @@ const markerEl = (address: string, rate: number) => {
   wrapper.innerHTML = `
     <div class="title">
       <span>${smallestRegion}</span>
-      <span class="star-rating-single">★</span>
-      <span>${rate.toFixed(1)}</span>
+      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
+      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
@@ -46,32 +46,31 @@ const largeMarkerEl = (rateData: RateType) => {
   const entertainment = categories.entertainment / count;
 
   wrapper.dataset.rateData = JSON.stringify(rateData);
-
-  wrapper.dataset.code = wrapper.innerHTML = `
+  wrapper.innerHTML = `
     <div class="title">
       <span>${address}</span>
-      <span class="star-rating-single">★</span>
-      <span>${averageRate.toFixed(1)}</span>
+      <span class="star-rating-single">${!count ? '' : '★'}</span>
+      <span>${!count ? '' : averageRate.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>안전 </span>
-      ${starRateHTML(safety)}
-      <span>${safety.toFixed(1)}</span>
+      ${starRateHTML(safety || 0)}
+      <span>${!count ? 'N/A' : safety.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>교통 </span>
-      ${starRateHTML(traffic)}
-      <span>${traffic.toFixed(1)}</span>
+      ${starRateHTML(traffic || 0)}
+      <span>${!count ? 'N/A' : traffic.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>먹거리 </span>
-      ${starRateHTML(food)}
-      <span>${food.toFixed(1)}</span>
+      ${starRateHTML(food || 0)}
+      <span>${!count ? 'N/A' : food.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>놀거리 </span>
-      ${starRateHTML(entertainment)}
-      <span>${entertainment.toFixed(1)}</span>
+      ${starRateHTML(entertainment || 0)}
+      <span>${!count ? 'N/A' : entertainment.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
@@ -179,6 +178,46 @@ const createMarkerClickListener = (
   return onMarkerClicked;
 };
 
+const LFURates = async (
+  cache: Map<string, RateType[] & { hitCount: number }>,
+  scale: number,
+  region: string[],
+) => {
+  const [big, medium] = region;
+  let key = '';
+
+  switch (true) {
+    case scale < 9:
+      key = `${big} ${medium}`;
+      break;
+    case 9 <= scale && scale < 12:
+      key = `${big}`;
+      break;
+    case 12 <= scale:
+      key = 'all';
+      break;
+  }
+
+  if (cache.has(key)) {
+    const rateData = cache.get(key);
+    if (rateData) rateData.hitCount++;
+    return rateData;
+  } else {
+    const rates = (await requestRates(scale, region)) as RateType[] & {
+      hitCount: number;
+    };
+    rates.hitCount = 1;
+    if (cache.size > 10) {
+      const mostUnusedRates = Array.from(cache.entries()).sort(
+        ([, rates1], [, rates2]) => rates1.hitCount - rates2.hitCount,
+      )[0][0];
+      cache.delete(mostUnusedRates);
+    }
+    cache.set(key, rates);
+    return rates;
+  }
+};
+
 export {
   requestRates,
   createMarkers,
@@ -186,4 +225,5 @@ export {
   deleteMarkers,
   regionToRates,
   createMarkerClickListener,
+  LFURates,
 };

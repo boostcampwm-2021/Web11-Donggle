@@ -1,7 +1,6 @@
 import ColorHash from 'color-hash';
 
 function getCurrentLocation(callback: (coord: [number, number]) => void) {
-  // const coord: [number, number] = [37.5642135, 127.0016985];
   let coord: [number, number] = [37.5642135, 127.0016985];
 
   const successCallback: PositionCallback = (position) => {

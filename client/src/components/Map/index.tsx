@@ -16,7 +16,7 @@ import {
   displayMarkers,
   deleteMarkers,
   createMarkerClickListener,
-  requestRates,
+  LFURates,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
@@ -44,7 +44,8 @@ const MapComponent: React.FC<IProps> = ({
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
-  const cache = useRef(new Map());
+  const polygonCache = useRef(new Map());
+  const markerCache = useRef(new Map());
 
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [range, setRange] = useState({
@@ -133,7 +134,7 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     const { scale, region } = range;
     const updatePolygons = async () => {
-      const regions = await LFURegions(cache.current, scale, region);
+      const regions = await LFURegions(polygonCache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
     };
@@ -150,8 +151,12 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     const { scale, region } = range;
     const updateMarkers = async () => {
-      const markerInfos = await requestRates(scale, region);
-      const markers = createMarkers(markerInfos);
+      const rates = (await LFURates(
+        markerCache.current,
+        scale,
+        region,
+      )) as RateType[];
+      const markers = createMarkers(rates);
       setMarkers(markers);
     };
     updateMarkers();
