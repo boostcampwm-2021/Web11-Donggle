@@ -16,7 +16,7 @@ router.get('/polygon', (async (req: Request, res: Response) => {
     res.json(polygon);
   } else {
     res.json([
-      { name: '', path: [], code: '', codeLength: 0, center: [], type: '' },
+      { address: '', path: [], code: '', codeLength: 0, center: [], type: '' },
     ]);
   }
 }) as RequestHandler);
