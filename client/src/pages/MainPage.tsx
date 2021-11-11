@@ -1,4 +1,3 @@
-import Header from '@components/Header';
 import Map from '@components/Map/index';
 
 import React, { useState, useCallback } from 'react';
@@ -87,7 +86,6 @@ const MainPage: React.FC = () => {
 
   return (
     <MainDiv>
-      <Header></Header>
       <FlexContainer>
         <Map
           openSidebar={openSidebar}

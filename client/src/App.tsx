@@ -15,11 +15,12 @@ import {
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
-import { ThemeProvider } from 'styled-components';
 import myTheme from '@styledComponents/theme';
+import Header from '@components/Header/index';
 
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -30,6 +31,8 @@ const App: React.FC = () => {
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
+          <Header />
+
           <Switch location={background || location}>
             <Route exact path="/" component={MainPage} />
             <Route path="/review" component={ReviewPage} />
