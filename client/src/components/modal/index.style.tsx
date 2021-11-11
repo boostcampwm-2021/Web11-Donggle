@@ -8,7 +8,7 @@ const ModalOverlay = styled.div`
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
 
-  z-index: 99;
+  z-index: 3000;
 `;
 
 const ModalWrapper = styled.div`
@@ -19,6 +19,7 @@ const ModalWrapper = styled.div`
   height: auto;
   top: 50%;
   left: 50%;
+  overflow: auto;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
@@ -29,7 +30,7 @@ const ModalWrapper = styled.div`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.white};
 
-  z-index: 100;
+  z-index: 3000;
 `;
 
 const ModalCloseBtnDiv = styled.div`

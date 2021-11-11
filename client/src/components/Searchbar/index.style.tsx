@@ -15,7 +15,7 @@ const SearchbarWrapper = styled.div`
   background: #fff;
   border: solid 2px #33ab74;
   border-radius: 20px;
-  z-index: 50;
+  z-index: 1000;
 `;
 
 const SearchbarInput = styled.input`
@@ -48,7 +48,7 @@ const DropdownWrapper = styled.div`
   background: #fff;
   border-radius: 10px;
   border: solid 1px #c5c5c5;
-  z-index: 50;
+  z-index: 1000;
   max-height: 600px;
   overflow-x: hidden;
   overflow-y: scroll;
