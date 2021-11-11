@@ -1,5 +1,5 @@
-import { expressLoader, logger, dbLoader } from '@loaders/index';
 import config from '@config/index';
+import { expressLoader, logger, dbLoader } from '@loaders/index';
 
 import express from 'express';
 import _http from 'http';
