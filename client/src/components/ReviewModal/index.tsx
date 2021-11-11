@@ -35,7 +35,7 @@ const ReviewModal: React.FC<ReviewType> = ({ address, text, categories }) => {
 
   const setText = useCallback((text: string) => {
     setReviewData((prevData) => {
-      return { ...prevData, content: text.slice(0, 400) };
+      return { ...prevData, text: text.slice(0, 400) };
     });
   }, []);
 
