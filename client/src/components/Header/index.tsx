@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   // }, []);
 
   const routeHistory = useCallback(
-    (path: string, state: { [index: string]: string }) => {
+    (path: string, state: { [index: string]: string } = {}) => {
       history.push({
         pathname: path,
         state: state,
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
           <LogoMenuContainer>
             <LogoWrapper>
               <LinkBtn
-                onClick={() => routeHistory('/', {})}
+                onClick={() => routeHistory('/')}
                 className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
               >
                 <img src={logo} alt="logo" width="70px" />
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
               <MenuList>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/', {})}
+                    onClick={() => routeHistory('/')}
                     className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
                   >
                     동네 지도
@@ -76,7 +76,7 @@ const Header: React.FC = () => {
                 </Menu>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/review', {})}
+                    onClick={() => routeHistory('/review')}
                     className={`${
                       clickedLinkBtnId === '/review' && 'link-selected'
                     }`}
@@ -103,7 +103,7 @@ const Header: React.FC = () => {
             {isAuth.isLoggedin ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
-                <UserProfile>
+                <UserProfile onClick={() => routeHistory('profile')}>
                   <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
                 </UserProfile>
               </>
