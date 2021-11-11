@@ -1,5 +1,5 @@
 import { Map, MapModel } from '@models/Map';
-import { SimpleMap, SimpleMapModel } from '@models/SimpleMap';
+import { MapInfo, MapInfoModel } from '@models/MapInfo';
 
 const queryPolygon = async (
   scale: number,
@@ -12,7 +12,13 @@ const queryPolygon = async (
   switch (true) {
     case scale < 9:
       result = await MapModel.find({
-        $text: { $search: `${medium}` },
+        /*
+        2921-11-10
+        홍승용
+        형태소가 아닌 문장을 쿼리하려면 escape 해야함
+        */
+        // eslint-disable-next-line no-useless-escape
+        $text: { $search: `\"${big} ${medium}\"` },
         codeLength: 7,
       });
       break;
@@ -31,8 +37,8 @@ const queryPolygon = async (
   return result;
 };
 
-const queryCenter = async (keyword: string): Promise<SimpleMap[]> => {
-  return await SimpleMapModel.find({ name: { $regex: RegExp(keyword, 'g') } });
+const queryCenter = async (keyword: string): Promise<MapInfo[]> => {
+  return await MapInfoModel.find({ address: { $regex: RegExp(keyword, 'g') } });
 };
 
 export default { queryPolygon, queryCenter };

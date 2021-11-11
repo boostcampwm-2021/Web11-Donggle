@@ -5,7 +5,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
+const Layout = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -15,18 +15,16 @@ const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
   z-index: 1;
   overflow-y: scroll;
   background-color: white;
-  -webkit-transform: translateX(400px);
   transform: translateX(400px);
-  -webkit-transition: all ease 0.3s 0s;
+
   transition: all ease 0.3s 0s;
   padding-bottom: 6.3em;
   &.open {
-    -webkit-transform: translateX(0px);
     transform: translateX(0px);
   }
   &::-webkit-scrollbar {
     width: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     background-color: ${(props) => props.theme.colors.lightgrey};
   }
 
@@ -42,7 +40,7 @@ const Layout = styled.div.attrs((props: { sidebar: boolean | null }) => props)`
   }
 `;
 
-const WrapperDiv = styled.div`
+const BaseDiv = styled.div`
   position: relative;
   display: flex;
   width: 100%;
@@ -50,10 +48,10 @@ const WrapperDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   line-height: 40px;
+`;
 
-  &:after {
-    content: ' ';
-  }
+const TitleDiv = styled(BaseDiv)`
+  background-color: ${(props) => props.theme.colors.whitesmoke};
 `;
 
 const SpanText = styled.span`
@@ -84,121 +82,21 @@ const SpanReviewTitle = styled(SpanTitle)`
   line-height: 40px;
 `;
 
-const RateDiv = styled(WrapperDiv)`
+const RateDiv = styled(BaseDiv)`
   flex-direction: column;
   width: 100%;
-  padding: 0 60px;
+  padding-left: 60px;
 `;
 
-const RateNumStarDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-`;
-
-const RateSpanText = styled(SpanText)`
-  display: block;
-  width: 10%;
-  font-size: 35px;
-  font-weight: bold;
-  margin-right: 40px;
-`;
-
-const RateStarDiv = styled(RateNumStarDiv)`
-  width: fit-content;
-  position: relative;
-  overflow: hidden;
-  box-sizing: content-box;
-`;
-
-const RateStarBaseDiv = styled.div`
-  color: ${(props) => props.theme.colors.lightgrey};
-  z-index: 0;
-  padding: 0;
-  position: absolute;
-  left: 0px;
-`;
-
-const RateStarFillDiv = styled.div<{ starRate: number }>`
-  color: gold;
-  padding: 0;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  width: ${(props) => props.starRate * 20}%;
-  overflow: hidden;
-`;
-
-const RateCategoryDiv = styled(RateNumStarDiv)`
-  flex-direction: column;
-  height: 100%;
-`;
-
-const RateCategoryGroup = styled.div`
+const HashTagDiv = styled(BaseDiv)`
   position: relative;
   width: 100%;
-  display: flex;
-  margin-top: 10px;
-  line-height: 1;
-  flex-direction: column;
-  justify-content: start;
-`;
-
-const RateCategoryTitle = styled(SpanText)`
-  font-size: 12px;
-`;
-
-const RateCategoryUnit = styled.div`
-  width: 80%;
-  height: 6px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  background-color: ${(props) => props.theme.colors.lightgrey};
-  border-radius: 5px;
-  margin: 5px 0 15px 0;
-`;
-
-const RateCategoryBar = styled.span<{ categoryRate: number }>`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  height: 6px;
-  width: ${(props) => props.categoryRate * 20}%;
-  background-color: ${(props) => props.theme.colors.green};
-  border-radius: 3px;
-  z-index: 1;
-`;
-
-const RateCategoryNum = styled(SpanText)`
-  position: relative;
-  left: 105%;
-  font-size: 12px;
-`;
-
-const HashTagDiv = styled(WrapperDiv)`
-  position: relative;
-  width: 100%;
-  padding: 10px 60px;
+  padding: 10px 55px;
   flex-wrap: wrap;
   justify-content: start;
 `;
 
-const HashTag = styled.span`
-  display: inline-block;
-  border: 1px solid ${(props) => props.theme.colors.green};
-  color: ${(props) => props.theme.colors.darkblue};
-  font-size: 10px;
-  border-radius: 10px;
-  line-height: 1;
-  padding: 6px;
-  margin: 2px 3px;
-  box-sizing: content-box;
-  white-space: nowrap;
-`;
-
-const MenuBarDiv = styled(WrapperDiv)`
+const MenuBarDiv = styled(BaseDiv)`
   position: relative;
   width: 100%;
   justify-content: start;
@@ -218,33 +116,70 @@ const Menu = styled.span`
   cursor: pointer;
 `;
 
-const ContentDiv = styled(WrapperDiv)`
+const ContentDiv = styled(BaseDiv)`
   position: relative;
-  width: 100%;
+  padding-bottom: 20px;
   flex-direction: column;
   justify-content: center;
-  line-height: 1;
+  line-height: 22px;
 `;
 
-const Content = styled(WrapperDiv)`
-  width: 100%;
-  height: 100px;
+const ContentTopDiv = styled(BaseDiv)`
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  border-bottom: none;
 `;
 
-const AddButtonDiv = styled(WrapperDiv)`
-  position: relative;
-  width: 100%;
-  height: fit-content;
-  margin: 10px 0px;
+const UserText = styled(SpanText)`
+  font-size: 12px;
+  color: ${(props) => props.theme.colors.ashgrey};
+`;
+
+const ContentTextDiv = styled(BaseDiv)`
+  width: 90%;
+  font-size: 12px;
+  border-bottom: none;
+  line-height: 22px;
+  color: ${(props) => props.theme.colors.ashgrey};
+`;
+
+const ContentBottomDiv = styled(BaseDiv)`
+  display: flex;
   justify-content: center;
+  border-bottom: none;
+  margin-top: 25px;
+`;
+
+const DetailBtn = styled.button`
+  border: none;
+  font-size: 14px;
+  background-color: transparent;
+  color: ${(props) => props.theme.colors.ashgrey};
+  cursor: pointer;
+
+  &:after {
+    margin-left: 10px;
+    content: '⇣';
+  }
+`;
+
+const AddButtonDiv = styled(BaseDiv)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0px;
   line-height: 1;
-  background-color: ${(props) => props.theme.colors.lightgrey};
+  background-color: ${(props) => props.theme.colors.lightgreen};
 `;
 
 const AddButton = styled.button`
   width: 100%;
+  height: 100%;
   border: none;
-  font-size: 20px;
+  font-size: 14px;
+  font-weight: bold;
   background-color: transparent;
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
@@ -253,30 +188,22 @@ const AddButton = styled.button`
 export {
   Container,
   Layout,
-  WrapperDiv,
+  TitleDiv,
   SpanText,
   EmptySpan,
   SpanBackArrow,
   SpanTitle,
   SpanReviewTitle,
   RateDiv,
-  RateSpanText,
-  RateNumStarDiv,
-  RateStarDiv,
-  RateStarBaseDiv,
-  RateStarFillDiv,
-  RateCategoryDiv,
-  RateCategoryGroup,
-  RateCategoryTitle,
-  RateCategoryUnit,
-  RateCategoryBar,
-  RateCategoryNum,
   HashTagDiv,
-  HashTag,
   MenuBarDiv,
   Menu,
   ContentDiv,
-  Content,
+  ContentTopDiv,
+  UserText,
+  ContentTextDiv,
+  ContentBottomDiv,
+  DetailBtn,
   AddButtonDiv,
   AddButton,
 };

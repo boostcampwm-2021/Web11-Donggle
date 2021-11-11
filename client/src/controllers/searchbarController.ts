@@ -1,13 +1,25 @@
 type CoordType = [number, number];
 
-interface SimpleMap {
-  name: string;
+interface Rate {
+  count: number;
+  total: number;
+  safety: number;
+  traffic: number;
+  food: number;
+  entertainment: number;
+}
+
+interface MapInfo {
+  address: string;
+  code: string;
   codeLength: number;
   center: CoordType;
+  //현재는 리뷰 정보가 없으므로 require를 false로함
+  rate?: Rate;
 }
 
 const spreadDropdown = async (keyword, isSpread, setResults) => {
-  const searchRegions = async (): Promise<SimpleMap[] | []> => {
+  const searchRegions = async (): Promise<MapInfo[] | []> => {
     return await fetch(
       `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}`,
     )
@@ -22,7 +34,7 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
     isSpread = _isSpread;
   };
 
-  const result: SimpleMap[] | [] = await searchRegions();
+  const result: MapInfo[] | [] = await searchRegions();
   if (result.length > 0) {
     setDropdown(result, true);
   } else {
@@ -32,7 +44,7 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
 
 const moveTo = (
   map: kakao.maps.Map | null,
-  to: SimpleMap,
+  to: MapInfo,
   setResults,
   inputTagRef,
 ) => {
@@ -62,4 +74,4 @@ const moveTo = (
 };
 
 export { spreadDropdown, moveTo };
-export type { SimpleMap };
+export type { MapInfo };
