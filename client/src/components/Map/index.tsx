@@ -9,6 +9,9 @@ import {
   displayPolygons,
   deletePolygons,
   LFURegions,
+  addPolygonClickEvent,
+  removePolygonClickEvent,
+  RegionPolygon,
 } from '@controllers/mapController';
 
 import {
@@ -17,6 +20,7 @@ import {
   deleteMarkers,
   createMarkerClickListener,
   LFURates,
+  findMarker,
 } from '@controllers/markerController';
 
 import './markerStyle.css';
@@ -54,7 +58,7 @@ const MapComponent: React.FC<IProps> = ({
   });
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
-  const [polygons, setPolygons] = useState(Array<kakao.maps.Polygon>());
+  const [polygons, setPolygons] = useState(Array<RegionPolygon>());
 
   useEffect(() => {
     if (!mapWrapper.current) {
@@ -168,6 +172,29 @@ const MapComponent: React.FC<IProps> = ({
     displayMarkers(markers, map);
     return () => deleteMarkers(markers);
   }, [map, markers]);
+
+  useEffect(() => {
+    polygons.forEach((polygon) => {
+      const onClick = () => {
+        kakao.maps.event.preventMap();
+        const matchingMarker = findMarker(markers, polygon.address);
+        if (!matchingMarker) return;
+
+        const markerEl = matchingMarker.getContent() as HTMLElement;
+        const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
+
+        updateSidebarRate(sidebarRate);
+        openSidebar();
+      };
+      addPolygonClickEvent(polygon, onClick);
+    });
+
+    return () => {
+      polygons.forEach((polygon) => {
+        removePolygonClickEvent(polygon);
+      });
+    };
+  }, [polygons, markers, openSidebar, updateSidebarRate]);
 
   return (
     <MapWrapper ref={mapWrapper}>

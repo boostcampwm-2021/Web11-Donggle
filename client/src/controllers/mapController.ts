@@ -1,5 +1,10 @@
 import ColorHash from 'color-hash';
 
+export type RegionPolygon = kakao.maps.Polygon & {
+  address: string;
+  onClick?: () => void;
+};
+
 function getCurrentLocation(callback: (coord: [number, number]) => void) {
   let coord: [number, number] = [37.5642135, 127.0016985];
 
@@ -91,17 +96,36 @@ const requestCoord = async (scale: number, region: Array<string>) => {
 };
 
 const createPolygons = (regions) => {
-  const polygons = Array<kakao.maps.Polygon>();
+  const polygons = Array<RegionPolygon>();
   const colorHash = new ColorHash();
   regions.forEach((region) => {
     const colorString = colorHash.hex(region.address);
     if (region.type === 'Polygon') {
-      polygons.push(makeSinglePolygon(region.path, colorString));
+      polygons.push(
+        makeSinglePolygon(region.path, region.address, colorString),
+      );
     } else {
-      polygons.push(...makeMultiPolygon(region.path, colorString));
+      polygons.push(
+        ...makeMultiPolygon(region.path, region.address, colorString),
+      );
     }
   });
   return polygons;
+};
+
+const addPolygonClickEvent = (polygon: RegionPolygon, onClick: () => void) => {
+  if (polygon.onClick) {
+    kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
+  }
+  polygon.onClick = onClick;
+  kakao.maps.event.addListener(polygon, 'click', onClick);
+};
+
+const removePolygonClickEvent = (polygon: RegionPolygon) => {
+  if (polygon.onClick) {
+    kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
+  }
+  polygon.onClick = undefined;
 };
 
 const addPolygonEvent = (
@@ -113,7 +137,11 @@ const addPolygonEvent = (
   kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
 };
 
-const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
+const makeSinglePolygon = (
+  coords: [number, number][],
+  address: string,
+  colorString: string,
+) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
@@ -125,7 +153,7 @@ const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
     strokeOpacity: 0.8,
     fillColor: colorString,
     fillOpacity: 0.7,
-  });
+  }) as RegionPolygon;
 
   addPolygonEvent(
     polygon,
@@ -139,11 +167,13 @@ const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
     },
   );
 
+  polygon.address = address;
   return polygon;
 };
 
 const makeMultiPolygon = (
   coordsArray: [number, number][][][],
+  address: string,
   colorString: string,
 ) => {
   const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
@@ -161,10 +191,10 @@ const makeMultiPolygon = (
         strokeOpacity: 0.8,
         fillColor: colorString,
         fillOpacity: 0.7,
-      }),
+      }) as RegionPolygon,
   );
 
-  polygons.forEach((polygon) =>
+  polygons.forEach((polygon) => {
     addPolygonEvent(
       polygon,
       () =>
@@ -177,8 +207,9 @@ const makeMultiPolygon = (
           polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
           polygon.setZIndex(0);
         }),
-    ),
-  );
+    );
+    polygon.address = address;
+  });
 
   return polygons;
 };
@@ -242,4 +273,6 @@ export {
   displayPolygons,
   deletePolygons,
   LFURegions,
+  addPolygonClickEvent,
+  removePolygonClickEvent,
 };

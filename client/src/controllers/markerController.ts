@@ -17,12 +17,18 @@ const starRateHTML = (rate: number) => {
   `;
 };
 
-const markerEl = (address: string, rate: number) => {
+const markerEl = (rateData: RateType) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
 
+  const { address, total, count } = rateData;
+  const rate = total / count;
+
   const region = address.split(' ');
   const smallestRegion = region[region.length - 1];
+
+  wrapper.dataset.address = address;
+  wrapper.dataset.rateData = JSON.stringify(rateData);
   wrapper.innerHTML = `
     <div class="title">
       <span>${smallestRegion}</span>
@@ -45,6 +51,7 @@ const largeMarkerEl = (rateData: RateType) => {
   const food = categories.food / count;
   const entertainment = categories.entertainment / count;
 
+  wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
   wrapper.innerHTML = `
     <div class="title">
@@ -107,7 +114,6 @@ const regionToRates = (region): RateType => {
   };
 };
 
-// TODO: fetch 요청
 const requestRates = async (
   scale: number,
   region: string[],
@@ -126,8 +132,8 @@ const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
       position: new kakao.maps.LatLng(...center),
     });
 
-    const defaultMarker = markerDefault(rateData);
-    const largeMarker = markerMouseOver(rateData);
+    const defaultMarker = markerEl(rateData);
+    const largeMarker = largeMarkerEl(rateData);
 
     defaultMarker.addEventListener('mouseenter', () => {
       marker.setContent(largeMarker);
@@ -140,15 +146,6 @@ const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
     marker.setContent(defaultMarker);
     return marker;
   });
-};
-
-const markerDefault = (rateData: RateType) => {
-  const { address, total, count } = rateData;
-  return markerEl(address, total / count);
-};
-
-const markerMouseOver = (rateData: RateType) => {
-  return largeMarkerEl(rateData);
 };
 
 const displayMarkers = (
@@ -168,9 +165,15 @@ const createMarkerClickListener = (
 ) => {
   const onMarkerClicked = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    const markerEl = target.closest('.customoverlay_large') as HTMLElement;
+    const markerEl = target.closest('.customoverlay') as HTMLElement;
     if (!markerEl) {
-      onOutsideClick();
+      /*
+          2021-11-11
+          송명회
+          폴리곤 클릭시 사이드바 닫힘 방지
+          Polygon은 HTML path 엘리먼트로 구현되어 있으므로 의도대로 동작함
+       */
+      if (!target.closest('path')) onOutsideClick();
       return;
     }
     onClick(JSON.parse(markerEl.dataset.rateData as string));
@@ -218,6 +221,13 @@ const LFURates = async (
   }
 };
 
+const findMarker = (markers: kakao.maps.CustomOverlay[], address: string) => {
+  return markers.find((marker) => {
+    const markerEl = marker.getContent() as HTMLElement;
+    return address === markerEl.dataset.address;
+  });
+};
+
 export {
   requestRates,
   createMarkers,
@@ -226,4 +236,5 @@ export {
   regionToRates,
   createMarkerClickListener,
   LFURates,
+  findMarker,
 };

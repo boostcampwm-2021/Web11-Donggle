@@ -49,6 +49,7 @@ const queryRates = async (
 ) => {
   let result: MapInfo[] = [];
   const fields = {
+    _id: 0,
     address: 1,
     code: 1,
     codeLength: 1,
