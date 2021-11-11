@@ -13,8 +13,16 @@ const submitReview = (data: ReviewDataType) => {
       {
         label: '제출',
         className: 'overlay-confirmation-submit',
-        onClick: () => {
-          console.log(data);
+        onClick: async () => {
+          fetch(`${process.env.REACT_APP_API_URL}/review`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+            .then((res) => res.json())
+            .then((res) => console.log(res));
         },
       },
       {
