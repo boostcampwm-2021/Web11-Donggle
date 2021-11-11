@@ -1,6 +1,7 @@
 import { logger } from '@loaders/index';
 import apiController from '@api/indexController';
 import adminController from '@api/adminController';
+import reviewController from '@api/reviewController';
 
 import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
@@ -33,6 +34,7 @@ export default ({ app }: { app: Application }) => {
 
   app.use('/api', apiController);
   app.use('/admin', adminController);
+  app.use('/review', reviewController);
 
   // 404 에러 처리
   app.use((req: Request, res: Response, next: NextFunction) => {
