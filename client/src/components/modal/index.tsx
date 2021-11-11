@@ -1,4 +1,9 @@
-import { ModalOverlay, ModalWrapper } from './index.style';
+import {
+  ModalOverlay,
+  ModalWrapper,
+  ModalCloseBtnDiv,
+  ModalCloseBtn,
+} from './index.style';
 import closeButton from '@assets/closeButton.png';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -53,7 +58,9 @@ const Modal: React.FC = ({ children }) => {
       {isActive && (
         <ModalOverlay>
           <ModalWrapper ref={modalRef}>
-            <img src={closeButton} alt="모달창닫기" onClick={onClick}></img>
+            <ModalCloseBtnDiv>
+              <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
+            </ModalCloseBtnDiv>
             {children}
           </ModalWrapper>
         </ModalOverlay>
