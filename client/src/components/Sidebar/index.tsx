@@ -48,11 +48,14 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
       >
         <TitleDiv>
           <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
-          <SpanTitle>서울특별시 용산구 후암동</SpanTitle>
+          <SpanTitle>{props.rateData.address}</SpanTitle>
           <EmptySpan></EmptySpan>
         </TitleDiv>
         <RateDiv>
-          <StarRateDiv isLarge={true} total={props.rateData.total} />
+          <StarRateDiv
+            isLarge={true}
+            total={(props.rateData.total / props.rateData.count).toFixed(1)}
+          />
           <BarRateDiv categories={props.rateData.categories} />
         </RateDiv>
         <HashTagDiv>
@@ -75,7 +78,14 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
         {props.reviewData.map((review, idx) => (
           <ContentDiv key={idx}>
             <ContentTopDiv>
-              <StarRateDiv isLarge={false} total={review.total} />
+              <StarRateDiv
+                isLarge={false}
+                total={(
+                  Object.keys(review.categories).reduce((prev, curr) => {
+                    return prev + review.categories[curr];
+                  }, 0) / 4
+                ).toFixed(1)}
+              />
               <UserText>{review.user}</UserText>
             </ContentTopDiv>
             <ContentTextDiv>{review.text}</ContentTextDiv>

@@ -27,6 +27,7 @@ export interface TempRateType {
   codeLength: number;
   center: [number, number];
   total: number;
+  count: number;
   categories: {
     safety: number;
     traffic: number;
@@ -36,7 +37,6 @@ export interface TempRateType {
 }
 
 export interface TempReviewType {
-  total: number;
   categories: {
     safety: number;
     traffic: number;
@@ -53,34 +53,33 @@ const TemporaryRateData: TempRateType = {
   code: '1121069',
   codeLength: 7,
   center: [37.48756349263078, 126.9283814947558],
-  total: 4.4,
+  total: 9,
+  count: 2,
   categories: {
-    safety: 4.2,
-    traffic: 4.9,
-    food: 4.5,
-    entertainment: 4.8,
+    safety: 8,
+    traffic: 7,
+    food: 9,
+    entertainment: 9,
   },
 };
 
 const TemporaryReviewData: TempReviewType[] = [
   {
-    total: 4.3,
     categories: {
-      safety: 4.4,
-      traffic: 4.2,
-      food: 4.1,
-      entertainment: 4.9,
+      safety: 4,
+      traffic: 4,
+      food: 5,
+      entertainment: 3,
     },
     text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
     user: 'github:user1',
   },
   {
-    total: 4.7,
     categories: {
-      safety: 4.2,
-      traffic: 4.1,
-      food: 4.8,
-      entertainment: 4.5,
+      safety: 4,
+      traffic: 4,
+      food: 4,
+      entertainment: 4,
     },
     text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
     user: 'github:user2',

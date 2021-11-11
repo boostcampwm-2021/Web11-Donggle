@@ -12,7 +12,7 @@ import {
 
 interface IProps {
   isLarge: boolean;
-  total: number;
+  total: string;
 }
 
 const StarRateDiv: React.FC<IProps> = ({ isLarge, total }) => {
@@ -20,7 +20,7 @@ const StarRateDiv: React.FC<IProps> = ({ isLarge, total }) => {
     <RateNumStarDiv>
       <RateSpanText isLarge={isLarge}>{total}</RateSpanText>
       <RateStarDiv>
-        <RateStarFillDiv rate={total}>
+        <RateStarFillDiv rate={Number(total)}>
           <FontAwesomeIcon icon={faStar} />
           <FontAwesomeIcon icon={faStar} />
           <FontAwesomeIcon icon={faStar} />
