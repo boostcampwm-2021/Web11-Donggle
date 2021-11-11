@@ -20,7 +20,15 @@ import Header from '@components/Header/index';
 
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const App: React.FC = () => {
   const location = useLocation();
