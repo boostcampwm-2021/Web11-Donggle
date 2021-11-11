@@ -10,14 +10,8 @@ import {
 } from './index.style';
 import { Category } from '@utils/enum';
 
-interface IProps {
+interface IProps extends CategoryRateType {
   count: number;
-  categories: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
 }
 
 const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
