@@ -32,6 +32,13 @@ const LoginButton: React.FC<LoginButtonProps> = (props) => {
   );
 };
 
+const loginGithub = () => {
+  const client_id = process.env.REACT_APP_CLIENT_ID;
+  const redirect_url = process.env.REACT_APP_REDIRECT_URL;
+  const loginUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=read:user&redirect_uri=${redirect_url}`;
+  window.location.href = loginUrl;
+};
+
 const LoginPlate: React.FC = () => {
   return (
     <Modal>
@@ -42,6 +49,7 @@ const LoginPlate: React.FC = () => {
           text="Google 로그인"
           color="#000000"
           bgColor="#ffffff"
+          onClick={loginGithub}
         ></LoginButton>
         <LoginButton
           IconComponent={NaverIcon}

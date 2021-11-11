@@ -5,6 +5,7 @@ import {
   ReviewPage,
   RankingPage,
   LoginPage,
+  CallbackPage,
 } from '@pages/index';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="/review" component={ReviewPage} />
             <Route path="/ranking" component={RankingPage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/github/callback" component={CallbackPage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/ranking" component={RankingPage} />}
