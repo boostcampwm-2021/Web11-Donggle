@@ -13,9 +13,31 @@ import {
 } from './index.style';
 import DynamicStarRateDiv from '@components/Common/DynamicStarRate';
 import { Category } from '@utils/enum';
+import { submitReview } from '@controllers/reviewController';
+
+interface ReviewType extends CategoryRateType {
+  address: string;
+  content: string;
+}
 
 const ReviewModal: React.FC = () => {
-  const [content, setContent] = useState('');
+  const DEFAULT_ADDRESS = '대전시 서구 탄방동';
+  const [reviewData, setReviewData] = useState<ReviewType>({
+    address: DEFAULT_ADDRESS,
+    content: '',
+    categories: {
+      safety: 0,
+      traffic: 0,
+      food: 0,
+      entertainment: 0,
+    },
+  });
+
+  const setText = useCallback((text: string) => {
+    setReviewData((prevData) => {
+      return { ...prevData, content: text.slice(0, 400) };
+    });
+  }, []);
 
   const RatingStars = (Object.keys(Category) as (keyof typeof Category)[]).map(
     (category, idx) => {
@@ -28,15 +50,16 @@ const ReviewModal: React.FC = () => {
     },
   );
 
-  const setText = useCallback((text: string) => {
-    setContent(text.slice(0, 400));
-  }, []);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    submitReview(reviewData);
+  };
 
   return (
     <Modal>
       <TitleDiv>
         <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
-        <span style={{ marginLeft: '10px' }}>경기도 성남시 분당구 판교동</span>
+        <span style={{ marginLeft: '10px' }}>{DEFAULT_ADDRESS}</span>
       </TitleDiv>
       <StarRateDiv>{RatingStars}</StarRateDiv>
       <TextAreaDiv>
@@ -45,7 +68,7 @@ const ReviewModal: React.FC = () => {
           rows={3}
           cols={20}
           onChange={(e) => setText(e.target.value)}
-          value={content}
+          value={reviewData.content}
         ></TextInput>
         <p
           style={{
@@ -55,11 +78,11 @@ const ReviewModal: React.FC = () => {
             color: 'red',
           }}
         >
-          {content.length} / 400
+          {reviewData.content.length} / 400
         </p>
       </TextAreaDiv>
       <SubmitDiv>
-        <SubmitBtn>제출하기</SubmitBtn>
+        <SubmitBtn onClick={submitHandler}>제출하기</SubmitBtn>
       </SubmitDiv>
     </Modal>
   );
