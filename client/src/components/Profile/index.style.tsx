@@ -8,17 +8,46 @@ const ImageUsernameWrapper = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 360px;
+  height: 440px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border-right: solid 1px #c5c5c5;
-  background: red;
+`;
+
+const UserImage = styled.img`
+  width: 280px;
+  height: 280px;
+  border-radius: 999px;
+`;
+
+const ImageUploadButton = styled.button`
+  width: 200px;
+  height: 60px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #33ab74;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+`;
+
+const ImageRemoveButton = styled.button`
+  width: 200px;
+  height: 60px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #fff;
+  color: #33ab74;
+  font-size: 20px;
+  cursor: pointer;
 `;
 
 const UsernameWrapper = styled.div`
   width: 600px;
-  height: 300px;
+  height: 460px;
   font-size: 70px;
   display: flex;
   align-items: center;
@@ -32,4 +61,12 @@ const AddressWrapper = styled.div`
   background: green;
 `;
 
-export { ImageUsernameWrapper, ImageWrapper, UsernameWrapper, AddressWrapper };
+export {
+  ImageUsernameWrapper,
+  ImageWrapper,
+  UserImage,
+  ImageUploadButton,
+  ImageRemoveButton,
+  UsernameWrapper,
+  AddressWrapper,
+};

@@ -1,6 +1,9 @@
 import {
   ImageUsernameWrapper,
   ImageWrapper,
+  UserImage,
+  ImageUploadButton,
+  ImageRemoveButton,
   UsernameWrapper,
   AddressWrapper,
 } from '@components/Profile/index.style';
@@ -15,7 +18,11 @@ const Profile: React.FC = () => {
   return (
     <>
       <ImageUsernameWrapper>
-        <ImageWrapper />
+        <ImageWrapper>
+          <UserImage src={auth.imageURL} />
+          <ImageUploadButton>이미지 업로드</ImageUploadButton>
+          <ImageRemoveButton>이미지 제거</ImageRemoveButton>
+        </ImageWrapper>
         <UsernameWrapper>{auth.username}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper />
