@@ -42,6 +42,8 @@
   font-weight: bold;
   font-size: 14px;
   float: left;
+  user-select: none;
+  cursor: pointer;
 }
 
 .customoverlay_large {
