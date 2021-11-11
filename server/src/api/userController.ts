@@ -1,12 +1,13 @@
 import { User, UserModel } from '@models/User';
 
-import express, { Request, Response } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import multer from 'multer';
 import AWS from 'aws-sdk';
 import { v4 } from 'uuid';
 
 interface ProfileImageBody {
   imageURL: string;
+  username: string;
 }
 
 const upload = multer();
@@ -42,6 +43,7 @@ router.patch(
         })
         .promise();
 
+      const username = body.username;
       const prevImageURL = body.imageURL;
       const prevImageName = prevImageURL.replace(
         `${process.env.IMAGE_ENDPOINT as string}/${
@@ -49,24 +51,43 @@ router.patch(
         }/`,
         '',
       );
-      console.log(prevImageName);
-      void s3
+      await UserModel.updateOne({ oauthEmail: username }, { image: imageLink });
+      await s3
         .deleteObject({
           Bucket: process.env.IMAGE_BUCKET as string,
           Key: prevImageName,
         })
         .promise();
-      void UserModel.updateOne({ image: imageLink });
 
       res.json({
-        imageLink: `${process.env.IMAGE_ENDPOINT as string}/${
-          process.env.IMAGE_BUCKET as string
-        }/${imageName}.png`,
+        imageLink,
       });
     } catch (err) {
       res.json({ imageLink: '' });
     }
   },
 );
+
+router.delete('/profile-image', (async (req: Request, res: Response) => {
+  const body: ProfileImageBody = req.body as ProfileImageBody;
+  const username = body.username;
+  const imageURL = body.imageURL;
+  const imageName = imageURL.replace(
+    `${process.env.IMAGE_ENDPOINT as string}/${
+      process.env.IMAGE_BUCKET as string
+    }/`,
+    '',
+  );
+
+  await UserModel.updateOne({ oauthEmail: username }, { image: '' });
+  await s3
+    .deleteObject({
+      Bucket: process.env.IMAGE_BUCKET as string,
+      Key: imageName,
+    })
+    .promise();
+
+  res.json({ imageLink: '' });
+}) as RequestHandler);
 
 export default router;
