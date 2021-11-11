@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,7 +9,6 @@ import {
   StarRateDiv,
   StarBtn,
 } from './index.style';
-import { mouseOverStarHandler } from '@controllers/reviewController';
 
 interface IProps {
   category: keyof CategoryRateType['categories'];
