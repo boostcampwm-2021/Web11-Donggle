@@ -14,7 +14,7 @@ const ModalOverlay = styled.div`
 const ModalWrapper = styled.div`
   position: absolute;
   max-width: 80%;
-  width: auto;
+  width: 500px;
   max-height: 80%;
   height: auto;
   top: 50%;

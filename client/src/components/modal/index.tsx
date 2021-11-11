@@ -4,7 +4,6 @@ import {
   ModalCloseBtnDiv,
   ModalCloseBtn,
 } from './index.style';
-import closeButton from '@assets/closeButton.png';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';

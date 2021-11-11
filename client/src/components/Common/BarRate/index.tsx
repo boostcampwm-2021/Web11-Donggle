@@ -8,13 +8,7 @@ import {
   RateCategoryBar,
   RateCategoryNum,
 } from './index.style';
-
-enum Category {
-  safety = '치안',
-  traffic = '교통',
-  food = '음식',
-  entertainment = '놀거리',
-}
+import { Category } from '@utils/enum';
 
 interface IProps {
   count: number;
