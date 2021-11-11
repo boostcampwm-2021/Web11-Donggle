@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
         </ImageWrapper>
         <UsernameWrapper>{auth.username}</UsernameWrapper>
       </ImageUsernameWrapper>
-      <AddressWrapper />
+      <AddressWrapper>{auth.address}</AddressWrapper>
     </>
   );
 };

@@ -14,7 +14,7 @@ const ImageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-right: solid 1px #c5c5c5;
+  border-right: solid 1px ${(props) => props.theme.colors.grey};
 `;
 
 const UserImage = styled.img`
@@ -28,10 +28,13 @@ const ImageUploadButton = styled.button`
   height: 60px;
   margin-top: 10px;
   border-radius: 10px;
-  background: #33ab74;
+  background: ${(props) => props.theme.colors.lightgreen};
   font-size: 20px;
   color: #fff;
   cursor: pointer;
+  :hover {
+    background: ${(props) => props.theme.colors.green};
+  }
 `;
 
 const ImageRemoveButton = styled.button`
@@ -40,9 +43,12 @@ const ImageRemoveButton = styled.button`
   margin-top: 10px;
   border-radius: 10px;
   background: #fff;
-  color: #33ab74;
+  color: ${(props) => props.theme.colors.lightgreen};
   font-size: 20px;
   cursor: pointer;
+  :hover {
+    color: ${(props) => props.theme.colors.green};
+  }
 `;
 
 const UsernameWrapper = styled.div`
@@ -56,9 +62,18 @@ const UsernameWrapper = styled.div`
 
 const AddressWrapper = styled.div`
   width: 900px;
-  height: 200px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 20px;
-  background: green;
+  border-radius: 20px;
+  border: solid 1px ${(props) => props.theme.colors.grey};
+  font-size: 50px;
+  cursor: pointer;
+  :hover {
+    background: ${(props) => props.theme.colors.grey};
+  }
 `;
 
 export {
