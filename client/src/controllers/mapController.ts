@@ -1,3 +1,5 @@
+import ColorHash from 'color-hash';
+
 function getCurrentLocation(callback: (coord: [number, number]) => void) {
   // const coord: [number, number] = [37.5642135, 127.0016985];
   let coord: [number, number] = [37.5642135, 127.0016985];
@@ -91,48 +93,95 @@ const requestCoord = async (scale: number, region: Array<string>) => {
 
 const createPolygons = (regions) => {
   const polygons = Array<kakao.maps.Polygon>();
+  const colorHash = new ColorHash();
   regions.forEach((region) => {
+    const colorString = colorHash.hex(region.address);
     if (region.type === 'Polygon') {
-      polygons.push(makeSinglePolygon(region.path));
+      polygons.push(makeSinglePolygon(region.path, colorString));
     } else {
-      polygons.push(...makeMultiPolygon(region.path));
+      polygons.push(...makeMultiPolygon(region.path, colorString));
     }
   });
   return polygons;
 };
 
-const makeSinglePolygon = (coords: [number, number][]) => {
+const addPolygonEvent = (
+  polygon: kakao.maps.Polygon,
+  callbackIn: () => void,
+  callbackOut: () => void,
+) => {
+  kakao.maps.event.addListener(polygon, 'mouseover', callbackIn);
+  kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
+};
+
+const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
 
-  return new kakao.maps.Polygon({
+  const polygon = new kakao.maps.Polygon({
     path: coordObjects,
     strokeWeight: 2,
-    strokeColor: '#004c80',
+    strokeColor: colorString,
     strokeOpacity: 0.8,
-    fillColor: '#fff',
+    fillColor: colorString,
     fillOpacity: 0.7,
   });
+
+  addPolygonEvent(
+    polygon,
+    () => {
+      polygon.setZIndex(1);
+      polygon.setOptions({ strokeColor: '#fff', fillOpacity: 1 });
+    },
+    () => {
+      polygon.setZIndex(0);
+      polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
+    },
+  );
+
+  return polygon;
 };
 
-const makeMultiPolygon = (coordsArray: [number, number][][][]) => {
+const makeMultiPolygon = (
+  coordsArray: [number, number][][][],
+  colorString: string,
+) => {
   const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
     coords.map((coord: [number, number][]) =>
       coord.map((c: [number, number]) => new kakao.maps.LatLng(...c)),
     ),
   );
 
-  return coordObjectsArray.map((coordObjects) => {
-    return new kakao.maps.Polygon({
-      path: coordObjects,
-      strokeWeight: 2,
-      strokeColor: '#004c80',
-      strokeOpacity: 0.8,
-      fillColor: '#fff',
-      fillOpacity: 0.7,
-    });
-  });
+  const polygons = coordObjectsArray.map(
+    (coordObjects) =>
+      new kakao.maps.Polygon({
+        path: coordObjects,
+        strokeWeight: 2,
+        strokeColor: colorString,
+        strokeOpacity: 0.8,
+        fillColor: colorString,
+        fillOpacity: 0.7,
+      }),
+  );
+
+  polygons.forEach((polygon) =>
+    addPolygonEvent(
+      polygon,
+      () =>
+        polygons.forEach((polygon) => {
+          polygon.setOptions({ strokeColor: '#fff', fillOpacity: 1 });
+          polygon.setZIndex(1);
+        }),
+      () =>
+        polygons.forEach((polygon) => {
+          polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
+          polygon.setZIndex(0);
+        }),
+    ),
+  );
+
+  return polygons;
 };
 
 const displayPolygons = (

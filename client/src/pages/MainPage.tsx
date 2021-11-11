@@ -14,42 +14,87 @@ const FlexContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
+  min-width: 1000px;
   height: 100%;
   flex: 1 1 0;
 `;
 
-type SidebarContentType = {
+// Rate, Review 는 Backend에서 아래와 같은 형식으로 반환한다고 가정
+export interface RateType {
   address: string;
-  starRate: number;
-  categoryRate: {
+  code: string;
+  codeLength: number;
+  center: [number, number];
+  total: number;
+  count: number;
+  categories: {
     safety: number;
     traffic: number;
     food: number;
     entertainment: number;
   };
-};
+}
 
-const DEFAULT_SIDEBAR_CONTENT = {
+export interface ReviewType {
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+  text: string;
+  user: string;
+}
+
+const TemporaryReviewData: ReviewType[] = [
+  {
+    categories: {
+      safety: 4,
+      traffic: 4,
+      food: 5,
+      entertainment: 3,
+    },
+    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
+    user: 'github:user1',
+  },
+  {
+    categories: {
+      safety: 4,
+      traffic: 4,
+      food: 4,
+      entertainment: 4,
+    },
+    text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
+    user: 'github:user2',
+  },
+];
+
+const TemporaryHashTagData: string[] = [
+  '소음이 적은',
+  '경관이 좋은',
+  '문화시설이 가까운',
+  '체육시설이 많은',
+  '역이 가까운',
+];
+
+const DEFAULT_RATE_DATA: RateType = {
   address: '',
-  starRate: 0,
-  categoryRate: {
-    safety: 0,
-    traffic: 0,
-    food: 0,
-    entertainment: 0,
+  code: '',
+  codeLength: 0,
+  center: [37.541, 126.986],
+  total: 9,
+  count: 2,
+  categories: {
+    safety: 8,
+    traffic: 7,
+    food: 9,
+    entertainment: 9,
   },
 };
 
-/*
-  2021-11-02
-  홍승용
-  임시 예제 코드입니다. router내부에서 history객체를 활용하려면 props의 type으로 RouteComponentsProps를 사용해야 합니다.
-*/
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
-  const [{ address, starRate, categoryRate }, setSidebarContent] = useState(
-    DEFAULT_SIDEBAR_CONTENT,
-  );
+  const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
 
   const toggleSidebar = () => {
     setSidebar((prev) => !prev);
@@ -63,8 +108,8 @@ const MainPage: React.FC = () => {
     setSidebar(false);
   }, []);
 
-  const updateSidebarContent = useCallback((content: SidebarContentType) => {
-    setSidebarContent(content);
+  const updateSidebarRate = useCallback((rateData: RateType) => {
+    setSidebarRate(rateData);
   }, []);
 
   return (
@@ -74,19 +119,14 @@ const MainPage: React.FC = () => {
         <Map
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
-          updateSidebarContent={updateSidebarContent}
+          updateSidebarRate={updateSidebarRate}
           toggleSidebar={toggleSidebar}
         ></Map>
         <Sidebar
-          address={address}
           sidebar={sidebar}
-          starRate={starRate}
-          categoryRate={{
-            safety: categoryRate.safety,
-            traffic: categoryRate.traffic,
-            food: categoryRate.food,
-            entertainment: categoryRate.entertainment,
-          }}
+          rateData={sidebarRate}
+          reviewData={TemporaryReviewData}
+          hashTagData={TemporaryHashTagData}
           closeSidebar={closeSidebar}
         ></Sidebar>
       </FlexContainer>

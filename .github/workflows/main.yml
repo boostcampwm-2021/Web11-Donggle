@@ -7,8 +7,6 @@ name: Node.js CD
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   deploy:
@@ -26,7 +24,6 @@ jobs:
           cache: "yarn"
           cache-dependency-path: |
             client/yarn.lock
-
       - name: Generate Environment Variables File for Production
         run: |
           echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.production
@@ -52,7 +49,6 @@ jobs:
           script: |
             rm -rf /usr/share/nginx/prod/*
             cd donggle-server/server && find . -maxdepth 1 ! -name public -exec rm -rf "{}" \;
-
       - name: copy client file to deploy server
         uses: appleboy/scp-action@master
         with:
@@ -81,9 +77,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cp server-env/.env.development donggle-server/server/
             cp server-env/.env.production donggle-server/server/
             cd donggle-server/server/
             yarn install
-            pm2 kill
+            yarn build
             yarn prod

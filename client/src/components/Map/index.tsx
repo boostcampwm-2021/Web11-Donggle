@@ -1,4 +1,4 @@
-import MapWrapper from '@components/Map/index.style';
+import MapWrapper, { CenterMarker } from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 
 import {
@@ -22,17 +22,7 @@ import {
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
-
-type SidebarContentType = {
-  address: string;
-  starRate: number;
-  categoryRate: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
-};
+import { RateType } from '@pages/MainPage';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -43,14 +33,14 @@ const DEFAULT_POSITION = {
 interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
-  updateSidebarContent: (content: SidebarContentType) => void;
+  updateSidebarRate: (rateData: RateType) => void;
   toggleSidebar: () => void;
 }
 
 const MapComponent: React.FC<IProps> = ({
   openSidebar,
   closeSidebar,
-  updateSidebarContent,
+  updateSidebarRate,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
@@ -108,15 +98,15 @@ const MapComponent: React.FC<IProps> = ({
     if (!mapWrapper.current) return;
 
     const wrapper = mapWrapper.current;
-    const onClick = (content: SidebarContentType) => {
-      updateSidebarContent(content);
+    const onClick = (rateData: RateType) => {
+      updateSidebarRate(rateData);
       openSidebar();
     };
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
 
     wrapper.addEventListener('click', onMarkerClicked);
     return () => wrapper.removeEventListener('click', onMarkerClicked);
-  }, [openSidebar, closeSidebar, updateSidebarContent]);
+  }, [openSidebar, closeSidebar, updateSidebarRate]);
 
   useEffect(() => {
     const updateRange = async () => {
@@ -144,6 +134,7 @@ const MapComponent: React.FC<IProps> = ({
     const { scale, region } = range;
     const updatePolygons = async () => {
       const regions = await LFURegions(cache.current, scale, region);
+      console.log(regions);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
 
@@ -171,6 +162,7 @@ const MapComponent: React.FC<IProps> = ({
   return (
     <MapWrapper ref={mapWrapper}>
       <Searchbar map={map} />
+      <CenterMarker />
     </MapWrapper>
   );
 };

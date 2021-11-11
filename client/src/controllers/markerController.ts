@@ -1,22 +1,5 @@
 import { regionToScaled } from '@utils/address';
-
-type RateType = {
-  safety: number;
-  traffic: number;
-  food: number;
-  entertainment: number;
-};
-
-type MarkerInfo = {
-  address: string;
-  center: [number, number];
-  rates: RateType;
-};
-
-const average = (...values: number[]) => {
-  const sum = values.reduce((a, b) => a + b, 0);
-  return Number((sum / values.length || 0).toFixed(2));
-};
+import { RateType } from '@pages/MainPage';
 
 const ratingToPercent = (rate: number) => {
   return rate * 20;
@@ -35,64 +18,61 @@ const starRateHTML = (rate: number) => {
   `;
 };
 
-const markerEl = (address: string, rates: RateType) => {
+const markerEl = (address: string, rate: number) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
 
-  const averageRate = average(
-    ...Object.keys(rates).map((category) => rates[category]),
-  );
   const region = address.split(' ');
   const smallestRegion = region[region.length - 1];
   wrapper.innerHTML = `
     <div class="title">
       <span>${smallestRegion}</span>
       <span class="star-rating-single">★</span>
-      <span>${averageRate}</span>
+      <span>${rate.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
 };
 
-const largeMarkerEl = (address: string, rates: RateType) => {
+const largeMarkerEl = (rateData: RateType) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay customoverlay_large';
-  const averageRate = average(
-    ...Object.keys(rates).map((category) => rates[category]),
-  );
 
-  wrapper.dataset.address = address;
-  wrapper.dataset.starRate = `${averageRate}`;
-  wrapper.dataset.safety = `${rates.safety}`;
-  wrapper.dataset.traffic = `${rates.traffic}`;
-  wrapper.dataset.food = `${rates.food}`;
-  wrapper.dataset.entertainment = `${rates.entertainment}`;
+  const { address, total, count, categories } = rateData;
+  const averageRate = total / count;
 
-  wrapper.innerHTML = `
+  const safety = categories.safety / count;
+  const traffic = categories.traffic / count;
+  const food = categories.food / count;
+  const entertainment = categories.entertainment / count;
+
+  wrapper.dataset.rateData = JSON.stringify(rateData);
+
+  wrapper.dataset.code = wrapper.innerHTML = `
     <div class="title">
       <span>${address}</span>
       <span class="star-rating-single">★</span>
-      <span>${averageRate}</span>
+      <span>${averageRate.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>안전 </span>
-      ${starRateHTML(rates.safety)}
-      <span>${rates.safety}</span>
+      ${starRateHTML(safety)}
+      <span>${safety.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>교통 </span>
-      ${starRateHTML(rates.traffic)}
-      <span>${rates.traffic}</span>
+      ${starRateHTML(traffic)}
+      <span>${traffic.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>먹거리 </span>
-      ${starRateHTML(rates.food)}
-      <span>${rates.food}</span>
+      ${starRateHTML(food)}
+      <span>${food.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>놀거리 </span>
-      ${starRateHTML(rates.entertainment)}
-      <span>${rates.entertainment}</span>
+      ${starRateHTML(entertainment)}
+      <span>${entertainment.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
@@ -110,15 +90,25 @@ const getRandomRate = () => {
   return random(1, 5);
 };
 
-const regionToMarkerInfo = (region) => {
+const regionToMarkerInfo = (region): RateType => {
+  const count = random(0, 100);
+  const safety = getRandomRate() * count;
+  const traffic = getRandomRate() * count;
+  const food = getRandomRate() * count;
+  const entertainment = getRandomRate() * count;
+
   return {
     address: region.address,
+    code: region.code,
+    codeLength: region.codeLength,
     center: region.center,
-    rates: {
-      safety: getRandomRate(),
-      traffic: getRandomRate(),
-      food: getRandomRate(),
-      entertainment: getRandomRate(),
+    total: (safety + traffic + food + entertainment) / 4,
+    count: count,
+    categories: {
+      safety,
+      traffic,
+      food,
+      entertainment,
     },
   };
 };
@@ -127,14 +117,18 @@ const regionToMarkerInfo = (region) => {
 const requestMarkerInfo = async (
   scale: number,
   region: string[],
-): Promise<MarkerInfo[]> => {
+): Promise<RateType[]> => {
   return Array(100)
     .fill(0)
     .map(() => {
       return {
         address: regionToScaled(region, scale),
+        code: '',
+        codeLength: 0,
         center: getRandomLatLng() as [number, number],
-        rates: {
+        total: 0,
+        count: 0,
+        categories: {
           safety: getRandomRate(),
           traffic: getRandomRate(),
           food: getRandomRate(),
@@ -144,17 +138,15 @@ const requestMarkerInfo = async (
     });
 };
 
-const createMarkers = (
-  markerInfos: MarkerInfo[],
-): kakao.maps.CustomOverlay[] => {
-  return markerInfos.map((markerInfo) => {
-    const { center } = markerInfo;
+const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
+  return rateDatas.map((rateData) => {
+    const { center } = rateData;
     const marker = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(...center),
     });
 
-    const defaultMarker = markerDefault(markerInfo);
-    const largeMarker = markerMouseOver(markerInfo);
+    const defaultMarker = markerDefault(rateData);
+    const largeMarker = markerMouseOver(rateData);
 
     defaultMarker.addEventListener('mouseenter', () => {
       marker.setContent(largeMarker);
@@ -169,14 +161,13 @@ const createMarkers = (
   });
 };
 
-const markerDefault = (markerInfo: MarkerInfo) => {
-  const { address, rates } = markerInfo;
-  return markerEl(address, rates);
+const markerDefault = (rateData: RateType) => {
+  const { address, total, count } = rateData;
+  return markerEl(address, total / count);
 };
 
-const markerMouseOver = (markerInfo: MarkerInfo) => {
-  const { address, rates } = markerInfo;
-  return largeMarkerEl(address, rates);
+const markerMouseOver = (rateData: RateType) => {
+  return largeMarkerEl(rateData);
 };
 
 const displayMarkers = (
@@ -191,7 +182,7 @@ const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
 };
 
 const createMarkerClickListener = (
-  onClick: (content) => void,
+  onClick: (rateData: RateType) => void,
   onOutsideClick: () => void,
 ) => {
   const onMarkerClicked = (e: MouseEvent) => {
@@ -201,16 +192,7 @@ const createMarkerClickListener = (
       onOutsideClick();
       return;
     }
-    onClick({
-      address: markerEl.dataset.address,
-      starRate: Number(markerEl.dataset.starRate),
-      categoryRate: {
-        safety: Number(markerEl.dataset.safety),
-        traffic: Number(markerEl.dataset.traffic),
-        food: Number(markerEl.dataset.food),
-        entertainment: Number(markerEl.dataset.entertainment),
-      },
-    });
+    onClick(JSON.parse(markerEl.dataset.rateData as string));
   };
   return onMarkerClicked;
 };
