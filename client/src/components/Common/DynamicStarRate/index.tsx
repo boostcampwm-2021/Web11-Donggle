@@ -31,7 +31,7 @@ const DynamicStarRateDiv: React.FC<IProps> = ({
   const faIconList = Array.from({ length: 5 }, (_, index) => index + 1).map(
     (n) => {
       return (
-        <StarBtn key={n}>
+        <StarBtn key={category + n}>
           <FontAwesomeIcon
             style={n <= number ? { color: 'gold' } : { color: 'lightgrey' }}
             icon={faStar}
