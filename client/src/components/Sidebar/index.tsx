@@ -1,48 +1,35 @@
 import React, { useState } from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-
 import {
   Container,
   Layout,
-  WrapperDiv,
+  TitleDiv,
   SpanBackArrow,
-  // SpanText,
   EmptySpan,
   SpanTitle,
-  // SpanReviewTitle,
   RateDiv,
-  RateSpanText,
-  RateNumStarDiv,
-  RateStarDiv,
-  RateStarBaseDiv,
-  RateStarFillDiv,
-  RateCategoryDiv,
-  RateCategoryGroup,
-  RateCategoryTitle,
-  RateCategoryUnit,
-  RateCategoryBar,
-  RateCategoryNum,
   HashTagDiv,
-  HashTag,
   MenuBarDiv,
   Menu,
   ContentDiv,
-  Content,
+  ContentTopDiv,
+  UserText,
+  ContentTextDiv,
+  ContentBottomDiv,
+  DetailBtn,
   AddButtonDiv,
   AddButton,
 } from './index.style';
+import { TempRateType, TempReviewType } from '@pages/MainPage';
+import StarRateDiv from '@components/Common/StarRate';
+import BarRateDiv from '@components/Common/BarRate';
+import HashTagList from '@components/Common/HashTag';
 
 export interface RateProps {
   sidebar: boolean | null;
-  starRate: number;
-  categoryRate: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
+  rateData: TempRateType;
+  reviewData: TempReviewType[];
+  hashTagData: string[];
   closeSidebar: () => void;
 }
 
@@ -59,75 +46,23 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
         className={`${props.sidebar ? 'open' : ''}`}
         sidebar={props.sidebar}
       >
-        <WrapperDiv>
+        <TitleDiv>
           <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
-          <SpanTitle>서울특별시 용산구 후암동</SpanTitle>
+          <SpanTitle>{props.rateData.address}</SpanTitle>
           <EmptySpan></EmptySpan>
-        </WrapperDiv>
-        {/* <WrapperDiv>
-          <SpanReviewTitle>동네 평점</SpanReviewTitle>
-        </WrapperDiv> */}
+        </TitleDiv>
         <RateDiv>
-          <RateNumStarDiv>
-            <RateSpanText>{props.starRate.toFixed(1)}</RateSpanText>
-            <RateStarDiv>
-              <RateStarFillDiv starRate={props.starRate}>
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-              </RateStarFillDiv>
-              <RateStarBaseDiv>
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-              </RateStarBaseDiv>
-            </RateStarDiv>
-          </RateNumStarDiv>
-          <RateCategoryDiv>
-            <RateCategoryGroup>
-              <RateCategoryTitle>치안</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.categoryRate.safety}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.safety}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>교통</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.categoryRate.traffic}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.traffic}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>음식</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.categoryRate.food}
-                ></RateCategoryBar>
-                <RateCategoryNum>{props.categoryRate.food}</RateCategoryNum>
-              </RateCategoryUnit>
-              <RateCategoryTitle>놀거리</RateCategoryTitle>
-              <RateCategoryUnit>
-                <RateCategoryBar
-                  categoryRate={props.categoryRate.entertainment}
-                ></RateCategoryBar>
-                <RateCategoryNum>
-                  {props.categoryRate.entertainment}
-                </RateCategoryNum>
-              </RateCategoryUnit>
-            </RateCategoryGroup>
-          </RateCategoryDiv>
+          <StarRateDiv
+            isLarge={true}
+            total={(props.rateData.total / props.rateData.count).toFixed(1)}
+          />
+          <BarRateDiv
+            categories={props.rateData.categories}
+            count={props.rateData.count}
+          />
         </RateDiv>
         <HashTagDiv>
-          <HashTag>소음이 적은</HashTag>
-          <HashTag>경관이 좋은</HashTag>
-          <HashTag>문화시설이 가까운</HashTag>
-          <HashTag>체육시설이 많은</HashTag>
-          <HashTag>역이 가까운</HashTag>
+          <HashTagList hashTags={props.hashTagData} />
         </HashTagDiv>
         <MenuBarDiv>
           <Menu
@@ -143,16 +78,27 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
             동네정보
           </Menu>
         </MenuBarDiv>
-        <ContentDiv>
-          <Content>Test1</Content>
-          <Content>Test2</Content>
-          <Content>Test3</Content>
-          <Content>Test4</Content>
-          <Content>Test5</Content>
-          <Content>Test6</Content>
-        </ContentDiv>
+        {props.reviewData.map((review, idx) => (
+          <ContentDiv key={idx}>
+            <ContentTopDiv>
+              <StarRateDiv
+                isLarge={false}
+                total={(
+                  Object.keys(review.categories).reduce((prev, curr) => {
+                    return prev + review.categories[curr];
+                  }, 0) / 4
+                ).toFixed(1)}
+              />
+              <UserText>{review.user}</UserText>
+            </ContentTopDiv>
+            <ContentTextDiv>{review.text}</ContentTextDiv>
+            <ContentBottomDiv>
+              <DetailBtn>자세히보기</DetailBtn>
+            </ContentBottomDiv>
+          </ContentDiv>
+        ))}
         <AddButtonDiv>
-          <AddButton>후기 작성하기</AddButton>
+          <AddButton>내 동네 후기 작성하기</AddButton>
         </AddButtonDiv>
       </Layout>
     </Container>

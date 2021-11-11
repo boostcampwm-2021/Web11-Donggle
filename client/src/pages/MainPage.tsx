@@ -4,9 +4,6 @@ import Map from '@components/Map/index';
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { tempState } from '@stores/atoms';
-import { TempCounter } from '@components/index';
 import Sidebar from '@components/Sidebar';
 
 const MainDiv = styled.div`
@@ -18,17 +15,86 @@ const FlexContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
+  min-width: 1000px;
   height: 100%;
   flex: 1 1 0;
 `;
 
-/*
-  2021-11-02
-  홍승용
-  임시 예제 코드입니다. router내부에서 history객체를 활용하려면 props의 type으로 RouteComponentsProps를 사용해야 합니다.
-*/
+// Rate, Review 는 Backend에서 아래와 같은 형식으로 반환한다고 가정
+export interface TempRateType {
+  address: string;
+  code: string;
+  codeLength: number;
+  center: [number, number];
+  total: number;
+  count: number;
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+}
+
+export interface TempReviewType {
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+  text: string;
+  user: string;
+}
+
+// Backend API 반환 데이터 가정
+const TemporaryRateData: TempRateType = {
+  address: '서울시 관악구 신림동',
+  code: '1121069',
+  codeLength: 7,
+  center: [37.48756349263078, 126.9283814947558],
+  total: 9,
+  count: 2,
+  categories: {
+    safety: 8,
+    traffic: 7,
+    food: 9,
+    entertainment: 9,
+  },
+};
+
+const TemporaryReviewData: TempReviewType[] = [
+  {
+    categories: {
+      safety: 4,
+      traffic: 4,
+      food: 5,
+      entertainment: 3,
+    },
+    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
+    user: 'github:user1',
+  },
+  {
+    categories: {
+      safety: 4,
+      traffic: 4,
+      food: 4,
+      entertainment: 4,
+    },
+    text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
+    user: 'github:user2',
+  },
+];
+
+const TemporaryHashTagData: string[] = [
+  '소음이 적은',
+  '경관이 좋은',
+  '문화시설이 가까운',
+  '체육시설이 많은',
+  '역이 가까운',
+];
+
 const MainPage: React.FC = () => {
-  const [temp, setTemp] = useRecoilState(tempState);
   const [sidebar, setSidebar] = useState<boolean | null>(null);
 
   const toggleSidebar = (e) => {
@@ -50,13 +116,9 @@ const MainPage: React.FC = () => {
         <Map sidebar={sidebar} toggleSidebar={toggleSidebar}></Map>
         <Sidebar
           sidebar={sidebar}
-          starRate={3.3}
-          categoryRate={{
-            safety: 3.6,
-            traffic: 4.1,
-            food: 2.7,
-            entertainment: 2.5,
-          }}
+          rateData={TemporaryRateData}
+          reviewData={TemporaryReviewData}
+          hashTagData={TemporaryHashTagData}
           closeSidebar={closeSidebar}
         ></Sidebar>
       </FlexContainer>
