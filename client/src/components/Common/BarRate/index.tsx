@@ -17,6 +17,7 @@ enum Category {
 }
 
 interface IProps {
+  count: number;
   categories: {
     safety: number;
     traffic: number;
@@ -25,15 +26,19 @@ interface IProps {
   };
 }
 
-const BarRateDiv: React.FC<IProps> = ({ categories }) => {
+const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
   const bar = (Object.keys(categories) as (keyof typeof Category)[]).map(
     (category) => {
       return (
         <>
           <RateCategoryTitle>{Category[category]}</RateCategoryTitle>
           <RateCategoryUnit>
-            <RateCategoryBar rate={categories[category]}></RateCategoryBar>
-            <RateCategoryNum>{categories[category]}</RateCategoryNum>
+            <RateCategoryBar
+              rate={categories[category] / count}
+            ></RateCategoryBar>
+            <RateCategoryNum>
+              {(categories[category] / count).toFixed(1)}
+            </RateCategoryNum>
           </RateCategoryUnit>
         </>
       );

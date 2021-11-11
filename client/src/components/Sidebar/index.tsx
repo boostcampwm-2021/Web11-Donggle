@@ -56,7 +56,10 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
             isLarge={true}
             total={(props.rateData.total / props.rateData.count).toFixed(1)}
           />
-          <BarRateDiv categories={props.rateData.categories} />
+          <BarRateDiv
+            categories={props.rateData.categories}
+            count={props.rateData.count}
+          />
         </RateDiv>
         <HashTagDiv>
           <HashTagList hashTags={props.hashTagData} />
