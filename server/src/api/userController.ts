@@ -8,6 +8,11 @@ interface ProfileImageBody {
   username: string;
 }
 
+interface ProfileImageQuery {
+  imageURL: string;
+  username: string;
+}
+
 const upload = multer();
 
 const router: express.Router = express.Router();
@@ -17,10 +22,11 @@ router.patch(
   upload.single('image'),
   async (req: Request, res: Response) => {
     const body: ProfileImageBody = req.body as ProfileImageBody;
-    const username = body.username;
-    const prevImageURL = body.imageURL;
+    const { username, imageURL: prevImageURL } = body;
 
-    let imageURL = '';
+    let imageURL = `${process.env.IMAGE_ENDPOINT as string}/${
+      process.env.IMAGE_BUCKET as string
+    }/user-profile.png`;
     if (req.file) {
       imageURL = await userService.patchProfileImage(
         username,
@@ -34,13 +40,21 @@ router.patch(
 );
 
 router.delete('/profile-image', (async (req: Request, res: Response) => {
-  const body: ProfileImageBody = req.body as ProfileImageBody;
-  const username = body.username;
-  const imageURL = body.imageURL;
+  const query = req.query;
+  const { username, imageURL } = query;
 
-  await userService.deleteProfileImage(username, imageURL);
+  if (username && imageURL) {
+    await userService.deleteProfileImage(
+      username as string,
+      imageURL as string,
+    );
+  }
 
-  res.status(200).send();
+  res.json({
+    imageURL: `${process.env.IMAGE_ENDPOINT as string}/${
+      process.env.IMAGE_BUCKET as string
+    }/user-profile.png`,
+  });
 }) as RequestHandler);
 
 export default router;

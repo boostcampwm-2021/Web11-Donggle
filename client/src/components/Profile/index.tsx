@@ -9,6 +9,7 @@ import {
 } from '@components/Profile/index.style';
 import { authState } from '@stores/atoms';
 import Modal from '@components/modal';
+import Searchbar from '@components/Searchbar/index';
 
 import React, { useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -54,6 +55,19 @@ const Profile: React.FC = withRouter(({ history, location }) => {
     }));
   };
 
+  const deleteImage = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/user/profile-image?username=${
+        auth.username
+      }&imageURL=${encodeURIComponent(auth.imageURL)}`,
+      {
+        method: 'DELETE',
+      },
+    );
+    const result = await response.json();
+    setAuth((prev) => ({ ...prev, imageURL: result.imageURL }));
+  };
+
   return (
     <>
       <ImageUsernameWrapper>
@@ -71,14 +85,16 @@ const Profile: React.FC = withRouter(({ history, location }) => {
               이미지 업로드
             </ImageUploadButton>
           </div>
-          <ImageRemoveButton>이미지 제거</ImageRemoveButton>
+          <ImageRemoveButton onClick={deleteImage}>
+            이미지 제거
+          </ImageRemoveButton>
         </ImageWrapper>
         <UsernameWrapper>{auth.username}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper onClick={() => toggleModal()}>
         {auth.address}
       </AddressWrapper>
-      {isModal && <Modal>엥</Modal>}
+      {isModal && <Modal>{/* <Searchbar /> */}</Modal>}
     </>
   );
 });
