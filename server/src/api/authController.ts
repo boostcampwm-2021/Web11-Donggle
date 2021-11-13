@@ -51,6 +51,7 @@ router.post('/auth', (async (req: Request, res: Response) => {
   const isMember = await isMemberService(oauthEmail.oauth_email);
   if (isMember) {
     const jwtToken = jwt.sign(oauthEmail);
+
     const userInfo = {
       jwtToken: jwtToken.token,
       oauthEmail: isMember.oauth_email,
