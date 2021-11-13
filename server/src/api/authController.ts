@@ -41,7 +41,9 @@ router.post('/auth', (async (req: Request, res: Response) => {
   if (isMember) {
     const jwtToken = jwt.sign(oauthEmail);
     const userInfo = {
-      oauthEmail: oauthEmail.oauth_email,
+      oauthEmail: isMember.oauth_email,
+      address: isMember.address,
+      image: isMember.image,
       jwtToken: jwtToken.token,
     };
     res.status(200).send(userInfo);

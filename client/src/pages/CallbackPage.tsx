@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import qs from 'qs';
 
+import { authState } from '@stores/atoms';
 import LoadAnimation from '@components/Callback/index';
+import { NonRelativeModuleNameResolutionCache } from 'typescript';
 
 const Body = styled.div`
   width: 100%;
@@ -13,7 +16,23 @@ const Body = styled.div`
   overflow: hidden;
 `;
 
+interface UserInfo {
+  jwtToken: string;
+  oauthEmail: string;
+  address: string;
+  image: string;
+}
+
+interface AuthInfo {
+  isLoggedin: boolean;
+  oauth_email: string;
+  address: string;
+  image: string;
+}
+
 const CallbackPage: React.FC = () => {
+  const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
+
   useEffect(() => {
     const getToken = async () => {
       const { code } = qs.parse(window.location.search, {
@@ -33,8 +52,20 @@ const CallbackPage: React.FC = () => {
             body: JSON.stringify({ code }),
           },
         );
-        const { oauthEmail, jwtToken } = await userInfoResponse.json();
-        console.log('email', oauthEmail, 'jwt', jwtToken);
+        const userInfo: string | UserInfo = await userInfoResponse.json(); //{oauthEmail, jwtToken}
+        if (typeof userInfo == 'string') {
+          //회원가입 페이지로 routing
+          console.log('회원가입 페이지로 라우팅');
+        } else {
+          // sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
+          sessionStorage.setItem('jwt', userInfo.jwtToken);
+          setAuth({
+            isLoggedin: true,
+            oauth_email: userInfo.oauthEmail,
+            address: userInfo.address,
+            image: userInfo.image,
+          });
+        }
       } catch (e) {
         console.log(e);
       }
