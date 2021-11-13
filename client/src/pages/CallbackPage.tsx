@@ -33,7 +33,8 @@ const CallbackPage: React.FC = () => {
             body: JSON.stringify({ code }),
           },
         );
-        const { login, avatar_url } = await userInfoResponse.json();
+        const { oauthEmail, jwtToken } = await userInfoResponse.json();
+        console.log('email', oauthEmail, 'jwt', jwtToken);
       } catch (e) {
         console.log(e);
       }
