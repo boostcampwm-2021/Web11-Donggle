@@ -31,6 +31,8 @@ const Header: React.FC = withRouter(({ history, location }) => {
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [isAuth, setIsAuth] = useRecoilState(authState);
 
+  console.log('isauth', isAuth);
+
   // const openSideBar = useCallback(() => {
   //   console.log('test');
   //   props.showSidebar();
@@ -99,7 +101,7 @@ const Header: React.FC = withRouter(({ history, location }) => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            {isAuth ? (
+            {isAuth.isLoggedin ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
                 <UserProfile>

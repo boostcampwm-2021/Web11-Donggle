@@ -6,18 +6,21 @@ import {
   RankingPage,
   LoginPage,
   CallbackPage,
+  SignInPage,
 } from '@pages/index';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import { ThemeProvider } from 'styled-components';
 import myTheme from '@styledComponents/theme';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 
 const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
+  console.log('background', background);
+  console.log('state', location.state);
 
   return (
     <>
@@ -30,6 +33,7 @@ const App: React.FC = () => {
             <Route path="/ranking" component={RankingPage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/github/callback" component={CallbackPage} />
+            <Route path="/signin" component={SignInPage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/ranking" component={RankingPage} />}

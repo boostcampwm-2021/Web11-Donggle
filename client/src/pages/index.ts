@@ -4,6 +4,7 @@ import ReviewPage from '@pages/ReviewPage';
 import RankingPage from '@pages/RankingPage';
 import LoginPage from '@pages/LoginPage';
 import CallbackPage from '@pages/CallbackPage';
+import SignInPage from '@pages/SignInPage';
 
 export {
   NotFoundPage,
@@ -12,4 +13,5 @@ export {
   RankingPage,
   LoginPage,
   CallbackPage,
+  SignInPage,
 };

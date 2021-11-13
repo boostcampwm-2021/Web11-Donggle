@@ -41,14 +41,21 @@ router.post('/auth', (async (req: Request, res: Response) => {
   if (isMember) {
     const jwtToken = jwt.sign(oauthEmail);
     const userInfo = {
+      jwtToken: jwtToken.token,
       oauthEmail: isMember.oauth_email,
       address: isMember.address,
       image: isMember.image,
-      jwtToken: jwtToken.token,
     };
     res.status(200).send(userInfo);
   } else {
-    res.status(200).send('not member');
+    const userInfo = {
+      oauthEmail: oauthEmail.oauth_email,
+      address: '',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      image: data.avatar_url as string,
+      jwtToken: '',
+    };
+    res.status(200).send(userInfo);
   }
 
   // refactoring 필요: login, avatar_url만 반환해야 하는데 typescript 어렵다..

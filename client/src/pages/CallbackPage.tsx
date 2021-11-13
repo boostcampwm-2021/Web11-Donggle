@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import qs from 'qs';
 
 import { authState } from '@stores/atoms';
 import LoadAnimation from '@components/Callback/index';
-import { NonRelativeModuleNameResolutionCache } from 'typescript';
 
 const Body = styled.div`
   width: 100%;
@@ -32,6 +32,19 @@ interface AuthInfo {
 
 const CallbackPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
+  const history = useHistory();
+  const location = useLocation();
+  console.log(location);
+
+  const routeHistory = useCallback(
+    (path: string, state: { [index: string]: string }) => {
+      history.push({
+        pathname: path,
+        state: state,
+      });
+    },
+    [history],
+  );
 
   useEffect(() => {
     const getToken = async () => {
@@ -40,7 +53,6 @@ const CallbackPage: React.FC = () => {
       });
 
       //backend에서 access_token이랑 github api 날린 다음에 github_id를 보냄
-      //process.env.REACT_APP_API_URL +
       try {
         const userInfoResponse = await fetch(
           `${process.env.REACT_APP_API_URL as string}/api/v1/auth`,
@@ -52,19 +64,27 @@ const CallbackPage: React.FC = () => {
             body: JSON.stringify({ code }),
           },
         );
-        const userInfo: string | UserInfo = await userInfoResponse.json(); //{oauthEmail, jwtToken}
-        if (typeof userInfo == 'string') {
-          //회원가입 페이지로 routing
-          console.log('회원가입 페이지로 라우팅');
+        const userInfo: UserInfo = await userInfoResponse.json();
+        if (!userInfo.jwtToken) {
+          // 회원가입 페이지로 routing
+          // 회원가입 주소를 제출할 때 db에 저장하기 위한 정보를 주기 위해서 recoil에 저장
+          setAuth({
+            ...auth,
+            oauth_email: userInfo.oauthEmail,
+            image: userInfo.image,
+          });
+          routeHistory('/signin', {});
         } else {
           // sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
           sessionStorage.setItem('jwt', userInfo.jwtToken);
           setAuth({
+            ...auth,
             isLoggedin: true,
             oauth_email: userInfo.oauthEmail,
             address: userInfo.address,
             image: userInfo.image,
           });
+          routeHistory('/', {}); // mainpage로 이동
         }
       } catch (e) {
         console.log(e);
@@ -73,9 +93,11 @@ const CallbackPage: React.FC = () => {
     getToken();
   }, []);
   return (
-    <Body>
-      <LoadAnimation />
-    </Body>
+    <>
+      <Body>
+        <LoadAnimation />
+      </Body>
+    </>
   );
 };
 
