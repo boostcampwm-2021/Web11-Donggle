@@ -32,14 +32,10 @@ export default {
     } catch (err) {
       const errMsg = (err as Error).message;
       if (errMsg === 'jwt expired') {
-        console.log('expired token');
         return TOKEN_EXPIRED;
       } else if (errMsg === 'invalid token') {
-        console.log('invalid token');
-        console.log(TOKEN_INVALID);
         return TOKEN_INVALID;
       } else {
-        console.log('invalid token');
         return TOKEN_INVALID;
       }
     }

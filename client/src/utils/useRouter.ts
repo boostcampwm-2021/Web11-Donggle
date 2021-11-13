@@ -7,12 +7,10 @@ export default () => {
 
   const routeHistory = useCallback(
     (path: string, state: { [index: string]: string }) => {
-      console.log('전', location);
       history.push({
         pathname: path,
         state: state,
       });
-      console.log('후', location);
     },
     [history],
   );

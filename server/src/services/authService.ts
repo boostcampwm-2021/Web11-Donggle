@@ -7,7 +7,6 @@ const isMember = async (oauth_email: string): Promise<User | null> => {
 };
 
 const findRegionInfo = async (address: string): Promise<MapInfo | null> => {
-  console.log('찾기', address);
   return await MapInfoModel.findOne().where('address').equals(address);
 };
 

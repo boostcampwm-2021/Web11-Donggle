@@ -19,8 +19,6 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
-  console.log('background', background);
-  console.log('state', location.state);
 
   return (
     <>

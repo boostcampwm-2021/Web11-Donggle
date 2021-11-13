@@ -31,8 +31,6 @@ const Header: React.FC = withRouter(({ history, location }) => {
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [isAuth, setIsAuth] = useRecoilState(authState);
 
-  console.log('isauth', isAuth);
-
   // const openSideBar = useCallback(() => {
   //   console.log('test');
   //   props.showSidebar();

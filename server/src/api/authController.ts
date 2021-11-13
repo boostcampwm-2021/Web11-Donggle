@@ -76,7 +76,6 @@ router.post('/auth', (async (req: Request, res: Response) => {
 router.post('/address', (async (req: Request, res: Response) => {
   const { oauthEmail, address, image }: UserInfo = req.body as UserInfo;
   const userRegionInfo = await findRegionInfo(address);
-  console.log('찾기끝남', userRegionInfo);
 
   if (userRegionInfo) {
     const newUserInfo: User = {
