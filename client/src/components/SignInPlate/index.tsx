@@ -14,25 +14,33 @@ interface AuthInfo {
   image: string;
 }
 
+interface ErrMsg {
+  err: string;
+}
+
 const SignInPlate: React.FC = () => {
   const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
   const [history, routeHistory] = useHistoryRouter();
 
   const onSubmitClick = async () => {
-    const response = await fetch('/api/v1/address', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/v1/address`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify({
+          oauthEmail: auth.oauth_email,
+          address: '전라북도 전주시 완산구 서신동',
+          image: auth.image,
+        }),
       },
-      body: JSON.stringify({
-        oauthEmail: auth.oauth_email,
-        address: '전주시 완산구 서신동',
-        image: auth.image,
-      }),
-    });
+    );
 
     if (response.status != 200) {
-      alert('올바른 주소로 다시 한 번 제출을 부탁드립니다.');
+      const errMsg: ErrMsg = await response.json();
+      alert(errMsg.err);
     } else {
       setAuth({
         ...auth,
@@ -56,14 +64,14 @@ const SignInPlate: React.FC = () => {
       image: '123',
     });
   };
+  */
 
   useEffect(() => {
-    if (auth.image == '123') {
+    if (auth.address) {
       routeHistory('/', {});
     }
   }, [auth, routeHistory]);
 
-  */
   return (
     <Modal>
       <SignInTitle>
