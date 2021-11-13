@@ -27,7 +27,7 @@ router.post('/rates', (req: MapRequest, res) => {
     void updateMapService.populateMapInfos();
     res.status(200).send('HAHAHA!');
   } else {
-    res.status(404).send('FXXK! 404 NOT FOUND.... GET OFF!');
+    res.status(404).send('Sorry.. 404 NOT FOUND.... Good bye!');
   }
 });
 
