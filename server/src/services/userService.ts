@@ -1,3 +1,4 @@
+import logger from '@loaders/loggerLoader';
 import { User, UserModel } from '@models/User';
 
 import AWS from 'aws-sdk';
@@ -39,13 +40,15 @@ const patchProfileImage = async (
       }/`,
       '',
     );
-    await UserModel.updateOne({ oauth_email }, { image });
-    await s3
-      .deleteObject({
-        Bucket: process.env.IMAGE_BUCKET as string,
-        Key: prevImageName,
-      })
-      .promise();
+    UserModel.updateOne({ oauth_email }, { image }).then(() =>
+      logger.info('User update image success!'),
+    );
+    s3.deleteObject({
+      Bucket: process.env.IMAGE_BUCKET as string,
+      Key: prevImageName,
+    })
+      .promise()
+      .then(() => logger.info('delete prev image from S3 success!'));
 
     return image;
   } catch {
@@ -66,7 +69,8 @@ const deleteProfileImage = async (oauth_email: string, image: string) => {
       Bucket: process.env.IMAGE_BUCKET as string,
       Key: imageName,
     })
-    .promise();
+    .promise()
+    .then(() => logger.info('delete image from S3 success!'));
 };
 
 export default { patchProfileImage, deleteProfileImage };
