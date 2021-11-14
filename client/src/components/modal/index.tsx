@@ -1,5 +1,9 @@
-import { ModalOverlay, ModalWrapper } from './index.style';
-import closeButton from '@assets/closeButton.png';
+import {
+  ModalOverlay,
+  ModalWrapper,
+  ModalCloseBtnDiv,
+  ModalCloseBtn,
+} from './index.style';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -31,6 +35,12 @@ const Modal: React.FC = ({ children }) => {
   useEffect(() => {
     const handleCloseModal = (e) => {
       if (
+        !e.target.closest('.overlay-confirmation-submit') &&
+        e.target.closest('.overlay-confirmation-alert')
+      ) {
+        return;
+      }
+      if (
         isActive &&
         (!modalRef.current || !modalRef.current.contains(e.target))
       ) {
@@ -53,7 +63,9 @@ const Modal: React.FC = ({ children }) => {
       {isActive && (
         <ModalOverlay>
           <ModalWrapper ref={modalRef}>
-            <img src={closeButton} alt="모달창닫기" onClick={onClick}></img>
+            <ModalCloseBtnDiv>
+              <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
+            </ModalCloseBtnDiv>
             {children}
           </ModalWrapper>
         </ModalOverlay>

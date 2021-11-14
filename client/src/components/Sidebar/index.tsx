@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import {
   Container,
@@ -35,6 +36,8 @@ export interface RateProps {
 
 const Sidebar: React.FC<RateProps> = (props: RateProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
+  const history = useHistory();
+  const location = useLocation();
   const fetchData = (menu: string) => {
     console.log(menu);
     setSelectedMenu(menu);
@@ -95,7 +98,16 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
           </ContentDiv>
         ))}
         <AddButtonDiv>
-          <AddButton>내 동네 후기 작성하기</AddButton>
+          <AddButton
+            onClick={() => {
+              history.push({
+                pathname: '/write-review',
+                state: { background: location },
+              });
+            }}
+          >
+            내 동네 후기 작성하기
+          </AddButton>
         </AddButtonDiv>
       </Layout>
     </Container>

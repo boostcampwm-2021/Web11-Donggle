@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ModalOverlay = styled.div`
+const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -8,17 +8,18 @@ export const ModalOverlay = styled.div`
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
 
-  z-index: 99;
+  z-index: 3000;
 `;
 
-export const ModalWrapper = styled.div`
+const ModalWrapper = styled.div`
   position: absolute;
   max-width: 80%;
-  width: auto;
+  width: 500px;
   max-height: 80%;
   height: auto;
   top: 50%;
   left: 50%;
+  overflow: auto;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
@@ -29,5 +30,19 @@ export const ModalWrapper = styled.div`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.white};
 
-  z-index: 100;
+  z-index: 3000;
 `;
+
+const ModalCloseBtnDiv = styled.div`
+  ${(props) => props.theme.common.flexRow};
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const ModalCloseBtn = styled.button`
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+`;
+
+export { ModalOverlay, ModalWrapper, ModalCloseBtnDiv, ModalCloseBtn };

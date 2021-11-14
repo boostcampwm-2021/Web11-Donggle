@@ -16,24 +16,17 @@ interface IProps {
 }
 
 const StarRateDiv: React.FC<IProps> = ({ isLarge, total }) => {
+  const faIconList = Array.from({ length: 5 }, (_, index) => index + 1).map(
+    (n) => {
+      return <FontAwesomeIcon key={n} icon={faStar} />;
+    },
+  );
   return (
     <RateNumStarDiv>
       <RateSpanText isLarge={isLarge}>{total}</RateSpanText>
       <RateStarDiv>
-        <RateStarFillDiv rate={Number(total)}>
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-        </RateStarFillDiv>
-        <RateStarBaseDiv>
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-        </RateStarBaseDiv>
+        <RateStarFillDiv rate={Number(total)}>{faIconList}</RateStarFillDiv>
+        <RateStarBaseDiv>{faIconList}</RateStarBaseDiv>
       </RateStarDiv>
     </RateNumStarDiv>
   );

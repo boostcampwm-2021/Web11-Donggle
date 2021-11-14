@@ -8,22 +8,10 @@ import {
   RateCategoryBar,
   RateCategoryNum,
 } from './index.style';
+import { Category } from '@utils/enum';
 
-enum Category {
-  safety = '치안',
-  traffic = '교통',
-  food = '음식',
-  entertainment = '놀거리',
-}
-
-interface IProps {
+interface IProps extends CategoryRateType {
   count: number;
-  categories: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
 }
 
 const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
