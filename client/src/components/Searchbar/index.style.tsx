@@ -3,12 +3,10 @@ import search from '@assets/icons/search.svg';
 
 const SearchbarWrapper = styled.div`
   position: relative;
-  top: 20px;
-  left: 20px;
   width: 400px;
   height: 60px;
   padding-left: 20px;
-  display: flex;
+  display: flex;Ç
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -41,8 +39,7 @@ SearchImg.defaultProps = { src: search };
 
 const DropdownWrapper = styled.div`
   position: relative;
-  top: 20px;
-  left: 40px;
+  left: 20px;
   width: 310px;
   height: auto;
   background: #fff;
