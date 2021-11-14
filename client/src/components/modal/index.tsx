@@ -3,6 +3,7 @@ import {
   ModalWrapper,
   ModalCloseBtnDiv,
   ModalCloseBtn,
+  ChildrenWrapper,
 } from './index.style';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -66,7 +67,7 @@ const Modal: React.FC = ({ children }) => {
             <ModalCloseBtnDiv>
               <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
             </ModalCloseBtnDiv>
-            {children}
+            <ChildrenWrapper>{children}</ChildrenWrapper>
           </ModalWrapper>
         </ModalOverlay>
       )}

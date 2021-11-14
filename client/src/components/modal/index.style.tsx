@@ -7,6 +7,7 @@ const ModalOverlay = styled.div`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
+  overflow: visible;
 
   z-index: 3000;
 `;
@@ -45,4 +46,18 @@ const ModalCloseBtn = styled.button`
   cursor: pointer;
 `;
 
-export { ModalOverlay, ModalWrapper, ModalCloseBtnDiv, ModalCloseBtn };
+const ChildrenWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+export {
+  ModalOverlay,
+  ModalWrapper,
+  ModalCloseBtnDiv,
+  ModalCloseBtn,
+  ChildrenWrapper,
+};
