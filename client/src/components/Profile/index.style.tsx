@@ -51,6 +51,12 @@ const ImageRemoveButton = styled.button`
   }
 `;
 
+const OauthnameWrapper = styled.div`
+  margin-left: 20px;
+  font-size: 20px;
+  color: ${(props) => props.theme.colors.lightgreen};
+`;
+
 const UsernameWrapper = styled.div`
   width: 600px;
   height: 460px;
@@ -82,6 +88,7 @@ export {
   UserImage,
   ImageUploadButton,
   ImageRemoveButton,
+  OauthnameWrapper,
   UsernameWrapper,
   AddressWrapper,
 };
