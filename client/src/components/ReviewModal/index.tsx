@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
-import Modal from '@components/modal';
+import Modal from '@components/Modal/index';
 import {
   TitleDiv,
   StarRateDiv,

@@ -4,11 +4,12 @@ import {
   UserImage,
   ImageUploadButton,
   ImageRemoveButton,
+  OauthnameWrapper,
   UsernameWrapper,
   AddressWrapper,
 } from '@components/Profile/index.style';
 import { authState } from '@stores/atoms';
-import Modal from '@components/modal';
+import Modal from '@components/Modal/index';
 import Searchbar from '@components/Searchbar/index';
 import {
   uploadImage,
@@ -68,7 +69,8 @@ const Profile: React.FC = withRouter(({ history, location }) => {
             이미지 제거
           </ImageRemoveButton>
         </ImageWrapper>
-        <UsernameWrapper>{auth.oauth_email}</UsernameWrapper>
+        <OauthnameWrapper>{auth.oauth_email.split('-')[0]}</OauthnameWrapper>
+        <UsernameWrapper>{auth.oauth_email.split('-')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper onClick={toggleModal}>{auth.address}</AddressWrapper>
       {isModal && (

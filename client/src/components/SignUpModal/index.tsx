@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 
 import { authState } from '@stores/atoms';
 import SearchBar from '@components/Searchbar/index';
-import Modal from '@components/modal';
+import Modal from '@components/Modal/index';
 import useHistoryRouter from '@utils/useRouter';
 import { SignUpTitle, ButtonWrapper, SubmitButton } from './index.style';
 
