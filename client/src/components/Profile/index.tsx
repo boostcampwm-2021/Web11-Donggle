@@ -82,7 +82,8 @@ const Profile: React.FC = withRouter(({ history, location }) => {
           <div>
             <input
               type="file"
-              name="image"
+              name="file"
+              accept="image/jpeg, image/png"
               style={{ display: 'none' }}
               onChange={uploadImage}
               ref={hiddenInputRef}

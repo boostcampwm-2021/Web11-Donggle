@@ -1,19 +1,37 @@
 import { userService } from '@services/index';
 
 import express, { Request, RequestHandler, Response } from 'express';
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
+import path from 'path';
 
 interface ProfileImageBody {
   image: string;
   oauth_email: string;
 }
 
-interface ProfileImageQuery {
-  image: string;
-  oauth_email: string;
-}
+const validateFileType = (
+  file: Express.Multer.File,
+  callback: multer.FileFilterCallback,
+) => {
+  const allowedTypes = /jpeg|jpg|png/;
+  const extResult = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase(),
+  );
+  const mimeResult = allowedTypes.test(file.mimetype);
+  if (extResult && mimeResult) {
+    callback(null, true);
+  } else {
+    callback(null, false);
+  }
+};
 
-const upload = multer();
+const upload = multer({
+  fileFilter: (
+    _,
+    file: Express.Multer.File,
+    callback: multer.FileFilterCallback,
+  ) => validateFileType(file, callback),
+});
 
 const router: express.Router = express.Router();
 

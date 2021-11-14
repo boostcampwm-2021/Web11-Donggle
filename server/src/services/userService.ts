@@ -40,15 +40,20 @@ const patchProfileImage = async (
       }/`,
       '',
     );
-    UserModel.updateOne({ oauth_email }, { image }).then(() =>
+    void UserModel.updateOne({ oauth_email }, { image }).then(() =>
       logger.info('User update image success!'),
     );
-    s3.deleteObject({
-      Bucket: process.env.IMAGE_BUCKET as string,
-      Key: prevImageName,
-    })
+    void s3
+      .deleteObject({
+        Bucket: process.env.IMAGE_BUCKET as string,
+        Key: prevImageName,
+      })
       .promise()
-      .then(() => logger.info('delete prev image from S3 success!'));
+      .then(() => logger.info('delete prev image from S3 success!'))
+      .catch((err) => {
+        logger.info('s3 error below... but ok!');
+        logger.info(err);
+      });
 
     return image;
   } catch {
@@ -64,7 +69,7 @@ const deleteProfileImage = async (oauth_email: string, image: string) => {
     '',
   );
   await UserModel.updateOne({ oauth_email }, { image: '' });
-  await s3
+  void s3
     .deleteObject({
       Bucket: process.env.IMAGE_BUCKET as string,
       Key: imageName,
