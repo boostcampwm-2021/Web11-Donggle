@@ -13,12 +13,12 @@ const s3 = new AWS.S3({
 });
 
 const patchProfileImage = async (
-  username: string,
-  prevImageURL: string,
+  oauth_email: string,
+  prevImage: string,
   file: Express.Multer.File,
 ) => {
   const imageName = v4();
-  const imageLink = `${process.env.IMAGE_ENDPOINT as string}/${
+  const image = `${process.env.IMAGE_ENDPOINT as string}/${
     process.env.IMAGE_BUCKET as string
   }/${imageName}.png`;
 
@@ -33,13 +33,13 @@ const patchProfileImage = async (
       })
       .promise();
 
-    const prevImageName = prevImageURL.replace(
+    const prevImageName = prevImage.replace(
       `${process.env.IMAGE_ENDPOINT as string}/${
         process.env.IMAGE_BUCKET as string
       }/`,
       '',
     );
-    await UserModel.updateOne({ oauthEmail: username }, { image: imageLink });
+    await UserModel.updateOne({ oauth_email }, { image });
     await s3
       .deleteObject({
         Bucket: process.env.IMAGE_BUCKET as string,
@@ -47,20 +47,20 @@ const patchProfileImage = async (
       })
       .promise();
 
-    return imageLink;
+    return image;
   } catch {
     return '';
   }
 };
 
-const deleteProfileImage = async (username: string, imageURL: string) => {
-  const imageName = imageURL.replace(
+const deleteProfileImage = async (oauth_email: string, image: string) => {
+  const imageName = image.replace(
     `${process.env.IMAGE_ENDPOINT as string}/${
       process.env.IMAGE_BUCKET as string
     }/`,
     '',
   );
-  await UserModel.updateOne({ oauthEmail: username }, { image: '' });
+  await UserModel.updateOne({ oauth_email }, { image: '' });
   await s3
     .deleteObject({
       Bucket: process.env.IMAGE_BUCKET as string,

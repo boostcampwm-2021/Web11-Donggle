@@ -38,9 +38,9 @@ const Profile: React.FC = withRouter(({ history, location }) => {
   const uploadImage = async (e) => {
     const image = e.target.files[0];
     const formData = new FormData();
-    formData.append('image', image);
-    formData.append('username', auth.username);
-    formData.append('imageURL', auth.imageURL);
+    formData.append('file', image);
+    formData.append('oauth_email', auth.oauth_email);
+    formData.append('image', auth.image);
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/profile-image`,
       {
@@ -51,28 +51,34 @@ const Profile: React.FC = withRouter(({ history, location }) => {
     const result = await response.json();
     setAuth((prev) => ({
       ...prev,
-      imageURL: result.imageURL,
+      image: result.image,
     }));
   };
 
   const deleteImage = async () => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/profile-image?username=${
-        auth.username
-      }&imageURL=${encodeURIComponent(auth.imageURL)}`,
+        auth.oauth_email
+      }&imageURL=${encodeURIComponent(auth.image)}`,
       {
         method: 'DELETE',
       },
     );
     const result = await response.json();
-    setAuth((prev) => ({ ...prev, imageURL: result.imageURL }));
+    setAuth((prev) => ({ ...prev, image: result.image }));
   };
 
   return (
     <>
       <ImageUsernameWrapper>
         <ImageWrapper>
-          <UserImage src={auth.imageURL} />
+          <UserImage
+            src={
+              auth.image.length > 0
+                ? auth.image
+                : process.env.REACT_APP_IMAGE_DEFAULT_USER
+            }
+          />
           <div>
             <input
               type="file"
@@ -89,7 +95,7 @@ const Profile: React.FC = withRouter(({ history, location }) => {
             이미지 제거
           </ImageRemoveButton>
         </ImageWrapper>
-        <UsernameWrapper>{auth.username}</UsernameWrapper>
+        <UsernameWrapper>{auth.oauth_email}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper onClick={() => toggleModal()}>
         {auth.address}

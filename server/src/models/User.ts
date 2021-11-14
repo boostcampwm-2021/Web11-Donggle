@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 type CoordType = [number, number];
 
 interface User {
-  oauthEmail: string;
+  oauth_email: string;
   address: string;
   code: string;
   center: CoordType;
@@ -11,7 +11,7 @@ interface User {
 }
 
 const userSchema = new Schema<User>({
-  oauthEmail: { type: String, index: true },
+  oauth_email: { type: String, index: true },
   address: { type: String },
   code: { type: String },
   center: { type: [Number, Number] },

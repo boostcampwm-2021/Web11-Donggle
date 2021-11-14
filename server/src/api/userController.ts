@@ -4,13 +4,13 @@ import express, { Request, RequestHandler, Response } from 'express';
 import multer from 'multer';
 
 interface ProfileImageBody {
-  imageURL: string;
-  username: string;
+  image: string;
+  oauth_email: string;
 }
 
 interface ProfileImageQuery {
-  imageURL: string;
-  username: string;
+  image: string;
+  oauth_email: string;
 }
 
 const upload = multer();
@@ -19,39 +19,39 @@ const router: express.Router = express.Router();
 
 router.patch(
   '/profile-image',
-  upload.single('image'),
+  upload.single('file'),
   async (req: Request, res: Response) => {
     const body: ProfileImageBody = req.body as ProfileImageBody;
-    const { username, imageURL: prevImageURL } = body;
+    const { oauth_email, image: prevImage } = body;
 
-    let imageURL = `${process.env.IMAGE_ENDPOINT as string}/${
+    let image = `${process.env.IMAGE_ENDPOINT as string}/${
       process.env.IMAGE_BUCKET as string
     }/user-profile.png`;
     if (req.file) {
-      imageURL = await userService.patchProfileImage(
-        username,
-        prevImageURL,
+      image = await userService.patchProfileImage(
+        oauth_email,
+        prevImage,
         req.file,
       );
     }
 
-    res.json({ imageURL });
+    res.json({ image });
   },
 );
 
 router.delete('/profile-image', (async (req: Request, res: Response) => {
   const query = req.query;
-  const { username, imageURL } = query;
+  const { oauth_email, image } = query;
 
-  if (username && imageURL) {
+  if (oauth_email && image) {
     await userService.deleteProfileImage(
-      username as string,
-      imageURL as string,
+      oauth_email as string,
+      image as string,
     );
   }
 
   res.json({
-    imageURL: `${process.env.IMAGE_ENDPOINT as string}/${
+    image: `${process.env.IMAGE_ENDPOINT as string}/${
       process.env.IMAGE_BUCKET as string
     }/user-profile.png`,
   });
