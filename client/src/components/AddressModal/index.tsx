@@ -6,27 +6,31 @@ import {
   SubmitButton,
 } from '@components/AddressModal/index.style';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 interface AddressModalProps {
   title: string;
-  onClickHandler: (mapInfo: MapInfo) => void | Promise<void>;
   onSubmitHandler;
   onCancelHandler;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
   title,
-  onClickHandler,
   onSubmitHandler,
   onCancelHandler,
 }) => {
+  const [mapInfo, setMapInfo] = useState({});
+
+  const onClickHandler = (mapInfo: MapInfo) => {
+    setMapInfo(mapInfo);
+  };
+
   return (
     <Modal>
       <TitleWrapper>{title}</TitleWrapper>
       <Searchbar onClickHandler={onClickHandler} />
       <ButtonWrapper>
-        <SubmitButton cancel={false} onClick={onSubmitHandler}>
+        <SubmitButton cancel={false} onClick={() => onSubmitHandler(mapInfo)}>
           제출
         </SubmitButton>
         <SubmitButton cancel={true} onClick={onCancelHandler}>
