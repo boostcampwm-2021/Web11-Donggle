@@ -1,6 +1,5 @@
 import MapWrapper, { CenterMarker } from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
-
 import {
   getCurrentLocation,
   coordToRegionCode,
@@ -13,7 +12,6 @@ import {
   removePolygonClickEvent,
   RegionPolygon,
 } from '@controllers/mapController';
-
 import {
   createMarkers,
   displayMarkers,
@@ -58,6 +56,30 @@ const MapComponent: React.FC<IProps> = ({
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
   const [polygons, setPolygons] = useState(Array<RegionPolygon>());
+
+  const moveTo = (to: MapInfo) => {
+    if (map === null) {
+      return;
+    }
+    const [x, y] = to.center;
+    const newCenter = new kakao.maps.LatLng(x, y);
+    map.setCenter(newCenter);
+    let newLevel = 9;
+    switch (to.codeLength) {
+      case 2:
+        newLevel = 11;
+        break;
+      case 5:
+        newLevel = 8;
+        break;
+      case 7:
+        newLevel = 6;
+        break;
+      default:
+        break;
+    }
+    map.setLevel(newLevel);
+  };
 
   useEffect(() => {
     if (!mapWrapper.current) {
@@ -197,7 +219,7 @@ const MapComponent: React.FC<IProps> = ({
 
   return (
     <MapWrapper ref={mapWrapper}>
-      <Searchbar map={map} />
+      <Searchbar onClickHandler={moveTo} />
       <CenterMarker />
     </MapWrapper>
   );

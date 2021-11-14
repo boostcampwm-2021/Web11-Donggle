@@ -6,7 +6,7 @@ import {
   DropdownWrapper,
   DropdownItem,
 } from '@components/Searchbar/index.style';
-import { MapInfo, spreadDropdown } from '@controllers/searchbarController';
+import { spreadDropdown } from '@controllers/searchbarController';
 
 import React, { useEffect, useState, useRef } from 'react';
 

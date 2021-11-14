@@ -36,5 +36,24 @@ declare global {
     text: string;
     user: string;
   }
+
+  interface MapInfo {
+    address: string;
+    code: string;
+    codeLength: number;
+    center: CoordType;
+    //현재는 리뷰 정보가 없으므로 require를 false로함
+    rate?: Rate;
+  }
+
+  interface Rate {
+    count: number;
+    total: number;
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  }
 }
+
 export {};
