@@ -26,7 +26,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
   }, [input]);
 
   return (
-    <>
+    <div>
       <SearchbarWrapper>
         <SearchbarInput
           onChange={(e) => setInput(e.target.value)}
@@ -36,7 +36,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
           <SearchImg />
         </SearchbarButton>
       </SearchbarWrapper>
-      {results.length > 0 && (
+      {results.length > 0 ? (
         <DropdownWrapper>
           {results.map((result, i) => (
             <DropdownItem
@@ -53,8 +53,10 @@ const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
             </DropdownItem>
           ))}
         </DropdownWrapper>
+      ) : (
+        <div className="test" style={{ height: '600px' }} />
       )}
-    </>
+    </div>
   );
 };
 
