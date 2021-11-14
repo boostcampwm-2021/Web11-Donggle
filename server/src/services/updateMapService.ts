@@ -182,4 +182,34 @@ const populateMapAndSimpleMap = async (): Promise<void> => {
   await recursiveGetCoords('', accessToken);
 };
 
-export default { populateMapAndSimpleMap };
+const random = (from: number, to: number) => {
+  return Number((Math.random() * (to - from) + from).toFixed(2));
+};
+
+const getRandomRate = () => {
+  return random(1, 5);
+};
+
+const populateMapInfos = async () => {
+  (await MapInfoModel.find({})).forEach((doc) => {
+    const count = Math.floor(random(0, 100));
+    const safety = Math.floor(getRandomRate() * count);
+    const traffic = Math.floor(getRandomRate() * count);
+    const food = Math.floor(getRandomRate() * count);
+    const entertainment = Math.floor(getRandomRate() * count);
+    const total = (safety + traffic + food + entertainment) / 4;
+    const rate = {
+      count,
+      total,
+      safety,
+      traffic,
+      food,
+      entertainment,
+    };
+    void doc.updateOne({ rate: rate }, {}, (err, result) => {
+      if (err) logger.error(`Update failed for ${doc.address}`);
+    });
+  });
+};
+
+export default { populateMapAndSimpleMap, populateMapInfos };

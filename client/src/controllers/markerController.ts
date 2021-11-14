@@ -1,4 +1,3 @@
-import { regionToScaled } from '@utils/address';
 import { RateType } from '@pages/MainPage';
 
 const ratingToPercent = (rate: number) => {
@@ -18,17 +17,23 @@ const starRateHTML = (rate: number) => {
   `;
 };
 
-const markerEl = (address: string, rate: number) => {
+const markerEl = (rateData: RateType) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
 
+  const { address, total, count } = rateData;
+  const rate = total / count;
+
   const region = address.split(' ');
   const smallestRegion = region[region.length - 1];
+
+  wrapper.dataset.address = address;
+  wrapper.dataset.rateData = JSON.stringify(rateData);
   wrapper.innerHTML = `
     <div class="title">
       <span>${smallestRegion}</span>
-      <span class="star-rating-single">★</span>
-      <span>${rate.toFixed(1)}</span>
+      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
+      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
@@ -46,33 +51,33 @@ const largeMarkerEl = (rateData: RateType) => {
   const food = categories.food / count;
   const entertainment = categories.entertainment / count;
 
+  wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
-
-  wrapper.dataset.code = wrapper.innerHTML = `
+  wrapper.innerHTML = `
     <div class="title">
       <span>${address}</span>
-      <span class="star-rating-single">★</span>
-      <span>${averageRate.toFixed(1)}</span>
+      <span class="star-rating-single">${!count ? '' : '★'}</span>
+      <span>${!count ? '' : averageRate.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>안전 </span>
-      ${starRateHTML(safety)}
-      <span>${safety.toFixed(1)}</span>
+      ${starRateHTML(safety || 0)}
+      <span>${!count ? 'N/A' : safety.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>교통 </span>
-      ${starRateHTML(traffic)}
-      <span>${traffic.toFixed(1)}</span>
+      ${starRateHTML(traffic || 0)}
+      <span>${!count ? 'N/A' : traffic.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>먹거리 </span>
-      ${starRateHTML(food)}
-      <span>${food.toFixed(1)}</span>
+      ${starRateHTML(food || 0)}
+      <span>${!count ? 'N/A' : food.toFixed(1)}</span>
     </div>
     <div class="content">
       <span>놀거리 </span>
-      ${starRateHTML(entertainment)}
-      <span>${entertainment.toFixed(1)}</span>
+      ${starRateHTML(entertainment || 0)}
+      <span>${!count ? 'N/A' : entertainment.toFixed(1)}</span>
     </div>
   `;
   return wrapper;
@@ -82,15 +87,11 @@ const random = (from: number, to: number) => {
   return Number((Math.random() * (to - from) + from).toFixed(2));
 };
 
-const getRandomLatLng = () => {
-  return [random(33, 38), random(124, 132)];
-};
-
 const getRandomRate = () => {
   return random(1, 5);
 };
 
-const regionToMarkerInfo = (region): RateType => {
+const regionToRates = (region): RateType => {
   const count = random(0, 100);
   const safety = getRandomRate() * count;
   const traffic = getRandomRate() * count;
@@ -113,29 +114,15 @@ const regionToMarkerInfo = (region): RateType => {
   };
 };
 
-// TODO: fetch 요청
-const requestMarkerInfo = async (
+const requestRates = async (
   scale: number,
   region: string[],
 ): Promise<RateType[]> => {
-  return Array(100)
-    .fill(0)
-    .map(() => {
-      return {
-        address: regionToScaled(region, scale),
-        code: '',
-        codeLength: 0,
-        center: getRandomLatLng() as [number, number],
-        total: 0,
-        count: 0,
-        categories: {
-          safety: getRandomRate(),
-          traffic: getRandomRate(),
-          food: getRandomRate(),
-          entertainment: getRandomRate(),
-        },
-      };
-    });
+  return await fetch(
+    `${process.env.REACT_APP_API_URL}/api/map/rates?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
+  )
+    .then((response) => response.json())
+    .catch((err) => console.error(err));
 };
 
 const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
@@ -145,8 +132,8 @@ const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
       position: new kakao.maps.LatLng(...center),
     });
 
-    const defaultMarker = markerDefault(rateData);
-    const largeMarker = markerMouseOver(rateData);
+    const defaultMarker = markerEl(rateData);
+    const largeMarker = largeMarkerEl(rateData);
 
     defaultMarker.addEventListener('mouseenter', () => {
       marker.setContent(largeMarker);
@@ -159,15 +146,6 @@ const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
     marker.setContent(defaultMarker);
     return marker;
   });
-};
-
-const markerDefault = (rateData: RateType) => {
-  const { address, total, count } = rateData;
-  return markerEl(address, total / count);
-};
-
-const markerMouseOver = (rateData: RateType) => {
-  return largeMarkerEl(rateData);
 };
 
 const displayMarkers = (
@@ -187,9 +165,15 @@ const createMarkerClickListener = (
 ) => {
   const onMarkerClicked = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    const markerEl = target.closest('.customoverlay_large') as HTMLElement;
+    const markerEl = target.closest('.customoverlay') as HTMLElement;
     if (!markerEl) {
-      onOutsideClick();
+      /*
+          2021-11-11
+          송명회
+          폴리곤 클릭시 사이드바 닫힘 방지
+          Polygon은 HTML path 엘리먼트로 구현되어 있으므로 의도대로 동작함
+       */
+      if (!target.closest('path')) onOutsideClick();
       return;
     }
     onClick(JSON.parse(markerEl.dataset.rateData as string));
@@ -197,11 +181,60 @@ const createMarkerClickListener = (
   return onMarkerClicked;
 };
 
+const LFURates = async (
+  cache: Map<string, RateType[] & { hitCount: number }>,
+  scale: number,
+  region: string[],
+) => {
+  const [big, medium] = region;
+  let key = '';
+
+  switch (true) {
+    case scale < 9:
+      key = `${big} ${medium}`;
+      break;
+    case 9 <= scale && scale < 12:
+      key = `${big}`;
+      break;
+    case 12 <= scale:
+      key = 'all';
+      break;
+  }
+
+  if (cache.has(key)) {
+    const rateData = cache.get(key);
+    if (rateData) rateData.hitCount++;
+    return rateData;
+  } else {
+    const rates = (await requestRates(scale, region)) as RateType[] & {
+      hitCount: number;
+    };
+    rates.hitCount = 1;
+    if (cache.size > 10) {
+      const mostUnusedRates = Array.from(cache.entries()).sort(
+        ([, rates1], [, rates2]) => rates1.hitCount - rates2.hitCount,
+      )[0][0];
+      cache.delete(mostUnusedRates);
+    }
+    cache.set(key, rates);
+    return rates;
+  }
+};
+
+const findMarker = (markers: kakao.maps.CustomOverlay[], address: string) => {
+  return markers.find((marker) => {
+    const markerEl = marker.getContent() as HTMLElement;
+    return address === markerEl.dataset.address;
+  });
+};
+
 export {
-  requestMarkerInfo,
+  requestRates,
   createMarkers,
   displayMarkers,
   deleteMarkers,
-  regionToMarkerInfo,
+  regionToRates,
   createMarkerClickListener,
+  LFURates,
+  findMarker,
 };

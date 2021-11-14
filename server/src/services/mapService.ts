@@ -41,4 +41,58 @@ const queryCenter = async (keyword: string): Promise<MapInfo[]> => {
   return await MapInfoModel.find({ address: { $regex: RegExp(keyword, 'g') } });
 };
 
-export default { queryPolygon, queryCenter };
+const queryRates = async (
+  scale: number,
+  big: string,
+  medium: string,
+  small: string,
+) => {
+  let result: MapInfo[] = [];
+  const fields = {
+    _id: 0,
+    address: 1,
+    code: 1,
+    codeLength: 1,
+    center: 1,
+    total: '$rate.total',
+    count: '$rate.count',
+    categories: {
+      safety: '$rate.safety',
+      traffic: '$rate.traffic',
+      food: '$rate.food',
+      entertainment: '$rate.entertainment',
+    },
+  };
+
+  switch (true) {
+    case scale < 9:
+      result = await MapInfoModel.find(
+        {
+          $text: { $search: `"${big} ${medium}"` },
+          codeLength: 7,
+        },
+        fields,
+      );
+      break;
+    case 9 <= scale && scale < 12:
+      result = await MapInfoModel.find(
+        {
+          $text: { $search: `${big}` },
+          codeLength: 5,
+        },
+        fields,
+      );
+      break;
+    case 12 <= scale:
+      result = await MapInfoModel.find(
+        {
+          codeLength: 2,
+        },
+        fields,
+      );
+      break;
+  }
+  return result;
+};
+
+export default { queryPolygon, queryCenter, queryRates };
