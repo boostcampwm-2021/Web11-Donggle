@@ -16,6 +16,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.15",
+    "axios": "^0.24.0",
     "color-hash": "^2.0.1",
     "dotenv": "^10.0.0",
     "proj4": "^2.7.5",

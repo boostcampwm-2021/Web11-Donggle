@@ -100,7 +100,7 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            {isAuth ? (
+            {isAuth.isLoggedin ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
                 <UserProfile>

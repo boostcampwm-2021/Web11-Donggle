@@ -4,6 +4,8 @@ import {
   ReviewPage,
   RankingPage,
   LoginPage,
+  CallbackPage,
+  SignInPage,
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
@@ -27,6 +29,8 @@ const App: React.FC = () => {
             <Route exact path="/" component={MainPage} />
             <Route path="/review" component={ReviewPage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/github/callback" component={CallbackPage} />
+            <Route path="/signin" component={SignInPage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/write-review" component={ReviewModal} />}
