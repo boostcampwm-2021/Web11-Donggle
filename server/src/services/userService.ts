@@ -78,4 +78,17 @@ const deleteProfileImage = async (oauth_email: string, image: string) => {
     .then(() => logger.info('delete image from S3 success!'));
 };
 
-export default { patchProfileImage, deleteProfileImage };
+const updateAddress = async (prevAddress: string, newAddress: string) => {
+  try {
+    await UserModel.updateOne(
+      { address: prevAddress },
+      { address: newAddress },
+    );
+    return true;
+  } catch (e) {
+    logger.error(e);
+    return false;
+  }
+};
+
+export default { patchProfileImage, deleteProfileImage, updateAddress };

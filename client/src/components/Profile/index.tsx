@@ -68,6 +68,23 @@ const Profile: React.FC = withRouter(({ history, location }) => {
     setAuth((prev) => ({ ...prev, image: result.image }));
   };
 
+  const updateAddress = async (mapInfo: MapInfo) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          prevAddress: auth.address,
+          newAddress: mapInfo.address,
+        }),
+      },
+    );
+    const result = await response.json();
+    console.log(result);
+    setAuth((prev) => ({ ...prev, address: result.address }));
+  };
+
   return (
     <>
       <ImageUsernameWrapper>
@@ -101,7 +118,11 @@ const Profile: React.FC = withRouter(({ history, location }) => {
       <AddressWrapper onClick={() => toggleModal()}>
         {auth.address}
       </AddressWrapper>
-      {isModal && <Modal>{/* <Searchbar /> */}</Modal>}
+      {isModal && (
+        <Modal>
+          <Searchbar onClickHandler={updateAddress} />
+        </Modal>
+      )}
     </>
   );
 });

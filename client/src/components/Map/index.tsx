@@ -1,4 +1,7 @@
-import MapWrapper, { CenterMarker } from '@components/Map/index.style';
+import MapWrapper, {
+  CenterMarker,
+  SearchbarWrapper,
+} from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
 import {
   getCurrentLocation,
@@ -219,7 +222,9 @@ const MapComponent: React.FC<IProps> = ({
 
   return (
     <MapWrapper ref={mapWrapper}>
-      <Searchbar onClickHandler={moveTo} />
+      <SearchbarWrapper>
+        <Searchbar onClickHandler={moveTo} />
+      </SearchbarWrapper>
       <CenterMarker />
     </MapWrapper>
   );

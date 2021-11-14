@@ -9,6 +9,11 @@ interface ProfileImageBody {
   oauth_email: string;
 }
 
+interface ProfileAddressBody {
+  prevAddress: string;
+  newAddress: string;
+}
+
 const validateFileType = (
   file: Express.Multer.File,
   callback: multer.FileFilterCallback,
@@ -73,6 +78,17 @@ router.delete('/profile-image', (async (req: Request, res: Response) => {
       process.env.IMAGE_BUCKET as string
     }/user-profile.png`,
   });
+}) as RequestHandler);
+
+router.patch('/profile-address', (async (req: Request, res: Response) => {
+  const body: ProfileAddressBody = req.body as ProfileAddressBody;
+  const { prevAddress, newAddress } = body;
+  const updateResult = await userService.updateAddress(prevAddress, newAddress);
+  if (updateResult) {
+    res.json({ address: newAddress });
+  } else {
+    res.json({ address: prevAddress });
+  }
 }) as RequestHandler);
 
 export default router;
