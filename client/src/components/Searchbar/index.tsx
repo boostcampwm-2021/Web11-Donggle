@@ -36,9 +36,9 @@ const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
           <SearchImg />
         </SearchbarButton>
       </SearchbarWrapper>
-      <DropdownWrapper>
-        {results.length > 0 &&
-          results.map((result, i) => (
+      {results.length > 0 && (
+        <DropdownWrapper>
+          {results.map((result, i) => (
             <DropdownItem
               key={i}
               onClick={(e) => {
@@ -52,7 +52,8 @@ const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
               {result.address}
             </DropdownItem>
           ))}
-      </DropdownWrapper>
+        </DropdownWrapper>
+      )}
     </>
   );
 };
