@@ -47,6 +47,8 @@ const ModalCloseBtn = styled.button`
 `;
 
 const ChildrenWrapper = styled.div`
+  position: relative;
+  margin: 20px 0;
   width: 100%;
   display: flex;
   flex-direction: column;
