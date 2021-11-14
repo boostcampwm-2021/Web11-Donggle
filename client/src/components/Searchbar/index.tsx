@@ -11,7 +11,7 @@ import { spreadDropdown } from '@controllers/searchbarController';
 import React, { useEffect, useState, useRef } from 'react';
 
 interface SearchbarProps {
-  onClickHandler: (mapInfo: MapInfo) => void;
+  onClickHandler: (mapInfo: MapInfo) => void | Promise<void>;
 }
 
 const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
