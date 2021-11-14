@@ -9,8 +9,7 @@ import {
   AddressWrapper,
 } from '@components/Profile/index.style';
 import { authState } from '@stores/atoms';
-import Modal from '@components/Modal/index';
-import Searchbar from '@components/Searchbar/index';
+import AddressModal from '@components/AddressModal/index';
 import {
   uploadImage,
   deleteImage,
@@ -74,9 +73,18 @@ const Profile: React.FC = withRouter(({ history, location }) => {
       </ImageUsernameWrapper>
       <AddressWrapper onClick={toggleModal}>{auth.address}</AddressWrapper>
       {isModal && (
-        <Modal>
-          <Searchbar onClickHandler={updateAddress(auth, setAuth)} />
-        </Modal>
+        <AddressModal
+          title="우리 동네를 입력해주세요!"
+          onClickHandler={() => {
+            console.log('?');
+          }}
+          onSubmitHandler={() => {
+            console.log('?');
+          }}
+          onCancelHandler={() => {
+            console.log('?');
+          }}
+        />
       )}
     </>
   );
