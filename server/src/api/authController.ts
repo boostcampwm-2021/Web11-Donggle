@@ -1,12 +1,23 @@
 import express, { Request, Response, RequestHandler } from 'express';
+import { User } from '@models/User';
 import axios, { AxiosResponse } from 'axios';
-import isMemberService from '@services/authService';
+import {
+  isMemberService,
+  findRegionInfo,
+  saveUserInfo,
+} from '@services/authService';
 import jwt from '@services/jwtService';
 
 const router: express.Router = express.Router();
 
 interface Code {
   code: string;
+}
+
+interface UserInfo {
+  oauthEmail: string;
+  address: string;
+  image: string;
 }
 
 router.post('/auth', (async (req: Request, res: Response) => {
@@ -40,6 +51,7 @@ router.post('/auth', (async (req: Request, res: Response) => {
   const isMember = await isMemberService(oauthEmail.oauth_email);
   if (isMember) {
     const jwtToken = jwt.sign(oauthEmail);
+
     const userInfo = {
       jwtToken: jwtToken.token,
       oauthEmail: isMember.oauth_email,
@@ -59,6 +71,29 @@ router.post('/auth', (async (req: Request, res: Response) => {
   }
 
   // refactoring 필요: login, avatar_url만 반환해야 하는데 typescript 어렵다..
+}) as RequestHandler);
+
+router.post('/address', (async (req: Request, res: Response) => {
+  const { oauthEmail, address, image }: UserInfo = req.body as UserInfo;
+  const userRegionInfo = await findRegionInfo(address);
+
+  if (userRegionInfo) {
+    const newUserInfo: User = {
+      oauth_email: oauthEmail,
+      address,
+      code: userRegionInfo.code,
+      center: userRegionInfo.center,
+      image,
+    };
+    const isSave = await saveUserInfo(newUserInfo);
+    if (isSave) {
+      res.status(200).send({ msg: 'success' });
+    } else {
+      res.status(404).send({ err: '이미 회원가입하셨습니다' });
+    }
+  } else {
+    res.status(404).send({ err: 'db에 없는 주소입니다' });
+  }
 }) as RequestHandler);
 
 export default router;

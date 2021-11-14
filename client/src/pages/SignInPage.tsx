@@ -3,16 +3,16 @@ import styled from 'styled-components';
 
 import SignInPlate from '@components/SignInPlate/index';
 
-const LoginDiv = styled.div`
+const SignInDiv = styled.div`
   width: 100vw;
   height: 100vh;
 `;
 
 const SignInPage: React.FC = () => {
   return (
-    <LoginDiv>
+    <SignInDiv>
       <SignInPlate />
-    </LoginDiv>
+    </SignInDiv>
   );
 };
 

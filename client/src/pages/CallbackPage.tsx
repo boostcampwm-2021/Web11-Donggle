@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import useHistoryRouter from '@utils/useRouter';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import qs from 'qs';
@@ -32,19 +32,7 @@ interface AuthInfo {
 
 const CallbackPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
-  const history = useHistory();
-  const location = useLocation();
-  console.log(location);
-
-  const routeHistory = useCallback(
-    (path: string, state: { [index: string]: string }) => {
-      history.push({
-        pathname: path,
-        state: state,
-      });
-    },
-    [history],
-  );
+  const [history, routeHistory] = useHistoryRouter();
 
   useEffect(() => {
     const getToken = async () => {
