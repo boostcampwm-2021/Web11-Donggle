@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { authState } from '@stores/atoms';
-import SearchBar from '@components/Searchbar/signIn';
+import SearchBar from '@components/Searchbar/index';
 import Modal from '@components/modal';
 import useHistoryRouter from '@utils/useRouter';
 import { SignUpTitle, ButtonWrapper, SubmitButton } from './index.style';
@@ -76,8 +76,12 @@ const SignUpModal: React.FC = () => {
     <Modal>
       <SignUpTitle>
         회원가입을 위해서 우리 동네 정보를 입력해주세요!
-      </SignUpTitle>
-      <SearchBar />
+      </SignInTitle>
+      <SearchBar
+        onClickHandler={(temp: MapInfo) => {
+          console.log('예비 코드');
+        }}
+      />
       <ButtonWrapper>
         <SubmitButton cancel={false} onClick={onSubmitClick}>
           제출
