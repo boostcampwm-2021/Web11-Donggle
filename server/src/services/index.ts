@@ -4,4 +4,10 @@ import updateMapService from '@services/updateMapService';
 import reviewService from '@services/reviewService';
 import userService from '@services/userService';
 
-export { authService, mapService, updateMapService, reviewService };
+export {
+  authService,
+  mapService,
+  updateMapService,
+  reviewService,
+  userService,
+};

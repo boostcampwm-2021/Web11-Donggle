@@ -1,9 +1,14 @@
 const spreadDropdown = async (keyword, isSpread, setResults) => {
-  const searchRegions = async (): Promise<MapInfo[] | []> => {
+  const searchRegions = async (): Promise<APIResultType<MapInfo[] | []>> => {
     return await fetch(
       `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}`,
     )
-      .then(async (response) => await response.json())
+      .then(async (response) => {
+        if (response.status === 200) {
+          return await response.json();
+        }
+        throw new Error('검색 결과를 받아오는데 실패했습니다!');
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -14,7 +19,8 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
     isSpread = _isSpread;
   };
 
-  const result: MapInfo[] | [] = await searchRegions();
+  const { result } = await searchRegions();
+
   if (result.length > 0) {
     setDropdown(result, true);
   } else {
