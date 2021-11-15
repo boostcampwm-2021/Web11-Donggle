@@ -9,9 +9,13 @@ import {
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
+interface ModalProps {
+  toggleModal?: () => void;
+}
+
 // "상위 컴포넌트에서는 클릭하면 무조건 추가한다"로 로직을 구성
 // recoil에서 전역ㅇ로 관리하는 것도 생각해 볼 수 있으려나..
-const Modal: React.FC = ({ children }) => {
+const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
   const history = useHistory();
   const [isActive, setIsActive] = useState(true);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -47,23 +51,28 @@ const Modal: React.FC = ({ children }) => {
       ) {
         setIsActive(!isActive);
         history.goBack();
+        if (toggleModal) {
+          toggleModal();
+        }
       }
     };
 
     if (isActive) {
       window.addEventListener('click', handleCloseModal);
+    } else {
+      window.removeEventListener('click', handleCloseModal);
     }
 
     return () => {
       window.removeEventListener('click', handleCloseModal);
     };
-  }, [history, isActive]);
+  }, [isActive]);
 
   return (
     <>
       {isActive && (
         <ModalOverlay>
-          <ModalWrapper ref={modalRef}>
+          <ModalWrapper className="modal" ref={modalRef}>
             <ModalCloseBtnDiv>
               <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
             </ModalCloseBtnDiv>

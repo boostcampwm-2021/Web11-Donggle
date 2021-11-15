@@ -9,12 +9,14 @@ import {
 import React, { useState } from 'react';
 
 interface AddressModalProps {
+  toggleModal: () => void;
   title: string;
   onSubmitHandler;
   onCancelHandler;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
+  toggleModal,
   title,
   onSubmitHandler,
   onCancelHandler,
@@ -26,7 +28,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   };
 
   return (
-    <Modal>
+    <Modal toggleModal={toggleModal}>
       <TitleWrapper>{title}</TitleWrapper>
       <Searchbar onClickHandler={onClickHandler} />
       <ButtonWrapper>

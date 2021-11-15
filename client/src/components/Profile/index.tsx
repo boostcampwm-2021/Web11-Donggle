@@ -29,7 +29,7 @@ const Profile: React.FC = withRouter(({ history, location }) => {
 
   const toggleModal = () => {
     if (!isModal) {
-      history.push(`${location.pathname}/profile/update-address`);
+      history.push(`${location.pathname}/update-address`);
     }
     setIsModal((prev) => !prev);
   };
@@ -68,12 +68,13 @@ const Profile: React.FC = withRouter(({ history, location }) => {
             이미지 제거
           </ImageRemoveButton>
         </ImageWrapper>
-        <OauthnameWrapper>{auth.oauth_email.split('-')[0]}</OauthnameWrapper>
-        <UsernameWrapper>{auth.oauth_email.split('-')[1]}</UsernameWrapper>
+        <OauthnameWrapper>{auth.oauth_email.split('_')[0]}</OauthnameWrapper>
+        <UsernameWrapper>{auth.oauth_email.split('_')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper onClick={toggleModal}>{auth.address}</AddressWrapper>
       {isModal && (
         <AddressModal
+          toggleModal={toggleModal}
           title="우리 동네를 입력해주세요!"
           onSubmitHandler={() => {
             console.log('?');
