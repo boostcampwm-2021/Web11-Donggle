@@ -21,7 +21,6 @@ import {
   AddButtonDiv,
   AddButton,
 } from './index.style';
-import { RateType, ReviewType } from '@pages/MainPage';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';

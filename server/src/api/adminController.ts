@@ -1,33 +1,45 @@
+import logger from '@loaders/loggerLoader';
 import { updateMapService } from '@services/index';
+import config from '@config/index';
+import { MapRequest } from '@myTypes/Admin';
+import { makeApiResponse } from '@utils/index';
 
 import express, { Request, Response } from 'express';
 
-interface UpdateMapservice {
-  populateMapAndSimpleMap: () => void;
-}
-
 const router: express.Router = express.Router();
 
-interface MapRequest extends Request {
-  body: { [password: string]: string };
-}
-
 router.post('/map-data', (req: MapRequest, res: Response) => {
-  if (req.body.password === process.env.ADMIN_PASSWORD) {
-    void updateMapService.populateMapAndSimpleMap();
-    res.status(200).send('HAHA!');
-  } else {
-    res.status(404).send('DAMN! 404 NOT FOUND... YOU MAD?');
+  try {
+    if (req.body.password === config.admin_password) {
+      void updateMapService.populateMapAndSimpleMap();
+      res.status(200).json(makeApiResponse({}, 'HAHA!'));
+    } else {
+      res
+        .status(404)
+        .send(makeApiResponse({}, 'DAMN! 404 NOT FOUND... YOU MAD?'));
+    }
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res.status(500).json(makeApiResponse({}, 'DB ACCESS FAILED!'));
   }
 });
 
-router.post('/rates', (req: MapRequest, res) => {
+router.post('/rates', (req: MapRequest, res: Response) => {
   const { password } = req.body;
-  if (password === process.env.ADMIN_PASSWORD) {
-    void updateMapService.populateMapInfos();
-    res.status(200).send('HAHAHA!');
-  } else {
-    res.status(404).send('Sorry.. 404 NOT FOUND.... Good bye!');
+  try {
+    if (password === config.admin_password) {
+      void updateMapService.populateMapInfos();
+      res.status(200).json(makeApiResponse({}, 'HAHAHA!'));
+    } else {
+      res
+        .status(404)
+        .json(makeApiResponse({}, 'Sorry.. 404 NOT FOUND.... Good bye!'));
+    }
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res.status(500).json(makeApiResponse({}, 'DB ACCESS FAILED!'));
   }
 });
 

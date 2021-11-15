@@ -1,3 +1,4 @@
+import config from '@config/index';
 import path from 'path';
 import { format, createLogger, transports } from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
@@ -55,7 +56,7 @@ const logger = createLogger({
 });
 
 // Production 환경이 아닌 경우(dev 등) 배포 환경에서는 최대한 자원을 안잡아 먹는 로그를 출력해야함
-if (process.env.NODE_ENV !== 'production') {
+if (config.node_env !== 'production') {
   logger.add(
     new transports.Console({
       format: combine(

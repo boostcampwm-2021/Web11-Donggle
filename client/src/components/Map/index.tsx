@@ -26,7 +26,6 @@ import {
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
-import { RateType } from '@pages/MainPage';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,

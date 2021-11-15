@@ -19,21 +19,6 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-// Rate, Review 는 Backend에서 아래와 같은 형식으로 반환한다고 가정
-export interface RateType extends CategoryRateType {
-  address: string;
-  code: string;
-  codeLength: number;
-  center: [number, number];
-  total: number;
-  count: number;
-}
-
-export interface ReviewType extends CategoryRateType {
-  text: string;
-  user: string;
-}
-
 const TemporaryReviewData: ReviewType[] = [
   {
     categories: {

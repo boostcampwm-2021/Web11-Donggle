@@ -1,5 +1,3 @@
-import { RateType } from '@pages/MainPage';
-
 const ratingToPercent = (rate: number) => {
   return rate * 20;
 };
@@ -121,8 +119,19 @@ const requestRates = async (
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/rates?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
-    .then((response) => response.json())
-    .catch((err) => console.error(err));
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      throw Error('요청 실패');
+    })
+    .then((res: APIResultType<RateType[]>) => {
+      return res.result;
+    })
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 };
 
 const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {

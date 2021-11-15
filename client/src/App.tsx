@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import {
   NotFoundPage,
   MainPage,
@@ -34,8 +35,8 @@ const App: React.FC = () => {
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/write-review" component={ReviewModal} />}
-          {background && <Route path="/ranking" component={RankingPage} />}
-          {background && <Route path="/login" component={LoginPage} />}
+          {background && <Route path="/ranking" render={RankingPage} />}
+          {background && <Route path="/login" render={LoginPage} />}
         </GlobalStore>
       </ThemeProvider>
     </>

@@ -5,8 +5,8 @@ export type RegionPolygon = kakao.maps.Polygon & {
   onClick?: () => void;
 };
 
-function getCurrentLocation(callback: (coord: [number, number]) => void) {
-  let coord: [number, number] = [37.5642135, 127.0016985];
+function getCurrentLocation(callback: (coord: CoordType) => void) {
+  let coord: CoordType = [37.5642135, 127.0016985];
 
   const successCallback: PositionCallback = (position) => {
     const { latitude, longitude } = position.coords; // (처음 접속)현재 사용자위치
@@ -85,13 +85,25 @@ const isRangeEqual = (
 };
 
 // backend에 polygon 정보 요청
-const requestCoord = async (scale: number, region: Array<string>) => {
+const requestCoord = async (
+  scale: number,
+  region: Array<string>,
+): Promise<Region[]> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      throw Error('요청 실패');
+    })
+    .then((res: APIResultType<Region[]>) => {
+      return res.result;
+    })
     .catch((err) => {
       console.error(err);
+      return [];
     });
 };
 
@@ -226,7 +238,7 @@ const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
 };
 
 const LFURegions = async (
-  cache: Map<string, any>,
+  cache: Map<string, Region[] & { count: number }>,
   scale: number,
   region: string[],
 ) => {
@@ -246,10 +258,13 @@ const LFURegions = async (
   }
 
   if (cache.has(key)) {
-    cache.get(key).count++;
-    return cache.get(key);
+    const regions = cache.get(key);
+    if (regions) regions.count++;
+    return regions;
   } else {
-    const regions = await requestCoord(scale, region);
+    const regions = (await requestCoord(scale, region)) as Region[] & {
+      count: number;
+    };
     regions.count = 1;
     if (cache.size > 10) {
       const mostUnusedRegions = Array.from(cache.entries()).sort(
