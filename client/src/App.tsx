@@ -33,9 +33,9 @@ const App: React.FC = () => {
             <Route path="/signin" component={SignInPage} />
             <Route component={NotFoundPage} />
           </Switch>
-          {background && <Route path="/write-review" component={ReviewModal} />}
-          {background && <Route path="/ranking" component={RankingPage} />}
-          {background && <Route path="/login" component={LoginPage} />}
+          {background && <Route path="/write-review" render={ReviewModal} />}
+          {background && <Route path="/ranking" render={RankingPage} />}
+          {background && <Route path="/login" render={LoginPage} />}
         </GlobalStore>
       </ThemeProvider>
     </>

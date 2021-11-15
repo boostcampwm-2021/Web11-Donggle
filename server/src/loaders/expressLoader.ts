@@ -34,7 +34,6 @@ export default ({ app }: { app: Application }) => {
 
   app.use('/api', apiController);
   app.use('/admin', adminController);
-  app.use('/review', reviewController);
 
   // 404 에러 처리
   app.use((req: Request, res: Response, next: NextFunction) => {

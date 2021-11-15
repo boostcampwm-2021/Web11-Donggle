@@ -12,7 +12,8 @@
       "@models/*": ["models/*"],
       "@services/*": ["services/*"],
       "@subscribers/*": ["subscribers/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@myTypes/*": ["types/*"]
     },
     "resolveJsonModule": true,
     "allowJs": true,

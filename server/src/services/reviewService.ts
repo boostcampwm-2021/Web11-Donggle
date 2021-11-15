@@ -2,8 +2,16 @@ import logger from '@loaders/loggerLoader';
 import { ReviewModel } from '@models/Review';
 import { Request, Response, RequestHandler } from 'express';
 import { Error } from 'mongoose';
-import { CategoryRateType } from '@utils/type';
+// import { CategoryRateType } from '@types/';
 
+interface CategoryRateType {
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+}
 interface ReviewRequest extends Request {
   body: {
     password: string;
