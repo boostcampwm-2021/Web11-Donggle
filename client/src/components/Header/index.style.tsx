@@ -80,7 +80,7 @@ const ProfileWrapper = styled.div`
   align-items: center;
 `;
 
-const LoginBtn = styled.button`
+const SignInBtn = styled.button`
   border: 1px solid ${(props) => props.theme.colors.lightgreen};
   border-radius: 10px;
   background: ${(props) => props.theme.colors.white};
@@ -95,7 +95,7 @@ const LoginBtn = styled.button`
   }
 `;
 
-const LogoutBtn = styled(LoginBtn)`
+const LogoutBtn = styled(SignInBtn)`
   margin-right: 10px;
 `;
 
@@ -120,7 +120,7 @@ export {
   MenuList,
   Menu,
   ProfileWrapper,
-  LoginBtn,
+  SignInBtn,
   LogoutBtn,
   UserProfile,
   ColorBar,

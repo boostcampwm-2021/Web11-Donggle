@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import qs from 'qs';
 
 import { authState } from '@stores/atoms';
-import LoadAnimation from '@components/Callback/index';
+import LoadAnimation from '@components/Loading/index';
 
 const Body = styled.div`
   width: 100%;
@@ -30,7 +30,7 @@ interface AuthInfo {
   image: string;
 }
 
-const CallbackPage: React.FC = () => {
+const LoadingPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
   const [history, routeHistory] = useHistoryRouter();
 
@@ -61,7 +61,7 @@ const CallbackPage: React.FC = () => {
             oauth_email: userInfo.oauthEmail,
             image: userInfo.image,
           });
-          routeHistory('/signin', {});
+          routeHistory('/signup', {});
         } else {
           // sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
           sessionStorage.setItem('jwt', userInfo.jwtToken);
@@ -89,4 +89,4 @@ const CallbackPage: React.FC = () => {
   );
 };
 
-export default CallbackPage;
+export default LoadingPage;

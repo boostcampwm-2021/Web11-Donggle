@@ -9,7 +9,7 @@ const sizeReact = css`
   padding: 5vh;
 `;
 
-export const SignInTitle = styled.div`
+export const SignUpTitle = styled.div`
   ${sizeReact}
   text-align: center;
   font-size: 20px;
