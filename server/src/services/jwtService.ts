@@ -4,22 +4,12 @@ import jwtConfig from '@config/secretKey';
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
-interface User {
-  oauth_email: string;
-}
-
-interface Token {
-  token: string;
-}
-
 export default {
-  sign: (user: User) => {
-    /* 현재는 idx와 email을 payload로 넣었지만 필요한 값을 넣으면 됨! */
+  sign: (user: { oauth_email: string }) => {
     const payload = {
       oauth_email: user.oauth_email,
     };
-    const token: Token = {
-      //sign메소드를 통해 access token 발급!
+    const token: { token: string } = {
       token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
     };
     return token;
@@ -27,7 +17,6 @@ export default {
   verify: (token: string) => {
     let decoded: string | jwt.JwtPayload;
     try {
-      // verify를 통해 값 decode!
       decoded = jwt.verify(token, jwtConfig.secretKey);
     } catch (err) {
       const errMsg = (err as Error).message;

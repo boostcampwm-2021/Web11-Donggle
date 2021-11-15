@@ -1,5 +1,5 @@
 import { User } from '@models/User';
-import authService from '@services/authService';
+import { authService } from '@services/index';
 import jwt from '@services/jwtService';
 import logger from '@loaders/loggerLoader';
 import { makeApiResponse } from '@utils/index';
@@ -51,7 +51,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);
-    return res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
+    res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
   }
 }) as RequestHandler);
 

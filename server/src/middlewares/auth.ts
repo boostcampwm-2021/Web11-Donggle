@@ -1,45 +1,37 @@
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  RequestHandler,
-} from 'express';
+import express, { Response, NextFunction } from 'express';
 import jwt from '@services/jwtService';
+import { makeApiResponse } from '@utils/index';
+import { AuthMiddleRequest } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      id: string;
-    }
-  }
-}
-
-const checkToken: RequestHandler = (
-  req: Request,
+const checkToken = (
+  req: AuthMiddleRequest,
   res: Response,
   next: NextFunction,
 ) => {
   const token: string = req.headers.token as string;
-  // 토큰 없음
-  if (!token) return res.json({ code: 404 });
-  // decode
+
+  if (!token)
+    return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+
   const user = jwt.verify(token);
-  // 유효기간 만료
-  if (user === TOKEN_EXPIRED) return res.json({ code: 404 });
-  // 유효하지 않는 토큰
-  if (user === TOKEN_INVALID) return res.json({ code: 404 });
+  if (user === TOKEN_EXPIRED)
+    return res
+      .status(500)
+      .json(makeApiResponse({}, '유효기간 만료되었습니다.'));
+  if (user === TOKEN_INVALID)
+    return res
+      .status(500)
+      .json(makeApiResponse({}, '유효하지 않은 토큰입니다.'));
 
   if ((user as JwtPayload).oauth_email === undefined)
-    return res.json({ code: 404 });
+    return res.status(500).json(makeApiResponse({}, '잘못된 토큰입니다.'));
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  req.id = (user as JwtPayload).oauth_email;
+  req.id = (user as JwtPayload).oauth_email as string;
   next();
 };
 
-module.exports = checkToken;
+export default checkToken;

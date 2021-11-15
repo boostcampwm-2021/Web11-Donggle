@@ -1,12 +1,10 @@
 import { User, UserModel } from '@models/User';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
-import { ObjectId } from 'mongoose';
+import config from '@config/index';
 import axios, { AxiosResponse } from 'axios';
 
 const getAccessToken = async (code: string): Promise<string> => {
-  const clientId = process.env.CLIENT_ID as string;
-  const clientSecret = process.env.CLIENT_SECRET as string;
-  const TOKEN_URL = `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${code}`;
+  const TOKEN_URL = `https://github.com/login/oauth/access_token?client_id=${config.client_id}&client_secret=${config.client_secret}&code=${code}`;
 
   const tokenResponse: AxiosResponse = await axios.post(TOKEN_URL, {
     headers: {

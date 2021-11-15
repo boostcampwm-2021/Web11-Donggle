@@ -1,12 +1,18 @@
 import { Request } from 'express';
 
-export interface UserInfo {
+interface UserInfo {
   oauthEmail: string;
   address: string;
   image: string;
 }
-export interface AuthRequest extends Request {
+interface AuthRequest extends Request {
   body: {
     code?: string;
   };
 }
+
+interface AuthMiddleRequest extends Request {
+  id?: string;
+}
+
+export { UserInfo, AuthRequest, AuthMiddleRequest };
