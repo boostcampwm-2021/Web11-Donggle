@@ -12,7 +12,7 @@ const Body = styled.div`
   height: 100vh;
   display: flex;
   justify-content: center;
-  background-color: #191940;
+  background-color: ${(props) => props.theme.colors.green};
   overflow: hidden;
 `;
 
