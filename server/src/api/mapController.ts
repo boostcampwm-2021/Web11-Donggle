@@ -17,21 +17,7 @@ router.get('/polygon', (async (req: Request, res: Response) => {
       );
       res.status(200).json(makeApiResponse(polygon, ''));
     } else {
-      res.status(200).json(
-        makeApiResponse(
-          [
-            {
-              address: '',
-              path: [],
-              code: '',
-              codeLength: 0,
-              center: [],
-              type: '',
-            },
-          ],
-          '',
-        ),
-      );
+      res.status(200).json(makeApiResponse([], ''));
     }
   } catch (error) {
     const err = error as Error;
