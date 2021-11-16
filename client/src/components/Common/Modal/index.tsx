@@ -2,6 +2,7 @@ import {
   ModalOverlay,
   ModalWrapper,
   ModalCloseBtnDiv,
+  ModalCloseImage,
   ModalCloseBtn,
   ChildrenWrapper,
 } from '@components/Common/Modal/index.style';
@@ -78,7 +79,9 @@ const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
         <ModalOverlay>
           <ModalWrapper className="modal" ref={modalRef}>
             <ModalCloseBtnDiv>
-              <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
+              <ModalCloseBtn onClick={onClick}>
+                <ModalCloseImage />
+              </ModalCloseBtn>
             </ModalCloseBtnDiv>
             <ChildrenWrapper>{children}</ChildrenWrapper>
           </ModalWrapper>
