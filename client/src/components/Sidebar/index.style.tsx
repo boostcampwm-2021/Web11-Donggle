@@ -1,16 +1,11 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
-  position: relative;
-  height: 100%;
-`;
-
 const Layout = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 100vh;
+  height: 100%;
   right: 0;
   z-index: 1;
   overflow-y: scroll;
@@ -18,7 +13,7 @@ const Layout = styled.div`
   transform: translateX(400px);
 
   transition: all ease 0.3s 0s;
-  padding-bottom: 6.3em;
+  padding-bottom: 8.7em;
   &.open {
     transform: translateX(0px);
   }
@@ -169,8 +164,8 @@ const AddButtonDiv = styled(BaseDiv)`
   display: flex;
   align-items: center;
   width: 100%;
+  height: 100px;
   padding: 10px 0px;
-  line-height: 1;
   background-color: ${(props) => props.theme.colors.lightgreen};
 `;
 
@@ -186,7 +181,6 @@ const AddButton = styled.button`
 `;
 
 export {
-  Container,
   Layout,
   TitleDiv,
   SpanText,
