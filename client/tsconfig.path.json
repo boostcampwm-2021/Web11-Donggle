@@ -9,7 +9,8 @@
       "@stores/*": ["stores/*"],
       "@styledComponents/*": ["styledComponents/*"],
       "@utils/*": ["utils/*"],
-      "@myTypes/*": ["types/*"]
+      "@myTypes/*": ["types/*"],
+      "@hooks/*": ["hooks/*"]
     }
   }
 }
