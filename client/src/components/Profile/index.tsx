@@ -17,19 +17,23 @@ import {
 } from '@controllers/profileController';
 
 import React, { useState, useRef } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-const Profile: React.FC = withRouter(({ history, location }) => {
+const Profile: React.FC = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const [auth, setAuth] = useRecoilState(authState);
+  const [isModal, setIsModal] = useState(
+    location.pathname === '/profile/update-address',
+  );
 
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [isModal, setIsModal] = useState(false);
-
   const toggleModal = () => {
     if (!isModal) {
-      history.push(`${location.pathname}/update-address`);
+      history.push(`profile/update-address`);
     }
     setIsModal((prev) => !prev);
   };
@@ -82,6 +86,6 @@ const Profile: React.FC = withRouter(({ history, location }) => {
       )}
     </>
   );
-});
+};
 
 export default Profile;
