@@ -14,10 +14,9 @@ const ModalOverlay = styled.div`
 
 const ModalWrapper = styled.div`
   position: absolute;
-  max-width: 80%;
   width: 500px;
-  max-height: 90%;
   height: auto;
+  max-height: 90%;
   top: 50%;
   left: 50%;
   overflow: auto;
@@ -53,7 +52,8 @@ const ChildrenWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: hidden;
 `;
 
 export {
