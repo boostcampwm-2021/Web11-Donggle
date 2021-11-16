@@ -46,7 +46,7 @@ const DropdownWrapper = styled.div`
   border-radius: 10px;
   border: solid 1px #c5c5c5;
   z-index: 1000;
-  max-height: 600px;
+  max-height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {

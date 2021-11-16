@@ -4,12 +4,23 @@ interface SubmitButton {
   cancel: boolean;
 }
 
+const ModalSizer = styled.div`
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 const TitleWrapper = styled.div`
-  font-size: 30px;
+  font-size: 20px;
   margin-bottom: 20px;
+  font-weight: bold;
 `;
 
 const ButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 20px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -34,4 +45,4 @@ const SubmitButton = styled.button<SubmitButton>`
   }
 `;
 
-export { TitleWrapper, ButtonWrapper, SubmitButton };
+export { ModalSizer, TitleWrapper, ButtonWrapper, SubmitButton };

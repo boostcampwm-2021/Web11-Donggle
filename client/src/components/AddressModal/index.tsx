@@ -4,6 +4,7 @@ import {
   TitleWrapper,
   ButtonWrapper,
   SubmitButton,
+  ModalSizer,
 } from '@components/AddressModal/index.style';
 
 import React, { useState } from 'react';
@@ -29,8 +30,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
   return (
     <Modal toggleModal={toggleModal}>
-      <TitleWrapper>{title}</TitleWrapper>
-      <Searchbar onClickHandler={onClickHandler} />
+      <ModalSizer>
+        <TitleWrapper>{title}</TitleWrapper>
+        <Searchbar onClickHandler={onClickHandler} />
+      </ModalSizer>
       <ButtonWrapper>
         <SubmitButton cancel={false} onClick={() => onSubmitHandler(mapInfo)}>
           제출
