@@ -94,9 +94,8 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       code: feature.properties.adm_cd,
       address: feature.properties.adm_nm,
       center: [lat, lng],
-      rate: {
-        count: 0,
-        total: 0,
+      count: 0,
+      categories: {
         safety: 0,
         traffic: 0,
         food: 0,
@@ -147,16 +146,15 @@ const populateMapInfos = async () => {
     const traffic = Math.floor(getRandomRate() * count);
     const food = Math.floor(getRandomRate() * count);
     const entertainment = Math.floor(getRandomRate() * count);
-    const total = (safety + traffic + food + entertainment) / 4;
-    const rate = {
-      count,
-      total,
+    const categories = {
       safety,
       traffic,
       food,
       entertainment,
     };
-    void doc.updateOne({ rate }, {});
+    void doc
+      .updateOne({ count, categories })
+      .then(() => logger.info('review updated!'));
   });
 };
 
