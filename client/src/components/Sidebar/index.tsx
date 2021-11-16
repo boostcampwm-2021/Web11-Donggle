@@ -24,11 +24,14 @@ import {
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
+import { IMapInfo } from '@myTypes/Map';
+import { IReviewRate } from '@myTypes/Review';
+import { calcTotal } from '@utils/common';
 
 export interface RateProps {
   sidebar: boolean | null;
-  rateData: RateType;
-  reviewData: ReviewType[];
+  rateData: IMapInfo;
+  reviewData: IReviewRate[];
   hashTagData: string[];
   closeSidebar: () => void;
 }
@@ -42,6 +45,8 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
     setSelectedMenu(menu);
   };
 
+  const total = calcTotal(props.rateData.categories) / props.rateData.count;
+
   return (
     <Container>
       <Layout className={`${props.sidebar ? 'open' : ''}`}>
@@ -51,10 +56,7 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
           <EmptySpan></EmptySpan>
         </TitleDiv>
         <RateDiv>
-          <StarRateDiv
-            isLarge={true}
-            total={(props.rateData.total / props.rateData.count).toFixed(1)}
-          />
+          <StarRateDiv isLarge={true} total={total.toFixed(1)} />
           <BarRateDiv
             categories={props.rateData.categories}
             count={props.rateData.count}

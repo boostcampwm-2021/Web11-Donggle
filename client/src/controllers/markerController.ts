@@ -1,3 +1,7 @@
+import { IMapInfo } from '@myTypes/Map';
+import { IAPIResult } from '@myTypes/Common';
+import { calcTotal } from '@utils/common';
+
 const ratingToPercent = (rate: number) => {
   return rate * 20;
 };
@@ -15,11 +19,12 @@ const starRateHTML = (rate: number) => {
   `;
 };
 
-const markerEl = (rateData: RateType) => {
+const markerEl = (rateData: IMapInfo) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
 
-  const { address, total, count } = rateData;
+  const { address, count, categories } = rateData;
+  const total = calcTotal(categories);
   const rate = total / count;
 
   const region = address.split(' ');
@@ -37,11 +42,12 @@ const markerEl = (rateData: RateType) => {
   return wrapper;
 };
 
-const largeMarkerEl = (rateData: RateType) => {
+const largeMarkerEl = (rateData: IMapInfo) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay customoverlay_large';
 
-  const { address, total, count, categories } = rateData;
+  const { address, count, categories } = rateData;
+  const total = calcTotal(categories);
   const averageRate = total / count;
 
   const safety = categories.safety / count;
@@ -89,7 +95,7 @@ const getRandomRate = () => {
   return random(1, 5);
 };
 
-const regionToRates = (region): RateType => {
+const regionToRates = (region): IMapInfo => {
   const count = random(0, 100);
   const safety = getRandomRate() * count;
   const traffic = getRandomRate() * count;
@@ -101,7 +107,6 @@ const regionToRates = (region): RateType => {
     code: region.code,
     codeLength: region.codeLength,
     center: region.center,
-    total: (safety + traffic + food + entertainment) / 4,
     count: count,
     categories: {
       safety,
@@ -115,7 +120,7 @@ const regionToRates = (region): RateType => {
 const requestRates = async (
   scale: number,
   region: string[],
-): Promise<RateType[]> => {
+): Promise<IMapInfo[]> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/rates?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
@@ -125,7 +130,7 @@ const requestRates = async (
       }
       throw Error('요청 실패');
     })
-    .then((res: APIResultType<RateType[]>) => {
+    .then((res: IAPIResult<IMapInfo[]>) => {
       return res.result;
     })
     .catch((err) => {
@@ -134,7 +139,7 @@ const requestRates = async (
     });
 };
 
-const createMarkers = (rateDatas: RateType[]): kakao.maps.CustomOverlay[] => {
+const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
   return rateDatas.map((rateData) => {
     const { center } = rateData;
     const marker = new kakao.maps.CustomOverlay({
@@ -169,7 +174,7 @@ const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
 };
 
 const createMarkerClickListener = (
-  onClick: (rateData: RateType) => void,
+  onClick: (rateData: IMapInfo) => void,
   onOutsideClick: () => void,
 ) => {
   const onMarkerClicked = (e: MouseEvent) => {
@@ -191,7 +196,7 @@ const createMarkerClickListener = (
 };
 
 const LFURates = async (
-  cache: Map<string, RateType[] & { hitCount: number }>,
+  cache: Map<string, IMapInfo[] & { hitCount: number }>,
   scale: number,
   region: string[],
 ) => {
@@ -215,7 +220,7 @@ const LFURates = async (
     if (rateData) rateData.hitCount++;
     return rateData;
   } else {
-    const rates = (await requestRates(scale, region)) as RateType[] & {
+    const rates = (await requestRates(scale, region)) as IMapInfo[] & {
       hitCount: number;
     };
     rates.hitCount = 1;

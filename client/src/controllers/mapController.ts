@@ -1,9 +1,6 @@
 import ColorHash from 'color-hash';
-
-export type RegionPolygon = kakao.maps.Polygon & {
-  address: string;
-  onClick?: () => void;
-};
+import { CoordType, IMap, IPolygon } from '@myTypes/Map';
+import { IAPIResult } from '@myTypes/Common';
 
 function getCurrentLocation(callback: (coord: CoordType) => void) {
   let coord: CoordType = [37.5642135, 127.0016985];
@@ -88,7 +85,7 @@ const isRangeEqual = (
 const requestCoord = async (
   scale: number,
   region: Array<string>,
-): Promise<Region[]> => {
+): Promise<IMap[]> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
@@ -98,7 +95,7 @@ const requestCoord = async (
       }
       throw Error('요청 실패');
     })
-    .then((res: APIResultType<Region[]>) => {
+    .then((res: IAPIResult<IMap[]>) => {
       return res.result;
     })
     .catch((err) => {
@@ -108,7 +105,7 @@ const requestCoord = async (
 };
 
 const createPolygons = (regions) => {
-  const polygons = Array<RegionPolygon>();
+  const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
   regions.forEach((region) => {
     const colorString = colorHash.hex(region.address);
@@ -125,7 +122,7 @@ const createPolygons = (regions) => {
   return polygons;
 };
 
-const addPolygonClickEvent = (polygon: RegionPolygon, onClick: () => void) => {
+const addPolygonClickEvent = (polygon: IPolygon, onClick: () => void) => {
   if (polygon.onClick) {
     kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
   }
@@ -133,7 +130,7 @@ const addPolygonClickEvent = (polygon: RegionPolygon, onClick: () => void) => {
   kakao.maps.event.addListener(polygon, 'click', onClick);
 };
 
-const removePolygonClickEvent = (polygon: RegionPolygon) => {
+const removePolygonClickEvent = (polygon: IPolygon) => {
   if (polygon.onClick) {
     kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
   }
@@ -165,7 +162,7 @@ const makeSinglePolygon = (
     strokeOpacity: 0.8,
     fillColor: colorString,
     fillOpacity: 0.7,
-  }) as RegionPolygon;
+  }) as IPolygon;
 
   addPolygonEvent(
     polygon,
@@ -203,7 +200,7 @@ const makeMultiPolygon = (
         strokeOpacity: 0.8,
         fillColor: colorString,
         fillOpacity: 0.7,
-      }) as RegionPolygon,
+      }) as IPolygon,
   );
 
   polygons.forEach((polygon) => {
@@ -238,7 +235,7 @@ const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
 };
 
 const LFURegions = async (
-  cache: Map<string, Region[] & { count: number }>,
+  cache: Map<string, IMap[] & { count: number }>,
   scale: number,
   region: string[],
 ) => {
@@ -262,7 +259,7 @@ const LFURegions = async (
     if (regions) regions.count++;
     return regions;
   } else {
-    const regions = (await requestCoord(scale, region)) as Region[] & {
+    const regions = (await requestCoord(scale, region)) as IMap[] & {
       count: number;
     };
     regions.count = 1;

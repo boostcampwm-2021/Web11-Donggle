@@ -1,5 +1,8 @@
+import { IAPIResult } from '@myTypes/Common';
+import { IMapInfo } from '@myTypes/Map';
+
 const spreadDropdown = async (keyword, isSpread, setResults) => {
-  const searchRegions = async (): Promise<APIResultType<MapInfo[] | []>> => {
+  const searchRegions = async (): Promise<IAPIResult<IMapInfo[] | []>> => {
     return await fetch(
       `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}`,
     )

@@ -12,17 +12,17 @@ import {
 import DynamicStarRateDiv from '@components/Common/DynamicStarRate';
 import { Category } from '@utils/enum';
 import { submitReview } from '@controllers/reviewController';
+import { ICategories, IReviewSubmit } from '@myTypes/Review';
 
 import React, { useCallback, useState } from 'react';
 
-interface ReviewType extends CategoryRateType {
-  address: string;
-  text: string;
-}
-
-const ReviewModal: React.FC<ReviewType> = ({ address, text, categories }) => {
+const ReviewModal: React.FC<IReviewSubmit> = ({
+  address,
+  text,
+  categories,
+}) => {
   const DEFAULT_ADDRESS = address || '대전시 서구 탄방동';
-  const [reviewData, setReviewData] = useState<ReviewType>({
+  const [reviewData, setReviewData] = useState<IReviewSubmit>({
     address: DEFAULT_ADDRESS,
     text: text || '',
     categories: categories || {
@@ -40,7 +40,7 @@ const ReviewModal: React.FC<ReviewType> = ({ address, text, categories }) => {
   }, []);
 
   const setCategoryRate = useCallback(
-    (category: keyof CategoryRateType['categories'], rate: number) => {
+    (category: keyof ICategories, rate: number) => {
       setReviewData((prevData) => {
         return {
           ...prevData,

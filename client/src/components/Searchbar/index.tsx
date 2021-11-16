@@ -9,15 +9,16 @@ import {
 import { spreadDropdown } from '@controllers/searchbarController';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { IMapInfo } from '@myTypes/Map';
 
 interface SearchbarProps {
-  onClickHandler: (mapInfo: MapInfo) => void | Promise<void>;
+  onClickHandler: (mapInfo: IMapInfo) => void | Promise<void>;
 }
 
 const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
   const [input, setInput] = useState('');
 
-  const [results, setResults] = useState<MapInfo[]>([]);
+  const [results, setResults] = useState<IMapInfo[]>([]);
   const isSpread = useRef(false);
   const inputTagRef = useRef<HTMLInputElement>(null);
 

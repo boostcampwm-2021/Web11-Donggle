@@ -9,15 +9,13 @@ import {
   StarRateDiv,
   StarBtn,
 } from './index.style';
+import { ICategories } from '@myTypes/Review';
 
 interface IProps {
-  category: keyof CategoryRateType['categories'];
+  category: keyof ICategories;
   name: string;
   rate: number;
-  setCategoryRate: (
-    category: keyof CategoryRateType['categories'],
-    rate: number,
-  ) => void;
+  setCategoryRate: (category: keyof ICategories, rate: number) => void;
 }
 
 const DynamicStarRateDiv: React.FC<IProps> = ({
