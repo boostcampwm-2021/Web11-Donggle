@@ -14,11 +14,13 @@ import { IMapInfo } from '@myTypes/Map';
 interface SearchbarProps {
   onClickHandler: (mapInfo: IMapInfo) => void | Promise<void>;
   valueState?: string;
+  onlyDong?: boolean;
 }
 
 const Searchbar: React.FC<SearchbarProps> = ({
   onClickHandler,
   valueState,
+  onlyDong = false,
 }) => {
   const [input, setInput] = useState('');
 
@@ -27,7 +29,7 @@ const Searchbar: React.FC<SearchbarProps> = ({
   const inputTagRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    spreadDropdown(input, isSpread.current, setResults);
+    spreadDropdown(input, isSpread.current, setResults, onlyDong);
   }, [input]);
 
   useEffect(() => {

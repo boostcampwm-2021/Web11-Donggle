@@ -36,6 +36,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         <Searchbar
           onClickHandler={onClickHandler}
           valueState={mapInfo.address}
+          onlyDong={true}
         />
       </ModalSizer>
       <ButtonWrapper>
