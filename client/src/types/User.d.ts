@@ -15,4 +15,9 @@ interface IAuthInfo extends IUser {
   isLoggedin: boolean;
 }
 
-export { IUserInfo, IAuthInfo };
+interface IToken {
+  jwtToken: string;
+  address: string;
+}
+
+export { IUserInfo, IAuthInfo, IToken };

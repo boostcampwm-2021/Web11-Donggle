@@ -29,8 +29,6 @@ const getToken = async (): Promise<
 
     return [userInfoResponse.status, userInfo];
   } catch (error) {
-    //const err = error as Error;
-    //console.log(err.message);
     return [500, { result: {}, message: '오류가 발생했습니다.' }];
   }
 };
@@ -49,10 +47,10 @@ const isMember = (
     문혜현
     로그인에 실패했을 시 다시 signin 페이지로 가야 하는데 아직 routeHistory 구현 못함
     */
-    //routeHistory('/signin', {});
+    routeHistory('/signin', {});
   }
 
-  if (!userInfo.result.jwtToken) {
+  if (status == 200 && !userInfo.result.jwtToken) {
     /*
     2021-11-16
     문혜현

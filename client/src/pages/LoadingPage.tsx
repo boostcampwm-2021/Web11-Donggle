@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { authState } from '@stores/atoms';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 import LoadAnimation from '@components/Loading/index';
-import { getToken, isMember } from '@controllers/authController';
+import { getToken, isMember } from '@controllers/signInController';
 import { IAuthInfo } from '@myTypes/User';
 
 const Body = styled.div`

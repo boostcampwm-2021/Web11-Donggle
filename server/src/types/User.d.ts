@@ -3,6 +3,8 @@ import { Request } from 'express';
 interface UserInfo {
   oauthEmail: string;
   address: string;
+  code: string;
+  center: [number, number];
   image: string;
 }
 interface AuthRequest extends Request {
