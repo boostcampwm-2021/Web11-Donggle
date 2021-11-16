@@ -36,7 +36,6 @@ router.get('/rates', (async (req: Request, res: Response) => {
         medium as string,
         small as string,
       );
-      console.log(rates);
       res.status(200).json(makeApiResponse(rates, ''));
     } else {
       res.status(200).json(makeApiResponse([], ''));

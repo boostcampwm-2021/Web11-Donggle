@@ -31,6 +31,22 @@ router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
   }
 }) as RequestHandler);
 
+router.get('/', (async (req: Request, res: Response) => {
+  try {
+    const address = req.query.address as string;
+    if (!address)
+      throw new Error('정상적이지 않은 요청입니다. Address 값 부재');
+    const data = await reviewService.queryReviews(address);
+    res.status(200).json(makeApiResponse(data, ''));
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res
+      .status(500)
+      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+  }
+}) as RequestHandler);
+
 router.post('/', (async (req: ReviewInsertRequest, res: Response) => {
   try {
     const insertData = req.body;
