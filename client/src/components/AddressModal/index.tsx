@@ -23,7 +23,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   onCancelHandler,
   toggleModal,
 }) => {
-  const [mapInfo, setMapInfo] = useState({});
+  const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
   const onClickHandler = (mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
@@ -33,7 +33,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
     <Modal toggleModal={toggleModal}>
       <ModalSizer>
         <TitleWrapper>{title}</TitleWrapper>
-        <Searchbar onClickHandler={onClickHandler} />
+        <Searchbar
+          onClickHandler={onClickHandler}
+          valueState={mapInfo.address}
+        />
       </ModalSizer>
       <ButtonWrapper>
         <SubmitButton cancel={false} onClick={() => onSubmitHandler(mapInfo)}>
