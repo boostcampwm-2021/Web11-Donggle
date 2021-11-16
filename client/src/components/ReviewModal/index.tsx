@@ -16,15 +16,13 @@ import { ICategories, IReviewSubmit } from '@myTypes/Review';
 import { useRecoilValue } from 'recoil';
 import { authState } from '@stores/atoms';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 
 const ReviewModal: React.FC = () => {
   const DEFAULT_ADDRESS = '대전광역시 서구 탄방동';
+  const [history, routeHistory] = useHistoryRouter();
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
-    /*
-      홍종우
-      아래 값 중 code, center, user 등은 recoil 값으로 변경 필요
-    */
     address: useRecoilValue(authState).address || DEFAULT_ADDRESS,
     user: 'testUser',
     text: '',
@@ -56,7 +54,7 @@ const ReviewModal: React.FC = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    submitReview(reviewData);
+    submitReview(reviewData, routeHistory);
   };
 
   const RatingStars = (Object.keys(Category) as (keyof typeof Category)[]).map(

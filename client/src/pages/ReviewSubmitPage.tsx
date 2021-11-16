@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import ReviewModal from '@components/ReviewModal';
 
 const ReviewSubmitDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 `;
 
 const ReviewSubmitPage: React.FC = () => {
