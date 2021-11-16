@@ -14,10 +14,16 @@ const initializeReviewModel = async () => {
 const queryReviews = async (address: string): Promise<Review[]> => {
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
-  const reviewData = await ReviewModel.find({
-    address: { $regex: RegExp(address, 'g') },
-    createdAt: { $gte: sixMonth },
-  });
+
+  const fields = { __v: 0 };
+
+  const reviewData = await ReviewModel.find(
+    {
+      address: { $regex: RegExp(address, 'g') },
+      createdAt: { $gte: sixMonth },
+    },
+    fields,
+  );
 
   return reviewData;
 };
