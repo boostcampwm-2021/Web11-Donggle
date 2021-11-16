@@ -75,12 +75,8 @@ const Profile: React.FC = withRouter(({ history, location }) => {
       {isModal && (
         <AddressModal
           title="우리 동네를 입력해주세요!"
-          onSubmitHandler={() => {
-            console.log('?');
-          }}
-          onCancelHandler={() => {
-            console.log('?');
-          }}
+          onSubmitHandler={updateAddress(auth, setAuth)}
+          onCancelHandler={toggleModal}
           toggleModal={toggleModal}
         />
       )}
