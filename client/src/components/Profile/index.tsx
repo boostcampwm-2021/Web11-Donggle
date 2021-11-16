@@ -25,9 +25,6 @@ const Profile: React.FC = () => {
   const location = useLocation();
 
   const [auth, setAuth] = useRecoilState(authState);
-  const [isModal, setIsModal] = useState(
-    location.pathname === '/profile/update-address',
-  );
 
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
 

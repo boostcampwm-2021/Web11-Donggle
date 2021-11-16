@@ -5,7 +5,7 @@ interface SubmitButton {
 }
 
 const ModalSizer = styled.div`
-  height: 700px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
