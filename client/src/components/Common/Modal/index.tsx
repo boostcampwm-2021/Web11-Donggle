@@ -23,6 +23,7 @@ const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
 
   const onClick = () => {
     setIsActive(!isActive);
+    history.goBack();
   };
 
   // scroll 작동 금지
@@ -77,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
     <>
       {isActive && (
         <ModalOverlay>
-          <ModalWrapper className="modal" ref={modalRef}>
+          <ModalWrapper ref={modalRef}>
             <ModalCloseBtnDiv>
               <ModalCloseBtn onClick={onClick}>
                 <ModalCloseImage />
