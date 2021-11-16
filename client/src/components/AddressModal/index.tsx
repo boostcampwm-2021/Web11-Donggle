@@ -14,14 +14,12 @@ interface AddressModalProps {
   title: string;
   onSubmitHandler;
   onCancelHandler;
-  toggleModal?: () => void;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
   title,
   onSubmitHandler,
   onCancelHandler,
-  toggleModal,
 }) => {
   const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
@@ -30,7 +28,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   };
 
   return (
-    <Modal toggleModal={toggleModal}>
+    <Modal>
       <ModalSizer>
         <TitleWrapper>{title}</TitleWrapper>
         <Searchbar
