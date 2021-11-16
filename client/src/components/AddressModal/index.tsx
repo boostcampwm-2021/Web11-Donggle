@@ -39,7 +39,13 @@ const AddressModal: React.FC<AddressModalProps> = ({
         />
       </ModalSizer>
       <ButtonWrapper>
-        <SubmitButton cancel={false} onClick={() => onSubmitHandler(mapInfo)}>
+        <SubmitButton
+          cancel={false}
+          onClick={async () => {
+            await onSubmitHandler(mapInfo);
+            onCancelHandler();
+          }}
+        >
           제출
         </SubmitButton>
         <SubmitButton cancel={true} onClick={onCancelHandler}>
