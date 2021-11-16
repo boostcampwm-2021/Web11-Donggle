@@ -8,9 +8,16 @@ type ThemeComponent = {
 };
 
 type Theme = {
+  componentSize: ThemeComponent;
   fontSizes: ThemeComponent;
   colors: ThemeComponent;
   common: ThemeComponent;
+};
+
+const componentSize: ThemeComponent = {
+  header: '140px',
+  headerLayout: '80px',
+  headerColorbar: '60px',
 };
 
 const fontSizes: ThemeComponent = {
@@ -55,6 +62,7 @@ const common: ThemeComponent = {
 
 // theme 객체에 감싸서 반환한다.
 const theme: Theme = {
+  componentSize,
   fontSizes,
   colors,
   common,

@@ -22,7 +22,7 @@ const Layout = styled.div`
   top: 0;
   display: flex;
   width: 100%;
-  height: 80px;
+  height: ${(props) => props.theme.componentSize.headerLayout};
   padding: 5px 10px;
 `;
 
@@ -106,7 +106,7 @@ const UserProfile = styled.div`
 
 const ColorBar = styled.div`
   width: 100%;
-  height: 60px;
+  height: ${(props) => props.theme.componentSize.headerColorbar};
   background: ${(props) => props.theme.colors.lightgreen};
 `;
 

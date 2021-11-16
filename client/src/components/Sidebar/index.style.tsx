@@ -5,7 +5,7 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 100%;
+  height: calc(100% - ${(props) => props.theme.componentSize.header});
   right: 0;
   z-index: 1;
   overflow-y: scroll;
@@ -13,7 +13,6 @@ const Layout = styled.div`
   transform: translateX(400px);
 
   transition: all ease 0.3s 0s;
-  padding-bottom: 8.7em;
   &.open {
     transform: translateX(0px);
   }
