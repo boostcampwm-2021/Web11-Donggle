@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useHistoryRouter from '@utils/useRouter';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import qs from 'qs';

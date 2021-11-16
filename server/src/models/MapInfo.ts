@@ -2,18 +2,14 @@ import { Schema, model } from 'mongoose';
 
 type CoordType = [number, number];
 
-interface Rate {
-  count: number;
-  total: number;
+interface Categories {
   safety: number;
   traffic: number;
   food: number;
   entertainment: number;
 }
 
-const rateSchema = new Schema<Rate>({
-  count: { type: Number, required: true },
-  total: { type: Number, required: true },
+const rateSchema = new Schema<Categories>({
   safety: { type: Number, required: true },
   traffic: { type: Number, required: true },
   food: { type: Number, required: true },
@@ -25,8 +21,9 @@ interface MapInfo {
   code: string;
   codeLength: number;
   center: CoordType;
+  count: number;
   //현재는 리뷰 정보가 없으므로 require를 false로함
-  rate?: Rate;
+  categories?: Categories;
 }
 
 const mapInfoSchema = new Schema<MapInfo>({
@@ -34,8 +31,9 @@ const mapInfoSchema = new Schema<MapInfo>({
   code: { type: String, required: true },
   codeLength: { type: Number, required: true, index: true },
   center: { type: [Number, Number], required: true },
+  count: { type: Number, required: true, default: 0 },
   //현재는 리뷰 정보가 없으므로 require를 false로함
-  rate: { type: rateSchema, required: false },
+  categories: { type: rateSchema, required: false },
 });
 
 const MapInfoModel = model<MapInfo>('MapInfo', mapInfoSchema);

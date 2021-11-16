@@ -1,3 +1,5 @@
+import { IMapInfo } from '@myTypes/Map';
+
 const uploadImage = async (e, auth, setAuth) => {
   const image = e.target.files[0];
   const formData = new FormData();
@@ -31,7 +33,7 @@ const deleteImage = async (auth, setAuth) => {
   setAuth((prev) => ({ ...prev, image: result.image }));
 };
 
-const updateAddress = (auth, setAuth) => async (mapInfo: MapInfo) => {
+const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
     {

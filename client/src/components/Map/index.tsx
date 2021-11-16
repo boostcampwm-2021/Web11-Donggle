@@ -13,7 +13,6 @@ import {
   LFURegions,
   addPolygonClickEvent,
   removePolygonClickEvent,
-  RegionPolygon,
 } from '@controllers/mapController';
 import {
   createMarkers,
@@ -24,6 +23,7 @@ import {
   findMarker,
 } from '@controllers/markerController';
 
+import { IMapInfo, IPolygon } from '@myTypes/Map';
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ const DEFAULT_POSITION = {
 interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
-  updateSidebarRate: (rateData: RateType) => void;
+  updateSidebarRate: (rateData: IMapInfo) => void;
   toggleSidebar: () => void;
 }
 
@@ -58,9 +58,9 @@ const MapComponent: React.FC<IProps> = ({
   });
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
-  const [polygons, setPolygons] = useState(Array<RegionPolygon>());
+  const [polygons, setPolygons] = useState(Array<IPolygon>());
 
-  const moveTo = (to: MapInfo) => {
+  const moveTo = (to: IMapInfo) => {
     if (map === null) {
       return;
     }
@@ -127,7 +127,7 @@ const MapComponent: React.FC<IProps> = ({
     if (!mapWrapper.current) return;
 
     const wrapper = mapWrapper.current;
-    const onClick = (rateData: RateType) => {
+    const onClick = (rateData: IMapInfo) => {
       updateSidebarRate(rateData);
       openSidebar();
     };
@@ -183,7 +183,7 @@ const MapComponent: React.FC<IProps> = ({
         markerCache.current,
         scale,
         region,
-      )) as RateType[];
+      )) as IMapInfo[];
       const markers = createMarkers(rates);
       setMarkers(markers);
     };

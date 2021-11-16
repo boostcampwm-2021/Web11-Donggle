@@ -8,7 +8,9 @@
       "@pages/*": ["pages/*"],
       "@stores/*": ["stores/*"],
       "@styledComponents/*": ["styledComponents/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@myTypes/*": ["types/*"],
+      "@hooks/*": ["hooks/*"]
     }
   }
 }

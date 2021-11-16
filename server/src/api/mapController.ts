@@ -36,29 +36,10 @@ router.get('/rates', (async (req: Request, res: Response) => {
         medium as string,
         small as string,
       );
-      res.json(makeApiResponse(rates, ''));
+      console.log(rates);
+      res.status(200).json(makeApiResponse(rates, ''));
     } else {
-      res.json(
-        makeApiResponse(
-          [
-            {
-              address: '',
-              code: '',
-              codeLength: 0,
-              center: [],
-              total: 0,
-              count: 0,
-              categories: {
-                safety: 0,
-                traffic: 0,
-                food: 0,
-                entertainment: 0,
-              },
-            },
-          ],
-          '',
-        ),
-      );
+      res.status(200).json(makeApiResponse([], ''));
     }
   } catch (error) {
     const err = error as Error;

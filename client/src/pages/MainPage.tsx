@@ -3,6 +3,8 @@ import Map from '@components/Map/index';
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Sidebar from '@components/Sidebar';
+import { IReviewRate } from '@myTypes/Review';
+import { IMapInfo } from '@myTypes/Map';
 
 const MainDiv = styled.div`
   width: 100vw;
@@ -18,7 +20,7 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-const TemporaryReviewData: ReviewType[] = [
+const TemporaryReviewData: IReviewRate[] = [
   {
     categories: {
       safety: 4,
@@ -49,12 +51,11 @@ const TemporaryHashTagData: string[] = [
   '역이 가까운',
 ];
 
-const DEFAULT_RATE_DATA: RateType = {
+const DEFAULT_RATE_DATA: IMapInfo = {
   address: '',
   code: '',
   codeLength: 0,
   center: [37.541, 126.986],
-  total: 9,
   count: 2,
   categories: {
     safety: 8,
@@ -80,7 +81,7 @@ const MainPage: React.FC = () => {
     setSidebar(false);
   }, []);
 
-  const updateSidebarRate = useCallback((rateData: RateType) => {
+  const updateSidebarRate = useCallback((rateData: IMapInfo) => {
     setSidebarRate(rateData);
   }, []);
 

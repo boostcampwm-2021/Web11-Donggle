@@ -9,9 +9,11 @@ import {
   RateCategoryNum,
 } from './index.style';
 import { Category } from '@utils/enum';
+import { ICategories } from '@myTypes/Review';
 
-interface IProps extends CategoryRateType {
+interface IProps {
   count: number;
+  categories: ICategories;
 }
 
 const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {

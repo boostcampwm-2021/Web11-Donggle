@@ -1,4 +1,4 @@
-import Modal from '@components/Modal/index';
+import Modal from '@components/Common/Modal/index';
 import Searchbar from '@components/Searchbar/index';
 import {
   TitleWrapper,
@@ -6,6 +6,7 @@ import {
   SubmitButton,
   ModalSizer,
 } from '@components/AddressModal/index.style';
+import { IMapInfo } from '@myTypes/Map';
 
 import React, { useState } from 'react';
 
@@ -24,7 +25,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
 }) => {
   const [mapInfo, setMapInfo] = useState({});
 
-  const onClickHandler = (mapInfo: MapInfo) => {
+  const onClickHandler = (mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
   };
 
