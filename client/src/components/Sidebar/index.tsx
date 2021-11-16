@@ -28,7 +28,7 @@ import { IMapInfo } from '@myTypes/Map';
 import { IReviewRate } from '@myTypes/Review';
 import { calcTotal } from '@utils/common';
 
-export interface RateProps {
+export interface IProps {
   sidebar: boolean | null;
   rateData: IMapInfo;
   reviewData: IReviewRate[];
@@ -36,7 +36,7 @@ export interface RateProps {
   closeSidebar: () => void;
 }
 
-const Sidebar: React.FC<RateProps> = (props: RateProps) => {
+const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
   const history = useHistory();
   const location = useLocation();

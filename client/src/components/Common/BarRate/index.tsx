@@ -17,8 +17,9 @@ interface IProps {
 }
 
 const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
-  const bar = (Object.keys(categories) as (keyof typeof Category)[]).map(
-    (category) => {
+  const bar = Object.keys(categories)
+    .filter((category) => category !== '_id')
+    .map((category) => {
       return (
         <>
           <RateCategoryTitle>{Category[category]}</RateCategoryTitle>
@@ -32,8 +33,7 @@ const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
           </RateCategoryUnit>
         </>
       );
-    },
-  );
+    });
 
   return (
     <RateCategoryDiv>
