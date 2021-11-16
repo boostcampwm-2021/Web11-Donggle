@@ -11,12 +11,6 @@ import {
   HashTagDiv,
   MenuBarDiv,
   Menu,
-  ContentDiv,
-  ContentTopDiv,
-  UserText,
-  ContentTextDiv,
-  ContentBottomDiv,
-  DetailBtn,
   AddButtonDiv,
   AddButton,
 } from './index.style';

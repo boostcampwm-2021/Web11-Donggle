@@ -110,54 +110,6 @@ const Menu = styled.span`
   cursor: pointer;
 `;
 
-const ContentDiv = styled(BaseDiv)`
-  position: relative;
-  padding-bottom: 20px;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 22px;
-`;
-
-const ContentTopDiv = styled(BaseDiv)`
-  display: flex;
-  width: 90%;
-  justify-content: space-between;
-  border-bottom: none;
-`;
-
-const UserText = styled(SpanText)`
-  font-size: 12px;
-  color: ${(props) => props.theme.colors.ashgrey};
-`;
-
-const ContentTextDiv = styled(BaseDiv)`
-  width: 90%;
-  font-size: 12px;
-  border-bottom: none;
-  line-height: 22px;
-  color: ${(props) => props.theme.colors.ashgrey};
-`;
-
-const ContentBottomDiv = styled(BaseDiv)`
-  display: flex;
-  justify-content: center;
-  border-bottom: none;
-  margin-top: 25px;
-`;
-
-const DetailBtn = styled.button`
-  border: none;
-  font-size: 14px;
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.ashgrey};
-  cursor: pointer;
-
-  &:after {
-    margin-left: 10px;
-    content: '⇣';
-  }
-`;
-
 const AddButtonDiv = styled(BaseDiv)`
   position: relative;
   display: flex;
@@ -191,12 +143,6 @@ export {
   HashTagDiv,
   MenuBarDiv,
   Menu,
-  ContentDiv,
-  ContentTopDiv,
-  UserText,
-  ContentTextDiv,
-  ContentBottomDiv,
-  DetailBtn,
   AddButtonDiv,
   AddButton,
 };

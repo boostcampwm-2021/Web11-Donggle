@@ -13,8 +13,6 @@ interface IReviewContent {
 
 interface IReviewSubmit {
   address: string;
-  code: string;
-  center: [number, number];
   text: string;
   user: string;
   categories: ICategories;
