@@ -13,13 +13,19 @@ import DynamicStarRateDiv from '@components/Common/DynamicStarRate';
 import { Category } from '@utils/enum';
 import { submitReview } from '@controllers/reviewController';
 import { ICategories, IReviewSubmit } from '@myTypes/Review';
+import { useRecoilValue } from 'recoil';
+import { authState } from '@stores/atoms';
 
 import React, { useCallback, useState } from 'react';
 
 const ReviewModal: React.FC = () => {
   const DEFAULT_ADDRESS = '대전시 서구 탄방동';
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
-    address: DEFAULT_ADDRESS,
+    /*
+      홍종우
+      아래 값 중 code, center, user 등은 recoil 값으로 변경 필요
+    */
+    address: useRecoilValue(authState).address || DEFAULT_ADDRESS,
     code: '2503057',
     center: [36.345004173928714, 127.39156773642355],
     user: 'testUser',

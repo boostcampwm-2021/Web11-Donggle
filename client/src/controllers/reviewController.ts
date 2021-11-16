@@ -1,12 +1,8 @@
+import { IReviewSubmit } from '@myTypes/Review';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-interface ReviewDataType {
-  address: string;
-  text: string;
-}
-
-const submitReview = (data: ReviewDataType) => {
+const submitReview = (data: IReviewSubmit) => {
   confirmAlert({
     message: '후기를 제출하시겠습니까?',
     buttons: [
@@ -14,7 +10,7 @@ const submitReview = (data: ReviewDataType) => {
         label: '제출',
         className: 'overlay-confirmation-submit',
         onClick: async () => {
-          fetch(`${process.env.REACT_APP_API_URL}/review`, {
+          fetch(`${process.env.REACT_APP_API_URL}/api/review`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -3,13 +3,13 @@ import {
   NotFoundPage,
   MainPage,
   ReviewPage,
+  ReviewSubmitPage,
   RankingPage,
   SignInPage,
   LoadingPage,
   SignUpPage,
   ProfilePage,
 } from '@pages/index';
-import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
@@ -63,7 +63,9 @@ const App: React.FC = () => {
             <Route path="/profile" component={ProfilePage} />
             <Route component={NotFoundPage} />
           </Switch>
-          {background && <Route path="/write-review" component={ReviewModal} />}
+          {background && (
+            <Route path="/write-review" component={ReviewSubmitPage} />
+          )}
           {background && <Route path="/ranking" render={RankingPage} />}
           {background && <Route path="/signin" render={SignInPage} />}
         </GlobalStore>
