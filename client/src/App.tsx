@@ -4,9 +4,9 @@ import {
   MainPage,
   ReviewPage,
   RankingPage,
-  LoginPage,
-  CallbackPage,
   SignInPage,
+  LoadingPage,
+  SignUpPage,
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
@@ -29,14 +29,14 @@ const App: React.FC = () => {
           <Switch location={background || location}>
             <Route exact path="/" component={MainPage} />
             <Route path="/review" component={ReviewPage} />
-            <Route path="/login" component={LoginPage} />
-            <Route path="/github/callback" component={CallbackPage} />
             <Route path="/signin" component={SignInPage} />
+            <Route path="/github/callback" component={LoadingPage} />
+            <Route path="/signup" component={SignUpPage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/write-review" component={ReviewModal} />}
           {background && <Route path="/ranking" render={RankingPage} />}
-          {background && <Route path="/login" render={LoginPage} />}
+          {background && <Route path="/signin" render={SignInPage} />}
         </GlobalStore>
       </ThemeProvider>
     </>

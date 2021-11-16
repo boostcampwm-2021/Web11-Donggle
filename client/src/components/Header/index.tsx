@@ -10,7 +10,7 @@ import {
   MenuList,
   Menu,
   ProfileWrapper,
-  LoginBtn,
+  SignInBtn,
   LogoutBtn,
   UserProfile,
   ColorBar,
@@ -108,11 +108,13 @@ const Header: React.FC = () => {
                 </UserProfile>
               </>
             ) : (
-              <LoginBtn
-                onClick={() => routeHistory('/login', { background: location })}
+              <SignInBtn
+                onClick={() =>
+                  routeHistory('/signin', { background: location })
+                }
               >
                 로그인
-              </LoginBtn>
+              </SignInBtn>
             )}
           </ProfileWrapper>
         </Background>

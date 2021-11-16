@@ -39,18 +39,18 @@ const Ball = styled.div`
 `;
 
 const Balls1 = styled(Ball)`
-  background-image: linear-gradient(to bottom, #ffe93e, #ff952a);
+  background-image: linear-gradient(to bottom, #477a62, #33ab74);
 `;
 const Balls2 = styled(Ball)`
-  background-image: linear-gradient(to bottom, #ff009e, #ff0038);
+  background-image: linear-gradient(to bottom, #33ab74, #a9e884);
 `;
 
 const Balls3 = styled(Ball)`
-  background-image: linear-gradient(to bottom, #00f4fe, #00bdfb);
+  background-image: linear-gradient(to bottom, #a9e884, #00bdfb);
 `;
 
 const Balls4 = styled(Ball)`
-  background-image: linear-gradient(to bottom, #fc00f9, #b500f9);
+  background-image: linear-gradient(to bottom, #00bdfb, #005672);
 `;
 
 export const Balls_1 = styled(Balls1)`

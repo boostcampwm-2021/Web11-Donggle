@@ -5,7 +5,7 @@ import { authState } from '@stores/atoms';
 import SearchBar from '@components/Searchbar/signIn';
 import Modal from '@components/modal';
 import useHistoryRouter from '@utils/useRouter';
-import { SignInTitle, ButtonWrapper, SubmitButton } from './index.style';
+import { SignUpTitle, ButtonWrapper, SubmitButton } from './index.style';
 
 interface AuthInfo {
   isLoggedin: boolean;
@@ -18,7 +18,7 @@ interface ErrMsg {
   err: string;
 }
 
-const SignInPlate: React.FC = () => {
+const SignUpModal: React.FC = () => {
   const [auth, setAuth] = useRecoilState<AuthInfo>(authState);
   const [history, routeHistory] = useHistoryRouter();
 
@@ -74,9 +74,9 @@ const SignInPlate: React.FC = () => {
 
   return (
     <Modal>
-      <SignInTitle>
+      <SignUpTitle>
         회원가입을 위해서 우리 동네 정보를 입력해주세요!
-      </SignInTitle>
+      </SignUpTitle>
       <SearchBar />
       <ButtonWrapper>
         <SubmitButton cancel={false} onClick={onSubmitClick}>
@@ -90,4 +90,4 @@ const SignInPlate: React.FC = () => {
   );
 };
 
-export default SignInPlate;
+export default SignUpModal;

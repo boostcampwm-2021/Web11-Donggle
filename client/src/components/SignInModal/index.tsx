@@ -11,7 +11,7 @@ import {
   CenteredSpan,
 } from './index.style';
 
-type LoginButtonProps = {
+type SignInButtonProps = {
   IconComponent: React.FC;
   text: string;
   color: string;
@@ -19,7 +19,7 @@ type LoginButtonProps = {
   onClick?: () => void;
 };
 
-const LoginButton: React.FC<LoginButtonProps> = (props) => {
+const SignInButton: React.FC<SignInButtonProps> = (props) => {
   const { IconComponent, text, color, bgColor, onClick } = props;
 
   return (
@@ -32,40 +32,40 @@ const LoginButton: React.FC<LoginButtonProps> = (props) => {
   );
 };
 
-const loginGithub = () => {
+const signInGithub = () => {
   const client_id = process.env.REACT_APP_CLIENT_ID;
   const redirect_url = process.env.REACT_APP_REDIRECT_URL;
-  const loginUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=read:user&redirect_uri=${redirect_url}`;
-  window.location.href = loginUrl;
+  const signInUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=read:user&redirect_uri=${redirect_url}`;
+  window.location.href = signInUrl;
 };
 
-const LoginPlate: React.FC = () => {
+const SignInModal: React.FC = () => {
   return (
     <Modal>
       <ColumnFlex>
         <CenteredSpan>내가 사는 동네 평점을 남겨보세요</CenteredSpan>
-        <LoginButton
+        <SignInButton
           IconComponent={GoogleIcon}
           text="Google 로그인"
           color="#000000"
           bgColor="#ffffff"
-          onClick={loginGithub}
-        ></LoginButton>
-        <LoginButton
+          onClick={signInGithub}
+        ></SignInButton>
+        <SignInButton
           IconComponent={NaverIcon}
           text="네이버 로그인"
           color="#ffffff"
           bgColor="#03c75a"
-        ></LoginButton>
-        <LoginButton
+        ></SignInButton>
+        <SignInButton
           IconComponent={FacebookIcon}
           text="Facebook 로그인"
           color="#ffffff"
           bgColor="#3c5a99"
-        ></LoginButton>
+        ></SignInButton>
       </ColumnFlex>
     </Modal>
   );
 };
 
-export default LoginPlate;
+export default SignInModal;
