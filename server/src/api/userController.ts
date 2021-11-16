@@ -49,7 +49,9 @@ router.patch(
     const body: ProfileImageBody = req.body as ProfileImageBody;
     const { oauth_email, image: prevImage } = body;
 
-    if (oauth_email && prevImage && req.file) {
+    console.log(oauth_email, prevImage);
+
+    if (oauth_email && req.file) {
       try {
         let image = `${process.env.IMAGE_ENDPOINT as string}/${
           process.env.IMAGE_BUCKET as string
@@ -83,13 +85,13 @@ router.delete('/profile-image', (async (req: Request, res: Response) => {
 
   if (oauth_email && image) {
     try {
-      const result = await userService.deleteProfileImage(
+      await userService.deleteProfileImage(
         oauth_email as string,
         image as string,
       );
       res
         .status(200)
-        .json(makeApiResponse(result, '성공적으로 이미지를 삭제했어요.'));
+        .json(makeApiResponse('', '성공적으로 이미지를 삭제했어요.'));
     } catch (error) {
       const err = error as Error;
       logger.error(err.message);
@@ -100,12 +102,6 @@ router.delete('/profile-image', (async (req: Request, res: Response) => {
   } else {
     res.status(500).json(makeApiResponse({}, '필요한 쿼리스트링이 비었어요.'));
   }
-
-  res.json({
-    image: `${process.env.IMAGE_ENDPOINT as string}/${
-      process.env.IMAGE_BUCKET as string
-    }/user-profile.png`,
-  });
 }) as RequestHandler);
 
 router.patch('/profile-address', (async (req: Request, res: Response) => {
@@ -120,9 +116,9 @@ router.patch('/profile-address', (async (req: Request, res: Response) => {
       if (updateResult) {
         res
           .status(200)
-          .json(makeApiResponse({ address }, '주소 업데이트에 성공했어요.'));
+          .json(makeApiResponse(address, '주소 업데이트에 성공했어요.'));
       } else {
-        res.status(200).json(makeApiResponse({}, '일치하는 아이디가 없어요.'));
+        res.status(500).json(makeApiResponse({}, '일치하는 아이디가 없어요.'));
       }
     } catch (error) {
       const err = error as Error;
