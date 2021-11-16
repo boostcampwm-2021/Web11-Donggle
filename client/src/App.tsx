@@ -5,12 +5,9 @@ import {
   ReviewPage,
   RankingPage,
   SignInPage,
-<<<<<<< HEAD
   LoadingPage,
   SignUpPage,
-=======
   ProfilePage,
->>>>>>> Feat: #69 - 프로필 페이지 라우팅 구현
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';

@@ -74,7 +74,6 @@ const Profile: React.FC = withRouter(({ history, location }) => {
       <AddressWrapper onClick={toggleModal}>{auth.address}</AddressWrapper>
       {isModal && (
         <AddressModal
-          toggleModal={toggleModal}
           title="우리 동네를 입력해주세요!"
           onSubmitHandler={() => {
             console.log('?');
@@ -82,6 +81,7 @@ const Profile: React.FC = withRouter(({ history, location }) => {
           onCancelHandler={() => {
             console.log('?');
           }}
+          toggleModal={toggleModal}
         />
       )}
     </>

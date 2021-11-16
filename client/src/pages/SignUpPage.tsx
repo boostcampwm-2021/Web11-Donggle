@@ -1,18 +1,18 @@
+import AddressModal from '@components/AddressModal/index';
+
 import React from 'react';
-import styled from 'styled-components';
-
-import SignUpModal from '@components/SignUpModal/index';
-
-const SignUpDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
-`;
 
 const SignUpPage: React.FC = () => {
   return (
-    <SignUpDiv>
-      <SignUpModal />
-    </SignUpDiv>
+    <AddressModal
+      title="타이틀"
+      onSubmitHandler={() => {
+        console.log('확인 버튼');
+      }}
+      onCancelHandler={() => {
+        console.log('취소 버튼');
+      }}
+    />
   );
 };
 

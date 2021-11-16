@@ -2,14 +2,14 @@ import Modal from '@components/Modal/index';
 import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
 import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
 import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
-
-import React from 'react';
 import {
   ColumnFlex,
   FlexButton,
   StretchingDiv,
   CenteredSpan,
 } from './index.style';
+
+import React from 'react';
 
 type SignInButtonProps = {
   IconComponent: React.FC;

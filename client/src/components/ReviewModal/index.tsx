@@ -1,7 +1,5 @@
-import React, { useCallback, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-
 import Modal from '@components/Modal/index';
 import {
   TitleDiv,
@@ -14,6 +12,8 @@ import {
 import DynamicStarRateDiv from '@components/Common/DynamicStarRate';
 import { Category } from '@utils/enum';
 import { submitReview } from '@controllers/reviewController';
+
+import React, { useCallback, useState } from 'react';
 
 interface ReviewType extends CategoryRateType {
   address: string;

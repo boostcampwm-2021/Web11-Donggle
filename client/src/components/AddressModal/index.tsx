@@ -10,17 +10,17 @@ import {
 import React, { useState } from 'react';
 
 interface AddressModalProps {
-  toggleModal: () => void;
   title: string;
   onSubmitHandler;
   onCancelHandler;
+  toggleModal?: () => void;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
-  toggleModal,
   title,
   onSubmitHandler,
   onCancelHandler,
+  toggleModal,
 }) => {
   const [mapInfo, setMapInfo] = useState({});
 
