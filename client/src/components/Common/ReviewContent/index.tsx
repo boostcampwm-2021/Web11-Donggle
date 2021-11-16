@@ -7,9 +7,11 @@ import {
   ContentBottomDiv,
   DetailBtn,
   CloseDetailBtn,
+  RateDiv,
 } from './index.style';
 import StarRateDiv from '@components/Common/StarRate';
 import { IReviewContent } from '@myTypes/Review';
+import BarRateDiv from '../BarRate';
 
 interface IProps {
   review: IReviewContent;
@@ -36,7 +38,17 @@ const ReviewContent: React.FC<IProps> = (props: IProps) => {
       <ContentTextDiv>{props.review.text}</ContentTextDiv>
       <ContentBottomDiv>
         {isDetailActive ? (
-          <CloseDetailBtn onClick={() => detailBtnClick()}>닫기</CloseDetailBtn>
+          <>
+            <RateDiv>
+              <BarRateDiv
+                count={1}
+                categories={props.review.categories}
+              ></BarRateDiv>
+            </RateDiv>
+            <CloseDetailBtn onClick={() => detailBtnClick()}>
+              닫기
+            </CloseDetailBtn>
+          </>
         ) : (
           <DetailBtn onClick={() => detailBtnClick()}>자세히보기</DetailBtn>
         )}

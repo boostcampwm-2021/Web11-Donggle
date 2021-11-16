@@ -45,12 +45,22 @@ const ContentTextDiv = styled(BaseDiv)`
 
 const ContentBottomDiv = styled(BaseDiv)`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   border-bottom: none;
   margin-top: 25px;
 `;
 
-const DetailBtn = styled.button`
+const RateDiv = styled(BaseDiv)`
+  flex-direction: column;
+  width: 100%;
+  padding-left: 60px;
+  border-bottom: none;
+`;
+
+const BaseBtn = styled.button`
+  display: block;
   border: none;
   font-size: 14px;
   background-color: transparent;
@@ -59,19 +69,16 @@ const DetailBtn = styled.button`
 
   &:after {
     margin-left: 10px;
+`;
+
+const DetailBtn = styled(BaseBtn)`
+  &:after {
     content: '⇣';
   }
 `;
 
-const CloseDetailBtn = styled.button`
-  border: none;
-  font-size: 14px;
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.ashgrey};
-  cursor: pointer;
-
+const CloseDetailBtn = styled(BaseBtn)`
   &:after {
-    margin-left: 10px;
     content: '⇡';
   }
 `;
@@ -84,4 +91,5 @@ export {
   ContentBottomDiv,
   DetailBtn,
   CloseDetailBtn,
+  RateDiv,
 };
