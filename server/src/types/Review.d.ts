@@ -17,7 +17,10 @@ export interface ReviewRequest extends Request {
 export interface ReviewInsertRequest extends Request {
   body: {
     address: string;
+    code: string;
+    center: [number, number];
     text: string;
+    user: string;
     categories: CategoryRateType;
   };
 }

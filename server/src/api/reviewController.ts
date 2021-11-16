@@ -33,11 +33,8 @@ router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
 
 router.post('/', (async (req: ReviewInsertRequest, res: Response) => {
   try {
-    const insertData = {
-      address: req.body.address,
-      text: req.body.text,
-      rate: req.body.categories,
-    };
+    console.log('insert', req.body);
+    const insertData = req.body;
     if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');
     await reviewService.insertReview(insertData);
     res
