@@ -37,36 +37,40 @@ const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
 
   // 모달창 바깥 클릭 시 모달창 없애기
   // https://chach4.tistory.com/4 참고
-  useEffect(() => {
-    const handleCloseModal = (e) => {
-      if (
-        !e.target.closest('.overlay-confirmation-submit') &&
-        e.target.closest('.overlay-confirmation-alert')
-      ) {
-        return;
-      }
-      if (
-        isActive &&
-        (!modalRef.current || !modalRef.current.contains(e.target))
-      ) {
-        setIsActive(!isActive);
-        history.goBack();
-        if (toggleModal) {
-          toggleModal();
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const handleCloseModal = (e) => {
+  //     if (
+  //       !e.target.closest('.overlay-confirmation-submit') &&
+  //       e.target.closest('.overlay-confirmation-alert')
+  //     ) {
+  //       return;
+  //     }
+  //     if (
+  //       isActive &&
+  //       (!modalRef.current || !modalRef.current.contains(e.target))
+  //     ) {
+  //       console.log(!modalRef?.current?.contains(e.target));
+  //       console.log(e.target.closest('.modal'));
+  //       console.log(e.target.closest('body'));
+  //       console.log(e.target);
+  //       setIsActive(!isActive);
+  //       history.goBack();
+  //       if (toggleModal) {
+  //         toggleModal();
+  //       }
+  //     }
+  //   };
 
-    if (isActive) {
-      window.addEventListener('click', handleCloseModal);
-    } else {
-      window.removeEventListener('click', handleCloseModal);
-    }
+  //   if (isActive) {
+  //     window.addEventListener('click', handleCloseModal);
+  //   } else {
+  //     window.removeEventListener('click', handleCloseModal);
+  //   }
 
-    return () => {
-      window.removeEventListener('click', handleCloseModal);
-    };
-  }, [isActive]);
+  //   return () => {
+  //     window.removeEventListener('click', handleCloseModal);
+  //   };
+  // }, [isActive]);
 
   return (
     <>
