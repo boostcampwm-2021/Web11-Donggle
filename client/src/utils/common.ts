@@ -5,7 +5,6 @@ const calcTotal = (categories: ICategories) => {
     Object.keys(categories)
       .filter((category) => category !== '_id')
       .map((category) => {
-        console.log(categories[category]);
         return categories[category];
       })
       .reduce((total, current) => current + total, 0) / 4;

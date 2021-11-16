@@ -3,7 +3,7 @@ import Map from '@components/Map/index';
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Sidebar from '@components/Sidebar';
-import { IReviewRate } from '@myTypes/Review';
+import { IReviewContent } from '@myTypes/Review';
 import { IMapInfo } from '@myTypes/Map';
 
 const MainDiv = styled.div`
@@ -20,7 +20,7 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-const TemporaryReviewData: IReviewRate[] = [
+const TemporaryReviewData: IReviewContent[] = [
   {
     categories: {
       safety: 4,

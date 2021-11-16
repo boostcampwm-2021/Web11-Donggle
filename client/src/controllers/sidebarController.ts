@@ -1,0 +1,3 @@
+const clickDetailBtnHandler = () => {};
+
+export { clickDetailBtnHandler };

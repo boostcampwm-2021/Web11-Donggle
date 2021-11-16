@@ -5,7 +5,7 @@ interface ICategories {
   entertainment: number;
 }
 
-interface IReviewRate {
+interface IReviewContent {
   text: string;
   user: string;
   categories: ICategories;
@@ -20,4 +20,4 @@ interface IReviewSubmit {
   categories: ICategories;
 }
 
-export { ICategories, IReviewRate, IReviewSubmit };
+export { ICategories, IReviewContent, IReviewSubmit };

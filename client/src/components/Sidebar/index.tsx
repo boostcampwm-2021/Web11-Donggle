@@ -24,13 +24,14 @@ import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
 import { IMapInfo } from '@myTypes/Map';
-import { IReviewRate } from '@myTypes/Review';
+import { IReviewContent } from '@myTypes/Review';
 import { calcTotal } from '@utils/common';
+import ReviewContent from '@components/Common/ReviewContent';
 
 export interface IProps {
   sidebar: boolean | null;
   rateData: IMapInfo;
-  reviewData: IReviewRate[];
+  reviewData: IReviewContent[];
   hashTagData: string[];
   closeSidebar: () => void;
 }
@@ -40,6 +41,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
   const history = useHistory();
   const location = useLocation();
   const fetchData = (menu: string) => {
+    // 아래 내용 구현 필요
     console.log(menu);
     setSelectedMenu(menu);
   };
@@ -78,23 +80,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
         </Menu>
       </MenuBarDiv>
       {props.reviewData.map((review, idx) => (
-        <ContentDiv key={idx}>
-          <ContentTopDiv>
-            <StarRateDiv
-              isLarge={false}
-              total={(
-                Object.keys(review.categories).reduce((prev, curr) => {
-                  return prev + review.categories[curr];
-                }, 0) / 4
-              ).toFixed(1)}
-            />
-            <UserText>{review.user}</UserText>
-          </ContentTopDiv>
-          <ContentTextDiv>{review.text}</ContentTextDiv>
-          <ContentBottomDiv>
-            <DetailBtn>자세히보기</DetailBtn>
-          </ContentBottomDiv>
-        </ContentDiv>
+        <ReviewContent key={idx} review={review} />
       ))}
       <AddButtonDiv>
         <AddButton
