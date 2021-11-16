@@ -1,29 +1,14 @@
-type CoordType = [number, number];
-
-interface Rate {
-  count: number;
-  total: number;
-  safety: number;
-  traffic: number;
-  food: number;
-  entertainment: number;
-}
-
-interface MapInfo {
-  address: string;
-  code: string;
-  codeLength: number;
-  center: CoordType;
-  //현재는 리뷰 정보가 없으므로 require를 false로함
-  rate?: Rate;
-}
-
 const spreadDropdown = async (keyword, isSpread, setResults) => {
-  const searchRegions = async (): Promise<MapInfo[] | []> => {
+  const searchRegions = async (): Promise<APIResultType<MapInfo[] | []>> => {
     return await fetch(
       `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}`,
     )
-      .then(async (response) => await response.json())
+      .then(async (response) => {
+        if (response.status === 200) {
+          return await response.json();
+        }
+        throw new Error('검색 결과를 받아오는데 실패했습니다!');
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -34,7 +19,8 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
     isSpread = _isSpread;
   };
 
-  const result: MapInfo[] | [] = await searchRegions();
+  const { result } = await searchRegions();
+
   if (result.length > 0) {
     setDropdown(result, true);
   } else {
@@ -42,36 +28,4 @@ const spreadDropdown = async (keyword, isSpread, setResults) => {
   }
 };
 
-const moveTo = (
-  map: kakao.maps.Map | null,
-  to: MapInfo,
-  setResults,
-  inputTagRef,
-) => {
-  if (map === null) {
-    return;
-  }
-  const [x, y] = to.center;
-  const newCenter = new kakao.maps.LatLng(x, y);
-  map.setCenter(newCenter);
-  let newLevel = 9;
-  switch (to.codeLength) {
-    case 2:
-      newLevel = 11;
-      break;
-    case 5:
-      newLevel = 8;
-      break;
-    case 7:
-      newLevel = 6;
-      break;
-    default:
-      break;
-  }
-  map.setLevel(newLevel);
-  inputTagRef.value = '';
-  setResults([]);
-};
-
-export { spreadDropdown, moveTo };
-export type { MapInfo };
+export { spreadDropdown };

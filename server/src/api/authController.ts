@@ -38,7 +38,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
         jwtToken: jwtToken.token,
         oauthEmail: isMember.oauth_email,
         address: isMember.address,
-        image: isMember.image,
+        image: isMember.image as string,
       };
       res.status(200).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
     } else {

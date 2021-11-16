@@ -3,14 +3,19 @@ import {
   ModalWrapper,
   ModalCloseBtnDiv,
   ModalCloseBtn,
-} from './index.style';
+  ChildrenWrapper,
+} from '@components/Modal/index.style';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
+interface ModalProps {
+  toggleModal?: () => void;
+}
+
 // "상위 컴포넌트에서는 클릭하면 무조건 추가한다"로 로직을 구성
 // recoil에서 전역ㅇ로 관리하는 것도 생각해 볼 수 있으려나..
-const Modal: React.FC = ({ children }) => {
+const Modal: React.FC<ModalProps> = ({ children, toggleModal }) => {
   const history = useHistory();
   const [isActive, setIsActive] = useState(true);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -32,41 +37,50 @@ const Modal: React.FC = ({ children }) => {
 
   // 모달창 바깥 클릭 시 모달창 없애기
   // https://chach4.tistory.com/4 참고
-  useEffect(() => {
-    const handleCloseModal = (e) => {
-      if (
-        !e.target.closest('.overlay-confirmation-submit') &&
-        e.target.closest('.overlay-confirmation-alert')
-      ) {
-        return;
-      }
-      if (
-        isActive &&
-        (!modalRef.current || !modalRef.current.contains(e.target))
-      ) {
-        setIsActive(!isActive);
-        history.goBack();
-      }
-    };
+  // useEffect(() => {
+  //   const handleCloseModal = (e) => {
+  //     if (
+  //       !e.target.closest('.overlay-confirmation-submit') &&
+  //       e.target.closest('.overlay-confirmation-alert')
+  //     ) {
+  //       return;
+  //     }
+  //     if (
+  //       isActive &&
+  //       (!modalRef.current || !modalRef.current.contains(e.target))
+  //     ) {
+  //       console.log(!modalRef?.current?.contains(e.target));
+  //       console.log(e.target.closest('.modal'));
+  //       console.log(e.target.closest('body'));
+  //       console.log(e.target);
+  //       setIsActive(!isActive);
+  //       history.goBack();
+  //       if (toggleModal) {
+  //         toggleModal();
+  //       }
+  //     }
+  //   };
 
-    if (isActive) {
-      window.addEventListener('click', handleCloseModal);
-    }
+  //   if (isActive) {
+  //     window.addEventListener('click', handleCloseModal);
+  //   } else {
+  //     window.removeEventListener('click', handleCloseModal);
+  //   }
 
-    return () => {
-      window.removeEventListener('click', handleCloseModal);
-    };
-  }, [history, isActive]);
+  //   return () => {
+  //     window.removeEventListener('click', handleCloseModal);
+  //   };
+  // }, [isActive]);
 
   return (
     <>
       {isActive && (
         <ModalOverlay>
-          <ModalWrapper ref={modalRef}>
+          <ModalWrapper className="modal" ref={modalRef}>
             <ModalCloseBtnDiv>
               <ModalCloseBtn onClick={onClick}>✖</ModalCloseBtn>
             </ModalCloseBtnDiv>
-            {children}
+            <ChildrenWrapper>{children}</ChildrenWrapper>
           </ModalWrapper>
         </ModalOverlay>
       )}

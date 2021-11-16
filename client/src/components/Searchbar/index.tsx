@@ -6,23 +6,19 @@ import {
   DropdownWrapper,
   DropdownItem,
 } from '@components/Searchbar/index.style';
-import {
-  MapInfo,
-  spreadDropdown,
-  moveTo,
-} from '@controllers/searchbarController';
+import { spreadDropdown } from '@controllers/searchbarController';
 
 import React, { useEffect, useState, useRef } from 'react';
 
 interface SearchbarProps {
-  map: kakao.maps.Map | null;
+  onClickHandler: (mapInfo: MapInfo) => void | Promise<void>;
 }
 
-const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
+const Searchbar: React.FC<SearchbarProps> = ({ onClickHandler }) => {
   const [input, setInput] = useState('');
+
   const [results, setResults] = useState<MapInfo[]>([]);
   const isSpread = useRef(false);
-
   const inputTagRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -30,7 +26,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
   }, [input]);
 
   return (
-    <>
+    <div>
       <SearchbarWrapper>
         <SearchbarInput
           onChange={(e) => setInput(e.target.value)}
@@ -40,20 +36,25 @@ const Searchbar: React.FC<SearchbarProps> = ({ map }) => {
           <SearchImg />
         </SearchbarButton>
       </SearchbarWrapper>
-      <DropdownWrapper>
-        {results.length > 0 &&
-          results.map((result, i) => (
+      {results.length > 0 && (
+        <DropdownWrapper>
+          {results.map((result, i) => (
             <DropdownItem
               key={i}
-              onClick={(e) =>
-                moveTo(map, results[i], setResults, inputTagRef.current)
-              }
+              onClick={(e) => {
+                onClickHandler(result);
+                setResults([]);
+                if (inputTagRef.current !== null) {
+                  inputTagRef.current.value = '';
+                }
+              }}
             >
               {result.address}
             </DropdownItem>
           ))}
-      </DropdownWrapper>
-    </>
+        </DropdownWrapper>
+      )}
+    </div>
   );
 };
 

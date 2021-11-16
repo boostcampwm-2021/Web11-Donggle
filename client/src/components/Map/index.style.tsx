@@ -29,5 +29,11 @@ const CenterMarker = styled.img`
 `;
 CenterMarker.defaultProps = { src: marker };
 
+const SearchbarWrapper = styled.div`
+  position: relative;
+  top: 20px;
+  left: 20px;
+`;
+
 export default MapWrapper;
-export { TestDiv, CenterMarker };
+export { TestDiv, CenterMarker, SearchbarWrapper };

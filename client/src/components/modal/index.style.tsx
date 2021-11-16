@@ -7,16 +7,16 @@ const ModalOverlay = styled.div`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
+  overflow: visible;
 
   z-index: 3000;
 `;
 
 const ModalWrapper = styled.div`
   position: absolute;
-  max-width: 80%;
   width: 500px;
-  max-height: 80%;
   height: auto;
+  max-height: 90%;
   top: 50%;
   left: 50%;
   overflow: auto;
@@ -45,4 +45,21 @@ const ModalCloseBtn = styled.button`
   cursor: pointer;
 `;
 
-export { ModalOverlay, ModalWrapper, ModalCloseBtnDiv, ModalCloseBtn };
+const ChildrenWrapper = styled.div`
+  position: relative;
+  margin: 20px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+`;
+
+export {
+  ModalOverlay,
+  ModalWrapper,
+  ModalCloseBtnDiv,
+  ModalCloseBtn,
+  ChildrenWrapper,
+};

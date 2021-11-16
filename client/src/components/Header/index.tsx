@@ -22,23 +22,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-// export interface MainIProps {
-//   showSidebar(): void;
-//   hideSidebar(): void;
-// }
 const Header: React.FC = () => {
-  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const history = useHistory();
   const location = useLocation();
-  const [isAuth, setIsAuth] = useRecoilState(authState);
 
-  // const openSideBar = useCallback(() => {
-  //   console.log('test');
-  //   props.showSidebar();
-  // }, []);
+  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
+  const [auth, setAuth] = useRecoilState(authState);
 
   const routeHistory = useCallback(
-    (path: string, state: { [index: string]: string }) => {
+    (path: string, state: { [index: string]: string } = {}) => {
       history.push({
         pathname: path,
         state: state,
@@ -58,7 +50,7 @@ const Header: React.FC = () => {
           <LogoMenuContainer>
             <LogoWrapper>
               <LinkBtn
-                onClick={() => routeHistory('/', {})}
+                onClick={() => routeHistory('/')}
                 className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
               >
                 <img src={logo} alt="logo" width="70px" />
@@ -68,7 +60,7 @@ const Header: React.FC = () => {
               <MenuList>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/', {})}
+                    onClick={() => routeHistory('/')}
                     className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
                   >
                     동네 지도
@@ -76,7 +68,7 @@ const Header: React.FC = () => {
                 </Menu>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/review', {})}
+                    onClick={() => routeHistory('/review')}
                     className={`${
                       clickedLinkBtnId === '/review' && 'link-selected'
                     }`}
@@ -100,10 +92,10 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            {isAuth.isLoggedin ? (
+            {auth.isLoggedin ? (
               <>
                 <LogoutBtn>로그아웃</LogoutBtn>
-                <UserProfile>
+                <UserProfile onClick={() => routeHistory('profile')}>
                   <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
                 </UserProfile>
               </>

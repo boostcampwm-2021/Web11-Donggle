@@ -7,15 +7,25 @@ import {
   SignInPage,
   LoadingPage,
   SignUpPage,
+  ProfilePage,
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
-import { ThemeProvider } from 'styled-components';
 import myTheme from '@styledComponents/theme';
+import Header from '@components/Header/index';
 
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
+import styled, { ThemeProvider } from 'styled-components';
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -26,12 +36,15 @@ const App: React.FC = () => {
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
+          <Header />
+
           <Switch location={background || location}>
             <Route exact path="/" component={MainPage} />
             <Route path="/review" component={ReviewPage} />
             <Route path="/signin" component={SignInPage} />
             <Route path="/github/callback" component={LoadingPage} />
             <Route path="/signup" component={SignUpPage} />
+            <Route path="/profile" component={ProfilePage} />
             <Route component={NotFoundPage} />
           </Switch>
           {background && <Route path="/write-review" component={ReviewModal} />}

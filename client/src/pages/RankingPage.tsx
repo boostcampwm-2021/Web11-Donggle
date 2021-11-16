@@ -1,7 +1,7 @@
+import Modal from '@components/Modal/index';
+
 import React from 'react';
 import styled from 'styled-components';
-
-import Modal from '@components/modal';
 
 const RankingDiv = styled.div`
   width: 100vw;

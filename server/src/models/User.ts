@@ -1,19 +1,21 @@
 import { Schema, model } from 'mongoose';
 
+type CoordType = [number, number];
+
 interface User {
   oauth_email: string;
   address: string;
   code: string;
-  center: [number, number];
-  image: string;
+  center: CoordType;
+  image?: string;
 }
 
 const userSchema = new Schema<User>({
-  oauth_email: { type: String, required: true, unique: true },
-  address: { type: String, required: true },
-  code: { type: String, required: true },
-  center: { type: [Number, Number], required: true },
-  image: { type: String, required: true },
+  oauth_email: { type: String, index: true },
+  address: { type: String },
+  code: { type: String },
+  center: { type: [Number, Number] },
+  image: { type: String },
 });
 
 const UserModel = model<User>('User', userSchema);

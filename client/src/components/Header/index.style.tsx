@@ -106,7 +106,7 @@ const UserProfile = styled.div`
 
 const ColorBar = styled.div`
   width: 100%;
-  height: 30px;
+  height: 60px;
   background: ${(props) => props.theme.colors.lightgreen};
 `;
 

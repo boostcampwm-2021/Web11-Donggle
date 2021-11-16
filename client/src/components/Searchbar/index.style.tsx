@@ -3,12 +3,10 @@ import search from '@assets/icons/search.svg';
 
 const SearchbarWrapper = styled.div`
   position: relative;
-  top: 20px;
-  left: 20px;
   width: 400px;
   height: 60px;
   padding-left: 20px;
-  display: flex;
+  display: flex;Ç
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -41,15 +39,14 @@ SearchImg.defaultProps = { src: search };
 
 const DropdownWrapper = styled.div`
   position: relative;
-  top: 20px;
-  left: 40px;
+  left: 20px;
   width: 310px;
   height: auto;
   background: #fff;
   border-radius: 10px;
   border: solid 1px #c5c5c5;
   z-index: 1000;
-  max-height: 600px;
+  max-height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {
