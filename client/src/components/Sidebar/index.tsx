@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import {
@@ -21,24 +21,35 @@ import { IMapInfo } from '@myTypes/Map';
 import { IReviewContent } from '@myTypes/Review';
 import { calcTotal } from '@utils/common';
 import ReviewContent from '@components/Common/ReviewContent';
+import { fetchRegionData } from '@controllers/sidebarController';
+import { IAPIResult } from '@myTypes/Common';
 
 export interface IProps {
-  sidebar: boolean | null;
+  sidebar: boolean;
   rateData: IMapInfo;
-  reviewData: IReviewContent[];
   hashTagData: string[];
   closeSidebar: () => void;
 }
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
+  const [reviewLists, setReviewLists] = useState<IReviewContent[]>([]);
   const history = useHistory();
   const location = useLocation();
-  const fetchData = (menu: string) => {
-    // 아래 내용 구현 필요
-    console.log(menu);
-    setSelectedMenu(menu);
-  };
+  const fetchData = useCallback(
+    async (address: string) => {
+      const list: IAPIResult<IReviewContent[]> = await fetchRegionData(
+        address,
+        selectedMenu,
+      );
+      setReviewLists(list.result);
+    },
+    [selectedMenu],
+  );
+
+  useEffect(() => {
+    if (props.sidebar) fetchData(props.rateData.address);
+  }, [fetchData, props.rateData.address, props.sidebar]);
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
@@ -61,19 +72,19 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       </HashTagDiv>
       <MenuBarDiv>
         <Menu
-          onClick={() => fetchData('review')}
+          onClick={() => setSelectedMenu('review')}
           className={`${selectedMenu === 'review' && 'menu-selected'}`}
         >
           동네후기
         </Menu>
         <Menu
-          onClick={() => fetchData('info')}
-          className={`${selectedMenu === 'info' && 'menu-selected'}`}
+          onClick={() => setSelectedMenu('article')}
+          className={`${selectedMenu === 'article' && 'menu-selected'}`}
         >
           동네정보
         </Menu>
       </MenuBarDiv>
-      {props.reviewData.map((review, idx) => (
+      {reviewLists.map((review, idx) => (
         <ReviewContent key={idx} review={review} />
       ))}
       <AddButtonDiv>

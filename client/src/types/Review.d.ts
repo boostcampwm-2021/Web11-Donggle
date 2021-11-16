@@ -5,17 +5,18 @@ interface ICategories {
   entertainment: number;
 }
 
-interface IReviewContent {
-  text: string;
-  user: string;
-  categories: ICategories;
-}
-
 interface IReviewSubmit {
   address: string;
   text: string;
   user: string;
   categories: ICategories;
+}
+
+interface IReviewContent extends IReviewSubmit {
+  _id: string;
+  center: [number, number];
+  code: string;
+  createdAt: Date;
 }
 
 export { ICategories, IReviewContent, IReviewSubmit };
