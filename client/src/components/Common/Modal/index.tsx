@@ -4,7 +4,7 @@ import {
   ModalCloseBtnDiv,
   ModalCloseBtn,
   ChildrenWrapper,
-} from '@components/Modal/index.style';
+} from '@components/Common/Modal/index.style';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';

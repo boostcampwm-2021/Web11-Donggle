@@ -1,4 +1,4 @@
-import Modal from '@components/Modal/index';
+import Modal from '@components/Common/Modal/index';
 import Searchbar from '@components/Searchbar/index';
 import {
   TitleWrapper,

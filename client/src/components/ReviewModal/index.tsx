@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import Modal from '@components/Modal/index';
+import Modal from '@components/Common/Modal/index';
 import {
   TitleDiv,
   StarRateDiv,
