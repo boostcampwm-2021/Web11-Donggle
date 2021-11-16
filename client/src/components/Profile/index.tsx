@@ -34,6 +34,8 @@ const Profile: React.FC = () => {
   const toggleModal = () => {
     if (!isModal) {
       history.push(`profile/update-address`);
+    } else {
+      history.goBack();
     }
     setIsModal((prev) => !prev);
   };
