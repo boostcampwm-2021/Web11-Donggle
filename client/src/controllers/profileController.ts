@@ -13,11 +13,15 @@ const uploadImage = async (e, auth, setAuth) => {
       body: formData,
     },
   );
-  const result = await response.json();
-  setAuth((prev) => ({
-    ...prev,
-    image: result.image,
-  }));
+  if (response.status === 200) {
+    const result = (await response.json()).result;
+    setAuth((prev) => ({
+      ...prev,
+      image: result.image,
+    }));
+  } else {
+    console.error('uploadImage 요청이 잘못되었어요.');
+  }
 };
 
 const deleteImage = async (auth, setAuth) => {
@@ -29,8 +33,15 @@ const deleteImage = async (auth, setAuth) => {
       method: 'DELETE',
     },
   );
-  const result = await response.json();
-  setAuth((prev) => ({ ...prev, image: result.image }));
+  if (response.status === 200) {
+    const result = await response.json();
+    setAuth((prev) => ({
+      ...prev,
+      image: result.result.image,
+    }));
+  } else {
+    console.error('deleteImage 요청이 잘못되었어요.');
+  }
 };
 
 const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
