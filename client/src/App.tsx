@@ -16,7 +16,7 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 
 import React from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 const ContentWrapper = styled.div`
@@ -26,6 +26,22 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+// eslint-disable-next-line react/prop-types
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      component={(props) =>
+        sessionStorage.getItem('jwt') ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: '/signin' }} />
+        )
+      }
+    />
+  );
+};
 
 const App: React.FC = () => {
   const location = useLocation();

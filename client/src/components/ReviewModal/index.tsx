@@ -16,16 +16,15 @@ import { ICategories, IReviewSubmit } from '@myTypes/Review';
 
 import React, { useCallback, useState } from 'react';
 
-const ReviewModal: React.FC<IReviewSubmit> = ({
-  address,
-  text,
-  categories,
-}) => {
-  const DEFAULT_ADDRESS = address || '대전시 서구 탄방동';
+const ReviewModal: React.FC = () => {
+  const DEFAULT_ADDRESS = '대전시 서구 탄방동';
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
     address: DEFAULT_ADDRESS,
-    text: text || '',
-    categories: categories || {
+    code: '2503057',
+    center: [36.345004173928714, 127.39156773642355],
+    user: 'testUser',
+    text: '',
+    categories: {
       safety: 1,
       traffic: 1,
       food: 1,
