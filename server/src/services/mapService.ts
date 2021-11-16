@@ -54,13 +54,12 @@ const queryRates = async (
     code: 1,
     codeLength: 1,
     center: 1,
-    total: '$rate.total',
-    count: '$rate.count',
+    count: 1,
     categories: {
-      safety: '$rate.safety',
-      traffic: '$rate.traffic',
-      food: '$rate.food',
-      entertainment: '$rate.entertainment',
+      safety: '$categories.safety',
+      traffic: '$categories.traffic',
+      food: '$categories.food',
+      entertainment: '$categories.entertainment',
     },
   };
 

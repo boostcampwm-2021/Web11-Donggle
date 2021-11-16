@@ -6,7 +6,7 @@ interface Review {
   address: string;
   code?: string; // 우선 optional 값으로 지정
   center?: CoordType; // 우선 optional 값으로 지정
-  rate: {
+  categories: {
     safety: number;
     traffic: number;
     food: number;
@@ -21,7 +21,7 @@ const reviewSchema = new Schema<Review>({
   address: { type: String, required: true },
   code: { type: String }, // required 임시 제거
   center: { type: [Number, Number] }, // required 임시 제거
-  rate: {
+  categories: {
     safety: { type: Number, required: true },
     traffic: { type: Number, required: true },
     food: { type: Number, required: true },

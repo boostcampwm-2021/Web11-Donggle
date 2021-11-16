@@ -154,7 +154,7 @@ const populateMapInfos = async () => {
     };
     void doc
       .updateOne({ count, categories })
-      .then(() => logger.info('review updated!'));
+      .then(() => logger.info(`${doc.address} -> mapInfo rate`));
   });
 };
 
