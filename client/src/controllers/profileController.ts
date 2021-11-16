@@ -13,14 +13,14 @@ const uploadImage = async (e, auth, setAuth) => {
       body: formData,
     },
   );
+  const result = await response.json();
   if (response.status === 200) {
-    const result = (await response.json()).result;
     setAuth((prev) => ({
       ...prev,
-      image: result.image,
+      image: result.result,
     }));
   } else {
-    console.error('uploadImage 요청이 잘못되었어요.');
+    console.error(result.message);
   }
 };
 
@@ -33,14 +33,14 @@ const deleteImage = async (auth, setAuth) => {
       method: 'DELETE',
     },
   );
+  const result = await response.json();
   if (response.status === 200) {
-    const result = await response.json();
     setAuth((prev) => ({
       ...prev,
-      image: result.result.image,
+      image: result.result,
     }));
   } else {
-    console.error('deleteImage 요청이 잘못되었어요.');
+    console.error(result.message);
   }
 };
 
