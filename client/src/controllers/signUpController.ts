@@ -39,14 +39,10 @@ const isSignUp = (
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory,
 ): void => {
+  const location = { pathname: '/', search: '', hash: '', state: undefined };
   if (status != 200) {
     alert(userInfo.message);
-    /*
-    2021-11-16
-    문혜현
-    회원가입에 실패했을 시 다시 signin 페이지로 가야 하는데 아직 routeHistory 구현 못함
-    */
-    //routeHistory('/signin', {});
+    routeHistory('/signin', { background: location });
   } else {
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
     setAuth({
@@ -54,7 +50,7 @@ const isSignUp = (
       isLoggedin: true,
       address: userInfo.result.address,
     });
-    //routeHistory('/', {});
+    routeHistory('/', {});
   }
 };
 
