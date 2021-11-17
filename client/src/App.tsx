@@ -13,7 +13,6 @@ import {
 import ReviewModal from '@components/ReviewModal';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
-import { showSnackbar } from '@utils/common';
 
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
@@ -30,19 +29,6 @@ const ContentWrapper = styled.div`
 const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
-
-  let error = false;
-
-  React.useEffect(() => {
-    setInterval(() => {
-      error = !error;
-      showSnackbar({
-        message: error ? '에러' : '정보',
-        expire: Date.now(),
-        error,
-      });
-    }, 1000);
-  }, []);
 
   return (
     <>
