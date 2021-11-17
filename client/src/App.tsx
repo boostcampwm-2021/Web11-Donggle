@@ -8,6 +8,7 @@ import {
   LoadingPage,
   SignUpPage,
   ProfilePage,
+  ProfileAddressPage,
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
 import { GlobalStore } from '@stores/index';
@@ -53,6 +54,12 @@ const App: React.FC = () => {
             )}
             {background && <Route path="/ranking" render={RankingPage} />}
             {background && <Route path="/signin" render={SignInPage} />}
+            {background && (
+              <Route
+                path="/profile/update-address"
+                component={ProfileAddressPage}
+              />
+            )}
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>

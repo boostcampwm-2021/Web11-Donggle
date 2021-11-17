@@ -1,12 +1,13 @@
-import styled from 'styled-components';
 import search from '@assets/icons/search.svg';
+
+import styled from 'styled-components';
 
 const SearchbarWrapper = styled.div`
   position: relative;
   width: 400px;
   height: 60px;
   padding-left: 20px;
-  display: flex;Ç
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -37,8 +38,8 @@ const SearchImg = styled.img`
 `;
 SearchImg.defaultProps = { src: search };
 
-const DropdownWrapper = styled.div`
-  position: relative;
+const DropdownWrapper = styled.div<{ top: number }>`
+  position: absolute;
   left: 20px;
   width: 310px;
   height: auto;
@@ -46,7 +47,7 @@ const DropdownWrapper = styled.div`
   border-radius: 10px;
   border: solid 1px #c5c5c5;
   z-index: 1000;
-  max-height: 500px;
+  max-height: calc(100vh - ${(props) => props.top}px - 20px);
   overflow-x: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {

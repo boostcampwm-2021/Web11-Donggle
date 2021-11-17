@@ -21,7 +21,7 @@ const ModalWrapper = styled.div`
   max-height: 90%;
   top: 50%;
   left: 50%;
-  overflow: auto;
+  overflow: visible;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
@@ -61,7 +61,7 @@ const ChildrenWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  overflow: hidden;
+  overflow: visible;
 `;
 
 export {

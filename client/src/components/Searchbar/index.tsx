@@ -27,6 +27,11 @@ const Searchbar: React.FC<SearchbarProps> = ({
   const [results, setResults] = useState<IMapInfo[]>([]);
   const isSpread = useRef(false);
   const inputTagRef = useRef<HTMLInputElement>(null);
+  const dropdownTagRef = useRef<HTMLDivElement>(null);
+  const [dropdownTop, setDropdownTop] = useState(0);
+
+  const getTop = (element: HTMLDivElement) =>
+    element.getBoundingClientRect().top;
 
   useEffect(() => {
     spreadDropdown(input, isSpread.current, setResults, onlyDong);
@@ -38,8 +43,14 @@ const Searchbar: React.FC<SearchbarProps> = ({
     }
   }, [valueState]);
 
+  useEffect(() => {
+    if (dropdownTagRef.current !== null) {
+      setDropdownTop(getTop(dropdownTagRef.current));
+    }
+  }, [dropdownTagRef.current]);
+
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <SearchbarWrapper>
         <SearchbarInput
           onChange={(e) => setInput(e.target.value)}
@@ -50,7 +61,7 @@ const Searchbar: React.FC<SearchbarProps> = ({
         </SearchbarButton>
       </SearchbarWrapper>
       {results.length > 0 && (
-        <DropdownWrapper>
+        <DropdownWrapper ref={dropdownTagRef} top={dropdownTop}>
           {results.map((result, i) => (
             <DropdownItem
               key={i}
