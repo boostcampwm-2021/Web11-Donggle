@@ -1,6 +1,6 @@
 import { DropdownWrapper, DropdownItem, SelectBar } from './index.style';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface IProps {
   labels: string[];
@@ -17,6 +17,10 @@ const Selector: React.FC<IProps> = ({ labels, onSelected, disabled }) => {
     () => setDropdownOpen((prev) => !prev),
     [],
   );
+
+  useEffect(() => {
+    setSelected(0);
+  }, [disabled]);
 
   return (
     <div style={{ position: 'relative' }}>
