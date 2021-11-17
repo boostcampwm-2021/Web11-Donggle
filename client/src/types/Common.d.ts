@@ -3,4 +3,10 @@ interface IAPIResult<T> {
   message: string;
 }
 
-export { IAPIResult };
+interface ISnackbar {
+  message: string;
+  error?: boolean;
+  expire: number;
+}
+
+export { IAPIResult, ISnackbar };

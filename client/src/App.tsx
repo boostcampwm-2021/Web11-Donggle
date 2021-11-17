@@ -11,14 +11,13 @@ import {
   ProfileAddressPage,
 } from '@pages/index';
 import ReviewModal from '@components/ReviewModal';
-import { GlobalStore } from '@stores/index';
-import GlobalStyle from '@styledComponents/GlobalStyle';
-import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
+import Snackbar from '@components/Snackbar';
+import { showSnackbar } from '@utils/common';
 
 import React from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 const ContentWrapper = styled.div`
   width: 100%;
@@ -32,37 +31,43 @@ const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
 
+  let error = false;
+
+  React.useEffect(() => {
+    setInterval(() => {
+      error = !error;
+      showSnackbar({
+        message: error ? '에러' : '정보',
+        expire: Date.now(),
+        error,
+      });
+    }, 1000);
+  }, []);
+
   return (
     <>
-      <GlobalStyle />
-      <ThemeProvider theme={myTheme}>
-        <GlobalStore>
-          <ContentWrapper>
-            <Header />
-
-            <Switch location={background || location}>
-              <Route exact path="/" component={MainPage} />
-              <Route path="/review" component={ReviewPage} />
-              <Route path="/signin" component={SignInPage} />
-              <Route path="/github/callback" component={LoadingPage} />
-              <Route path="/signup" component={SignUpPage} />
-              <Route path="/profile" component={ProfilePage} />
-              <Route component={NotFoundPage} />
-            </Switch>
-            {background && (
-              <Route path="/write-review" component={ReviewModal} />
-            )}
-            {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" render={SignInPage} />}
-            {background && (
-              <Route
-                path="/profile/update-address"
-                component={ProfileAddressPage}
-              />
-            )}
-          </ContentWrapper>
-        </GlobalStore>
-      </ThemeProvider>
+      <ContentWrapper>
+        <Snackbar />
+        <Header />
+        <Switch location={background || location}>
+          <Route exact path="/" component={MainPage} />
+          <Route path="/review" component={ReviewPage} />
+          <Route path="/signin" component={SignInPage} />
+          <Route path="/github/callback" component={LoadingPage} />
+          <Route path="/signup" component={SignUpPage} />
+          <Route path="/profile" component={ProfilePage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+        {background && <Route path="/write-review" component={ReviewModal} />}
+        {background && <Route path="/ranking" render={RankingPage} />}
+        {background && <Route path="/signin" render={SignInPage} />}
+        {background && (
+          <Route
+            path="/profile/update-address"
+            component={ProfileAddressPage}
+          />
+        )}
+      </ContentWrapper>
     </>
   );
 };
