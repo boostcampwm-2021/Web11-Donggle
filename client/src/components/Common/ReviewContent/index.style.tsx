@@ -4,7 +4,6 @@ const BaseDiv = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  border-bottom: 1px solid ${(props) => props.theme.colors.grey};
   justify-content: space-between;
   align-items: center;
   line-height: 40px;
@@ -15,19 +14,24 @@ const SpanText = styled.span`
   font-size: 18px;
 `;
 
+const ContentWrapper = styled(BaseDiv)`
+  height: auto;
+  flex-direction: column;
+`;
+
 const ContentDiv = styled(BaseDiv)`
   position: relative;
   padding-bottom: 20px;
   flex-direction: column;
   justify-content: center;
   line-height: 22px;
+  border-bottom: 1px solid ${(props) => props.theme.colors.grey};
 `;
 
 const ContentTopDiv = styled(BaseDiv)`
   display: flex;
   width: 90%;
   justify-content: space-between;
-  border-bottom: none;
 `;
 
 const UserText = styled(SpanText)`
@@ -60,6 +64,7 @@ const RateDiv = styled(BaseDiv)`
 `;
 
 export {
+  ContentWrapper,
   ContentDiv,
   ContentTopDiv,
   UserText,

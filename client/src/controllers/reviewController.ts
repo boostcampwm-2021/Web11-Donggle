@@ -42,14 +42,16 @@ const submitReview = (
   });
 };
 
-const fetchReviewData = async (
+const fetchContentData = async (
   address,
   menu,
+  pageNum,
+  itemNum,
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/${
       menu === 'review' ? 'review' : 'article'
-    }?address=${address}`,
+    }?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`,
     {
       method: 'GET',
     },
@@ -65,4 +67,4 @@ const fetchReviewData = async (
     });
 };
 
-export { submitReview, fetchReviewData };
+export { submitReview, fetchContentData };

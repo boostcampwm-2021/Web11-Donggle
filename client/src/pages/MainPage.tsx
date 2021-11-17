@@ -3,6 +3,7 @@ import Map from '@components/Map/index';
 import React, { useState, useCallback, Suspense } from 'react';
 import styled from 'styled-components';
 const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
+
 import { IMapInfo } from '@myTypes/Map';
 
 const MainDiv = styled.div`
