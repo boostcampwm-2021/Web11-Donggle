@@ -8,6 +8,7 @@ import { IAuthInfo } from '@myTypes/User';
 const signUpAdress = async (
   mapInfo: IMapInfo,
   auth: IAuthInfo,
+  location,
 ): Promise<[number, IAPIResult<IToken | Record<string, never>>]> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/auth/signup`,
@@ -17,11 +18,11 @@ const signUpAdress = async (
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        oauthEmail: auth.oauth_email,
+        oauthEmail: location.state.oauth_email,
         address: mapInfo.address,
         code: mapInfo.code,
         center: mapInfo.center,
-        image: auth.image,
+        image: location.state.image,
       }),
     },
   );
