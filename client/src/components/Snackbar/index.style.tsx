@@ -1,36 +1,36 @@
 import styled from 'styled-components';
 
-const SnackbarWrapper = styled.div<{ duration: number; error: boolean }>`
+const SnackbarDiv = styled.div<{ error: boolean }>`
   position: fixed;
-  bottom: 0;
+  top: 0;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   font-size: ${(props) => props.theme.fontSizes.paragraph};
-  background: ${(props) => props.theme.colors.green};
+  background: ${(props) => props.theme.colors.lightgreen};
   color: ${(props) =>
-    props.error ? props.theme.colors.yellow : props.theme.colors.white};
+    props.error ? props.theme.colors.red : props.theme.colors.white};
   border-radius: 10px;
   animation-name: pop;
-  animation-duration: ${(props) => props.duration}s;
+  animation-duration: 3s;
   animation-fill-mode: forwards;
 
   @keyframes pop {
     0% {
-      bottom: -50px;
+      top: -50px;
     }
     20% {
-      bottom: 0px;
+      top: 0px;
     }
     80% {
-      bottom: 0px;
+      top: 0px;
     }
     100% {
-      bottom: -50px;
+      top: -50px;
     }
   }
 `;
 
-export { SnackbarWrapper };
+export { SnackbarDiv };
