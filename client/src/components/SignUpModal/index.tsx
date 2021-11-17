@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { authState } from '@stores/atoms';
@@ -12,20 +12,17 @@ const SignUpModal: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
   const [history, routeHistory] = useHistoryRouter();
 
-  const onSubmitHandler = async (mapInfo: IMapInfo): Promise<void> => {
-    const [status, userInfo] = await signUpAdress(mapInfo, auth);
-    isSignUp(status, userInfo, auth, setAuth, routeHistory);
-  };
-
-  const onCancelHandler = (): void => {
+  const onCancelHandler = useCallback((): void => {
     window.location.href = process.env.REACT_APP_MAIN_URL as string;
-  };
+  }, []);
 
-  useEffect(() => {
-    if (auth.address) {
-      routeHistory('/', {});
-    }
-  }, [auth, routeHistory]);
+  const onSubmitHandler = useCallback(
+    async (mapInfo: IMapInfo): Promise<void> => {
+      const [status, userInfo] = await signUpAdress(mapInfo, auth);
+      isSignUp(status, userInfo, auth, setAuth, routeHistory);
+    },
+    [],
+  );
 
   return (
     <AdressModal
