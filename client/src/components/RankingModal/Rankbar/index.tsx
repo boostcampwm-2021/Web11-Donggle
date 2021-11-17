@@ -34,7 +34,7 @@ const Rankbar: React.FC<IRankbarProps> = ({ rank, address, categories }) => {
   const totalRate = calcTotal(categories);
 
   return (
-    <>
+    <div>
       <RankbarDiv onClick={toggleDetails}>
         <RankSpan>{rank}</RankSpan>
         <span>{address}</span>
@@ -45,7 +45,7 @@ const Rankbar: React.FC<IRankbarProps> = ({ rank, address, categories }) => {
       {showDetails && (
         <DetailedRankbar total={totalRate} categories={categories} />
       )}
-    </>
+    </div>
   );
 };
 
