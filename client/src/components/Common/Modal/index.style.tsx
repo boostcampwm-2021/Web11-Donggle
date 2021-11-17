@@ -1,3 +1,5 @@
+import xIcon from '@assets/icons/x.svg';
+
 import styled from 'styled-components';
 
 const ModalOverlay = styled.div`
@@ -39,6 +41,12 @@ const ModalCloseBtnDiv = styled.div`
   width: 100%;
 `;
 
+const ModalCloseImage = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+ModalCloseImage.defaultProps = { src: xIcon };
+
 const ModalCloseBtn = styled.button`
   border: none;
   background-color: transparent;
@@ -60,6 +68,7 @@ export {
   ModalOverlay,
   ModalWrapper,
   ModalCloseBtnDiv,
+  ModalCloseImage,
   ModalCloseBtn,
   ChildrenWrapper,
 };
