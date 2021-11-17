@@ -1,9 +1,8 @@
 import Map from '@components/Map/index';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import styled from 'styled-components';
-import Sidebar from '@components/Sidebar';
-import { IReviewContent } from '@myTypes/Review';
+const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
 import { IMapInfo } from '@myTypes/Map';
 
 const MainDiv = styled.div`
@@ -94,12 +93,16 @@ const MainPage: React.FC = () => {
           updateSidebarRate={updateSidebarRate}
           toggleSidebar={toggleSidebar}
         ></Map>
-        <Sidebar
-          sidebar={sidebar}
-          rateData={sidebarRate}
-          hashTagData={TemporaryHashTagData}
-          closeSidebar={closeSidebar}
-        ></Sidebar>
+        {sidebar && (
+          <Suspense fallback="loading...">
+            <SidebarLazy
+              sidebar={sidebar}
+              rateData={sidebarRate}
+              hashTagData={TemporaryHashTagData}
+              closeSidebar={closeSidebar}
+            ></SidebarLazy>
+          </Suspense>
+        )}
       </FlexContainer>
     </MainDiv>
   );

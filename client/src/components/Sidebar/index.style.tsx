@@ -110,6 +110,12 @@ const Menu = styled.span`
   cursor: pointer;
 `;
 
+const ReviewContentDiv = styled(BaseDiv)`
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const AddButtonDiv = styled(BaseDiv)`
   position: relative;
   display: flex;
@@ -143,6 +149,7 @@ export {
   HashTagDiv,
   MenuBarDiv,
   Menu,
+  ReviewContentDiv,
   AddButtonDiv,
   AddButton,
 };

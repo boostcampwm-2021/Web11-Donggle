@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import {
@@ -18,11 +18,8 @@ import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
 import { IMapInfo } from '@myTypes/Map';
-import { IReviewContent } from '@myTypes/Review';
 import { calcTotal } from '@utils/common';
 import ReviewContent from '@components/Common/ReviewContent';
-import { fetchRegionData } from '@controllers/sidebarController';
-import { IAPIResult } from '@myTypes/Common';
 
 export interface IProps {
   sidebar: boolean;
@@ -33,23 +30,8 @@ export interface IProps {
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
-  const [reviewLists, setReviewLists] = useState<IReviewContent[]>([]);
   const history = useHistory();
   const location = useLocation();
-  const fetchData = useCallback(
-    async (address: string) => {
-      const list: IAPIResult<IReviewContent[]> = await fetchRegionData(
-        address,
-        selectedMenu,
-      );
-      setReviewLists(list.result);
-    },
-    [selectedMenu],
-  );
-
-  useEffect(() => {
-    if (props.sidebar) fetchData(props.rateData.address);
-  }, [fetchData, props.rateData.address, props.sidebar]);
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
@@ -84,9 +66,10 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
           동네정보
         </Menu>
       </MenuBarDiv>
-      {reviewLists.map((review, idx) => (
-        <ReviewContent key={idx} review={review} />
-      ))}
+      <ReviewContent
+        address={props.rateData.address}
+        selectedMenu={selectedMenu}
+      />
       <AddButtonDiv>
         <AddButton
           onClick={() => {

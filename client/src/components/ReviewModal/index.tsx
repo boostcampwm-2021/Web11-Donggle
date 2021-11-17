@@ -16,7 +16,7 @@ import { ICategories, IReviewSubmit } from '@myTypes/Review';
 import { useRecoilValue } from 'recoil';
 import { authState } from '@stores/atoms';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 
 const ReviewModal: React.FC = () => {
