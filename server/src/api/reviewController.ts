@@ -34,9 +34,11 @@ router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
 router.get('/', (async (req: Request, res: Response) => {
   try {
     const address = req.query.address as string;
+    const pageNum: number = parseInt(req.query.pageNum as string);
+    const itemNum: number = parseInt(req.query.itemNum as string);
     if (!address)
       throw new Error('정상적이지 않은 요청입니다. Address 값 부재');
-    const data = await reviewService.queryReviews(address);
+    const data = await reviewService.queryReviews(address, pageNum, itemNum);
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;

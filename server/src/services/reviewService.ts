@@ -11,7 +11,11 @@ const initializeReviewModel = async () => {
   await ReviewModel.collection.createIndex({ address: 'text' });
 };
 
-const queryReviews = async (address: string): Promise<Review[]> => {
+const queryReviews = async (
+  address: string,
+  pageNum: number,
+  itemNum: number,
+): Promise<Review[]> => {
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
 
@@ -23,7 +27,11 @@ const queryReviews = async (address: string): Promise<Review[]> => {
       createdAt: { $gte: sixMonth },
     },
     fields,
-  );
+    {
+      skip: pageNum * itemNum,
+      limit: itemNum,
+    },
+  ).sort({ createdAt: -1 });
 
   return reviewData;
 };
