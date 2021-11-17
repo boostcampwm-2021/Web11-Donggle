@@ -41,7 +41,6 @@ const Sidebar: React.FC<RateProps> = (props: RateProps) => {
   const history = useHistory();
   const location = useLocation();
   const fetchData = (menu: string) => {
-    console.log(menu);
     setSelectedMenu(menu);
   };
 
