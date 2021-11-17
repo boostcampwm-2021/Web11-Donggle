@@ -20,6 +20,7 @@ const Selector: React.FC<IProps> = ({ labels, onSelected, disabled }) => {
 
   useEffect(() => {
     setSelected(0);
+    setDropdownOpen(false);
   }, [disabled]);
 
   return (
