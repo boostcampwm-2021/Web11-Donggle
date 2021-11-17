@@ -1,8 +1,10 @@
 import Modal from '@components/Common/Modal';
 import Rankbar from './Rankbar';
+import Selector from './Selector';
+import { RankbarList, SelectorWrapper, TitleText } from './index.style';
+import { ReactComponent as RankIcon } from '@assets/icons/ranking.svg';
 
 import React from 'react';
-import { RankbarList } from './index.style';
 
 const exampleData = [
   {
@@ -91,6 +93,22 @@ const exampleData = [
 const RankingModal: React.FC = () => {
   return (
     <Modal>
+      <TitleText>
+        <RankIcon height="30px" />
+        <span>동네별 랭킹</span>
+      </TitleText>
+      <SelectorWrapper>
+        <Selector
+          labels={exampleData.map((data) => data.address.split(' ')[1])}
+          onSelected={(idx) => console.log(exampleData[idx])}
+          disabled={false}
+        />
+        <Selector
+          labels={exampleData.map((data) => data.address.split(' ')[1])}
+          onSelected={(idx) => console.log(exampleData[idx])}
+          disabled={false}
+        />
+      </SelectorWrapper>
       <RankbarList>
         {exampleData.map(({ address, categories }, idx) => (
           <Rankbar
