@@ -14,6 +14,7 @@ import {
   LogoutBtn,
   UserProfile,
   ColorBar,
+  ProfileImage,
 } from './index.style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +29,16 @@ const Header: React.FC = () => {
 
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [auth, setAuth] = useRecoilState(authState);
+
+  const onLogoutClick = useCallback(() => {
+    sessionStorage.removeItem('jwt');
+    setAuth({
+      ...auth,
+      oauth_email: '',
+      address: '',
+      image: '',
+    });
+  }, []);
 
   const routeHistory = useCallback(
     (path: string, state: { [index: string]: string } = {}) => {
@@ -92,11 +103,11 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            {auth.isLoggedin ? (
+            {sessionStorage.getItem('jwt') ? (
               <>
-                <LogoutBtn>로그아웃</LogoutBtn>
+                <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>
-                  <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
+                  <ProfileImage src={auth.image} alt="프로필사진" />
                 </UserProfile>
               </>
             ) : (
