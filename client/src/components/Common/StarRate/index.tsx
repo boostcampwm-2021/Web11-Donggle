@@ -23,9 +23,13 @@ const StarRateDiv: React.FC<IProps> = ({ isLarge, total }) => {
   );
   return (
     <RateNumStarDiv>
-      <RateSpanText isLarge={isLarge}>{total}</RateSpanText>
+      <RateSpanText isLarge={isLarge}>
+        {isNaN(Number(total)) ? 'N/A' : total}
+      </RateSpanText>
       <RateStarDiv>
-        <RateStarFillDiv rate={Number(total)}>{faIconList}</RateStarFillDiv>
+        <RateStarFillDiv rate={Number(total) || 0}>
+          {faIconList}
+        </RateStarFillDiv>
         <RateStarBaseDiv>{faIconList}</RateStarBaseDiv>
       </RateStarDiv>
     </RateNumStarDiv>
