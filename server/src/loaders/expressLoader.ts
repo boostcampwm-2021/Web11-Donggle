@@ -23,7 +23,7 @@ export default ({ app }: { app: Application }) => {
     const options: cors.CorsOptions = {
       origin: allowedOrigins,
     };
-    app.use(cors());
+    app.use(cors(options));
   }
 
   app.use(morgan(morganFormat, { stream }));

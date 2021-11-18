@@ -1,4 +1,4 @@
-import Modal from '@components/Common/Modal/index';
+import RankingModal from '@components/RankingModal';
 
 import React from 'react';
 import styled from 'styled-components';
@@ -11,9 +11,7 @@ const RankingDiv = styled.div`
 const RankingPage: React.FC = () => {
   return (
     <RankingDiv>
-      <Modal>
-        <span>Ranking Page 입니다.</span>
-      </Modal>
+      <RankingModal />
     </RankingDiv>
   );
 };

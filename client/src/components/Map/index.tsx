@@ -200,7 +200,6 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     polygons.forEach((polygon) => {
       const onClick = () => {
-        kakao.maps.event.preventMap();
         const matchingMarker = findMarker(markers, polygon.address);
         if (!matchingMarker) return;
 
