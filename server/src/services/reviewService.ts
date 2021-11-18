@@ -50,4 +50,13 @@ const insertReview = async (data: ReviewInsertData) => {
   await mapService.updateRates(mapData.code, data);
 };
 
-export default { dropModel, initializeReviewModel, queryReviews, insertReview };
+const parseHashtags = (text: string) =>
+  Array.from(text.matchAll(/#[^#\s]*/g)).map((hashtag) => hashtag[0]);
+
+export default {
+  dropModel,
+  initializeReviewModel,
+  queryReviews,
+  insertReview,
+  parseHashtags,
+};
