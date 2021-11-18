@@ -1,45 +1,15 @@
 import logger from '@loaders/loggerLoader';
+import config from '@config/index';
 import { Map, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
+import { CoordType, Point, FeatureType, CollectionType } from '@myTypes/Admin';
 
 import axios from 'axios';
 import proj4 from 'proj4';
 import simplify from 'simplify-js';
 
-type CoordType = [number, number];
-
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface FeatureType {
-  type: string;
-  geometry: {
-    type: 'Polygon' | 'MultiPolygon';
-    coordinates: CoordType[][] | CoordType[][][];
-  };
-  properties: {
-    adm_cd: string;
-    adm_nm: string;
-    x: string;
-    y: string;
-  };
-}
-
-interface CollectionType {
-  type: string;
-  id: string;
-  errMsg: string;
-  errCd: number;
-  trId: string;
-  features: FeatureType[];
-}
-
 const getAuthToken = async () => {
-  const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${
-    process.env.KOSIS_CONSUMER_KEY as string
-  }&consumer_secret=${process.env.KOSIS_CONSUMER_SECRET as string}`;
+  const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${config.kosis_consumer_key}&consumer_secret=${config.kosis_consumer_secret}`;
   const token = await axios
     .request<{ result: { accessToken: string } }>({
       url: url,
@@ -61,18 +31,7 @@ const getDistrictCoord = async (code: string, accessToken: string) => {
       url: url,
       method: 'get',
     })
-    .then((res) => res.data)
-    .catch(
-      (err) =>
-        ({
-          type: '',
-          id: '',
-          errMsg: 'ERROR!',
-          errCd: 0,
-          trId: '',
-          features: Array<FeatureType>(),
-        } as CollectionType),
-    );
+    .then((res) => res.data);
 
   return collection;
 };
@@ -135,51 +94,68 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
       code: feature.properties.adm_cd,
       address: feature.properties.adm_nm,
       center: [lat, lng],
+      count: 0,
+      categories: {
+        safety: 0,
+        traffic: 0,
+        food: 0,
+        entertainment: 0,
+      },
     };
 
-    MapModel.create(regionData)
-      .then(() => {
-        logger.info(`insert -> ${regionData.address}`);
-      })
-      .catch((err) => {
-        logger.error(err);
-      });
+    void MapModel.create(regionData).then(() => {
+      logger.info(`insert -> ${regionData.address}`);
+    });
 
-    MapInfoModel.create(mapInfoData)
-      .then(() => {
-        logger.info(`insert -> ${mapInfoData.address} -> mapInfo`);
-      })
-      .catch((err) => {
-        logger.error(err);
-      });
+    void MapInfoModel.create(mapInfoData).then(() => {
+      logger.info(`insert -> ${mapInfoData.address} -> mapInfo`);
+    });
 
     void recursiveGetCoords(feature.properties.adm_cd, accessToken);
   }
 };
 
 const populateMapAndSimpleMap = async (): Promise<void> => {
-  await MapModel.collection
-    .drop()
-    .then((result) => {
-      logger.info('Dropped maps collection');
-    })
-    .catch((err) => {
-      logger.error('Error! : ', err);
-    });
+  await MapModel.collection.drop().then((result) => {
+    logger.info('Dropped maps collection');
+  });
+
   //MapInfo는 업데이트 / 삭제 추후 결정
-  await MapInfoModel.collection
-    .drop()
-    .then((result) => {
-      logger.info('Dropped mapInfos collection');
-    })
-    .catch((err) => {
-      logger.error('Error! : ', err);
-    });
+  await MapInfoModel.collection.drop().then((result) => {
+    logger.info('Dropped mapInfos collection');
+  });
 
   await MapModel.collection.createIndex({ codeLength: 1, address: 'text' });
-  await MapInfoModel.collection.createIndex({ address: 1 });
+  await MapInfoModel.collection.createIndex({ codeLength: 1, address: 'text' });
   const accessToken = await getAuthToken();
   await recursiveGetCoords('', accessToken);
 };
 
-export default { populateMapAndSimpleMap };
+const random = (from: number, to: number) => {
+  return Number((Math.random() * (to - from) + from).toFixed(2));
+};
+
+const getRandomRate = () => {
+  return random(1, 5);
+};
+
+const populateMapInfos = async () => {
+  (await MapInfoModel.find({})).forEach((doc) => {
+    const count = Math.floor(random(0, 100));
+    const safety = Math.floor(getRandomRate() * count);
+    const traffic = Math.floor(getRandomRate() * count);
+    const food = Math.floor(getRandomRate() * count);
+    const entertainment = Math.floor(getRandomRate() * count);
+    const categories = {
+      safety,
+      traffic,
+      food,
+      entertainment,
+    };
+    void doc
+      .updateOne({ count, categories })
+      .then(() => logger.info(`${doc.address} -> mapInfo rate`));
+  });
+};
+
+export default { populateMapAndSimpleMap, populateMapInfos };

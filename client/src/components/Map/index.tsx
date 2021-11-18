@@ -1,6 +1,8 @@
-import MapWrapper, { CenterMarker } from '@components/Map/index.style';
+import MapWrapper, {
+  CenterMarker,
+  SearchbarWrapper,
+} from '@components/Map/index.style';
 import Searchbar from '@components/Searchbar/index';
-
 import {
   getCurrentLocation,
   coordToRegionCode,
@@ -9,20 +11,22 @@ import {
   displayPolygons,
   deletePolygons,
   LFURegions,
+  addPolygonClickEvent,
+  removePolygonClickEvent,
 } from '@controllers/mapController';
-
 import {
   createMarkers,
   displayMarkers,
   deleteMarkers,
-  regionToMarkerInfo,
   createMarkerClickListener,
+  LFURates,
+  findMarker,
 } from '@controllers/markerController';
 
+import { IMapInfo, IPolygon } from '@myTypes/Map';
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
-import { RateType } from '@pages/MainPage';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -33,7 +37,7 @@ const DEFAULT_POSITION = {
 interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
-  updateSidebarRate: (rateData: RateType) => void;
+  updateSidebarRate: (rateData: IMapInfo) => void;
   toggleSidebar: () => void;
 }
 
@@ -44,7 +48,8 @@ const MapComponent: React.FC<IProps> = ({
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
-  const cache = useRef(new Map());
+  const polygonCache = useRef(new Map());
+  const markerCache = useRef(new Map());
 
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [range, setRange] = useState({
@@ -53,7 +58,31 @@ const MapComponent: React.FC<IProps> = ({
   });
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
-  const [polygons, setPolygons] = useState(Array<kakao.maps.Polygon>());
+  const [polygons, setPolygons] = useState(Array<IPolygon>());
+
+  const moveTo = (to: IMapInfo) => {
+    if (map === null) {
+      return;
+    }
+    const [x, y] = to.center;
+    const newCenter = new kakao.maps.LatLng(x, y);
+    map.setCenter(newCenter);
+    let newLevel = 9;
+    switch (to.codeLength) {
+      case 2:
+        newLevel = 11;
+        break;
+      case 5:
+        newLevel = 8;
+        break;
+      case 7:
+        newLevel = 6;
+        break;
+      default:
+        break;
+    }
+    map.setLevel(newLevel);
+  };
 
   useEffect(() => {
     if (!mapWrapper.current) {
@@ -98,7 +127,7 @@ const MapComponent: React.FC<IProps> = ({
     if (!mapWrapper.current) return;
 
     const wrapper = mapWrapper.current;
-    const onClick = (rateData: RateType) => {
+    const onClick = (rateData: IMapInfo) => {
       updateSidebarRate(rateData);
       openSidebar();
     };
@@ -133,14 +162,9 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     const { scale, region } = range;
     const updatePolygons = async () => {
-      const regions = await LFURegions(cache.current, scale, region);
-      console.log(regions);
+      const regions = await LFURegions(polygonCache.current, scale, region);
       const polygons = createPolygons(regions);
       setPolygons(polygons);
-
-      const markerInfos = regions.map((region) => regionToMarkerInfo(region));
-      const markers = createMarkers(markerInfos);
-      setMarkers(markers);
     };
     updatePolygons();
   }, [range]);
@@ -153,15 +177,53 @@ const MapComponent: React.FC<IProps> = ({
   }, [map, polygons]);
 
   useEffect(() => {
+    const { scale, region } = range;
+    const updateMarkers = async () => {
+      const rates = (await LFURates(
+        markerCache.current,
+        scale,
+        region,
+      )) as IMapInfo[];
+      const markers = createMarkers(rates);
+      setMarkers(markers);
+    };
+    updateMarkers();
+  }, [range]);
+
+  useEffect(() => {
     if (!map) return;
 
     displayMarkers(markers, map);
     return () => deleteMarkers(markers);
   }, [map, markers]);
 
+  useEffect(() => {
+    polygons.forEach((polygon) => {
+      const onClick = () => {
+        const matchingMarker = findMarker(markers, polygon.address);
+        if (!matchingMarker) return;
+
+        const markerEl = matchingMarker.getContent() as HTMLElement;
+        const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
+
+        updateSidebarRate(sidebarRate);
+        openSidebar();
+      };
+      addPolygonClickEvent(polygon, onClick);
+    });
+
+    return () => {
+      polygons.forEach((polygon) => {
+        removePolygonClickEvent(polygon);
+      });
+    };
+  }, [polygons, markers, openSidebar, updateSidebarRate]);
+
   return (
     <MapWrapper ref={mapWrapper}>
-      <Searchbar map={map} />
+      <SearchbarWrapper>
+        <Searchbar onClickHandler={moveTo} />
+      </SearchbarWrapper>
       <CenterMarker />
     </MapWrapper>
   );

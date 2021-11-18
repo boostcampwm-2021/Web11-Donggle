@@ -1,8 +1,9 @@
 import ColorHash from 'color-hash';
+import { CoordType, IMap, IPolygon } from '@myTypes/Map';
+import { IAPIResult } from '@myTypes/Common';
 
-function getCurrentLocation(callback: (coord: [number, number]) => void) {
-  // const coord: [number, number] = [37.5642135, 127.0016985];
-  let coord: [number, number] = [37.5642135, 127.0016985];
+function getCurrentLocation(callback: (coord: CoordType) => void) {
+  let coord: CoordType = [37.5642135, 127.0016985];
 
   const successCallback: PositionCallback = (position) => {
     const { latitude, longitude } = position.coords; // (처음 접속)현재 사용자위치
@@ -81,28 +82,59 @@ const isRangeEqual = (
 };
 
 // backend에 polygon 정보 요청
-const requestCoord = async (scale: number, region: Array<string>) => {
+const requestCoord = async (
+  scale: number,
+  region: Array<string>,
+): Promise<IMap[]> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
   )
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      throw Error('요청 실패');
+    })
+    .then((res: IAPIResult<IMap[]>) => {
+      return res.result;
+    })
     .catch((err) => {
       console.error(err);
+      return [];
     });
 };
 
 const createPolygons = (regions) => {
-  const polygons = Array<kakao.maps.Polygon>();
+  const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
   regions.forEach((region) => {
     const colorString = colorHash.hex(region.address);
     if (region.type === 'Polygon') {
-      polygons.push(makeSinglePolygon(region.path, colorString));
+      polygons.push(
+        makeSinglePolygon(region.path, region.address, colorString),
+      );
     } else {
-      polygons.push(...makeMultiPolygon(region.path, colorString));
+      polygons.push(
+        ...makeMultiPolygon(region.path, region.address, colorString),
+      );
     }
   });
   return polygons;
+};
+
+const addPolygonClickEvent = (polygon: IPolygon, onClick: () => void) => {
+  if (polygon.onClick) {
+    kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
+  }
+  polygon.onClick = onClick;
+  kakao.maps.event.addListener(polygon, 'click', onClick);
+};
+
+const removePolygonClickEvent = (polygon: IPolygon) => {
+  if (polygon.onClick) {
+    kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
+  }
+  polygon.onClick = undefined;
 };
 
 const addPolygonEvent = (
@@ -114,7 +146,11 @@ const addPolygonEvent = (
   kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
 };
 
-const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
+const makeSinglePolygon = (
+  coords: [number, number][],
+  address: string,
+  colorString: string,
+) => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
@@ -126,7 +162,7 @@ const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
     strokeOpacity: 0.8,
     fillColor: colorString,
     fillOpacity: 0.7,
-  });
+  }) as IPolygon;
 
   addPolygonEvent(
     polygon,
@@ -140,11 +176,13 @@ const makeSinglePolygon = (coords: [number, number][], colorString: string) => {
     },
   );
 
+  polygon.address = address;
   return polygon;
 };
 
 const makeMultiPolygon = (
   coordsArray: [number, number][][][],
+  address: string,
   colorString: string,
 ) => {
   const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
@@ -162,10 +200,10 @@ const makeMultiPolygon = (
         strokeOpacity: 0.8,
         fillColor: colorString,
         fillOpacity: 0.7,
-      }),
+      }) as IPolygon,
   );
 
-  polygons.forEach((polygon) =>
+  polygons.forEach((polygon) => {
     addPolygonEvent(
       polygon,
       () =>
@@ -178,8 +216,9 @@ const makeMultiPolygon = (
           polygon.setOptions({ strokeColor: colorString, fillOpacity: 0.7 });
           polygon.setZIndex(0);
         }),
-    ),
-  );
+    );
+    polygon.address = address;
+  });
 
   return polygons;
 };
@@ -196,7 +235,7 @@ const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
 };
 
 const LFURegions = async (
-  cache: Map<string, any>,
+  cache: Map<string, IMap[] & { count: number }>,
   scale: number,
   region: string[],
 ) => {
@@ -216,10 +255,13 @@ const LFURegions = async (
   }
 
   if (cache.has(key)) {
-    cache.get(key).count++;
-    return cache.get(key);
+    const regions = cache.get(key);
+    if (regions) regions.count++;
+    return regions;
   } else {
-    const regions = await requestCoord(scale, region);
+    const regions = (await requestCoord(scale, region)) as IMap[] & {
+      count: number;
+    };
     regions.count = 1;
     if (cache.size > 10) {
       const mostUnusedRegions = Array.from(cache.entries()).sort(
@@ -243,4 +285,6 @@ export {
   displayPolygons,
   deletePolygons,
   LFURegions,
+  addPolygonClickEvent,
+  removePolygonClickEvent,
 };

@@ -1,16 +1,11 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
-  position: relative;
-  height: 100%;
-`;
-
 const Layout = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 100vh;
+  height: calc(100% - ${(props) => props.theme.componentSize.header});
   right: 0;
   z-index: 1;
   overflow-y: scroll;
@@ -18,7 +13,6 @@ const Layout = styled.div`
   transform: translateX(400px);
 
   transition: all ease 0.3s 0s;
-  padding-bottom: 6.3em;
   &.open {
     transform: translateX(0px);
   }
@@ -116,77 +110,24 @@ const Menu = styled.span`
   cursor: pointer;
 `;
 
-const ContentDiv = styled(BaseDiv)`
+const ReviewContentDiv = styled(BaseDiv)`
   position: relative;
-  padding-bottom: 20px;
   flex-direction: column;
   justify-content: center;
-  line-height: 22px;
 `;
 
-const ContentTopDiv = styled(BaseDiv)`
-  display: flex;
-  width: 90%;
-  justify-content: space-between;
-  border-bottom: none;
-`;
-
-const UserText = styled(SpanText)`
-  font-size: 12px;
-  color: ${(props) => props.theme.colors.ashgrey};
-`;
-
-const ContentTextDiv = styled(BaseDiv)`
-  width: 90%;
-  font-size: 12px;
-  border-bottom: none;
-  line-height: 22px;
-  color: ${(props) => props.theme.colors.ashgrey};
-`;
-
-const ContentBottomDiv = styled(BaseDiv)`
-  display: flex;
-  justify-content: center;
-  border-bottom: none;
-  margin-top: 25px;
-`;
-
-const DetailBtn = styled.button`
-  border: none;
-  font-size: 14px;
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.ashgrey};
-  cursor: pointer;
-
-  &:after {
-    margin-left: 10px;
-    content: '⇣';
-  }
-`;
-
-const AddButtonDiv = styled(BaseDiv)`
+const SidebarBottomDiv = styled(BaseDiv)`
+  bottom: 0;
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
+  height: 20px;
   padding: 10px 0px;
-  line-height: 1;
   background-color: ${(props) => props.theme.colors.lightgreen};
 `;
 
-const AddButton = styled.button`
-  width: 100%;
-  height: 100%;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.white};
-  cursor: pointer;
-`;
-
 export {
-  Container,
   Layout,
   TitleDiv,
   SpanText,
@@ -198,12 +139,6 @@ export {
   HashTagDiv,
   MenuBarDiv,
   Menu,
-  ContentDiv,
-  ContentTopDiv,
-  UserText,
-  ContentTextDiv,
-  ContentBottomDiv,
-  DetailBtn,
-  AddButtonDiv,
-  AddButton,
+  ReviewContentDiv,
+  SidebarBottomDiv,
 };

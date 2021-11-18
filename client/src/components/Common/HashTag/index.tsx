@@ -9,8 +9,8 @@ interface IProps {
 const HashTagList: React.FC<IProps> = ({ hashTags }) => {
   return (
     <>
-      {hashTags.map((hashTag: string) => (
-        <HashTag key={hashTag}>{hashTag}</HashTag>
+      {hashTags.map((hashTag: string, idx) => (
+        <HashTag key={idx}>{hashTag}</HashTag>
       ))}
     </>
   );

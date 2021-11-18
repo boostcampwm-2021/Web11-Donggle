@@ -8,29 +8,20 @@ import {
   RateCategoryBar,
   RateCategoryNum,
 } from './index.style';
-
-enum Category {
-  safety = '치안',
-  traffic = '교통',
-  food = '음식',
-  entertainment = '놀거리',
-}
+import { Category } from '@utils/enum';
+import { ICategories } from '@myTypes/Review';
 
 interface IProps {
   count: number;
-  categories: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
+  categories: ICategories;
 }
 
 const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
-  const bar = (Object.keys(categories) as (keyof typeof Category)[]).map(
-    (category) => {
+  const bar = Object.keys(categories)
+    .filter((category) => category !== '_id')
+    .map((category, idx) => {
       return (
-        <>
+        <React.Fragment key={category + idx}>
           <RateCategoryTitle>{Category[category]}</RateCategoryTitle>
           <RateCategoryUnit>
             <RateCategoryBar
@@ -40,10 +31,9 @@ const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
               {(categories[category] / count).toFixed(1)}
             </RateCategoryNum>
           </RateCategoryUnit>
-        </>
+        </React.Fragment>
       );
-    },
-  );
+    });
 
   return (
     <RateCategoryDiv>

@@ -8,9 +8,16 @@ type ThemeComponent = {
 };
 
 type Theme = {
+  componentSize: ThemeComponent;
   fontSizes: ThemeComponent;
   colors: ThemeComponent;
   common: ThemeComponent;
+};
+
+const componentSize: ThemeComponent = {
+  header: '140px',
+  headerLayout: '80px',
+  headerColorbar: '60px',
 };
 
 const fontSizes: ThemeComponent = {
@@ -33,6 +40,7 @@ const colors: ThemeComponent = {
   darkblue: '#00008B',
   deepseablue: '#123456',
   lightwhite: '#FFFFF7',
+  red: '#DB4242',
 };
 
 const common: ThemeComponent = {
@@ -47,14 +55,15 @@ const common: ThemeComponent = {
     align-items: center;
   `,
   flexRow: `
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`,
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  `,
 };
 
 // theme 객체에 감싸서 반환한다.
 const theme: Theme = {
+  componentSize,
   fontSizes,
   colors,
   common,

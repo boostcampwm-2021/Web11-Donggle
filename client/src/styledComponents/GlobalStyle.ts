@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     font-family: "Noto Sans KR";
   }
+
+  button {
+    border: none;
+  }
 `;
 
 export default GlobalStyle;

@@ -1,3 +1,4 @@
+import config from '@config/index';
 import { logger } from '@loaders/index';
 import apiController from '@api/indexController';
 import adminController from '@api/adminController';
@@ -14,11 +15,11 @@ const stream = {
   },
 };
 
-const morganFormat = process.env.NODE_ENV !== 'production' ? 'dev' : 'combined';
+const morganFormat = config.node_env !== 'production' ? 'dev' : 'combined';
 
 export default ({ app }: { app: Application }) => {
   if (morganFormat == 'dev') {
-    const allowedOrigins = [`${process.env.REACT_URL as string}`];
+    const allowedOrigins = [`${config.react_url}`];
     const options: cors.CorsOptions = {
       origin: allowedOrigins,
     };

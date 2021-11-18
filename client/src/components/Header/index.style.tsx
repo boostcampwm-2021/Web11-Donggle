@@ -22,7 +22,7 @@ const Layout = styled.div`
   top: 0;
   display: flex;
   width: 100%;
-  height: 80px;
+  height: ${(props) => props.theme.componentSize.headerLayout};
   padding: 5px 10px;
 `;
 
@@ -80,11 +80,12 @@ const ProfileWrapper = styled.div`
   align-items: center;
 `;
 
-const LoginBtn = styled.button`
+const SignInBtn = styled.button`
   border: 1px solid ${(props) => props.theme.colors.lightgreen};
   border-radius: 10px;
   background: ${(props) => props.theme.colors.white};
-  width: 100px;
+  min-width: 100px;
+  width: fit-content;
   height: 40px;
   text-align: center;
   cursor: pointer;
@@ -95,19 +96,41 @@ const LoginBtn = styled.button`
   }
 `;
 
-const LogoutBtn = styled(LoginBtn)`
+const ReviewButton = styled(SignInBtn)`
+  background: ${(props) => props.theme.colors.lightgreen};
+  color: ${(props) => props.theme.colors.white};
+  cursor: pointer;
+  margin-right: 10px;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.lightgreen};
+  }
+`;
+
+const LogoutBtn = styled(SignInBtn)`
   margin-right: 10px;
 `;
 
 const UserProfile = styled.div`
   margin: 0 15px;
+  width: 60px;
+  height: 45px;
   cursor: pointer;
+  border-radius: 30%;
+  overflow: hidden;
 `;
 
 const ColorBar = styled.div`
   width: 100%;
-  height: 30px;
+  height: ${(props) => props.theme.componentSize.headerColorbar};
   background: ${(props) => props.theme.colors.lightgreen};
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 export {
@@ -120,8 +143,10 @@ export {
   MenuList,
   Menu,
   ProfileWrapper,
-  LoginBtn,
+  SignInBtn,
+  ReviewButton,
   LogoutBtn,
   UserProfile,
   ColorBar,
+  ProfileImage,
 };

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const MapWrapper = styled.div`
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - ${(props) => props.theme.componentSize.header});
 `;
 
 const TestDiv = styled.div`
@@ -29,5 +29,11 @@ const CenterMarker = styled.img`
 `;
 CenterMarker.defaultProps = { src: marker };
 
+const SearchbarWrapper = styled.div`
+  position: relative;
+  top: 20px;
+  left: 20px;
+`;
+
 export default MapWrapper;
-export { TestDiv, CenterMarker };
+export { TestDiv, CenterMarker, SearchbarWrapper };
