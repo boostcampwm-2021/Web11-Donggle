@@ -34,21 +34,34 @@ const Modal: React.FC = ({ children }) => {
 
   //모달창 바깥 클릭 시 모달창 없애기
   //https://chach4.tistory.com/4 참고
-  useEffect(() => {
-    const handleCloseModal = (e) => {
-      if (e.target.className.includes('modalOverlay')) {
-        routeHistory(location.state.background.pathname, {});
-      }
-    };
-    window.addEventListener('click', handleCloseModal);
-    return () => {
-      window.removeEventListener('click', handleCloseModal);
-    };
-  });
+  // useEffect(() => {
+  //   const handleCloseModal = (e) => {
+  //     if (
+  //       e.target.className &&
+  //       typeof e.target.className.includes !== 'undefined' &&
+  //       e.target.className.includes('modalOverlay')
+  //     ) {
+  //       routeHistory(location.state.background.pathname, {});
+  //     }
+  //   };
+  //   window.addEventListener('click', handleCloseModal);
+  //   return () => {
+  //     window.removeEventListener('click', handleCloseModal);
+  //   };
+  // });
 
   return (
-    <ModalOverlay className="modalOverlay">
-      <ModalWrapper>
+    <ModalOverlay
+      className="modalOverlay"
+      onClick={() => {
+        routeHistory(location.state.background.pathname, {});
+      }}
+    >
+      <ModalWrapper
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <ModalCloseBtnDiv>
           <ModalCloseBtn onClick={onClick}>
             <ModalCloseImage />
