@@ -62,12 +62,10 @@ const queryRates = async (
     codeLength: 1,
     center: 1,
     count: 1,
-    categories: {
-      safety: '$categories.safety',
-      traffic: '$categories.traffic',
-      food: '$categories.food',
-      entertainment: '$categories.entertainment',
-    },
+    'categories.safety': 1,
+    'categories.traffic': 1,
+    'categories.food': 1,
+    'categories.entertainment': 1,
   };
 
   switch (true) {

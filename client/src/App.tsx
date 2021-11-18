@@ -60,7 +60,6 @@ const App: React.FC = () => {
               <Route path="/review" component={ReviewPage} />
               <Route path="/signin" component={SignInPage} />
               <Route path="/github/callback" component={LoadingPage} />
-              <Route path="/signup" component={SignUpPage} />
               <Route path="/profile" component={ProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>
@@ -75,6 +74,7 @@ const App: React.FC = () => {
                 component={ProfileAddressPage}
               />
             )}
+            {background && <Route path="/signup" component={SignUpPage} />}
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>

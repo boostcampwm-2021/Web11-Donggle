@@ -42,7 +42,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
           cancel={false}
           onClick={async () => {
             await onSubmitHandler(mapInfo);
-            onCancelHandler();
           }}
         >
           제출
