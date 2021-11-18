@@ -8,6 +8,7 @@ dotenv.config({
 
 export default {
   node_env: process.env.NODE_ENV || '',
+  host: process.env.HOST || 'localhost',
   port: parseInt(process.env.PORT || '3003', 10),
   mongo_host: process.env.MONGO_HOST || '',
   kosis_consumer_key: process.env.KOSIS_CONSUMER_KEY || '',
