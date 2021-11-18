@@ -27,6 +27,9 @@ jobs:
       - name: Generate Environment Variables File for Production
         run: |
           echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.production
+          echo "REACT_APP_CLIENT_ID=$REACT_APP_CLIENT_ID" >> .env.production
+          echo "REACT_APP_REDIRECT_URL=$REACT_APP_REDIRECT_URL" >> .env.production
+          echo "REACT_APP_MAIN_URL=$REACT_APP_MAIN_URL" >> .env.production
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         working-directory: ${{env.client-directory}}
