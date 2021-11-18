@@ -40,6 +40,7 @@ const colors: ThemeComponent = {
   darkblue: '#00008B',
   deepseablue: '#123456',
   lightwhite: '#FFFFF7',
+  red: '#DB4242',
 };
 
 const common: ThemeComponent = {

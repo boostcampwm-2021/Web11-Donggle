@@ -15,6 +15,7 @@ import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
+import Snackbar from '@components/Snackbar';
 
 import React from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
@@ -54,28 +55,29 @@ const App: React.FC = () => {
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
           <ContentWrapper>
-            <Header />
-            <Switch location={background || location}>
-              <Route exact path="/" component={MainPage} />
-              <Route path="/review" component={ReviewPage} />
-              <Route path="/signin" component={SignInPage} />
-              <Route path="/github/callback" component={LoadingPage} />
-              <Route path="/profile" component={ProfilePage} />
-              <Route component={NotFoundPage} />
-            </Switch>
-            {background && (
-              <Route path="/write-review" component={ReviewSubmitPage} />
-            )}
-            {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" render={SignInPage} />}
-            {background && (
-              <Route
-                path="/profile/update-address"
-                component={ProfileAddressPage}
-              />
-            )}
-            {background && <Route path="/signup" component={SignUpPage} />}
-          </ContentWrapper>
+        <Snackbar />
+        <Header />
+        <Switch location={background || location}>
+          <Route exact path="/" component={MainPage} />
+          <Route path="/review" component={ReviewPage} />
+          <Route path="/signin" component={SignInPage} />
+          <Route path="/github/callback" component={LoadingPage} />
+          <Route path="/signup" component={SignUpPage} />
+          <Route path="/profile" component={ProfilePage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+        {background && (
+          <Route path="/write-review" component={ReviewSubmitPage} />
+        )}
+        {background && <Route path="/ranking" render={RankingPage} />}
+        {background && <Route path="/signin" render={SignInPage} />}
+        {background && (
+          <Route
+            path="/profile/update-address"
+            component={ProfileAddressPage}
+          />
+        )}
+      </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
     </>
