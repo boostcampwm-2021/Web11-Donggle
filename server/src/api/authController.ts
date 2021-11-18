@@ -26,6 +26,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
     const isMember = await authService.isMember(oauthEmail.oauth_email);
     let userInfo = {
       jwtToken: '',
+      refreshToken: '',
       oauthEmail: '',
       address: '',
       image: '',
@@ -36,6 +37,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
       userInfo = {
         ...userInfo,
         jwtToken: jwtToken.token,
+        refreshToken: jwtToken.refreshToken,
         oauthEmail: isMember.oauth_email,
         address: isMember.address,
         image: isMember.image as string,
@@ -71,14 +73,16 @@ router.post('/signup', (async (req: Request, res: Response) => {
     await authService.saveUserInfo(newUserInfo);
     const jwtToken = jwt.sign({ oauth_email: oauthEmail });
 
-    res
-      .status(200)
-      .json(
-        makeApiResponse(
-          { jwtToken: jwtToken.token, address: address },
-          '성공적으로 회원가입 되었습니다.',
-        ),
-      );
+    res.status(200).json(
+      makeApiResponse(
+        {
+          jwtToken: jwtToken.token,
+          refreshToken: jwtToken.refreshToken,
+          address: address,
+        },
+        '성공적으로 회원가입 되었습니다.',
+      ),
+    );
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);

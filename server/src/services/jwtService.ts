@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import jwtConfig from '@config/secretKey';
+import randToken from 'rand-token';
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
@@ -9,8 +10,9 @@ export default {
     const payload = {
       oauth_email: user.oauth_email,
     };
-    const token: { token: string } = {
+    const token: { token: string; refreshToken: string } = {
       token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
+      refreshToken: randToken.uid(16),
     };
     return token;
   },
