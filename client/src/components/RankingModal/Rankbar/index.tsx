@@ -5,7 +5,7 @@ import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import CircleRate from '@components/Common/CircleRate';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 
 interface IDetailedProps {
   total: number;
@@ -30,8 +30,8 @@ const DetailedRankbar: React.FC<IDetailedProps> = ({ total, categories }) => {
 const Rankbar: React.FC<IRankbarProps> = ({ rank, address, categories }) => {
   const [showDetails, setShowDetails] = useState(false);
 
-  const toggleDetails = () => setShowDetails((prev) => !prev);
-  const totalRate = calcTotal(categories);
+  const toggleDetails = useCallback(() => setShowDetails((prev) => !prev), []);
+  const totalRate = useMemo(() => calcTotal(categories), [categories]);
 
   return (
     <div>

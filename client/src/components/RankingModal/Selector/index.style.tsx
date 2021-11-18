@@ -4,7 +4,6 @@ import React from 'react';
 const DropdownWrapper = styled.div`
   position: absolute;
   z-index: 4000;
-  padding: 0 10px;
   left: 0;
   width: 100%;
   max-height: 240px;
@@ -13,8 +12,19 @@ const DropdownWrapper = styled.div`
   border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.colors?.green ?? '#33AB74'};
 
+  > *:first-child {
+    background-color: ${({ theme }) => theme.colors?.lightgrey ?? '#C4C4C4'};
+  }
+
   > *:not(:last-child) {
-    border-bottom: 1px solid #c5c5c5;
+    ::after {
+      position: relative;
+      top: 8px;
+      display: block;
+      margin: 0 12px;
+      content: '';
+      border-bottom: 1px solid #c5c5c5;
+    }
   }
 
   overflow-y: scroll;
@@ -33,6 +43,9 @@ const DropdownItem = styled.div`
   padding: 8px 0;
   cursor: pointer;
   text-align: center;
+  :hover {
+    background-color: ${({ theme }) => theme.colors?.grey ?? '#E5E5E5'};
+  }
 `;
 
 const SelectBarDiv = styled.div`
