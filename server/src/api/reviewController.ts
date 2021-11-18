@@ -31,13 +31,27 @@ router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
   }
 }) as RequestHandler);
 
+router.get('/', (async (req: Request, res: Response) => {
+  try {
+    const address = req.query.address as string;
+    const pageNum: number = parseInt(req.query.pageNum as string);
+    const itemNum: number = parseInt(req.query.itemNum as string);
+    if (!address)
+      throw new Error('정상적이지 않은 요청입니다. Address 값 부재');
+    const data = await reviewService.queryReviews(address, pageNum, itemNum);
+    res.status(200).json(makeApiResponse(data, ''));
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res
+      .status(500)
+      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+  }
+}) as RequestHandler);
+
 router.post('/', (async (req: ReviewInsertRequest, res: Response) => {
   try {
-    const insertData = {
-      address: req.body.address,
-      text: req.body.text,
-      rate: req.body.categories,
-    };
+    const insertData = req.body;
     if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');
     await reviewService.insertReview(insertData);
     res

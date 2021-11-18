@@ -1,11 +1,12 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, PopulatedDoc } from 'mongoose';
+import { User } from '@models/User';
 
 type CoordType = [number, number];
 
 interface Review {
   address: string;
-  code?: string; // 우선 optional 값으로 지정
-  center?: CoordType; // 우선 optional 값으로 지정
+  code: string;
+  center: CoordType;
   categories: {
     safety: number;
     traffic: number;
@@ -13,14 +14,14 @@ interface Review {
     entertainment: number;
   };
   text?: string;
-  user?: string; // 우선 optional 값으로 지정
-  createdAt?: Date; // 우선 optional 값으로 지정
+  user: string; // 회원가입 로직 구현 후 변경 PopulatedDoc<User>;
+  createdAt: Date;
 }
 
 const reviewSchema = new Schema<Review>({
   address: { type: String, required: true },
-  code: { type: String }, // required 임시 제거
-  center: { type: [Number, Number] }, // required 임시 제거
+  code: { type: String, required: true },
+  center: { type: [Number, Number], required: true },
   categories: {
     safety: { type: Number, required: true },
     traffic: { type: Number, required: true },
@@ -28,8 +29,9 @@ const reviewSchema = new Schema<Review>({
     entertainment: { type: Number, required: true },
   },
   text: { type: String },
-  user: { type: String }, // required 임시 제거
-  createdAt: { type: Date, required: true, default: Date.now },
+  // Schema.Types.ObjectId,
+  user: { type: String, required: true, ref: 'User' },
+  createdAt: { type: Date, required: true, default: new Date() },
 });
 
 const ReviewModel = model<Review>('Review', reviewSchema);

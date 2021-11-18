@@ -1,9 +1,9 @@
 import Map from '@components/Map/index';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import styled from 'styled-components';
-import Sidebar from '@components/Sidebar';
-import { IReviewRate } from '@myTypes/Review';
+const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
+
 import { IMapInfo } from '@myTypes/Map';
 
 const MainDiv = styled.div`
@@ -20,28 +20,28 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-const TemporaryReviewData: IReviewRate[] = [
-  {
-    categories: {
-      safety: 4,
-      traffic: 4,
-      food: 5,
-      entertainment: 3,
-    },
-    text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
-    user: 'github:user1',
-  },
-  {
-    categories: {
-      safety: 4,
-      traffic: 4,
-      food: 4,
-      entertainment: 4,
-    },
-    text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
-    user: 'github:user2',
-  },
-];
+// const TemporaryReviewData: IReviewContent[] = [
+//   {
+//     categories: {
+//       safety: 4,
+//       traffic: 4,
+//       food: 5,
+//       entertainment: 3,
+//     },
+//     text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
+//     user: 'github:user1',
+//   },
+//   {
+//     categories: {
+//       safety: 4,
+//       traffic: 4,
+//       food: 4,
+//       entertainment: 4,
+//     },
+//     text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
+//     user: 'github:user2',
+//   },
+// ];
 
 const TemporaryHashTagData: string[] = [
   '소음이 적은',
@@ -70,7 +70,7 @@ const MainPage: React.FC = () => {
   const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
 
   const toggleSidebar = () => {
-    setSidebar((prev) => !prev);
+    setSidebar(!sidebar);
   };
 
   const openSidebar = useCallback(() => {
@@ -94,13 +94,16 @@ const MainPage: React.FC = () => {
           updateSidebarRate={updateSidebarRate}
           toggleSidebar={toggleSidebar}
         ></Map>
-        <Sidebar
-          sidebar={sidebar}
-          rateData={sidebarRate}
-          reviewData={TemporaryReviewData}
-          hashTagData={TemporaryHashTagData}
-          closeSidebar={closeSidebar}
-        ></Sidebar>
+        {sidebar && (
+          <Suspense fallback="loading...">
+            <SidebarLazy
+              sidebar={sidebar}
+              rateData={sidebarRate}
+              hashTagData={TemporaryHashTagData}
+              closeSidebar={closeSidebar}
+            ></SidebarLazy>
+          </Suspense>
+        )}
       </FlexContainer>
     </MainDiv>
   );

@@ -5,16 +5,19 @@ interface ICategories {
   entertainment: number;
 }
 
-interface IReviewRate {
+interface IReviewSubmit {
+  address: string;
   text: string;
   user: string;
   categories: ICategories;
 }
 
-interface IReviewSubmit {
-  address: string;
+interface IReviewContent {
   text: string;
+  user: string;
+  dateDiff: number;
+  createdAt: Date;
   categories: ICategories;
 }
 
-export { ICategories, IReviewRate, IReviewSubmit };
+export { ICategories, IReviewContent, IReviewSubmit };

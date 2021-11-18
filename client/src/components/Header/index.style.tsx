@@ -22,7 +22,7 @@ const Layout = styled.div`
   top: 0;
   display: flex;
   width: 100%;
-  height: 80px;
+  height: ${(props) => props.theme.componentSize.headerLayout};
   padding: 5px 10px;
 `;
 
@@ -84,7 +84,8 @@ const SignInBtn = styled.button`
   border: 1px solid ${(props) => props.theme.colors.lightgreen};
   border-radius: 10px;
   background: ${(props) => props.theme.colors.white};
-  width: 100px;
+  min-width: 100px;
+  width: fit-content;
   height: 40px;
   text-align: center;
   cursor: pointer;
@@ -92,6 +93,18 @@ const SignInBtn = styled.button`
   &:hover {
     background: ${(props) => props.theme.colors.lightgreen};
     color: ${(props) => props.theme.colors.white};
+  }
+`;
+
+const ReviewButton = styled(SignInBtn)`
+  background: ${(props) => props.theme.colors.lightgreen};
+  color: ${(props) => props.theme.colors.white};
+  cursor: pointer;
+  margin-right: 10px;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.lightgreen};
   }
 `;
 
@@ -110,7 +123,7 @@ const UserProfile = styled.div`
 
 const ColorBar = styled.div`
   width: 100%;
-  height: 60px;
+  height: ${(props) => props.theme.componentSize.headerColorbar};
   background: ${(props) => props.theme.colors.lightgreen};
 `;
 
@@ -131,6 +144,7 @@ export {
   Menu,
   ProfileWrapper,
   SignInBtn,
+  ReviewButton,
   LogoutBtn,
   UserProfile,
   ColorBar,
