@@ -49,8 +49,6 @@ router.patch(
     const body: ProfileImageBody = req.body as ProfileImageBody;
     const { oauth_email, image: prevImage } = body;
 
-    console.log(oauth_email, prevImage);
-
     if (oauth_email && req.file) {
       try {
         let image = `${process.env.IMAGE_ENDPOINT as string}/${
