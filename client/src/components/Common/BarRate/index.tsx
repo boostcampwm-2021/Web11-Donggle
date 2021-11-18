@@ -25,10 +25,12 @@ const BarRateDiv: React.FC<IProps> = ({ count, categories }) => {
           <RateCategoryTitle>{Category[category]}</RateCategoryTitle>
           <RateCategoryUnit>
             <RateCategoryBar
-              rate={categories[category] / count}
+              rate={categories[category] / count || 0}
             ></RateCategoryBar>
             <RateCategoryNum>
-              {(categories[category] / count).toFixed(1)}
+              {isNaN(categories[category] / count)
+                ? 'N/A'
+                : (categories[category] / count).toFixed(1)}
             </RateCategoryNum>
           </RateCategoryUnit>
         </React.Fragment>
