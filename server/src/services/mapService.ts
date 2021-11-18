@@ -1,5 +1,6 @@
 import { Map, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
+import { ReviewInsertData } from '@myTypes/Review';
 
 const queryPolygon = async (
   scale: number,
@@ -94,4 +95,26 @@ const queryRates = async (
   return result;
 };
 
-export default { queryPolygon, queryCenter, queryRates };
+const updateRates = async (code: string, review: ReviewInsertData) => {
+  const conditions = [
+    { codeLength: 2, code: code.slice(0, 2) },
+    { codeLength: 5, code: code.slice(0, 5) },
+    { codeLength: 7, code: code },
+  ];
+
+  const increment = {
+    count: 1,
+    'categories.safety': review.categories.safety,
+    'categories.traffic': review.categories.traffic,
+    'categories.food': review.categories.food,
+    'categories.entertainment': review.categories.entertainment,
+  };
+
+  await MapInfoModel.updateMany(
+    { $or: conditions },
+    {
+      $inc: increment,
+    },
+  );
+};
+export default { queryPolygon, queryCenter, queryRates, updateRates };

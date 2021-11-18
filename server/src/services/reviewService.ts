@@ -38,15 +38,16 @@ const queryReviews = async (
 
 const insertReview = async (data: ReviewInsertData) => {
   const mapInfo: MapInfo[] = await mapService.queryCenter(data.address);
-  const codeAndCenter = {
+  const mapData = {
     code: mapInfo[0].code,
     center: mapInfo[0].center,
   };
   const insertData = {
     ...data,
-    ...codeAndCenter,
+    ...mapData,
   };
   await ReviewModel.create(insertData);
+  await mapService.updateRates(mapData.code, data);
 };
 
 export default { dropModel, initializeReviewModel, queryReviews, insertReview };

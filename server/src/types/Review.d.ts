@@ -1,11 +1,9 @@
 import { Request } from 'express';
 export interface CategoryRateType {
-  categories: {
-    safety: number;
-    traffic: number;
-    food: number;
-    entertainment: number;
-  };
+  safety: number;
+  traffic: number;
+  food: number;
+  entertainment: number;
 }
 
 export interface ReviewInsertData {

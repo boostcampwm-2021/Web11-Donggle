@@ -64,7 +64,7 @@ const App: React.FC = () => {
             <Route component={NotFoundPage} />
           </Switch>
           {background && (
-            <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
+            <Route path="/write-review" component={ReviewSubmitPage} />
           )}
           {background && <Route path="/ranking" render={RankingPage} />}
           {background && <Route path="/signin" render={SignInPage} />}
