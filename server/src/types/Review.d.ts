@@ -15,6 +15,14 @@ export interface ReviewInsertData {
   categories: CategoryRateType;
 }
 
+export interface ReviewFindData {
+  _id: string;
+  dateDiff: number;
+  text: string;
+  user: string;
+  categories: CategoryRateType;
+}
+
 export interface ReviewRequest extends Request {
   body: {
     password: string;

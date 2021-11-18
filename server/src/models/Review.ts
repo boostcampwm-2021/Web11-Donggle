@@ -14,7 +14,7 @@ interface Review {
   };
   text?: string;
   user: string;
-  createdAt?: Date;
+  createdAt: Date;
 }
 
 const reviewSchema = new Schema<Review>({
@@ -29,7 +29,7 @@ const reviewSchema = new Schema<Review>({
   },
   text: { type: String },
   user: { type: String, required: true },
-  createdAt: { type: Date, required: true, default: Date.now },
+  createdAt: { type: Date, required: true, default: new Date() },
 });
 
 const ReviewModel = model<Review>('Review', reviewSchema);

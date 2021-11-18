@@ -1,6 +1,6 @@
 import { MapInfo } from '@models/MapInfo';
 import { Review, ReviewModel } from '@models/Review';
-import { ReviewInsertData } from '@myTypes/Review';
+import { ReviewFindData, ReviewInsertData } from '@myTypes/Review';
 import { mapService } from '@services/index';
 
 const dropModel = async () => {
@@ -15,11 +15,11 @@ const queryReviews = async (
   address: string,
   pageNum: number,
   itemNum: number,
-): Promise<Review[]> => {
+): Promise<Review[] | []> => {
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
 
-  const fields = { __v: 0 };
+  const fields = { categories: 1, text: 1, user: 1, createdAt: 1 };
 
   const reviewData = await ReviewModel.find(
     {

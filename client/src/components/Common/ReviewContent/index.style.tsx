@@ -34,6 +34,17 @@ const ContentTopDiv = styled(BaseDiv)`
   justify-content: space-between;
 `;
 
+const ContentTopTextDiv = styled(BaseDiv)`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const DateText = styled(SpanText)`
+  font-size: 12px;
+  margin-right: 10px;
+  color: ${(props) => props.theme.colors.ashgrey};
+`;
+
 const UserText = styled(SpanText)`
   font-size: 12px;
   color: ${(props) => props.theme.colors.ashgrey};
@@ -67,6 +78,8 @@ export {
   ContentWrapper,
   ContentDiv,
   ContentTopDiv,
+  ContentTopTextDiv,
+  DateText,
   UserText,
   ContentTextDiv,
   ContentBottomDiv,

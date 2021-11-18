@@ -12,11 +12,12 @@ interface IReviewSubmit {
   categories: ICategories;
 }
 
-interface IReviewContent extends IReviewSubmit {
-  _id: string;
-  center: [number, number];
-  code: string;
+interface IReviewContent {
+  text: string;
+  user: string;
+  dateDiff: number;
   createdAt: Date;
+  categories: ICategories;
 }
 
 export { ICategories, IReviewContent, IReviewSubmit };

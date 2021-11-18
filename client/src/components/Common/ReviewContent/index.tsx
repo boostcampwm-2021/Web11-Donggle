@@ -3,6 +3,8 @@ import {
   ContentWrapper,
   ContentDiv,
   ContentTopDiv,
+  ContentTopTextDiv,
+  DateText,
   UserText,
   ContentTextDiv,
   ContentBottomDiv,
@@ -27,6 +29,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
   const NUMBER_OF_DATA_PER_PAGE = 3;
+  const today = new Date().getTime();
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -37,16 +40,13 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       NUMBER_OF_DATA_PER_PAGE,
     );
     if (list.result) {
-      console.log('list', list.result);
       setContentLists([...contentLists, ...list.result]);
       setHasMore(list.result.length > 0);
     }
     setIsLoading(false);
   }, [pageNumber]);
 
-  // 초기 1회 fetch
   useEffect(() => {
-    // console.log(contentLists);
     (async () => await fetchData())();
   }, [pageNumber]);
 
@@ -61,7 +61,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
             setPageNumber((prev) => prev + 1);
           }
         },
-        { threshold: 1 },
+        { threshold: 0.7 },
       ));
       if (node) ob.observe(node);
     },
@@ -82,7 +82,16 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
                   }, 0) / 4
                 ).toFixed(1)}
               />
-              <UserText>{content.user}</UserText>
+              <ContentTopTextDiv>
+                <DateText>
+                  {Math.floor(
+                    (today - new Date(content.createdAt).getTime()) /
+                      (1000 * 3600 * 24),
+                  )}{' '}
+                  일전
+                </DateText>
+                <UserText>{content.user}</UserText>
+              </ContentTopTextDiv>
             </ContentTopDiv>
             <ContentTextDiv>{content.text}</ContentTextDiv>
             <ContentBottomDiv>
