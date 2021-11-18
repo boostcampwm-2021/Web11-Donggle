@@ -38,7 +38,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         sessionStorage.getItem('jwt') ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: '/signin' }} />
+          <Redirect
+            to={{
+              pathname: '/signin',
+              state: {
+                background: {
+                  pathname: '/',
+                },
+              },
+            }}
+          />
         )
       }
     />
@@ -60,14 +69,12 @@ const App: React.FC = () => {
             <Switch location={background || location}>
               <Route exact path="/" component={MainPage} />
               <Route path="/review" component={ReviewPage} />
-              <Route path="/signin" component={SignInPage} />
               <Route path="/github/callback" component={LoadingPage} />
-              <Route path="/profile" component={ProfilePage} />
+              <Route path="/signup" component={SignUpPage} />
+              <PrivateRoute path="/profile" component={ProfilePage} />
+              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
               <Route component={NotFoundPage} />
             </Switch>
-            {background && (
-              <Route path="/write-review" component={ReviewSubmitPage} />
-            )}
             {background && <Route path="/ranking" render={RankingPage} />}
             {background && <Route path="/signin" render={SignInPage} />}
             {background && (
@@ -76,7 +83,6 @@ const App: React.FC = () => {
                 component={ProfileAddressPage}
               />
             )}
-            {background && <Route path="/signup" component={SignUpPage} />}
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
