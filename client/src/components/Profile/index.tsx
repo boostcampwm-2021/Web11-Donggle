@@ -9,30 +9,24 @@ import {
   AddressWrapper,
 } from '@components/Profile/index.style';
 import { authState } from '@stores/atoms';
-import AddressModal from '@components/AddressModal/index';
 import {
   uploadImage,
   deleteImage,
   updateAddress,
 } from '@controllers/profileController';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 
-import React, { useState, useRef } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
+import { useLocation } from 'react-router-dom';
 
-const Profile: React.FC = withRouter(({ history, location }) => {
+const Profile: React.FC = () => {
+  const [history, routeHistory] = useHistoryRouter();
+  const location = useLocation();
+
   const [auth, setAuth] = useRecoilState(authState);
 
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [isModal, setIsModal] = useState(false);
-
-  const toggleModal = () => {
-    if (!isModal) {
-      history.push(`${location.pathname}/update-address`);
-    }
-    setIsModal((prev) => !prev);
-  };
 
   const inputClickPasser = () => {
     if (hiddenInputRef.current !== null) {
@@ -71,21 +65,15 @@ const Profile: React.FC = withRouter(({ history, location }) => {
         <OauthnameWrapper>{auth.oauth_email.split('_')[0]}</OauthnameWrapper>
         <UsernameWrapper>{auth.oauth_email.split('_')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
-      <AddressWrapper onClick={toggleModal}>{auth.address}</AddressWrapper>
-      {isModal && (
-        <AddressModal
-          title="우리 동네를 입력해주세요!"
-          onSubmitHandler={() => {
-            console.log('?');
-          }}
-          onCancelHandler={() => {
-            console.log('?');
-          }}
-          toggleModal={toggleModal}
-        />
-      )}
+      <AddressWrapper
+        onClick={() =>
+          routeHistory('profile/update-address', { background: location })
+        }
+      >
+        {auth.address}
+      </AddressWrapper>
     </>
   );
-});
+};
 
 export default Profile;

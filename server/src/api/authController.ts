@@ -47,6 +47,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
         oauthEmail: oauthEmail.oauth_email,
         image: oauthInfo.image,
       };
+      res.status(200).json(makeApiResponse(userInfo, '회원이 아닙니다.'));
     }
   } catch (error) {
     const err = error as Error;
@@ -57,26 +58,27 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
 
 router.post('/signup', (async (req: Request, res: Response) => {
   try {
-    const { oauthEmail, address, image }: UserInfo = req.body as UserInfo;
-    const userRegionInfo = await authService.findRegionInfo(address);
+    const { oauthEmail, address, code, center, image }: UserInfo =
+      req.body as UserInfo;
 
-    if (userRegionInfo) {
-      const newUserInfo: User = {
-        oauth_email: oauthEmail,
-        address,
-        code: userRegionInfo.code,
-        center: userRegionInfo.center,
-        image,
-      };
-
-      await authService.saveUserInfo(newUserInfo);
-    } else {
-      throw new Error('DB에 없는 주소입니다.');
-    }
+    const newUserInfo: User = {
+      oauth_email: oauthEmail,
+      address,
+      code,
+      center,
+      image,
+    };
+    await authService.saveUserInfo(newUserInfo);
+    const jwtToken = jwt.sign({ oauth_email: oauthEmail });
 
     res
       .status(200)
-      .json(makeApiResponse({}, '성공적으로 회원가입 되었습니다.'));
+      .json(
+        makeApiResponse(
+          { jwtToken: jwtToken.token, address: address },
+          '성공적으로 회원가입 되었습니다.',
+        ),
+      );
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);

@@ -14,29 +14,37 @@ interface AddressModalProps {
   title: string;
   onSubmitHandler;
   onCancelHandler;
-  toggleModal?: () => void;
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({
   title,
   onSubmitHandler,
   onCancelHandler,
-  toggleModal,
 }) => {
-  const [mapInfo, setMapInfo] = useState({});
+  const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
   const onClickHandler = (mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
   };
 
   return (
-    <Modal toggleModal={toggleModal}>
+    <Modal>
       <ModalSizer>
         <TitleWrapper>{title}</TitleWrapper>
-        <Searchbar onClickHandler={onClickHandler} />
+        <Searchbar
+          onClickHandler={onClickHandler}
+          valueState={mapInfo.address}
+          onlyDong={true}
+        />
       </ModalSizer>
       <ButtonWrapper>
-        <SubmitButton cancel={false} onClick={() => onSubmitHandler(mapInfo)}>
+        <SubmitButton
+          cancel={false}
+          onClick={async () => {
+            await onSubmitHandler(mapInfo);
+            onCancelHandler();
+          }}
+        >
           제출
         </SubmitButton>
         <SubmitButton cancel={true} onClick={onCancelHandler}>

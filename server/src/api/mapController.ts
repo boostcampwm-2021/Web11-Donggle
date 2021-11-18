@@ -50,10 +50,10 @@ router.get('/rates', (async (req: Request, res: Response) => {
 }) as RequestHandler);
 
 router.get('/search', (async (req: Request, res: Response) => {
-  const { keyword } = req.query;
+  const { keyword, onlyDong } = req.query;
   try {
     if (typeof keyword === 'string' && keyword.length > 0) {
-      const center = await mapService.queryCenter(keyword);
+      const center = await mapService.queryCenter(keyword, !!onlyDong);
       res.status(200).json(makeApiResponse(center, ''));
     } else {
       res.status(200).json(makeApiResponse([], ''));

@@ -1,3 +1,5 @@
+import xIcon from '@assets/icons/x.svg';
+
 import styled from 'styled-components';
 
 const ModalOverlay = styled.div`
@@ -19,7 +21,7 @@ const ModalWrapper = styled.div`
   max-height: 90%;
   top: 50%;
   left: 50%;
-  overflow: auto;
+  overflow: visible;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
@@ -39,6 +41,12 @@ const ModalCloseBtnDiv = styled.div`
   width: 100%;
 `;
 
+const ModalCloseImage = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+ModalCloseImage.defaultProps = { src: xIcon };
+
 const ModalCloseBtn = styled.button`
   border: none;
   background-color: transparent;
@@ -53,13 +61,14 @@ const ChildrenWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  overflow: hidden;
+  overflow: visible;
 `;
 
 export {
   ModalOverlay,
   ModalWrapper,
   ModalCloseBtnDiv,
+  ModalCloseImage,
   ModalCloseBtn,
   ChildrenWrapper,
 };

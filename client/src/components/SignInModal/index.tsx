@@ -2,6 +2,8 @@ import Modal from '@components/Common/Modal/index';
 import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
 import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
 import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
+import { ReactComponent as GithubIcon } from '@assets/icons/github.svg';
+
 import {
   ColumnFlex,
   FlexButton,
@@ -45,6 +47,13 @@ const SignInModal: React.FC = () => {
       <ColumnFlex>
         <CenteredSpan>내가 사는 동네 평점을 남겨보세요</CenteredSpan>
         <SignInButton
+          IconComponent={GithubIcon}
+          text="Github 로그인"
+          color="#ffffff"
+          bgColor="#000000"
+          onClick={signInGithub}
+        ></SignInButton>
+        {/* <SignInButton
           IconComponent={GoogleIcon}
           text="Google 로그인"
           color="#000000"
@@ -62,7 +71,7 @@ const SignInModal: React.FC = () => {
           text="Facebook 로그인"
           color="#ffffff"
           bgColor="#3c5a99"
-        ></SignInButton>
+        ></SignInButton> */}
       </ColumnFlex>
     </Modal>
   );

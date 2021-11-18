@@ -38,8 +38,14 @@ const queryPolygon = async (
   return result;
 };
 
-const queryCenter = async (keyword: string): Promise<MapInfo[]> => {
-  return await MapInfoModel.find({ address: { $regex: RegExp(keyword, 'g') } });
+const queryCenter = async (
+  keyword: string,
+  onlyDong: boolean,
+): Promise<MapInfo[]> => {
+  const query = onlyDong
+    ? { address: { $regex: RegExp(keyword, 'g') }, codeLength: 7 }
+    : { address: { $regex: RegExp(keyword, 'g') } };
+  return await MapInfoModel.find(query);
 };
 
 const queryRates = async (

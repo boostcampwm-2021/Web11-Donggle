@@ -114,13 +114,23 @@ const LogoutBtn = styled(SignInBtn)`
 
 const UserProfile = styled.div`
   margin: 0 15px;
+  width: 60px;
+  height: 45px;
   cursor: pointer;
+  border-radius: 30%;
+  overflow: hidden;
 `;
 
 const ColorBar = styled.div`
   width: 100%;
   height: ${(props) => props.theme.componentSize.headerColorbar};
   background: ${(props) => props.theme.colors.lightgreen};
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 export {
@@ -138,4 +148,5 @@ export {
   LogoutBtn,
   UserProfile,
   ColorBar,
+  ProfileImage,
 };

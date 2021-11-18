@@ -68,7 +68,10 @@ const deleteProfileImage = async (oauth_email: string, image: string) => {
     }/`,
     '',
   );
-  await UserModel.updateOne({ oauth_email }, { image: '' });
+  const deletedDocument = await UserModel.updateOne(
+    { oauth_email },
+    { image: '' },
+  );
   void s3
     .deleteObject({
       Bucket: process.env.IMAGE_BUCKET as string,
@@ -76,15 +79,17 @@ const deleteProfileImage = async (oauth_email: string, image: string) => {
     })
     .promise()
     .then(() => logger.info('delete image from S3 success!'));
+
+  return deletedDocument;
 };
 
-const updateAddress = async (prevAddress: string, newAddress: string) => {
+const updateAddress = async (oauth_email: string, address: string) => {
   try {
-    await UserModel.updateOne(
-      { address: prevAddress },
-      { address: newAddress },
-    );
-    return true;
+    const updatedDocument = await UserModel.updateOne(
+      { oauth_email },
+      { address },
+    ).then(() => logger.info(`${oauth_email} address updated!`));
+    return updatedDocument;
   } catch (e) {
     logger.error(e);
     return false;

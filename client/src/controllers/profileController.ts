@@ -14,23 +14,34 @@ const uploadImage = async (e, auth, setAuth) => {
     },
   );
   const result = await response.json();
-  setAuth((prev) => ({
-    ...prev,
-    image: result.image,
-  }));
+  if (response.status === 200) {
+    setAuth((prev) => ({
+      ...prev,
+      image: result.result,
+    }));
+  } else {
+    console.error(result.message);
+  }
 };
 
 const deleteImage = async (auth, setAuth) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/profile-image?username=${
+    `${process.env.REACT_APP_API_URL}/api/user/profile-image?oauth_email=${
       auth.oauth_email
-    }&imageURL=${encodeURIComponent(auth.image)}`,
+    }&image=${encodeURIComponent(auth.image)}`,
     {
       method: 'DELETE',
     },
   );
   const result = await response.json();
-  setAuth((prev) => ({ ...prev, image: result.image }));
+  if (response.status === 200) {
+    setAuth((prev) => ({
+      ...prev,
+      image: result.result,
+    }));
+  } else {
+    console.error(result.message);
+  }
 };
 
 const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
@@ -40,13 +51,17 @@ const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
       method: 'PATCH',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
-        prevAddress: auth.address,
-        newAddress: mapInfo.address,
+        oauth_email: auth.oauth_email,
+        address: mapInfo.address,
       }),
     },
   );
   const result = await response.json();
-  setAuth((prev) => ({ ...prev, address: result.address }));
+  if (response.status === 200) {
+    setAuth((prev) => ({ ...prev, address: result.result }));
+  } else {
+    console.error(result.message);
+  }
 };
 
 export { uploadImage, deleteImage, updateAddress };
