@@ -8,7 +8,7 @@ interface ICategories {
 interface IReviewSubmit {
   address: string;
   text: string;
-  user: string;
+  oauth_email: string;
   categories: ICategories;
 }
 

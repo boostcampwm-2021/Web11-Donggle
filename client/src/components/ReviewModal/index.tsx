@@ -23,8 +23,8 @@ const ReviewModal: React.FC = () => {
   const DEFAULT_ADDRESS = '대전광역시 서구 탄방동';
   const [history, routeHistory] = useHistoryRouter();
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
-    address: useRecoilValue(authState).address || DEFAULT_ADDRESS,
-    user: 'testUser',
+    address: useRecoilValue(authState).address,
+    oauth_email: useRecoilValue(authState).oauth_email,
     text: '',
     categories: {
       safety: 1,
@@ -75,7 +75,7 @@ const ReviewModal: React.FC = () => {
     <Modal>
       <TitleDiv>
         <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
-        <span style={{ marginLeft: '10px' }}>{DEFAULT_ADDRESS}</span>
+        <span style={{ marginLeft: '10px' }}>{reviewData.address}</span>
       </TitleDiv>
       <StarRateDiv>{RatingStars}</StarRateDiv>
       <TextAreaDiv>
