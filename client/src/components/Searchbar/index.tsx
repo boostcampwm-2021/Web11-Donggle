@@ -7,9 +7,10 @@ import {
   DropdownItem,
 } from '@components/Searchbar/index.style';
 import { spreadDropdown } from '@controllers/searchbarController';
-
-import React, { useEffect, useState, useRef } from 'react';
 import { IMapInfo } from '@myTypes/Map';
+import { getDebouncedFunction } from '@utils/common';
+
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 interface SearchbarProps {
   onClickHandler: (mapInfo: IMapInfo) => void | Promise<void>;
@@ -22,20 +23,30 @@ const Searchbar: React.FC<SearchbarProps> = ({
   valueState,
   onlyDong = false,
 }) => {
-  const [input, setInput] = useState('');
+  const input = useRef('');
 
   const [results, setResults] = useState<IMapInfo[]>([]);
   const isSpread = useRef(false);
   const inputTagRef = useRef<HTMLInputElement>(null);
   const dropdownTagRef = useRef<HTMLDivElement>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
+  const [spreadFlag, setSpreadFlag] = useState(new Date());
+
+  const debouncedSpreadDropdown = useCallback(
+    getDebouncedFunction(
+      () =>
+        spreadDropdown(input.current, isSpread.current, setResults, onlyDong),
+      500,
+    ),
+    [],
+  );
 
   const getTop = (element: HTMLDivElement) =>
     element.getBoundingClientRect().top;
 
   useEffect(() => {
-    spreadDropdown(input, isSpread.current, setResults, onlyDong);
-  }, [input]);
+    debouncedSpreadDropdown();
+  }, [spreadFlag]);
 
   useEffect(() => {
     if (inputTagRef.current !== null && valueState) {
@@ -53,7 +64,10 @@ const Searchbar: React.FC<SearchbarProps> = ({
     <div style={{ position: 'relative' }}>
       <SearchbarWrapper>
         <SearchbarInput
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            input.current = e.target.value;
+            setSpreadFlag(new Date());
+          }}
           ref={inputTagRef}
         />
         <SearchbarButton>

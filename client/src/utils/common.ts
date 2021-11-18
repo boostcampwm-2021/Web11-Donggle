@@ -27,4 +27,12 @@ const showSnackbar = (snackbar: ISnackbar) => {
   }
 };
 
-export { calcTotal, showSnackbar };
+const getDebouncedFunction = (targetFunction: () => void, time: number) => {
+  let timeoutId: NodeJS.Timeout;
+  return () => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => targetFunction(), time);
+  };
+};
+
+export { calcTotal, getDebouncedFunction, showSnackbar };

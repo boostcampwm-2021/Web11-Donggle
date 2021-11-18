@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { authState } from '@stores/atoms';
@@ -11,21 +12,19 @@ import { IMapInfo } from '@myTypes/Map';
 const SignUpModal: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
   const [history, routeHistory] = useHistoryRouter();
+  const location = useLocation();
 
-  const onSubmitHandler = async (mapInfo: IMapInfo): Promise<void> => {
-    const [status, userInfo] = await signUpAdress(mapInfo, auth);
-    isSignUp(status, userInfo, auth, setAuth, routeHistory);
-  };
+  const onCancelHandler = useCallback((): void => {
+    routeHistory('/', {});
+  }, []);
 
-  const onCancelHandler = (): void => {
-    window.location.href = process.env.REACT_APP_MAIN_URL as string;
-  };
-
-  useEffect(() => {
-    if (auth.address) {
-      routeHistory('/', {});
-    }
-  }, [auth, routeHistory]);
+  const onSubmitHandler = useCallback(
+    async (mapInfo: IMapInfo): Promise<void> => {
+      const [status, userInfo] = await signUpAdress(mapInfo, auth, location);
+      isSignUp(status, userInfo, auth, setAuth, routeHistory);
+    },
+    [],
+  );
 
   return (
     <AdressModal

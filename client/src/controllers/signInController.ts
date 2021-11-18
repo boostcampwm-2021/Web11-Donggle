@@ -40,30 +40,28 @@ const isMember = (
   auth,
   setAuth,
 ): void => {
+  const location = { pathname: '/', search: '', hash: '', state: undefined };
+
   if (status != 200) {
     alert(userInfo.message);
-    /*
-    2021-11-16
-    문혜현
-    로그인에 실패했을 시 다시 signin 페이지로 가야 하는데 아직 routeHistory 구현 못함
-    */
-    routeHistory('/signin', {});
+    routeHistory('/signin', { background: location });
+    return;
   }
 
   if (status == 200 && !userInfo.result.jwtToken) {
-    /*
-    2021-11-16
-    문혜현
-    회원가입 페이지로 routing
-    회원가입 주소를 제출할 때 db에 저장하기 위한 정보를 주기 위해서 recoil에 저장
-    */
     setAuth({
       ...auth,
       oauth_email: userInfo.result.oauthEmail,
       image: userInfo.result.image,
     });
-    routeHistory('/signup', {});
-  } else {
+    routeHistory('/signup', {
+      background: location,
+      oauth_email: userInfo.result.oauthEmail,
+      image: userInfo.result.image,
+    });
+    return;
+  }
+  if (status == 200 && userInfo.result.jwtToken) {
     /*
     2021-11-16
     문혜현
@@ -78,6 +76,7 @@ const isMember = (
       image: userInfo.result.image,
     });
     routeHistory('/', {});
+    return;
   }
 };
 

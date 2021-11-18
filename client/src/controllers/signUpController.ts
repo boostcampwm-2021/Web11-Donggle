@@ -8,6 +8,7 @@ import { IAuthInfo } from '@myTypes/User';
 const signUpAdress = async (
   mapInfo: IMapInfo,
   auth: IAuthInfo,
+  location,
 ): Promise<[number, IAPIResult<IToken | Record<string, never>>]> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/auth/signup`,
@@ -17,11 +18,11 @@ const signUpAdress = async (
         'Content-Type': 'application/json;charset=utf-8',
       },
       body: JSON.stringify({
-        oauthEmail: auth.oauth_email,
+        oauthEmail: location.state.oauth_email,
         address: mapInfo.address,
         code: mapInfo.code,
         center: mapInfo.center,
-        image: auth.image,
+        image: location.state.image,
       }),
     },
   );
@@ -39,14 +40,10 @@ const isSignUp = (
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory,
 ): void => {
+  const location = { pathname: '/', search: '', hash: '', state: undefined };
   if (status != 200) {
     alert(userInfo.message);
-    /*
-    2021-11-16
-    문혜현
-    회원가입에 실패했을 시 다시 signin 페이지로 가야 하는데 아직 routeHistory 구현 못함
-    */
-    //routeHistory('/signin', {});
+    routeHistory('/signin', { background: location });
   } else {
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
     setAuth({
@@ -54,7 +51,7 @@ const isSignUp = (
       isLoggedin: true,
       address: userInfo.result.address,
     });
-    //routeHistory('/', {});
+    routeHistory('/', {});
   }
 };
 

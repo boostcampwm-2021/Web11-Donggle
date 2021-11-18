@@ -48,10 +48,10 @@ const common: ThemeComponent = {
     align-items: center;
   `,
   flexRow: `
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`,
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  `,
 };
 
 // theme 객체에 감싸서 반환한다.
