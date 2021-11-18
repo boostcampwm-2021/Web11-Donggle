@@ -116,25 +116,15 @@ const ReviewContentDiv = styled(BaseDiv)`
   justify-content: center;
 `;
 
-const AddButtonDiv = styled(BaseDiv)`
+const SidebarBottomDiv = styled(BaseDiv)`
+  bottom: 0;
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-  height: 100px;
+  height: 20px;
   padding: 10px 0px;
   background-color: ${(props) => props.theme.colors.lightgreen};
-`;
-
-const AddButton = styled.button`
-  width: 100%;
-  height: 100%;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.white};
-  cursor: pointer;
 `;
 
 export {
@@ -150,6 +140,5 @@ export {
   MenuBarDiv,
   Menu,
   ReviewContentDiv,
-  AddButtonDiv,
-  AddButton,
+  SidebarBottomDiv,
 };

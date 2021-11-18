@@ -9,6 +9,7 @@ import {
   ContentTextDiv,
   ContentBottomDiv,
   RateDiv,
+  EmptyDiv,
 } from './index.style';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
@@ -70,44 +71,48 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
 
   return (
     <ContentWrapper>
-      {contentLists.map((content, idx) =>
-        props.selectedMenu === 'review' ? (
-          <ContentDiv key={idx} ref={lastItemRef}>
-            <ContentTopDiv>
-              <StarRateDiv
-                isLarge={false}
-                total={(
-                  Object.keys(content.categories).reduce((prev, curr) => {
-                    return prev + content.categories[curr];
-                  }, 0) / 4
-                ).toFixed(1)}
-              />
-              <ContentTopTextDiv>
-                <DateText>
-                  {Math.floor(
-                    (today - new Date(content.createdAt).getTime()) /
-                      (1000 * 3600 * 24),
-                  )}{' '}
-                  일전
-                </DateText>
-                <UserText>{content.user}</UserText>
-              </ContentTopTextDiv>
-            </ContentTopDiv>
-            <ContentTextDiv>{content.text}</ContentTextDiv>
-            <ContentBottomDiv>
-              <DetailBtn>
-                <RateDiv>
-                  <BarRateDiv
-                    count={1}
-                    categories={content.categories}
-                  ></BarRateDiv>
-                </RateDiv>
-              </DetailBtn>
-            </ContentBottomDiv>
-          </ContentDiv>
-        ) : (
-          <ContentDiv>Article 입니다.</ContentDiv>
-        ),
+      {contentLists.length > 0 ? (
+        contentLists.map((content, idx) =>
+          props.selectedMenu === 'review' ? (
+            <ContentDiv key={idx} ref={lastItemRef}>
+              <ContentTopDiv>
+                <StarRateDiv
+                  isLarge={false}
+                  total={(
+                    Object.keys(content.categories).reduce((prev, curr) => {
+                      return prev + content.categories[curr];
+                    }, 0) / 4
+                  ).toFixed(1)}
+                />
+                <ContentTopTextDiv>
+                  <DateText>
+                    {Math.floor(
+                      (today - new Date(content.createdAt).getTime()) /
+                        (1000 * 3600 * 24),
+                    )}{' '}
+                    일전
+                  </DateText>
+                  <UserText>{content.user}</UserText>
+                </ContentTopTextDiv>
+              </ContentTopDiv>
+              <ContentTextDiv>{content.text}</ContentTextDiv>
+              <ContentBottomDiv>
+                <DetailBtn>
+                  <RateDiv>
+                    <BarRateDiv
+                      count={1}
+                      categories={content.categories}
+                    ></BarRateDiv>
+                  </RateDiv>
+                </DetailBtn>
+              </ContentBottomDiv>
+            </ContentDiv>
+          ) : (
+            <ContentDiv>Article 입니다.</ContentDiv>
+          ),
+        )
+      ) : (
+        <EmptyDiv>관련 글이 없어요! 글을 남겨주세요!</EmptyDiv>
       )}
     </ContentWrapper>
   );

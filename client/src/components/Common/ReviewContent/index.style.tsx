@@ -74,6 +74,16 @@ const RateDiv = styled(BaseDiv)`
   border-bottom: none;
 `;
 
+const EmptyDiv = styled(BaseDiv)`
+  color: ${(props) => props.theme.colors.ashgrey};
+  height: 200px;
+  opacity: 0.7;
+  justify-content: center;
+  &:before {
+    content: &#1F625;
+  }
+`;
+
 export {
   ContentWrapper,
   ContentDiv,
@@ -84,4 +94,5 @@ export {
   ContentTextDiv,
   ContentBottomDiv,
   RateDiv,
+  EmptyDiv,
 };

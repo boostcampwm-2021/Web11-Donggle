@@ -11,6 +11,7 @@ import {
   Menu,
   ProfileWrapper,
   SignInBtn,
+  ReviewButton,
   LogoutBtn,
   UserProfile,
   ColorBar,
@@ -18,26 +19,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 import { useRecoilState } from 'recoil';
 
 const Header: React.FC = () => {
-  const history = useHistory();
+  const [history, routeHistory] = useHistoryRouter();
   const location = useLocation();
 
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [auth, setAuth] = useRecoilState(authState);
-
-  const routeHistory = useCallback(
-    (path: string, state: { [index: string]: string } = {}) => {
-      history.push({
-        pathname: path,
-        state: state,
-      });
-    },
-    [history],
-  );
 
   useEffect(() => {
     setClickedLinkBtnId(location.pathname);
@@ -94,19 +86,35 @@ const Header: React.FC = () => {
           <ProfileWrapper>
             {auth.isLoggedin ? (
               <>
+                <ReviewButton
+                  onClick={() => {
+                    routeHistory('/write-review', { background: location });
+                  }}
+                >
+                  내 동네 후기 쓰기
+                </ReviewButton>
                 <LogoutBtn>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>
                   <FontAwesomeIcon icon={faUserCircle} size="3x" color="grey" />
                 </UserProfile>
               </>
             ) : (
-              <SignInBtn
-                onClick={() =>
-                  routeHistory('/signin', { background: location })
-                }
-              >
-                로그인
-              </SignInBtn>
+              <>
+                <ReviewButton
+                  onClick={() => {
+                    routeHistory('/write-review', { background: location });
+                  }}
+                >
+                  내 동네 후기 쓰기
+                </ReviewButton>
+                <SignInBtn
+                  onClick={() =>
+                    routeHistory('/signin', { background: location })
+                  }
+                >
+                  로그인
+                </SignInBtn>
+              </>
             )}
           </ProfileWrapper>
         </Background>

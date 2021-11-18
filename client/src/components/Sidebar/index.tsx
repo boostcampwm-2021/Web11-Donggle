@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import {
   Layout,
@@ -11,15 +11,15 @@ import {
   HashTagDiv,
   MenuBarDiv,
   Menu,
-  AddButtonDiv,
-  AddButton,
+  SidebarBottomDiv,
 } from './index.style';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
+import ReviewContent from '@components/Common/ReviewContent';
 import { IMapInfo } from '@myTypes/Map';
 import { calcTotal } from '@utils/common';
-import ReviewContent from '@components/Common/ReviewContent';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 
 export interface IProps {
   sidebar: boolean;
@@ -30,7 +30,7 @@ export interface IProps {
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
-  const history = useHistory();
+  const [history, routeHistory] = useHistoryRouter();
   const location = useLocation();
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
@@ -70,18 +70,6 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
         address={props.rateData.address}
         selectedMenu={selectedMenu}
       />
-      <AddButtonDiv>
-        <AddButton
-          onClick={() => {
-            history.push({
-              pathname: '/write-review',
-              state: { background: location },
-            });
-          }}
-        >
-          내 동네 후기 작성하기
-        </AddButton>
-      </AddButtonDiv>
     </Layout>
   );
 };
