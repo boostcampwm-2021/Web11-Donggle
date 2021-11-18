@@ -32,7 +32,10 @@ jobs:
           echo "REACT_APP_MAIN_URL=$REACT_APP_MAIN_URL" >> .env.production
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-        working-directory: ${{env.client-directory}}
+          REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
+          REACT_APP_REDIRECT_URL: ${{ secrets.REACT_APP_REDIRECT_URL }}
+          REACT_APP_MAIN_URL: ${{ secrets.REACT_APP_MAIN_URL }}
+        working-directory: ${{ env.client-directory }}
 
       - name: Client yarn install
         run: yarn install
