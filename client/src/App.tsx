@@ -18,7 +18,13 @@ import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 
 import React from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  useLocation,
+  RouterProps,
+} from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 const ContentWrapper = styled.div`
@@ -29,8 +35,10 @@ const ContentWrapper = styled.div`
   align-items: center;
 `;
 
-// eslint-disable-next-line react/prop-types
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC<RouterProps> = ({
+  component: Component,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}
@@ -76,7 +84,7 @@ const App: React.FC = () => {
               <Route component={NotFoundPage} />
             </Switch>
             {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" render={SignInPage} />}
+            {background && <Route path="/signin" component={SignInPage} />}
             {background && (
               <Route
                 path="/profile/update-address"

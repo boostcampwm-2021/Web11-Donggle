@@ -45,11 +45,11 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       setHasMore(list.result.length > 0);
     }
     setIsLoading(false);
-  }, [pageNumber]);
+  }, [pageNumber, props.address]);
 
   useEffect(() => {
     (async () => await fetchData())();
-  }, [pageNumber]);
+  }, [pageNumber, props.address]);
 
   const lastItemRef = useCallback(
     (node) => {
