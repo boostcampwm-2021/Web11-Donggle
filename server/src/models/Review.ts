@@ -1,5 +1,4 @@
-import { Schema, model, PopulatedDoc } from 'mongoose';
-import { User } from '@models/User';
+import { Schema, model } from 'mongoose';
 
 type CoordType = [number, number];
 
@@ -14,7 +13,7 @@ interface Review {
     entertainment: number;
   };
   text?: string;
-  user: string; // 회원가입 로직 구현 후 변경 PopulatedDoc<User>;
+  oauth_email: string;
   createdAt: Date;
 }
 
@@ -29,8 +28,7 @@ const reviewSchema = new Schema<Review>({
     entertainment: { type: Number, required: true },
   },
   text: { type: String },
-  // Schema.Types.ObjectId,
-  user: { type: String, required: true, ref: 'User' },
+  oauth_email: { type: String, required: true },
   createdAt: { type: Date, required: true, default: new Date() },
 });
 

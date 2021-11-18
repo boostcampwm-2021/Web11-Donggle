@@ -14,11 +14,13 @@ const submitReview = (
         label: '제출',
         className: 'overlay-confirmation-submit',
         onClick: async () => {
+          const requestHeaders: HeadersInit = new Headers();
+          requestHeaders.set('Content-Type', 'application/json');
+          requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
+
           fetch(`${process.env.REACT_APP_API_URL}/api/review`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: requestHeaders,
             body: JSON.stringify(data),
           })
             .then((res) => res.json())

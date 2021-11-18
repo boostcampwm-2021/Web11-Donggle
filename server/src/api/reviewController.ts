@@ -4,6 +4,7 @@ import logger from '@loaders/loggerLoader';
 import { ReviewRequest, ReviewInsertRequest } from '@myTypes/Review';
 import config from '@config/index';
 import express, { Request, Response, RequestHandler } from 'express';
+import checkToken from '@middlewares/auth';
 
 const router: express.Router = express.Router();
 
@@ -49,7 +50,10 @@ router.get('/', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
-router.post('/', (async (req: ReviewInsertRequest, res: Response) => {
+router.post('/', checkToken, (async (
+  req: ReviewInsertRequest,
+  res: Response,
+) => {
   try {
     const insertData = req.body;
     if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');

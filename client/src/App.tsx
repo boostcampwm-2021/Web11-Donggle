@@ -18,7 +18,13 @@ import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 
 import React from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  useLocation,
+  RouterProps,
+} from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 const ContentWrapper = styled.div`
@@ -29,8 +35,10 @@ const ContentWrapper = styled.div`
   align-items: center;
 `;
 
-// eslint-disable-next-line react/prop-types
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC<RouterProps> = ({
+  component: Component,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}
@@ -38,7 +46,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         sessionStorage.getItem('jwt') ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: '/signin' }} />
+          <Redirect
+            to={{
+              pathname: '/signin',
+              state: {
+                background: {
+                  pathname: '/',
+                },
+              },
+            }}
+          />
         )
       }
     />
@@ -60,23 +77,20 @@ const App: React.FC = () => {
             <Switch location={background || location}>
               <Route exact path="/" component={MainPage} />
               <Route path="/review" component={ReviewPage} />
-              <Route path="/signin" component={SignInPage} />
               <Route path="/github/callback" component={LoadingPage} />
-              <Route path="/profile" component={ProfilePage} />
+              <Route path="/signup" component={SignUpPage} />
+              <PrivateRoute path="/profile" component={ProfilePage} />
+              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
               <Route component={NotFoundPage} />
             </Switch>
-            {background && (
-              <Route path="/write-review" component={ReviewSubmitPage} />
-            )}
             {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" render={SignInPage} />}
+            {background && <Route path="/signin" component={SignInPage} />}
             {background && (
               <Route
                 path="/profile/update-address"
                 component={ProfileAddressPage}
               />
             )}
-            {background && <Route path="/signup" component={SignUpPage} />}
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
