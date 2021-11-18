@@ -37,7 +37,7 @@ const queryReviews = async (
 };
 
 const insertReview = async (data: ReviewInsertData) => {
-  const mapInfo: MapInfo[] = await mapService.queryCenter(data.address);
+  const mapInfo: MapInfo[] = await mapService.queryCenter(data.address, false);
   const mapData = {
     code: mapInfo[0].code,
     center: mapInfo[0].center,

@@ -20,7 +20,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 import { useRecoilState } from 'recoil';
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
       image: '',
     });
   }, []);
-  
+
   useEffect(() => {
     setClickedLinkBtnId(location.pathname);
   }, [clickedLinkBtnId, location]);

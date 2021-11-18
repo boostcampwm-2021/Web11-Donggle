@@ -55,29 +55,29 @@ const App: React.FC = () => {
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
           <ContentWrapper>
-        <Snackbar />
-        <Header />
-        <Switch location={background || location}>
-          <Route exact path="/" component={MainPage} />
-          <Route path="/review" component={ReviewPage} />
-          <Route path="/signin" component={SignInPage} />
-          <Route path="/github/callback" component={LoadingPage} />
-          <Route path="/signup" component={SignUpPage} />
-          <Route path="/profile" component={ProfilePage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-        {background && (
-          <Route path="/write-review" component={ReviewSubmitPage} />
-        )}
-        {background && <Route path="/ranking" render={RankingPage} />}
-        {background && <Route path="/signin" render={SignInPage} />}
-        {background && (
-          <Route
-            path="/profile/update-address"
-            component={ProfileAddressPage}
-          />
-        )}
-      </ContentWrapper>
+            <Snackbar />
+            <Header />
+            <Switch location={background || location}>
+              <Route exact path="/" component={MainPage} />
+              <Route path="/review" component={ReviewPage} />
+              <Route path="/signin" component={SignInPage} />
+              <Route path="/github/callback" component={LoadingPage} />
+              <Route path="/signup" component={SignUpPage} />
+              <Route path="/profile" component={ProfilePage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+            {background && (
+              <Route path="/write-review" component={ReviewSubmitPage} />
+            )}
+            {background && <Route path="/ranking" render={RankingPage} />}
+            {background && <Route path="/signin" render={SignInPage} />}
+            {background && (
+              <Route
+                path="/profile/update-address"
+                component={ProfileAddressPage}
+              />
+            )}
+          </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
     </>
