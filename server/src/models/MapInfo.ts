@@ -24,6 +24,8 @@ interface MapInfo {
   count: number;
   //현재는 리뷰 정보가 없으므로 require를 false로함
   categories?: Categories;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  hashtags?: Map<string, number>;
 }
 
 const mapInfoSchema = new Schema<MapInfo>({
@@ -34,6 +36,7 @@ const mapInfoSchema = new Schema<MapInfo>({
   count: { type: Number, required: true, default: 0 },
   //현재는 리뷰 정보가 없으므로 require를 false로함
   categories: { type: rateSchema, required: false },
+  hashtags: { type: Map, required: false },
 });
 
 const MapInfoModel = model<MapInfo>('MapInfo', mapInfoSchema);

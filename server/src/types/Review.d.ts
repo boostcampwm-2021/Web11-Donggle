@@ -11,6 +11,7 @@ export interface ReviewInsertData {
   text: string;
   user: string;
   categories: CategoryRateType;
+  hashtags?: string[];
 }
 
 export interface ReviewFindData {
