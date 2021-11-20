@@ -49,11 +49,6 @@ const isMember = (
   }
 
   if (status == 200 && !userInfo.result.jwtToken) {
-    setAuth({
-      ...auth,
-      oauth_email: userInfo.result.oauthEmail,
-      image: userInfo.result.image,
-    });
     routeHistory('/signup', {
       background: location,
       oauth_email: userInfo.result.oauthEmail,
