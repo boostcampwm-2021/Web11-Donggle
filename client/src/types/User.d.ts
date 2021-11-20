@@ -19,7 +19,10 @@ interface IAuthInfo extends IUser {
 interface IToken {
   jwtToken: string;
   refreshToken: string;
+}
+
+interface ISignUp extends IToken {
   address: string;
 }
 
-export { IUserInfo, IAuthInfo, IToken };
+export { IUserInfo, IAuthInfo, IToken, ISignUp };
