@@ -63,6 +63,7 @@ const isMember = (
     sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
     */
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
+    sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
     setAuth({
       ...auth,
       isLoggedin: true,

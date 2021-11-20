@@ -25,7 +25,9 @@ const checkToken = (
     logger.error('유효기간이 만료되었습니다.');
     return res
       .status(500)
-      .json(makeApiResponse({}, '유효기간 만료되었습니다.'));
+      .json(
+        makeApiResponse({ token: TOKEN_EXPIRED }, '유효기간 만료되었습니다.'),
+      );
   }
   if (user === TOKEN_INVALID) {
     logger.error('유효하지 않은 토큰입니다.');

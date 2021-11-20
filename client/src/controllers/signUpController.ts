@@ -46,6 +46,7 @@ const isSignUp = (
     routeHistory('/signin', { background: location });
   } else {
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
+    sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
     setAuth({
       ...auth,
       isLoggedin: true,
