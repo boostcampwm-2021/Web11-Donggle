@@ -17,5 +17,9 @@ export default {
   client_id: process.env.CLIENT_ID || '',
   client_secret: process.env.CLIENT_SECRET || '',
   jwt_secret: process.env.JWT_SECRET || '',
+  jwt_refresh_secret: process.env.JWT_REFRESH_SECRET || '',
   jwt_algorithm: process.env.JWT_ALGORITHM || '',
+  jwt_refresh_algorithm: process.env.JWT_REFRESH_ALGORITHM || '',
+  jwt_expire: process.env.JWT_EXPIRE || '',
+  jwt_refresh_expire: process.env.JWT_REFRESH_EXPIRE || '',
 };

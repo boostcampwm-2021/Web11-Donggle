@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-import jwtConfig from '@config/secretKey';
-import randToken from 'rand-token';
+import { jwtConfig, jwtRefreshConfig } from '@config/secretKey';
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
@@ -12,14 +11,22 @@ export default {
     };
     const token: { token: string; refreshToken: string } = {
       token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
-      refreshToken: randToken.uid(16),
+      refreshToken: jwt.sign(
+        payload,
+        jwtRefreshConfig.secretKey,
+        jwtRefreshConfig.options,
+      ),
     };
     return token;
   },
-  verify: (token: string) => {
+  verify: (token: string, kind = 'jwt') => {
     let decoded: string | jwt.JwtPayload;
     try {
-      decoded = jwt.verify(token, jwtConfig.secretKey);
+      if (kind === 'jwt') {
+        decoded = jwt.verify(token, jwtConfig.secretKey);
+      } else {
+        decoded = jwt.verify(token, jwtRefreshConfig.secretKey);
+      }
     } catch (err) {
       const errMsg = (err as Error).message;
       if (errMsg === 'jwt expired') {
