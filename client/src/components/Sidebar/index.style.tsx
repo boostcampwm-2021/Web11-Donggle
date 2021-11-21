@@ -90,6 +90,12 @@ const HashTagDiv = styled(BaseDiv)`
   justify-content: start;
 `;
 
+const HashTagNo = styled.div`
+  width: 100%;
+  color: ${(props) => props.theme.colors.lightgrey};
+  text-align: center;
+`;
+
 const MenuBarDiv = styled(BaseDiv)`
   position: relative;
   width: 100%;
@@ -137,6 +143,7 @@ export {
   SpanReviewTitle,
   RateDiv,
   HashTagDiv,
+  HashTagNo,
   MenuBarDiv,
   Menu,
   ReviewContentDiv,

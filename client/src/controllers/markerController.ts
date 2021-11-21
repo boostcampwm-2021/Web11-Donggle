@@ -31,6 +31,7 @@ const markerEl = (rateData: IMapInfo) => {
   const smallestRegion = region[region.length - 1];
 
   wrapper.dataset.address = address;
+  rateData.hashtags = Object.fromEntries(rateData.hashtags.entries());
   wrapper.dataset.rateData = JSON.stringify(rateData);
   wrapper.innerHTML = `
     <div class="title">
@@ -114,6 +115,7 @@ const regionToRates = (region): IMapInfo => {
       food,
       entertainment,
     },
+    hashtags: new Map(),
   };
 };
 
@@ -130,9 +132,12 @@ const requestRates = async (
       }
       throw Error('요청 실패');
     })
-    .then((res: IAPIResult<IMapInfo[]>) => {
-      return res.result;
-    })
+    .then((res: IAPIResult<IMapInfo[]>) =>
+      res.result.map((r) => ({
+        ...r,
+        hashtags: new Map(Object.entries(r.hashtags)),
+      })),
+    )
     .catch((err) => {
       console.error(err);
       return [];
