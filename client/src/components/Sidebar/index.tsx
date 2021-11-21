@@ -42,8 +42,6 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       .map((hashtag) => hashtag[0])
       .slice(0, 5);
 
-  React.useEffect(() => console.log(props.hashTagData), []);
-
   return (
     <Layout className={`${props.sidebar ? 'open' : ''}`}>
       <TitleDiv>
