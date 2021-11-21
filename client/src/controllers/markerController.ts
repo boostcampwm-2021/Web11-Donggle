@@ -31,7 +31,6 @@ const markerEl = (rateData: IMapInfo) => {
   const smallestRegion = region[region.length - 1];
 
   wrapper.dataset.address = address;
-  rateData.hashtags = Object.fromEntries(rateData.hashtags.entries());
   wrapper.dataset.rateData = JSON.stringify(rateData);
   wrapper.innerHTML = `
     <div class="title">
@@ -151,6 +150,7 @@ const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
       position: new kakao.maps.LatLng(...center),
     });
 
+    rateData.hashtags = Object.fromEntries(rateData.hashtags.entries());
     const defaultMarker = markerEl(rateData);
     const largeMarker = largeMarkerEl(rateData);
 
@@ -222,7 +222,12 @@ const LFURates = async (
 
   if (cache.has(key)) {
     const rateData = cache.get(key);
-    if (rateData) rateData.hitCount++;
+    if (rateData) {
+      rateData.forEach((r, i) => {
+        rateData[i] = { ...r, hashtags: new Map(Object.entries(r.hashtags)) };
+      });
+      rateData.hitCount++;
+    }
     return rateData;
   } else {
     const rates = (await requestRates(scale, region)) as IMapInfo[] & {
