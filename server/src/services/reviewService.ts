@@ -90,9 +90,7 @@ const updateMapInfoHashtag = async (address: string, hashtags: string[]) => {
       { codeLength: 7, code: code },
     ];
     conditions.forEach((condition) => {
-      if (condition.codeLength >= code.length) {
-        void findAndModifyHashtag(condition, hashtags);
-      }
+      void findAndModifyHashtag(condition, hashtags);
     });
   }
 };
