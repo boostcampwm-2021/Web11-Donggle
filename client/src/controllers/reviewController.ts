@@ -66,8 +66,14 @@ const fetchContentData = async (
 };
 
 const parseHashtags = (text: string) =>
-  Array.from(text.matchAll(/#[^#\s]*/g)).map((hashtag) =>
-    hashtag[0].replace('#', ''),
-  );
+  Array.from(text.matchAll(/#[^#\s]*/g))
+    .map((hashtag) => hashtag[0].replace('#', ''))
+    .reduce((a, hashtag) => {
+      if (!a.includes(hashtag)) {
+        return [...a, hashtag];
+      } else {
+        return a;
+      }
+    }, <string[]>[]);
 
 export { submitReview, fetchContentData, parseHashtags };
