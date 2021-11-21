@@ -30,8 +30,6 @@ export interface IProps {
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
-  const [history, routeHistory] = useHistoryRouter();
-  const location = useLocation();
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
