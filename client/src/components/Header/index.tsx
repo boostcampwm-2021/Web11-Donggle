@@ -17,8 +17,6 @@ import {
   ColorBar,
   ProfileImage,
 } from './index.style';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -68,16 +66,6 @@ const Header: React.FC = () => {
                     className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
                   >
                     동네 지도
-                  </LinkBtn>
-                </Menu>
-                <Menu>
-                  <LinkBtn
-                    onClick={() => routeHistory('/review')}
-                    className={`${
-                      clickedLinkBtnId === '/review' && 'link-selected'
-                    }`}
-                  >
-                    동네 후기
                   </LinkBtn>
                 </Menu>
                 <Menu>
