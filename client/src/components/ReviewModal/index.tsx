@@ -87,6 +87,17 @@ const ReviewModal: React.FC = () => {
       </TitleDiv>
       <StarRateDiv>{RatingStars}</StarRateDiv>
       <TextAreaDiv>
+        <p
+          style={{
+            position: 'absolute',
+            right: '75px',
+            top: '-35px',
+            color: reviewData.text.length < 400 ? 'grey' : 'red',
+            marginRight: '10px',
+          }}
+        >
+          {reviewData.text.length} / 400
+        </p>
         <TextInput
           placeholder="후기를 작성해주세요.(선택, 400자 이내)"
           rows={3}
@@ -97,16 +108,6 @@ const ReviewModal: React.FC = () => {
           }}
           value={reviewData.text}
         ></TextInput>
-        <p
-          style={{
-            position: 'absolute',
-            right: '75px',
-            bottom: '-10px',
-            color: 'red',
-          }}
-        >
-          {reviewData.text.length} / 400
-        </p>
       </TextAreaDiv>
       <HashTagWrapper>
         {reviewData.hashtags?.map((h) => (
