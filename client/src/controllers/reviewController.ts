@@ -22,11 +22,7 @@ const submitReview = (
             method: 'POST',
             headers: requestHeaders,
             body: JSON.stringify(data),
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              console.log(res);
-            });
+          }).then((res) => res.json());
           routeHistory('/', {});
         },
       },
@@ -69,4 +65,9 @@ const fetchContentData = async (
     });
 };
 
-export { submitReview, fetchContentData };
+const parseHashtags = (text: string) =>
+  Array.from(text.matchAll(/#[^#\s]*/g)).map((hashtag) =>
+    hashtag[0].replace('#', ''),
+  );
+
+export { submitReview, fetchContentData, parseHashtags };

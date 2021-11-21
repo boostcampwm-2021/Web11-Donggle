@@ -51,9 +51,6 @@ const insertReview = async (data: ReviewInsertData) => {
   await mapService.updateRates(mapData.code, data);
 };
 
-const parseHashtags = (text: string) =>
-  Array.from(text.matchAll(/#[^#\s]*/g)).map((hashtag) => hashtag[0]);
-
 const getCodeByAddress = async (address: string) => {
   const foundDocument = await MapInfoModel.findOne({ address });
   return foundDocument?.code;
@@ -100,6 +97,5 @@ export default {
   initializeReviewModel,
   queryReviews,
   insertReview,
-  parseHashtags,
   updateMapInfoHashtag,
 };

@@ -39,6 +39,15 @@ const TextInput = styled.textarea`
   line-height: 24px;
 `;
 
+const HashTagWrapper = styled.div`
+  width: 70%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
 const SubmitDiv = styled(BaseDiv)`
   margin-top: 15px;
 `;
@@ -54,4 +63,12 @@ const SubmitBtn = styled.button`
   cursor: pointer;
 `;
 
-export { TitleDiv, StarRateDiv, TextAreaDiv, TextInput, SubmitDiv, SubmitBtn };
+export {
+  TitleDiv,
+  StarRateDiv,
+  TextAreaDiv,
+  TextInput,
+  HashTagWrapper,
+  SubmitDiv,
+  SubmitBtn,
+};

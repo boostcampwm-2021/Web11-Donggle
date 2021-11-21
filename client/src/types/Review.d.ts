@@ -10,6 +10,7 @@ interface IReviewSubmit {
   text: string;
   oauth_email: string;
   categories: ICategories;
+  hashtags?: string[];
 }
 
 interface IReviewContent {
