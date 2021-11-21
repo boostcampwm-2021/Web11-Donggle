@@ -38,7 +38,6 @@ interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
   updateSidebarRate: (rateData: IMapInfo) => void;
-  toggleSidebar: () => void;
 }
 
 const MapComponent: React.FC<IProps> = ({

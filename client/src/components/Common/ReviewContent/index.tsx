@@ -48,8 +48,18 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   }, [pageNumber, props.address]);
 
   useEffect(() => {
+    console.log(1);
+    setContentLists([]);
+    setPageNumber(0);
+    setIsLoading(false);
+    setHasMore(false);
     (async () => await fetchData())();
-  }, [pageNumber, props.address]);
+  }, [props.address]);
+
+  useEffect(() => {
+    console.log(2);
+    (async () => await fetchData())();
+  }, [pageNumber]);
 
   const lastItemRef = useCallback(
     (node) => {

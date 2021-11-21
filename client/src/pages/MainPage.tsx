@@ -55,23 +55,19 @@ const DEFAULT_RATE_DATA: IMapInfo = {
   address: '',
   code: '',
   codeLength: 0,
-  center: [37.541, 126.986],
-  count: 2,
+  center: [37.541, 126.986], // 제주도
+  count: 0,
   categories: {
-    safety: 8,
-    traffic: 7,
-    food: 9,
-    entertainment: 9,
+    safety: 0,
+    traffic: 0,
+    food: 0,
+    entertainment: 0,
   },
 };
 
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
-  const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
-
-  const toggleSidebar = () => {
-    setSidebar(!sidebar);
-  };
+  const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
 
   const openSidebar = useCallback(() => {
     setSidebar(true);
@@ -92,7 +88,6 @@ const MainPage: React.FC = () => {
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
           updateSidebarRate={updateSidebarRate}
-          toggleSidebar={toggleSidebar}
         ></Map>
         {sidebar && (
           <Suspense fallback="loading...">
