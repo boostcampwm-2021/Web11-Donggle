@@ -45,7 +45,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
   return (
     <Layout className={`${props.sidebar ? 'open' : ''}`}>
       <TitleDiv>
-        <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
+        <SpanBackArrow onClick={() => props.closeSidebar()}>❯</SpanBackArrow>
         <SpanTitle>{props.rateData.address}</SpanTitle>
         <EmptySpan></EmptySpan>
       </TitleDiv>

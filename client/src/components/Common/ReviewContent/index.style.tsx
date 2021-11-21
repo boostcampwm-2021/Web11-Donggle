@@ -70,7 +70,6 @@ const ContentBottomDiv = styled(BaseDiv)`
 const RateDiv = styled(BaseDiv)`
   flex-direction: column;
   width: 100%;
-  padding-left: 60px;
   border-bottom: none;
 `;
 
