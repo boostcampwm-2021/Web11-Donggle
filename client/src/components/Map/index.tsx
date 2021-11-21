@@ -27,6 +27,9 @@ import { IMapInfo, IPolygon } from '@myTypes/Map';
 import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
+import { IReviewContent } from '@myTypes/Review';
+import { fetchContentData } from '@controllers/reviewController';
+import { IAPIResult } from '@myTypes/Common';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -38,12 +41,14 @@ interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
   updateSidebarRate: (rateData: IMapInfo) => void;
+  updateSidebarContents: (contentsData: IReviewContent[]) => void;
 }
 
 const MapComponent: React.FC<IProps> = ({
   openSidebar,
   closeSidebar,
   updateSidebarRate,
+  updateSidebarContents,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
@@ -126,8 +131,12 @@ const MapComponent: React.FC<IProps> = ({
     if (!mapWrapper.current) return;
 
     const wrapper = mapWrapper.current;
-    const onClick = (rateData: IMapInfo) => {
+    const onClick = async (rateData: IMapInfo) => {
+      const reviewContents: IAPIResult<IReviewContent[]> =
+        await fetchContentData(rateData.address, 'review');
+
       updateSidebarRate(rateData);
+      updateSidebarContents(reviewContents.result || []);
       openSidebar();
     };
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
@@ -198,14 +207,18 @@ const MapComponent: React.FC<IProps> = ({
 
   useEffect(() => {
     polygons.forEach((polygon) => {
-      const onClick = () => {
+      const onClick = async () => {
         const matchingMarker = findMarker(markers, polygon.address);
         if (!matchingMarker) return;
 
         const markerEl = matchingMarker.getContent() as HTMLElement;
         const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
 
+        const reviewContents: IAPIResult<IReviewContent[]> =
+          await fetchContentData(polygon.address, 'review');
+
         updateSidebarRate(sidebarRate);
+        updateSidebarContents(reviewContents.result || []);
         openSidebar();
       };
       addPolygonClickEvent(polygon, onClick);

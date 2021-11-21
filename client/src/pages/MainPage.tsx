@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
 
 import { IMapInfo } from '@myTypes/Map';
+import { IReviewContent } from '@myTypes/Review';
 
 const MainDiv = styled.div`
   width: 100vw;
@@ -68,6 +69,7 @@ const DEFAULT_RATE_DATA: IMapInfo = {
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
+  const [sidebarContents, setSidebarContents] = useState<IReviewContent[]>([]);
 
   const openSidebar = useCallback(() => {
     setSidebar(true);
@@ -81,6 +83,13 @@ const MainPage: React.FC = () => {
     setSidebarRate(rateData);
   }, []);
 
+  const updateSidebarContents = useCallback(
+    (contentsData: IReviewContent[]) => {
+      setSidebarContents(contentsData);
+    },
+    [],
+  );
+
   return (
     <MainDiv>
       <FlexContainer>
@@ -88,12 +97,15 @@ const MainPage: React.FC = () => {
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
           updateSidebarRate={updateSidebarRate}
+          updateSidebarContents={updateSidebarContents}
         ></Map>
         {sidebar && (
           <Suspense fallback="loading...">
             <SidebarLazy
               sidebar={sidebar}
               rateData={sidebarRate}
+              contentsData={sidebarContents}
+              setContentsData={setSidebarContents}
               hashTagData={TemporaryHashTagData}
               closeSidebar={closeSidebar}
             ></SidebarLazy>
