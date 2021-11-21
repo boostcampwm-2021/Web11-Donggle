@@ -101,6 +101,7 @@ const recursiveGetCoords = async (code: string, accessToken: string) => {
         food: 0,
         entertainment: 0,
       },
+      hashtags: new Map(),
     };
 
     void MapModel.create(regionData).then(() => {
