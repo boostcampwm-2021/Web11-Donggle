@@ -17,7 +17,7 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Switch,
   Route,
@@ -34,6 +34,14 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+const pathExceptions = [
+  '/write-review',
+  '/ranking',
+  '/signin',
+  '/signup',
+  '/profile/update-address',
+];
 
 const PrivateRoute: React.FC<RouterProps> = ({
   component: Component,
@@ -66,6 +74,26 @@ const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
 
+  const routeAgain = useCallback((to: string) => {
+    const paths = to.match(/\/[^\/]*/);
+    if (paths === null) {
+      return <NotFoundPage />;
+    }
+    const background = { pathname: paths[0] };
+    background.pathname =
+      background.pathname === to ? '/' : background.pathname;
+    return (
+      <Redirect
+        to={{
+          pathname: to,
+          state: {
+            background,
+          },
+        }}
+      />
+    );
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -78,7 +106,11 @@ const App: React.FC = () => {
               <Route exact path="/" component={MainPage} />
               <Route path="/github/callback" component={LoadingPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
-              <Route component={NotFoundPage} />
+              {pathExceptions.includes(location.pathname) ? (
+                routeAgain(location.pathname)
+              ) : (
+                <Route component={NotFoundPage} />
+              )}
             </Switch>
             {background && (
               <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
