@@ -1,5 +1,5 @@
 import { ICategories } from '@myTypes/Review';
-import { ISnackbar } from '@myTypes/Common';
+import { IAPIResult } from '@myTypes/Common';
 import { snackbars, setSnackbars } from '@components/Snackbar';
 
 const calcTotal = (categories: ICategories) => {
@@ -44,4 +44,11 @@ const getPrevPath = (to: string) => {
   return paths.join();
 };
 
-export { calcTotal, getDebouncedFunction, showSnackbar, getPrevPath };
+const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
+  const response = await fetch(info, init);
+  if (response.status !== 200) throw Error('요청 실패');
+  const json: IAPIResult<T> = await response.json();
+  return json.result;
+};
+
+export { calcTotal, getDebouncedFunction, showSnackbar, getPrevPath, fetcher };

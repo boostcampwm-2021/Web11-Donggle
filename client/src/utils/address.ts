@@ -1,3 +1,5 @@
+import { IRange } from '@myTypes/Map';
+
 const regionToScaled = (region: string[], scale: number) => {
   if (region.length < 3) return region.join(' ');
   const [big, medium, small] = region;
@@ -30,4 +32,27 @@ const regionToSmallest = (region: string[], scale: number) => {
   }
 };
 
-export { regionToScaled, regionToSmallest };
+const regionToRange = (region: string[], scale: number): IRange => {
+  const [big, medium] = region;
+  const range: IRange = {
+    address: '',
+    scope: 'big',
+  };
+
+  switch (true) {
+    case scale < 9:
+      range.scope = 'small';
+      range.address = `${big} ${medium}`;
+      break;
+    case 9 <= scale && scale < 12:
+      range.scope = 'medium';
+      range.address = `${big}`;
+      break;
+    case scale >= 12:
+      range.scope = 'big';
+      break;
+  }
+  return range;
+};
+
+export { regionToScaled, regionToSmallest, regionToRange };
