@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { jwtConfig, jwtRefreshConfig } from '@config/secretKey';
-
-const TOKEN_EXPIRED = -3;
-const TOKEN_INVALID = -2;
+import { AuthError } from '@utils/authErrorEnum';
 
 export default {
   sign: (user: { oauth_email: string }) => {
@@ -30,11 +28,11 @@ export default {
     } catch (err) {
       const errMsg = (err as Error).message;
       if (errMsg === 'jwt expired') {
-        return TOKEN_EXPIRED;
+        return AuthError.TOKEN_EXPIRED;
       } else if (errMsg === 'invalid token') {
-        return TOKEN_INVALID;
+        return AuthError.TOKEN_INVALID;
       } else {
-        return TOKEN_INVALID;
+        return AuthError.TOKEN_INVALID;
       }
     }
     return decoded;
