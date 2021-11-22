@@ -5,6 +5,7 @@ import {
   ContentTopDiv,
   ContentTopTextDiv,
   DateText,
+  AddressText,
   UserText,
   ContentTextDiv,
   ContentBottomDiv,
@@ -110,39 +111,40 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   return (
     <ContentWrapper>
       {props.contentsData.length > 0 ? (
-        props.contentsData.map((content, idx) =>
-          props.selectedMenu === 'review' ? (
-            <ContentDiv key={idx} ref={lastItemRef}>
-              <ContentTopDiv>
-                <StarRateDiv
-                  isLarge={false}
-                  total={(
-                    Object.keys(content.categories).reduce((prev, curr) => {
-                      return prev + content.categories[curr];
-                    }, 0) / 4
-                  ).toFixed(1)}
-                />
-                <ContentTopTextDiv>
-                  <DateText>{showDate(content.createdAt)}</DateText>
-                  <UserText>{content.user}</UserText>
-                </ContentTopTextDiv>
-              </ContentTopDiv>
-              <ContentTextDiv>{content.text}</ContentTextDiv>
-              <ContentBottomDiv>
-                <DetailBtn>
-                  <RateDiv>
-                    <BarRateDiv
-                      count={1}
-                      categories={content.categories}
-                    ></BarRateDiv>
-                  </RateDiv>
-                </DetailBtn>
-              </ContentBottomDiv>
-            </ContentDiv>
-          ) : (
-            <ContentDiv>Article 입니다.</ContentDiv>
-          ),
-        )
+        props.contentsData.map((content, idx) => (
+          <ContentDiv key={idx} ref={lastItemRef}>
+            <ContentTopDiv>
+              <StarRateDiv
+                isLarge={false}
+                total={(
+                  Object.keys(content.categories).reduce((prev, curr) => {
+                    return prev + content.categories[curr];
+                  }, 0) / 4
+                ).toFixed(1)}
+              />
+              <ContentTopTextDiv>
+                {props.selectedMenu === 'myreview' ? (
+                  <AddressText>{content.address}</AddressText>
+                ) : (
+                  <></>
+                )}
+                <DateText>{showDate(content.createdAt)}</DateText>
+                <UserText>{content.user}</UserText>
+              </ContentTopTextDiv>
+            </ContentTopDiv>
+            <ContentTextDiv>{content.text}</ContentTextDiv>
+            <ContentBottomDiv>
+              <DetailBtn>
+                <RateDiv>
+                  <BarRateDiv
+                    count={1}
+                    categories={content.categories}
+                  ></BarRateDiv>
+                </RateDiv>
+              </DetailBtn>
+            </ContentBottomDiv>
+          </ContentDiv>
+        ))
       ) : (
         <EmptyDiv>관련 글이 없어요! 글을 남겨주세요!</EmptyDiv>
       )}

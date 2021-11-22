@@ -45,6 +45,14 @@ const DateText = styled(SpanText)`
   color: ${(props) => props.theme.colors.ashgrey};
 `;
 
+const AddressText = styled(SpanText)`
+  font-size: 10px;
+  box-sizing: border-box;
+  text-decoration: underline;
+  margin-right: 8px;
+  color: ${(props) => props.theme.colors.green};
+`;
+
 const UserText = styled(SpanText)`
   font-size: 12px;
   color: ${(props) => props.theme.colors.ashgrey};
@@ -89,6 +97,7 @@ export {
   ContentTopDiv,
   ContentTopTextDiv,
   DateText,
+  AddressText,
   UserText,
   ContentTextDiv,
   ContentBottomDiv,

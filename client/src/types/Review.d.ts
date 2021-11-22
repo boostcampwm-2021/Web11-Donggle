@@ -15,6 +15,7 @@ interface IReviewSubmit {
 
 interface IReviewContent {
   text: string;
+  address?: string;
   user: string;
   dateDiff: number;
   createdAt: Date;
