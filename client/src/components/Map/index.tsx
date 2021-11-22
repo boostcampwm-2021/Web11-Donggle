@@ -134,11 +134,11 @@ const MapComponent: React.FC<IProps> = ({
 
     const wrapper = mapWrapper.current;
     const onClick = async (rateData: IMapInfo) => {
-      const reviewContents: IAPIResult<IReviewContent[]> =
+      const sidebarContents: IAPIResult<IReviewContent[]> =
         await fetchContentData(rateData.address, 'review');
 
       updateSidebarRate(rateData);
-      updateSidebarContents(reviewContents.result || []);
+      updateSidebarContents(sidebarContents.result || []);
       openSidebar();
     };
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
@@ -216,11 +216,11 @@ const MapComponent: React.FC<IProps> = ({
         const markerEl = matchingMarker.getContent() as HTMLElement;
         const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
 
-        const reviewContents: IAPIResult<IReviewContent[]> =
+        const sidebarContents: IAPIResult<IReviewContent[]> =
           await fetchContentData(polygon.address, 'review');
 
         updateSidebarRate(sidebarRate);
-        updateSidebarContents(reviewContents.result || []);
+        updateSidebarContents(sidebarContents.result || []);
         openSidebar();
       };
       addPolygonClickEvent(polygon, onClick);

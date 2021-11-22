@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   Layout,
@@ -16,9 +16,14 @@ import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
 import HashTagList from '@components/Common/HashTag';
 import ReviewContent from '@components/Common/ReviewContent';
-import { IMapInfo } from '@myTypes/Map';
 import { calcTotal } from '@utils/common';
+import { useRecoilState } from 'recoil';
+import { IMapInfo } from '@myTypes/Map';
 import { IReviewContent } from '@myTypes/Review';
+import { fetchContentData } from '@controllers/sidebarController';
+import { IAPIResult } from '@myTypes/Common';
+import { IAuthInfo } from '@myTypes/User';
+import { authState } from '@stores/atoms';
 
 export interface IProps {
   sidebar: boolean;
@@ -31,6 +36,7 @@ export interface IProps {
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
+  const [auth] = useRecoilState<IAuthInfo>(authState);
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
@@ -39,6 +45,23 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       .sort((a, b) => a[1] - b[1])
       .map((hashtag) => hashtag[0])
       .slice(0, 5);
+
+  const onMenuClickHandler = useCallback(
+    async (menu) => {
+      if (menu === selectedMenu) return;
+
+      setSelectedMenu(menu);
+      const sidebarContents: IAPIResult<IReviewContent[]> =
+        await fetchContentData(props.rateData.address, menu, auth.oauth_email);
+
+      props.updateSidebarContents(sidebarContents.result || []);
+    },
+    [auth, props, selectedMenu],
+  );
+
+  useEffect(() => {
+    setSelectedMenu('review');
+  }, [props.rateData.address, auth]);
 
   return (
     <Layout className={`${props.sidebar ? 'open' : ''}`}>
@@ -67,17 +90,21 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       </HashTagDiv>
       <MenuBarDiv>
         <Menu
-          onClick={() => setSelectedMenu('review')}
+          onClick={() => onMenuClickHandler('review')}
           className={`${selectedMenu === 'review' && 'menu-selected'}`}
         >
           동네후기
         </Menu>
-        <Menu
-          onClick={() => setSelectedMenu('myreview')}
-          className={`${selectedMenu === 'myreview' && 'menu-selected'}`}
-        >
-          내 후기
-        </Menu>
+        {sessionStorage.getItem('jwt') ? (
+          <Menu
+            onClick={() => onMenuClickHandler('myreview')}
+            className={`${selectedMenu === 'myreview' && 'menu-selected'}`}
+          >
+            내 후기
+          </Menu>
+        ) : (
+          <></>
+        )}
       </MenuBarDiv>
       <ReviewContent
         address={props.rateData.address}

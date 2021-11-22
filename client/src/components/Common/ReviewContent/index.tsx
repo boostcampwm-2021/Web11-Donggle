@@ -16,6 +16,11 @@ import BarRateDiv from '@components/Common/BarRate';
 import DetailBtn from '@components/Common/DetailBtn';
 import { IReviewContent } from '@myTypes/Review';
 import { IAPIResult } from '@myTypes/Common';
+import { IAuthInfo } from '@myTypes/User';
+
+import { useRecoilState } from 'recoil';
+import { authState } from '@stores/atoms';
+
 import { fetchContentData } from '@controllers/sidebarController';
 
 interface IProps {
@@ -30,6 +35,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
+  const [auth] = useRecoilState<IAuthInfo>(authState);
 
   const showDate = (createdAt: Date) => {
     const now = new Date();
@@ -64,10 +70,10 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
-    console.log('fetcing', pageNumber);
     const list: IAPIResult<IReviewContent[]> = await fetchContentData(
       props.address,
       props.selectedMenu,
+      auth.oauth_email,
       pageNumber,
     );
     if (list.result) {
@@ -75,7 +81,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
     }
     setHasMore(list.result.length > 0);
     setIsLoading(false);
-  }, [props.contentsData, pageNumber, props.address]);
+  }, [props, auth.oauth_email, pageNumber]);
 
   useEffect(() => {
     setPageNumber(1);
@@ -98,7 +104,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       ));
       if (node) ob.observe(node);
     },
-    [props.contentsData, props.address, hasMore, isLoading],
+    [isLoading, hasMore, fetchData],
   );
 
   return (

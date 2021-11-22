@@ -40,12 +40,23 @@ const submitReview = (
 };
 
 const fetchContentData = async (
-  address,
-  menu,
+  address: string,
+  menu: string,
+  user: string | undefined = undefined,
   pageNum = 0,
   itemNum = 3,
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
-  const fetchUrl = `${process.env.REACT_APP_API_URL}/api/${menu}?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`;
+  let fetchUrl: string;
+
+  switch (menu) {
+    case 'myreview':
+      fetchUrl = `${process.env.REACT_APP_API_URL}/api/${menu}?user=${user}&pageNum=${pageNum}&itemNum=${itemNum}`;
+      break;
+    default:
+      fetchUrl = `${process.env.REACT_APP_API_URL}/api/${menu}?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`;
+      break;
+  }
+
   return await fetch(`${fetchUrl}`, {
     method: 'GET',
   })
@@ -57,6 +68,7 @@ const fetchContentData = async (
     })
     .catch((err) => {
       console.error(err);
+      return { result: null, message: err };
     });
 };
 
