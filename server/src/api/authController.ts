@@ -44,12 +44,13 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
       const refreshToken = jwt.sign(oauthEmail, 'refresh');
 
       const userId = (isMember._id as ObjectId).toString();
+      const userIdToken = jwt.sign({ id: userId }, 'id');
       void authService.updateRefreshToken(oauthEmail, refreshToken.token);
 
       userInfo = {
         ...userInfo,
         jwtToken: jwtToken.token,
-        refreshToken: userId,
+        refreshToken: userIdToken.token,
         oauthEmail: isMember.oauth_email,
         address: isMember.address,
         image: isMember.image as string,
@@ -88,12 +89,13 @@ router.post('/signup', (async (req: Request, res: Response) => {
     };
     const newUserDoc = await authService.saveUserInfo(newUserInfo);
     const userId = (newUserDoc._id as ObjectId).toString();
+    const userIdToken = jwt.sign({ id: userId }, 'id');
 
     res.status(200).json(
       makeApiResponse(
         {
           jwtToken: jwtToken.token,
-          refreshToken: userId,
+          refreshToken: userIdToken.token,
           address: address,
         },
         '성공적으로 회원가입 되었습니다.',

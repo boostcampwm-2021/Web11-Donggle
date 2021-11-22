@@ -22,4 +22,12 @@ const jwtRefreshConfig: Config = {
   },
 };
 
-export { jwtConfig, jwtRefreshConfig };
+const jwtIdConfig: Config = {
+  secretKey: config.jwt_id_secret,
+  options: {
+    algorithm: config.jwt_id_algorithm as jwt.Algorithm,
+    expiresIn: config.jwt_id_expire,
+  },
+};
+
+export { jwtConfig, jwtRefreshConfig, jwtIdConfig };

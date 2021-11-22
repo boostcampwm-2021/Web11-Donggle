@@ -18,8 +18,11 @@ export default {
   client_secret: process.env.CLIENT_SECRET || '',
   jwt_secret: process.env.JWT_SECRET || '',
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET || '',
+  jwt_id_secret: process.env.JWT_ID_SECRET || '',
   jwt_algorithm: process.env.JWT_ALGORITHM || '',
   jwt_refresh_algorithm: process.env.JWT_REFRESH_ALGORITHM || '',
+  jwt_id_algorithm: process.env.JWT_ID_ALGORITHM || '',
   jwt_expire: process.env.JWT_EXPIRE || '',
   jwt_refresh_expire: process.env.JWT_REFRESH_EXPIRE || '',
+  jwt_id_expire: process.env.JWT_ID_EXPIRE || '',
 };
