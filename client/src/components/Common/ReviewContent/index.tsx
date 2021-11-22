@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   ContentWrapper,
   ContentDiv,
@@ -28,36 +21,35 @@ import { fetchContentData } from '@controllers/reviewController';
 interface IProps {
   address: string;
   selectedMenu: string;
-  contentsData: IReviewContent[];
-  setContentsData: Dispatch<SetStateAction<IReviewContent[]>>;
 }
 
 const RegionContent: React.FC<IProps> = (props: IProps) => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [contentLists, setContentLists] = useState<IReviewContent[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
+  const NUMBER_OF_DATA_PER_PAGE = 3;
   const today = new Date().getTime();
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
-    console.log('fetcing', pageNumber);
     const list: IAPIResult<IReviewContent[]> = await fetchContentData(
       props.address,
       props.selectedMenu,
       pageNumber,
+      NUMBER_OF_DATA_PER_PAGE,
     );
     if (list.result) {
-      props.setContentsData([...props.contentsData, ...list.result]);
+      setContentLists([...contentLists, ...list.result]);
+      setHasMore(list.result.length > 0);
     }
-    setHasMore(list.result.length > 0);
     setIsLoading(false);
-  }, [props.contentsData, pageNumber, props.address]);
+  }, [pageNumber, props.address]);
 
   useEffect(() => {
-    setPageNumber(1);
-    setHasMore(true);
-  }, [props.address]);
+    (async () => await fetchData())();
+  }, [pageNumber, props.address]);
 
   const lastItemRef = useCallback(
     (node) => {
@@ -65,9 +57,8 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       if (observer.current) observer.current.disconnect();
 
       const ob = (observer.current = new IntersectionObserver(
-        async (entries) => {
+        (entries) => {
           if (entries[0].isIntersecting && hasMore) {
-            await fetchData();
             setPageNumber((prev) => prev + 1);
           }
         },
@@ -75,13 +66,13 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       ));
       if (node) ob.observe(node);
     },
-    [props.contentsData, props.address, hasMore, isLoading],
+    [hasMore, isLoading],
   );
 
   return (
     <ContentWrapper>
-      {props.contentsData.length > 0 ? (
-        props.contentsData.map((content, idx) =>
+      {contentLists.length > 0 ? (
+        contentLists.map((content, idx) =>
           props.selectedMenu === 'review' ? (
             <ContentDiv key={idx} ref={lastItemRef}>
               <ContentTopDiv>

@@ -47,8 +47,8 @@ const submitReview = (
 const fetchContentData = async (
   address,
   menu,
-  pageNum = 0,
-  itemNum = 3,
+  pageNum,
+  itemNum,
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
   return await fetch(
     `${process.env.REACT_APP_API_URL}/api/${
