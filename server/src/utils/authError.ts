@@ -12,7 +12,7 @@ const authErrCheck = (user: string | -3 | -2 | JwtPayload, res: Response) => {
       .json(makeApiResponse({}, '유효하지 않은 토큰입니다.'));
   }
 
-  if ((user as JwtPayload).oauth_email === undefined) {
+  if (user[Object.keys(user as JwtPayload)[0]] === undefined) {
     logger.error('잘못된 토큰입니다.');
     return res.status(500).json(makeApiResponse({}, '잘못된 토큰입니다.'));
   }

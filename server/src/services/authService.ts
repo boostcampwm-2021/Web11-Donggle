@@ -62,6 +62,10 @@ const saveUserInfo = async (userInfo: User) => {
   });
 };
 
+const findRefreshToken = async (id: string) => {
+  return await UserModel.findById(id);
+};
+
 export default {
   getAccessToken,
   getOauthEmail,
@@ -69,4 +73,5 @@ export default {
   updateRefreshToken,
   findRegionInfo,
   saveUserInfo,
+  findRefreshToken,
 };

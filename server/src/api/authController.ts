@@ -108,20 +108,20 @@ router.post('/signup', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
-router.get('/refresh', checkToken, (req: Request, res: Response) => {
-  const refreshToken = req.headers.refreshtoken as string;
+router.get('/refresh', checkToken, async (req: Request, res: Response) => {
+  const idToken = req.headers.refreshtoken as string;
 
-  if (!refreshToken) {
+  if (!idToken) {
     return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
   }
 
-  const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
+  const idVerify = jwt.verify(idToken, 'id');
   /*
   2021-11-20
   문혜현
   token과 refresh token 모두 만료되었을 때
   */
-  if (refreshVerify == AuthError.TOKEN_EXPIRED) {
+  if (idVerify == AuthError.TOKEN_EXPIRED) {
     return res.status(500).json(
       makeApiResponse(
         {
@@ -134,15 +134,35 @@ router.get('/refresh', checkToken, (req: Request, res: Response) => {
   }
 
   if (
-    refreshVerify === AuthError.TOKEN_INVALID ||
-    (refreshVerify as JwtPayload).oauth_email === undefined
+    idVerify === AuthError.TOKEN_INVALID ||
+    (idVerify as JwtPayload).id === undefined
   ) {
-    return authErrCheck(refreshVerify, res);
+    return authErrCheck(idVerify, res);
+  }
+
+  const refreshTokenDb = await authService.findRefreshToken(
+    (idVerify as JwtPayload).id as string,
+  );
+
+  const refreshToken = refreshTokenDb?.refreshToken;
+  const refreshVerify = jwt.verify(refreshToken as string, 'refresh');
+
+  if (refreshVerify == AuthError.TOKEN_EXPIRED) {
+    return res.status(500).json(
+      makeApiResponse(
+        {
+          jwtToken: AuthError.TOKEN_EXPIRED,
+          refreshToken: AuthError.TOKEN_EXPIRED,
+        },
+        '다시 로그인해 주세요.',
+      ),
+    );
   }
 
   const newAccessToken = jwt.sign({
     oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
   });
+
   return res
     .status(200)
     .json(
