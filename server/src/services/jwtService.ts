@@ -3,19 +3,25 @@ import { jwtConfig, jwtRefreshConfig } from '@config/secretKey';
 import { AuthError } from '@utils/authErrorEnum';
 
 export default {
-  sign: (user: { oauth_email: string }) => {
+  sign: (user: { oauth_email: string }, kind = 'jwt') => {
     const payload = {
       oauth_email: user.oauth_email,
     };
-    const token: { token: string; refreshToken: string } = {
-      token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
-      refreshToken: jwt.sign(
-        payload,
-        jwtRefreshConfig.secretKey,
-        jwtRefreshConfig.options,
-      ),
-    };
-    return token;
+    if (kind === 'jwt') {
+      const token: { token: string } = {
+        token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
+      };
+      return token;
+    } else {
+      const token: { token: string } = {
+        token: jwt.sign(
+          payload,
+          jwtRefreshConfig.secretKey,
+          jwtRefreshConfig.options,
+        ),
+      };
+      return token;
+    }
   },
   verify: (token: string, kind = 'jwt') => {
     let decoded: string | jwt.JwtPayload;
