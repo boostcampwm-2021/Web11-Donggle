@@ -49,11 +49,6 @@ const isMember = (
   }
 
   if (status == 200 && !userInfo.result.jwtToken) {
-    setAuth({
-      ...auth,
-      oauth_email: userInfo.result.oauthEmail,
-      image: userInfo.result.image,
-    });
     routeHistory('/signup', {
       background: location,
       oauth_email: userInfo.result.oauthEmail,
@@ -68,6 +63,7 @@ const isMember = (
     sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
     */
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
+    sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
     setAuth({
       ...auth,
       isLoggedin: true,

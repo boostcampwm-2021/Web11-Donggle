@@ -1,12 +1,11 @@
-import express, { Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import logger from '@loaders/loggerLoader';
 import jwt from '@services/jwtService';
 import { makeApiResponse } from '@utils/index';
 import { AuthMiddleRequest } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
-
-const TOKEN_EXPIRED = -3;
-const TOKEN_INVALID = -2;
+import { AuthError } from '@utils/authErrorEnum';
+import { authErrCheck } from '@utils/authError';
 
 const checkToken = (
   req: AuthMiddleRequest,
@@ -21,22 +20,17 @@ const checkToken = (
   }
 
   const user = jwt.verify(token);
-  if (user === TOKEN_EXPIRED) {
+
+  if (user == AuthError.TOKEN_EXPIRED) {
     logger.error('유효기간이 만료되었습니다.');
-    return res
-      .status(500)
-      .json(makeApiResponse({}, '유효기간 만료되었습니다.'));
-  }
-  if (user === TOKEN_INVALID) {
-    logger.error('유효하지 않은 토큰입니다.');
-    return res
-      .status(500)
-      .json(makeApiResponse({}, '유효하지 않은 토큰입니다.'));
+    return next();
   }
 
-  if ((user as JwtPayload).oauth_email === undefined) {
-    logger.error('잘못된 토큰입니다.');
-    return res.status(500).json(makeApiResponse({}, '잘못된 토큰입니다.'));
+  if (
+    user === AuthError.TOKEN_INVALID ||
+    (user as JwtPayload).oauth_email === undefined
+  ) {
+    return authErrCheck(user, res);
   }
 
   req.id = (user as JwtPayload).oauth_email as string;
