@@ -115,14 +115,11 @@ const isLike = (color1: string, color2: string) => {
 const createPolygons = (regions) => {
   const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
-  const colors = [''];
-  regions.forEach((region) => {
-    let color: string = colorHash.hex(region.address);
-    let i = 0;
-    while (colors.filter((c) => isLike(c, color)).length) {
-      color = colorHash.hex(`${region.address}${i++}`);
-    }
-    colors.push(color);
+  const keyString = '!@#$';
+  let resultString = '';
+  regions.forEach((region, i) => {
+    const color: string = colorHash.hex(resultString);
+    resultString += keyString;
     if (region.type === 'Polygon') {
       polygons.push(makeSinglePolygon(region.path, region.address, color));
     } else {
