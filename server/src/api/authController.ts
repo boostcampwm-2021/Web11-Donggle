@@ -1,4 +1,5 @@
 import express, { Request, Response, RequestHandler } from 'express';
+import { ObjectId } from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
 
 import { User } from '@models/User';
@@ -40,10 +41,15 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
 
     if (isMember) {
       const jwtToken = jwt.sign(oauthEmail);
+      const refreshToken = jwt.sign(oauthEmail, 'refresh');
+
+      const userId = (isMember._id as ObjectId).toString();
+      void authService.updateRefreshToken(oauthEmail, refreshToken.token);
+
       userInfo = {
         ...userInfo,
         jwtToken: jwtToken.token,
-        refreshToken: jwtToken.refreshToken,
+        refreshToken: userId,
         oauthEmail: isMember.oauth_email,
         address: isMember.address,
         image: isMember.image as string,
@@ -69,21 +75,25 @@ router.post('/signup', (async (req: Request, res: Response) => {
     const { oauthEmail, address, code, center, image }: UserInfo =
       req.body as UserInfo;
 
+    const jwtToken = jwt.sign({ oauth_email: oauthEmail });
+    const refreshToken = jwt.sign({ oauth_email: oauthEmail }, 'refresh');
+
     const newUserInfo: User = {
       oauth_email: oauthEmail,
       address,
       code,
       center,
       image,
+      refreshToken: refreshToken.token,
     };
-    await authService.saveUserInfo(newUserInfo);
-    const jwtToken = jwt.sign({ oauth_email: oauthEmail });
+    const newUserDoc = await authService.saveUserInfo(newUserInfo);
+    const userId = (newUserDoc._id as ObjectId).toString();
 
     res.status(200).json(
       makeApiResponse(
         {
           jwtToken: jwtToken.token,
-          refreshToken: jwtToken.refreshToken,
+          refreshToken: userId,
           address: address,
         },
         '성공적으로 회원가입 되었습니다.',

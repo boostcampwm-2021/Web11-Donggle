@@ -2,6 +2,7 @@ import { User, UserModel } from '@models/User';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import config from '@config/index';
 import axios, { AxiosResponse } from 'axios';
+import logger from '@loaders/loggerLoader';
 
 const getAccessToken = async (code: string): Promise<string> => {
   const TOKEN_URL = `https://github.com/login/oauth/access_token?client_id=${config.client_id}&client_secret=${config.client_secret}&code=${code}`;
@@ -36,15 +37,24 @@ const getOauthEmail = async (
   return { oauthEmail: data.login, image: data.avatar_url };
 };
 
-const isMember = async (oauth_email: string): Promise<User | null> => {
+const isMember = async (oauth_email: string) => {
   return await UserModel.findOne().where('oauth_email').equals(oauth_email);
 };
 
-const findRegionInfo = async (address: string): Promise<MapInfo | null> => {
+const updateRefreshToken = async (
+  oauthEmail: { oauth_email: string },
+  refreshToken: string,
+) => {
+  return UserModel.updateOne(oauthEmail, {
+    refreshToken: refreshToken,
+  }).then(() => logger.info('refreshToken을 업데이트했습니다'));
+};
+
+const findRegionInfo = async (address: string) => {
   return await MapInfoModel.findOne().where('address').equals(address);
 };
 
-const saveUserInfo = async (userInfo: User): Promise<User> => {
+const saveUserInfo = async (userInfo: User) => {
   const newUser = new UserModel(userInfo);
   return await newUser.save().catch((err: Error) => {
     err.message = '이미 회원가입하셨습니다.';
@@ -56,6 +66,7 @@ export default {
   getAccessToken,
   getOauthEmail,
   isMember,
+  updateRefreshToken,
   findRegionInfo,
   saveUserInfo,
 };
