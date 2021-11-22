@@ -38,6 +38,29 @@ const queryReviews = async (
   return reviewData;
 };
 
+const queryUserReviews = async (
+  user_email: string,
+  pageNum: number,
+  itemNum: number,
+): Promise<Review[] | []> => {
+  const sixMonth = new Date();
+  sixMonth.setMonth(sixMonth.getMonth() - 6);
+
+  const fields = { address: 1, categories: 1, text: 1, user: 1, createdAt: 1 };
+  const reviewData = await ReviewModel.find(
+    {
+      oauth_email: { $eq: user_email },
+      createdAt: { $gte: sixMonth },
+    },
+    fields,
+    {
+      skip: pageNum * itemNum,
+      limit: itemNum,
+    },
+  ).sort({ createdAt: -1 });
+  return reviewData;
+};
+
 const insertReview = async (data: ReviewInsertData) => {
   const session: ClientSession = await mongoose.startSession();
 
@@ -64,7 +87,6 @@ const insertReview = async (data: ReviewInsertData) => {
       session,
     );
   });
-  console.log('ending');
 
   await session.endSession();
 };
@@ -123,6 +145,7 @@ export default {
   dropModel,
   initializeReviewModel,
   queryReviews,
+  queryUserReviews,
   insertReview,
   updateMapInfoHashtag,
 };

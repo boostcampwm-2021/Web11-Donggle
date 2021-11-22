@@ -50,6 +50,28 @@ router.get('/', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
+router.get('/:id', checkToken, (async (req: Request, res: Response) => {
+  try {
+    const userEmail = req.params.id;
+    const pageNum: number = parseInt(req.query.pageNum as string);
+    const itemNum: number = parseInt(req.query.itemNum as string);
+    if (!userEmail)
+      throw new Error('정상적이지 않은 요청입니다. User Email 값 부재');
+    const data = await reviewService.queryUserReviews(
+      userEmail,
+      pageNum,
+      itemNum,
+    );
+    res.status(200).json(makeApiResponse(data, ''));
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res
+      .status(500)
+      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+  }
+}) as RequestHandler);
+
 router.post('/', checkToken, (async (
   req: ReviewInsertRequest,
   res: Response,
