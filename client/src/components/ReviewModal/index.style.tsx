@@ -35,8 +35,18 @@ const TextInput = styled.textarea`
   margin: auto;
   padding: 0 30px 50px 0px;
   border: 1px solid ${(props) => props.theme.colors.lightgrey};
+  border-radius: 5px;
   resize: none;
   line-height: 24px;
+`;
+
+const HashTagWrapper = styled.div`
+  width: 70%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 const SubmitDiv = styled(BaseDiv)`
@@ -52,6 +62,19 @@ const SubmitBtn = styled.button`
   color: ${(props) => props.theme.colors.white};
   background-color: ${(props) => props.theme.colors.lightgreen};
   cursor: pointer;
+  border-radius: 10px;
+
+  :hover {
+    background-color: ${(props) => props.theme.colors.green};
+  }
 `;
 
-export { TitleDiv, StarRateDiv, TextAreaDiv, TextInput, SubmitDiv, SubmitBtn };
+export {
+  TitleDiv,
+  StarRateDiv,
+  TextAreaDiv,
+  TextInput,
+  HashTagWrapper,
+  SubmitDiv,
+  SubmitBtn,
+};

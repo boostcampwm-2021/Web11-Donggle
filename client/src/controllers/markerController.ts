@@ -114,6 +114,7 @@ const regionToRates = (region): IMapInfo => {
       food,
       entertainment,
     },
+    hashtags: new Map(),
   };
 };
 
@@ -130,9 +131,12 @@ const requestRates = async (
       }
       throw Error('요청 실패');
     })
-    .then((res: IAPIResult<IMapInfo[]>) => {
-      return res.result;
-    })
+    .then((res: IAPIResult<IMapInfo[]>) =>
+      res.result.map((r) => ({
+        ...r,
+        hashtags: new Map(Object.entries(r.hashtags)),
+      })),
+    )
     .catch((err) => {
       console.error(err);
       return [];
@@ -146,6 +150,7 @@ const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
       position: new kakao.maps.LatLng(...center),
     });
 
+    rateData.hashtags = Object.fromEntries(rateData.hashtags.entries());
     const defaultMarker = markerEl(rateData);
     const largeMarker = largeMarkerEl(rateData);
 
@@ -217,7 +222,12 @@ const LFURates = async (
 
   if (cache.has(key)) {
     const rateData = cache.get(key);
-    if (rateData) rateData.hitCount++;
+    if (rateData) {
+      rateData.forEach((r, i) => {
+        rateData[i] = { ...r, hashtags: new Map(Object.entries(r.hashtags)) };
+      });
+      rateData.hitCount++;
+    }
     return rateData;
   } else {
     const rates = (await requestRates(scale, region)) as IMapInfo[] & {

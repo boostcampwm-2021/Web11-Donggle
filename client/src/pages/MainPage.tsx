@@ -1,4 +1,4 @@
-import Map from '@components/Map/index';
+import MapComponent from '@components/Map/index';
 
 import React, { useState, useCallback, Suspense } from 'react';
 import styled from 'styled-components';
@@ -21,37 +21,6 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-// const TemporaryReviewData: IReviewContent[] = [
-//   {
-//     categories: {
-//       safety: 4,
-//       traffic: 4,
-//       food: 5,
-//       entertainment: 3,
-//     },
-//     text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
-//     user: 'github:user1',
-//   },
-//   {
-//     categories: {
-//       safety: 4,
-//       traffic: 4,
-//       food: 4,
-//       entertainment: 4,
-//     },
-//     text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
-//     user: 'github:user2',
-//   },
-// ];
-
-const TemporaryHashTagData: string[] = [
-  '소음이 적은',
-  '경관이 좋은',
-  '문화시설이 가까운',
-  '체육시설이 많은',
-  '역이 가까운',
-];
-
 const DEFAULT_RATE_DATA: IMapInfo = {
   address: '',
   code: '',
@@ -64,6 +33,7 @@ const DEFAULT_RATE_DATA: IMapInfo = {
     food: 0,
     entertainment: 0,
   },
+  hashtags: new Map(),
 };
 
 const MainPage: React.FC = () => {
@@ -93,12 +63,12 @@ const MainPage: React.FC = () => {
   return (
     <MainDiv>
       <FlexContainer>
-        <Map
+        <MapComponent
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
           updateSidebarRate={updateSidebarRate}
           updateSidebarContents={updateSidebarContents}
-        ></Map>
+        ></MapComponent>
         {sidebar && (
           <Suspense fallback="loading...">
             <SidebarLazy
@@ -106,7 +76,7 @@ const MainPage: React.FC = () => {
               rateData={sidebarRate}
               contentsData={sidebarContents}
               setContentsData={setSidebarContents}
-              hashTagData={TemporaryHashTagData}
+              hashTagData={sidebarRate.hashtags}
               closeSidebar={closeSidebar}
             ></SidebarLazy>
           </Suspense>

@@ -77,17 +77,29 @@ const SpanReviewTitle = styled(SpanTitle)`
 `;
 
 const RateDiv = styled(BaseDiv)`
+  display: flex;
   flex-direction: column;
   width: 100%;
-  padding-left: 60px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
 `;
 
 const HashTagDiv = styled(BaseDiv)`
   position: relative;
   width: 100%;
-  padding: 10px 55px;
+  padding: 10px 10px;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: center;
+`;
+
+const HashTagNo = styled.div`
+  width: 100%;
+  height: 28px;
+  display: flex;
+  color: ${(props) => props.theme.colors.lightgrey};
+  align-items: center;
+  justify-content: center;
 `;
 
 const MenuBarDiv = styled(BaseDiv)`
@@ -137,6 +149,7 @@ export {
   SpanReviewTitle,
   RateDiv,
   HashTagDiv,
+  HashTagNo,
   MenuBarDiv,
   Menu,
   ReviewContentDiv,

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const BaseDiv = styled.div`
   position: relative;
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
   line-height: 40px;
@@ -22,7 +21,7 @@ const RateSpanText = styled.span<{ isLarge: boolean }>`
 const RateStarDiv = styled(RateNumStarDiv)`
   width: fit-content;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: content-box;
 `;
 
@@ -38,6 +37,7 @@ const RateStarFillDiv = styled.div<{ rate: number }>`
   color: gold;
   padding: 0;
   position: relative;
+  bottom: 2px;
   z-index: 1;
   display: flex;
   width: ${(props) => props.rate * 20}%;

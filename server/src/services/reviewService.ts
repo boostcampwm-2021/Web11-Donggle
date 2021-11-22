@@ -1,7 +1,8 @@
-import { MapInfo } from '@models/MapInfo';
+import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { Review, ReviewModel } from '@models/Review';
 import { ReviewFindData, ReviewInsertData } from '@myTypes/Review';
 import { mapService } from '@services/index';
+import logger from '@loaders/loggerLoader';
 
 const dropModel = async () => {
   await ReviewModel.collection.drop();
@@ -50,4 +51,51 @@ const insertReview = async (data: ReviewInsertData) => {
   await mapService.updateRates(mapData.code, data);
 };
 
-export default { dropModel, initializeReviewModel, queryReviews, insertReview };
+const getCodeByAddress = async (address: string) => {
+  const foundDocument = await MapInfoModel.findOne({ address });
+  return foundDocument?.code;
+};
+
+const findAndModifyHashtag = async (
+  condition: { codeLength: number; code: string },
+  hashtags: string[],
+) => {
+  const foundDocument = await MapInfoModel.findOne(condition);
+  if (!foundDocument) {
+    throw new Error('해시태그를 업데이트하는데 condition이 이상합니다!');
+  } else {
+    const prevHashtags = foundDocument.hashtags ?? new Map<string, number>();
+    hashtags.forEach((hashtag) => {
+      const prevCount = prevHashtags.get(hashtag) ?? 0;
+      prevHashtags.set(hashtag, prevCount + 1);
+    });
+
+    void MapInfoModel.updateOne(condition, { hashtags: prevHashtags }).then(
+      () => logger.info('해시태그를 업데이트했어요!'),
+    );
+  }
+};
+
+const updateMapInfoHashtag = async (address: string, hashtags: string[]) => {
+  const code = await getCodeByAddress(address);
+  if (!code) {
+    throw new Error('해시태그를 업데이트하는데 address가 이상합니다!');
+  } else {
+    const conditions = [
+      { codeLength: 2, code: code.slice(0, 2) },
+      { codeLength: 5, code: code.slice(0, 5) },
+      { codeLength: 7, code: code },
+    ];
+    conditions.forEach((condition) => {
+      void findAndModifyHashtag(condition, hashtags);
+    });
+  }
+};
+
+export default {
+  dropModel,
+  initializeReviewModel,
+  queryReviews,
+  insertReview,
+  updateMapInfoHashtag,
+};

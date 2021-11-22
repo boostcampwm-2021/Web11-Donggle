@@ -64,6 +64,8 @@ const MapComponent: React.FC<IProps> = ({
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
   const [polygons, setPolygons] = useState(Array<IPolygon>());
 
+  const [browserSize, setBrowserSize] = useState([0, 0]);
+
   const moveTo = (to: IMapInfo) => {
     if (map === null) {
       return;
@@ -231,13 +233,24 @@ const MapComponent: React.FC<IProps> = ({
     };
   }, [polygons, markers, openSidebar, updateSidebarRate]);
 
+  useEffect(() => {
+    const updateSize = () => {
+      setBrowserSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', updateSize);
+    return window.removeEventListener('resize', updateSize);
+  }, []);
+
   return (
-    <MapWrapper ref={mapWrapper}>
-      <SearchbarWrapper>
-        <Searchbar onClickHandler={moveTo} />
-      </SearchbarWrapper>
+    <>
+      <MapWrapper ref={mapWrapper}>
+        <SearchbarWrapper>
+          <Searchbar onClickHandler={moveTo} />
+        </SearchbarWrapper>
+      </MapWrapper>
       <CenterMarker />
-    </MapWrapper>
+    </>
   );
 };
 

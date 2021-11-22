@@ -19,6 +19,7 @@ interface IMapInfo {
   count: number;
   //현재는 리뷰 정보가 없으므로 require를 false로함
   categories: ICategories;
+  hashtags: Map<string, number> | Map;
 }
 
 interface IPolygon extends kakao.maps.Polygon {

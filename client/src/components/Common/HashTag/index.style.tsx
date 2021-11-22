@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const HashTag = styled.span`
+  height: 10px;
   display: inline-block;
   border: 1px solid ${(props) => props.theme.colors.green};
   color: ${(props) => props.theme.colors.darkblue};

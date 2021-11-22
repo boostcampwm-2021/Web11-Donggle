@@ -9,6 +9,7 @@ import {
   SpanTitle,
   RateDiv,
   HashTagDiv,
+  HashTagNo,
   MenuBarDiv,
   Menu,
   SidebarBottomDiv,
@@ -26,7 +27,7 @@ export interface IProps {
   rateData: IMapInfo;
   contentsData: IReviewContent[];
   setContentsData: Dispatch<SetStateAction<IReviewContent[]>>;
-  hashTagData: string[];
+  hashTagData: Map<string, number>;
   closeSidebar: () => void;
 }
 
@@ -35,10 +36,16 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
+  const filterTop5Hashtags = (hashtags: Map<string, number>) =>
+    Array.from(hashtags.entries())
+      .sort((a, b) => a[1] - b[1])
+      .map((hashtag) => hashtag[0])
+      .slice(0, 5);
+
   return (
     <Layout className={`${props.sidebar ? 'open' : ''}`}>
       <TitleDiv>
-        <SpanBackArrow onClick={() => props.closeSidebar()}>❮</SpanBackArrow>
+        <SpanBackArrow onClick={() => props.closeSidebar()}>❯</SpanBackArrow>
         <SpanTitle>{props.rateData.address}</SpanTitle>
         <EmptySpan></EmptySpan>
       </TitleDiv>
@@ -50,7 +57,15 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
         />
       </RateDiv>
       <HashTagDiv>
-        <HashTagList hashTags={props.hashTagData} />
+        {Object.keys(props.hashTagData).length ? (
+          <HashTagList
+            hashTags={filterTop5Hashtags(
+              new Map(Object.entries(props.hashTagData)),
+            )}
+          />
+        ) : (
+          <HashTagNo>아직 해시태그가 없어요...</HashTagNo>
+        )}
       </HashTagDiv>
       <MenuBarDiv>
         <Menu

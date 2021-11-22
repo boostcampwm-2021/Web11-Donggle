@@ -1,0 +1,15 @@
+.react-confirm-alert-body {
+  text-align: center;
+}
+
+.react-confirm-alert-button-group {
+  justify-content: center;
+}
+
+.react-confirm-alert-button-group > button {
+  background: #33ab74;
+}
+
+.react-confirm-alert-button-group > button:hover {
+  background: #70c49d;
+}

@@ -66,6 +66,7 @@ const queryRates = async (
     'categories.traffic': 1,
     'categories.food': 1,
     'categories.entertainment': 1,
+    hashtags: true,
   };
 
   switch (true) {
@@ -96,6 +97,13 @@ const queryRates = async (
       );
       break;
   }
+
+  result.forEach((r) => {
+    if (!r.hashtags) {
+      r.hashtags = new Map();
+    }
+  });
+
   return result;
 };
 

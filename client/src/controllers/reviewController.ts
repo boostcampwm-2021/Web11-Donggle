@@ -1,7 +1,9 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IReviewContent, IReviewSubmit } from '@myTypes/Review';
 import { confirmAlert } from 'react-confirm-alert';
+
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import '@components/ReviewModal/alertStyle.css';
 
 const submitReview = (
   data: IReviewSubmit,
@@ -12,8 +14,7 @@ const submitReview = (
     buttons: [
       {
         label: '제출',
-        className: 'overlay-confirmation-submit',
-        onClick: async () => {
+        onClick: () => {
           const requestHeaders: HeadersInit = new Headers();
           requestHeaders.set('Content-Type', 'application/json');
           requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
@@ -22,17 +23,12 @@ const submitReview = (
             method: 'POST',
             headers: requestHeaders,
             body: JSON.stringify(data),
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              console.log(res);
-            });
+          }).then((res) => res.json());
           routeHistory('/', {});
         },
       },
       {
         label: '취소',
-        className: 'overlay-confirmation-cancel',
         onClick: () => {
           return;
         },
@@ -40,7 +36,6 @@ const submitReview = (
     ],
     closeOnEscape: false,
     closeOnClickOutside: false,
-    overlayClassName: 'overlay-confirmation-alert',
   });
 };
 
@@ -69,4 +64,15 @@ const fetchContentData = async (
     });
 };
 
-export { submitReview, fetchContentData };
+const parseHashtags = (text: string) =>
+  Array.from(text.matchAll(/#[^#\s]*/g))
+    .map((hashtag) => hashtag[0].replace('#', ''))
+    .reduce((a, hashtag) => {
+      if (!a.includes(hashtag)) {
+        return [...a, hashtag];
+      } else {
+        return a;
+      }
+    }, <string[]>[]);
+
+export { submitReview, fetchContentData, parseHashtags };
