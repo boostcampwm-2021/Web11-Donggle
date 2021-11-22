@@ -34,6 +34,7 @@ const Header: React.FC = () => {
 
   const onLogoutClick = useCallback(() => {
     sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('refreshToken');
     setAuth({
       ...auth,
       oauth_email: '',
