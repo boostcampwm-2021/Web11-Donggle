@@ -76,7 +76,6 @@ const App: React.FC = () => {
             <Header />
             <Switch location={background || location}>
               <Route exact path="/" component={MainPage} />
-              <Route path="/review" component={ReviewPage} />
               <Route path="/github/callback" component={LoadingPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
               <Route component={NotFoundPage} />
@@ -86,13 +85,13 @@ const App: React.FC = () => {
             )}
             {background && <Route path="/ranking" render={RankingPage} />}
             {background && <Route path="/signin" component={SignInPage} />}
+            {background && <Route path="/signup" component={SignUpPage} />}
             {background && (
               <Route
                 path="/profile/update-address"
                 component={ProfileAddressPage}
               />
             )}
-            {background && <Route path="/signup" component={SignUpPage} />}
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
