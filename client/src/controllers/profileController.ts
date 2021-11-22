@@ -1,6 +1,8 @@
 import { IMapInfo } from '@myTypes/Map';
+import { showSnackbar } from '@utils/common';
 
 const uploadImage = async (e, auth, setAuth) => {
+  showSnackbar('이미지 크기에 따라 시간이 걸릴수 있어요.');
   const image = e.target.files[0];
   const formData = new FormData();
   formData.append('file', image);
@@ -20,7 +22,7 @@ const uploadImage = async (e, auth, setAuth) => {
       image: result.result,
     }));
   } else {
-    console.error(result.message);
+    showSnackbar('이미지 업로딩에 실패했어요!', true);
   }
 };
 
