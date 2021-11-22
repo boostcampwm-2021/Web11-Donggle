@@ -16,7 +16,7 @@ import BarRateDiv from '@components/Common/BarRate';
 import DetailBtn from '@components/Common/DetailBtn';
 import { IReviewContent } from '@myTypes/Review';
 import { IAPIResult } from '@myTypes/Common';
-import { fetchContentData } from '@controllers/reviewController';
+import { fetchContentData } from '@controllers/sidebarController';
 
 interface IProps {
   address: string;

@@ -12,7 +12,7 @@ import {
 } from './index.style';
 import DynamicStarRateDiv from '@components/Common/DynamicStarRate';
 import { Category } from '@utils/enum';
-import { submitReview, parseHashtags } from '@controllers/reviewController';
+import { submitReview, parseHashtags } from '@controllers/sidebarController';
 import { ICategories, IReviewSubmit } from '@myTypes/Review';
 import { useRecoilValue } from 'recoil';
 import { authState } from '@stores/atoms';

@@ -28,7 +28,7 @@ import './markerStyle.css';
 
 import React, { useRef, useEffect, useState } from 'react';
 import { IReviewContent } from '@myTypes/Review';
-import { fetchContentData } from '@controllers/reviewController';
+import { fetchContentData } from '@controllers/sidebarController';
 import { IAPIResult } from '@myTypes/Common';
 
 const DEFAULT_POSITION = {
