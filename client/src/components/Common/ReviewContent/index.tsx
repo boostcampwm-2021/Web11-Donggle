@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   ContentWrapper,
   ContentDiv,
@@ -29,7 +22,7 @@ interface IProps {
   address: string;
   selectedMenu: string;
   contentsData: IReviewContent[];
-  setContentsData: Dispatch<SetStateAction<IReviewContent[]>>;
+  updateSidebarContents: (contentsData: IReviewContent[]) => void;
 }
 
 const RegionContent: React.FC<IProps> = (props: IProps) => {
@@ -37,7 +30,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
-  const NUMBER_OF_DATA_PER_PAGE = 3;
 
   const showDate = (createdAt: Date) => {
     const now = new Date();
@@ -79,7 +71,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       pageNumber,
     );
     if (list.result) {
-      props.setContentsData([...props.contentsData, ...list.result]);
+      props.updateSidebarContents([...props.contentsData, ...list.result]);
     }
     setHasMore(list.result.length > 0);
     setIsLoading(false);

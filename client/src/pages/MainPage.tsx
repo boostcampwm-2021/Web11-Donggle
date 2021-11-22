@@ -75,7 +75,7 @@ const MainPage: React.FC = () => {
               sidebar={sidebar}
               rateData={sidebarRate}
               contentsData={sidebarContents}
-              setContentsData={setSidebarContents}
+              updateSidebarContents={updateSidebarContents}
               hashTagData={sidebarRate.hashtags}
               closeSidebar={closeSidebar}
             ></SidebarLazy>

@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import {
   Layout,
@@ -12,7 +11,6 @@ import {
   HashTagNo,
   MenuBarDiv,
   Menu,
-  SidebarBottomDiv,
 } from './index.style';
 import StarRateDiv from '@components/Common/StarRate';
 import BarRateDiv from '@components/Common/BarRate';
@@ -26,7 +24,7 @@ export interface IProps {
   sidebar: boolean;
   rateData: IMapInfo;
   contentsData: IReviewContent[];
-  setContentsData: Dispatch<SetStateAction<IReviewContent[]>>;
+  updateSidebarContents: (contentsData: IReviewContent[]) => void;
   hashTagData: Map<string, number>;
   closeSidebar: () => void;
 }
@@ -75,17 +73,17 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
           동네후기
         </Menu>
         <Menu
-          onClick={() => setSelectedMenu('article')}
-          className={`${selectedMenu === 'article' && 'menu-selected'}`}
+          onClick={() => setSelectedMenu('myreview')}
+          className={`${selectedMenu === 'myreview' && 'menu-selected'}`}
         >
-          동네정보
+          내 후기
         </Menu>
       </MenuBarDiv>
       <ReviewContent
         address={props.rateData.address}
         selectedMenu={selectedMenu}
         contentsData={props.contentsData}
-        setContentsData={props.setContentsData}
+        updateSidebarContents={props.updateSidebarContents}
       />
     </Layout>
   );
