@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
 
 import { IMapInfo } from '@myTypes/Map';
-import { IReviewContent } from '@myTypes/Review';
 
 const MainDiv = styled.div`
   width: 100vw;
@@ -56,20 +55,23 @@ const DEFAULT_RATE_DATA: IMapInfo = {
   address: '',
   code: '',
   codeLength: 0,
-  center: [37.541, 126.986], // 제주도
-  count: 0,
+  center: [37.541, 126.986],
+  count: 2,
   categories: {
-    safety: 0,
-    traffic: 0,
-    food: 0,
-    entertainment: 0,
+    safety: 8,
+    traffic: 7,
+    food: 9,
+    entertainment: 9,
   },
 };
 
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
-  const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
-  const [sidebarContents, setSidebarContents] = useState<IReviewContent[]>([]);
+  const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
+
+  const toggleSidebar = () => {
+    setSidebar(!sidebar);
+  };
 
   const openSidebar = useCallback(() => {
     setSidebar(true);
@@ -83,13 +85,6 @@ const MainPage: React.FC = () => {
     setSidebarRate(rateData);
   }, []);
 
-  const updateSidebarContents = useCallback(
-    (contentsData: IReviewContent[]) => {
-      setSidebarContents(contentsData);
-    },
-    [],
-  );
-
   return (
     <MainDiv>
       <FlexContainer>
@@ -97,15 +92,13 @@ const MainPage: React.FC = () => {
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
           updateSidebarRate={updateSidebarRate}
-          updateSidebarContents={updateSidebarContents}
+          toggleSidebar={toggleSidebar}
         ></Map>
         {sidebar && (
           <Suspense fallback="loading...">
             <SidebarLazy
               sidebar={sidebar}
               rateData={sidebarRate}
-              contentsData={sidebarContents}
-              setContentsData={setSidebarContents}
               hashTagData={TemporaryHashTagData}
               closeSidebar={closeSidebar}
             ></SidebarLazy>

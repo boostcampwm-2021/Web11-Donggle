@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import {
@@ -19,19 +19,19 @@ import HashTagList from '@components/Common/HashTag';
 import ReviewContent from '@components/Common/ReviewContent';
 import { IMapInfo } from '@myTypes/Map';
 import { calcTotal } from '@utils/common';
-import { IReviewContent } from '@myTypes/Review';
+import useHistoryRouter from '@hooks/useHistoryRouter';
 
 export interface IProps {
   sidebar: boolean;
   rateData: IMapInfo;
-  contentsData: IReviewContent[];
-  setContentsData: Dispatch<SetStateAction<IReviewContent[]>>;
   hashTagData: string[];
   closeSidebar: () => void;
 }
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
+  const [history, routeHistory] = useHistoryRouter();
+  const location = useLocation();
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
 
@@ -69,8 +69,6 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       <ReviewContent
         address={props.rateData.address}
         selectedMenu={selectedMenu}
-        contentsData={props.contentsData}
-        setContentsData={props.setContentsData}
       />
     </Layout>
   );
