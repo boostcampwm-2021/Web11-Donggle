@@ -79,9 +79,11 @@ const App: React.FC = () => {
               <Route path="/review" component={ReviewPage} />
               <Route path="/github/callback" component={LoadingPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
-              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
               <Route component={NotFoundPage} />
             </Switch>
+            {background && (
+              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
+            )}
             {background && <Route path="/ranking" render={RankingPage} />}
             {background && <Route path="/signin" component={SignInPage} />}
             {background && (
