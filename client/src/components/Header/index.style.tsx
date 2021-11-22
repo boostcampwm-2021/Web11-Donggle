@@ -115,10 +115,10 @@ const LogoutBtn = styled(SignInBtn)`
 
 const UserProfile = styled.div`
   margin: 0 15px;
-  width: 60px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
-  border-radius: 30%;
+  border-radius: 999px;
   overflow: hidden;
 `;
 
