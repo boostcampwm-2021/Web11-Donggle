@@ -1,3 +1,4 @@
+import mongoose, { ClientSession } from 'mongoose';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { Review, ReviewModel } from '@models/Review';
 import { ReviewFindData, ReviewInsertData } from '@myTypes/Review';
@@ -38,17 +39,34 @@ const queryReviews = async (
 };
 
 const insertReview = async (data: ReviewInsertData) => {
-  const mapInfo: MapInfo[] = await mapService.queryCenter(data.address, false);
-  const mapData = {
-    code: mapInfo[0].code,
-    center: mapInfo[0].center,
-  };
-  const insertData = {
-    ...data,
-    ...mapData,
-  };
-  await ReviewModel.create(insertData);
-  await mapService.updateRates(mapData.code, data);
+  const session: ClientSession = await mongoose.startSession();
+
+  await session.withTransaction(async () => {
+    const mapInfo: MapInfo[] = await mapService.queryCenter(
+      data.address,
+      false,
+      session,
+    );
+    const mapData = {
+      code: mapInfo[0].code,
+      center: mapInfo[0].center,
+    };
+    const insertData = {
+      ...data,
+      ...mapData,
+    };
+    await ReviewModel.create([insertData], { session: session });
+    await mapService.updateRates(mapData.code, data, session);
+
+    await updateMapInfoHashtag(
+      data.address,
+      data.hashtags as string[],
+      session,
+    );
+  });
+  console.log('ending');
+
+  await session.endSession();
 };
 
 const getCodeByAddress = async (address: string) => {
@@ -56,9 +74,31 @@ const getCodeByAddress = async (address: string) => {
   return foundDocument?.code;
 };
 
+const updateMapInfoHashtag = async (
+  address: string,
+  hashtags: string[],
+  session: ClientSession | undefined,
+) => {
+  const code = await getCodeByAddress(address);
+  if (!code) {
+    throw new Error('해시태그를 업데이트하는데 address가 이상합니다!');
+  } else {
+    const conditions = [
+      { codeLength: 2, code: code.slice(0, 2) },
+      { codeLength: 5, code: code.slice(0, 5) },
+      { codeLength: 7, code: code },
+    ];
+
+    for (const condition of conditions) {
+      await findAndModifyHashtag(condition, hashtags, session);
+    }
+  }
+};
+
 const findAndModifyHashtag = async (
   condition: { codeLength: number; code: string },
   hashtags: string[],
+  session: ClientSession | undefined,
 ) => {
   const foundDocument = await MapInfoModel.findOne(condition);
   if (!foundDocument) {
@@ -70,25 +110,12 @@ const findAndModifyHashtag = async (
       prevHashtags.set(hashtag, prevCount + 1);
     });
 
-    void MapInfoModel.updateOne(condition, { hashtags: prevHashtags }).then(
-      () => logger.info('해시태그를 업데이트했어요!'),
+    await MapInfoModel.updateOne(
+      condition,
+      { hashtags: prevHashtags },
+      { session: session },
     );
-  }
-};
-
-const updateMapInfoHashtag = async (address: string, hashtags: string[]) => {
-  const code = await getCodeByAddress(address);
-  if (!code) {
-    throw new Error('해시태그를 업데이트하는데 address가 이상합니다!');
-  } else {
-    const conditions = [
-      { codeLength: 2, code: code.slice(0, 2) },
-      { codeLength: 5, code: code.slice(0, 5) },
-      { codeLength: 7, code: code },
-    ];
-    conditions.forEach((condition) => {
-      void findAndModifyHashtag(condition, hashtags);
-    });
+    logger.info('해시태그를 정상적으로 업데이트 했습니다.');
   }
 };
 

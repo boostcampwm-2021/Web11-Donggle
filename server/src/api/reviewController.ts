@@ -56,12 +56,9 @@ router.post('/', checkToken, (async (
 ) => {
   try {
     const insertData = req.body;
+    console.log('data', insertData);
     if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');
     await reviewService.insertReview(insertData);
-    await reviewService.updateMapInfoHashtag(
-      insertData.address,
-      insertData.hashtags as string[],
-    );
     res
       .status(200)
       .json(makeApiResponse({}, '후기를 정상적으로 저장하였습니다.'));
