@@ -84,15 +84,16 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
+            <ReviewButton
+              onClick={() => {
+                console.log(location);
+                routeHistory('/write-review', { background: location });
+              }}
+            >
+              내 동네 후기 쓰기
+            </ReviewButton>
             {sessionStorage.getItem('jwt') ? (
               <>
-                <ReviewButton
-                  onClick={() => {
-                    routeHistory('/write-review', { background: location });
-                  }}
-                >
-                  내 동네 후기 쓰기
-                </ReviewButton>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>
                   <ProfileImage src={auth.image} alt="프로필사진" />
@@ -100,13 +101,6 @@ const Header: React.FC = () => {
               </>
             ) : (
               <>
-                <ReviewButton
-                  onClick={() => {
-                    routeHistory('/write-review', { background: location });
-                  }}
-                >
-                  내 동네 후기 쓰기
-                </ReviewButton>
                 <SignInBtn
                   onClick={() =>
                     routeHistory('/signin', { background: location })
