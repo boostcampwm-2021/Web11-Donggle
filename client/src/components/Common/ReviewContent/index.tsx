@@ -87,7 +87,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   useEffect(() => {
     setPageNumber(1);
     setHasMore(true);
-  }, [props.address]);
+  }, [props]);
 
   const lastItemRef = useCallback(
     (node) => {

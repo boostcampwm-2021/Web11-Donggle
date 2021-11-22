@@ -40,30 +40,14 @@ const submitReview = (
 };
 
 const fetchContentData = async (
-  address: string,
-  menu: string,
-  user: string | undefined = undefined,
+  address,
+  menu,
   pageNum = 0,
   itemNum = 3,
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
-  let fetchUrl = `${process.env.REACT_APP_API_URL}/api/review`;
-
-  const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set('Content-Type', 'application/json');
-  requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
-
-  switch (menu) {
-    case 'myreview':
-      fetchUrl += `/${user}?pageNum=${pageNum}&itemNum=${itemNum}`;
-      break;
-    default:
-      fetchUrl += `?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`;
-      break;
-  }
-
+  const fetchUrl = `${process.env.REACT_APP_API_URL}/api/${menu}?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`;
   return await fetch(`${fetchUrl}`, {
     method: 'GET',
-    headers: requestHeaders,
   })
     .then(async (response) => {
       if (response.status === 200) {
@@ -73,7 +57,6 @@ const fetchContentData = async (
     })
     .catch((err) => {
       console.error(err);
-      return { result: null, message: err };
     });
 };
 

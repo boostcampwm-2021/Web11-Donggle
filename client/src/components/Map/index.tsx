@@ -134,7 +134,6 @@ const MapComponent: React.FC<IProps> = ({
 
     const wrapper = mapWrapper.current;
     const onClick = async (rateData: IMapInfo) => {
-      console.log('clicked');
       const sidebarContents: IAPIResult<IReviewContent[]> =
         await fetchContentData(rateData.address, 'review');
 

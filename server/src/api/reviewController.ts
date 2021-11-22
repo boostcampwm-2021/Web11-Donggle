@@ -78,7 +78,6 @@ router.post('/', checkToken, (async (
 ) => {
   try {
     const insertData = req.body;
-    console.log('data', insertData);
     if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');
     await reviewService.insertReview(insertData);
     res

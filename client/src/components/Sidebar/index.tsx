@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   Layout,
@@ -36,6 +36,7 @@ export interface IProps {
 
 const Sidebar: React.FC<IProps> = (props: IProps) => {
   const [selectedMenu, setSelectedMenu] = useState('review');
+  const layout = useRef<HTMLDivElement | null>(null);
   const [auth] = useRecoilState<IAuthInfo>(authState);
 
   const total = calcTotal(props.rateData.categories) / props.rateData.count;
@@ -63,8 +64,12 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
     setSelectedMenu('review');
   }, [props.rateData.address, auth]);
 
+  useEffect(() => {
+    if (layout.current !== null) layout.current.scrollTo(0, 0);
+  }, [selectedMenu]);
+
   return (
-    <Layout className={`${props.sidebar ? 'open' : ''}`}>
+    <Layout ref={layout} className={`${props.sidebar ? 'open' : ''}`}>
       <TitleDiv>
         <SpanBackArrow onClick={() => props.closeSidebar()}>❯</SpanBackArrow>
         <SpanTitle>{props.rateData.address}</SpanTitle>
