@@ -53,7 +53,7 @@ router.get('/search', (async (req: Request, res: Response) => {
   const { keyword, onlyDong } = req.query;
   try {
     if (typeof keyword === 'string' && keyword.length > 0) {
-      const center = await mapService.queryCenter(keyword, !!onlyDong, null);
+      const center = await mapService.queryCenter(keyword, !!onlyDong);
       res.status(200).json(makeApiResponse(center, ''));
     } else {
       res.status(200).json(makeApiResponse([], ''));
