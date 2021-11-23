@@ -1,6 +1,5 @@
 import ColorHash from 'color-hash';
-import { CoordType, IMap, IPolygon } from '@myTypes/Map';
-import { IAPIResult } from '@myTypes/Common';
+import { CoordType, IMap, IPolygon, IRange } from '@myTypes/Map';
 
 function getCurrentLocation(callback: (coord: CoordType) => void) {
   let coord: CoordType = [37.5642135, 127.0016985];
@@ -22,25 +21,7 @@ function getCurrentLocation(callback: (coord: CoordType) => void) {
   }
 }
 
-// 좌표 값에 해당하는 구 주소와 도로명 주소 정보 요청
-const coordToAddress = (wtmX: number, wtmY: number) => {
-  const geocoder = new kakao.maps.services.Geocoder();
-  const coord = new kakao.maps.LatLng(wtmX, wtmY);
-
-  return new Promise((resolve, reject) => {
-    geocoder.coord2Address(
-      coord.getLng(),
-      coord.getLat(),
-      function (result, status) {
-        if (status == kakao.maps.services.Status.OK)
-          resolve(result[0].address.address_name);
-        else reject(status);
-      },
-    );
-  });
-};
-
-const coordToRegionCode = (latitude: number, longitude: number) => {
+const coordToRegion = (latitude: number, longitude: number) => {
   const geocoder = new kakao.maps.services.Geocoder();
 
   return new Promise((resolve, reject) => {
@@ -59,60 +40,13 @@ const coordToRegionCode = (latitude: number, longitude: number) => {
   });
 };
 
-const isRangeEqual = (
-  range1: { region: string[]; scale: number },
-  range2: { region: string[]; scale: number },
-) => {
-  const [big1, medium1] = range1.region;
-  const [big2, medium2] = range2.region;
-
-  switch (true) {
-    case range1.scale < 9:
-      if (range2.scale >= 9) return false;
-      return big1 === big2 && medium1 == medium2;
-    case 9 <= range1.scale && range1.scale < 12:
-      if (range2.scale < 9 || range2.scale >= 12) return false;
-      return big1 === big2;
-    case range1.scale >= 12:
-      if (range2.scale < 12) return false;
-      return true;
-    default:
-      return true;
-  }
+const isRangeEqual = (range1: IRange, range2: IRange) => {
+  if (range1.scope !== range2.scope) return false;
+  if (range1.address !== range2.address) return false;
+  return true;
 };
 
-// backend에 polygon 정보 요청
-const requestCoord = async (
-  scale: number,
-  region: Array<string>,
-): Promise<IMap[]> => {
-  return await fetch(
-    `${process.env.REACT_APP_API_URL}/api/map/polygon?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
-  )
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw Error('요청 실패');
-    })
-    .then((res: IAPIResult<IMap[]>) => {
-      return res.result;
-    })
-    .catch((err) => {
-      console.error(err);
-      return [];
-    });
-};
-
-const isLike = (color1: string, color2: string) => {
-  color1 = color1.replace('#', '');
-  color2 = color2.replace('#', '');
-  return (
-    Array.from(color1).filter((_, i) => color1[i] === color2[i]).length >= 3
-  );
-};
-
-const createPolygons = (regions) => {
+const createPolygons = (regions: IMap[]) => {
   const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
   const keyString = '!@#$';
@@ -121,9 +55,17 @@ const createPolygons = (regions) => {
     const color: string = colorHash.hex(resultString);
     resultString += keyString;
     if (region.type === 'Polygon') {
-      polygons.push(makeSinglePolygon(region.path, region.address, color));
+      polygons.push(
+        makeSinglePolygon(region.path as CoordType[], region.address, color),
+      );
     } else {
-      polygons.push(...makeMultiPolygon(region.path, region.address, color));
+      polygons.push(
+        ...makeMultiPolygon(
+          region.path as CoordType[][][],
+          region.address,
+          color,
+        ),
+      );
     }
   });
   return polygons;
@@ -241,57 +183,13 @@ const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
   polygons.forEach((polygon) => polygon.setMap(null));
 };
 
-const LFURegions = async (
-  cache: Map<string, IMap[] & { count: number }>,
-  scale: number,
-  region: string[],
-) => {
-  const [big, medium] = region;
-  let key = '';
-
-  switch (true) {
-    case scale < 9:
-      key = `${big} ${medium}`;
-      break;
-    case 9 <= scale && scale < 12:
-      key = `${big}`;
-      break;
-    case 12 <= scale:
-      key = 'all';
-      break;
-  }
-
-  if (cache.has(key)) {
-    const regions = cache.get(key);
-    if (regions) regions.count++;
-    return regions;
-  } else {
-    const regions = (await requestCoord(scale, region)) as IMap[] & {
-      count: number;
-    };
-    regions.count = 1;
-    if (cache.size > 10) {
-      const mostUnusedRegions = Array.from(cache.entries()).sort(
-        (a, b) => a[1].count - b[1].count,
-      )[0][0];
-
-      cache.delete(mostUnusedRegions);
-    }
-    cache.set(key, regions);
-    return regions;
-  }
-};
-
 export {
   getCurrentLocation,
-  coordToAddress,
-  coordToRegionCode,
-  requestCoord,
+  coordToRegion,
   isRangeEqual,
   createPolygons,
   displayPolygons,
   deletePolygons,
-  LFURegions,
   addPolygonClickEvent,
   removePolygonClickEvent,
 };

@@ -1,24 +1,22 @@
 import { mapService } from '@services/index';
-import { makeApiResponse } from '@utils/index';
+import { makeApiResponse, isRangeValid } from '@utils/index';
 import logger from '@loaders/loggerLoader';
 import express, { Request, Response, RequestHandler } from 'express';
 
 const router: express.Router = express.Router();
 
 router.get('/polygon', (async (req: Request, res: Response) => {
-  const { scale, big, medium, small } = req.query;
+  const address = req.query.address as string;
+  const scope = req.query.scope as string;
   try {
-    if (scale && (big || medium || small)) {
-      const polygon = await mapService.queryPolygon(
-        Number(scale),
-        big as string,
-        medium as string,
-        small as string,
-      );
-      res.status(200).json(makeApiResponse(polygon, ''));
-    } else {
-      res.status(200).json(makeApiResponse([], ''));
+    if (!isRangeValid(address, scope)) {
+      throw Error(`잘못된 폴리곤 요청: address=${address}&scope=${scope}`);
     }
+    const paths = await mapService.queryPolygon(
+      address,
+      scope as 'big' | 'medium' | 'small',
+    );
+    res.status(200).json(makeApiResponse(paths, ''));
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);
@@ -27,19 +25,17 @@ router.get('/polygon', (async (req: Request, res: Response) => {
 }) as RequestHandler);
 
 router.get('/rates', (async (req: Request, res: Response) => {
+  const address = req.query.address as string;
+  const scope = req.query.scope as string;
   try {
-    const { scale, big, medium, small } = req.query;
-    if (scale && (big || medium || small)) {
-      const rates = await mapService.queryRates(
-        Number(scale),
-        big as string,
-        medium as string,
-        small as string,
-      );
-      res.status(200).json(makeApiResponse(rates, ''));
-    } else {
-      res.status(200).json(makeApiResponse([], ''));
+    if (!isRangeValid(address, scope)) {
+      throw Error(`잘못된 평점 요청: address=${address}&scope=${scope}`);
     }
+    const rates = await mapService.queryRates(
+      address,
+      scope as 'big' | 'medium' | 'small',
+    );
+    res.status(200).json(makeApiResponse(rates, ''));
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);
