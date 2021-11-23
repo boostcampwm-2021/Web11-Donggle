@@ -57,7 +57,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
 
       props.updateSidebarContents(sidebarContents.result || []);
     },
-    [auth, props, selectedMenu],
+    [props, selectedMenu],
   );
 
   useEffect(() => {
