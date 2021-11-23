@@ -17,9 +17,9 @@ interface IReviewContent {
   text: string;
   address?: string;
   oauth_email: string;
-  dateDiff: number;
   createdAt: Date;
   categories: ICategories;
+  image: string;
 }
 
 export { ICategories, IReviewContent, IReviewSubmit };

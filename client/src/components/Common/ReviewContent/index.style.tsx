@@ -58,6 +58,12 @@ const UserText = styled(SpanText)`
   color: ${(props) => props.theme.colors.ashgrey};
 `;
 
+const UserImage = styled.img`
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+`;
+
 const ContentTextDiv = styled(BaseDiv)`
   width: 90%;
   font-size: 12px;
@@ -99,6 +105,7 @@ export {
   DateText,
   AddressText,
   UserText,
+  UserImage,
   ContentTextDiv,
   ContentBottomDiv,
   RateDiv,
