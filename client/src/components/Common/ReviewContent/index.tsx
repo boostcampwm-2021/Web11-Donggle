@@ -19,6 +19,7 @@ import { IReviewContent } from '@myTypes/Review';
 import { IAPIResult } from '@myTypes/Common';
 
 import { fetchContentData } from '@controllers/sidebarController';
+import { calcDateDiff } from '@utils/common';
 
 interface IProps {
   address: string;
@@ -33,36 +34,36 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
 
-  const showDate = (createdAt: Date) => {
-    const now = new Date();
-    const post = new Date(createdAt);
-    const yearDiff = now.getUTCFullYear() - post.getUTCFullYear();
-    if (yearDiff < 1) {
-      const monthDiff = now.getUTCMonth() - post.getUTCMonth();
-      if (monthDiff < 1) {
-        const dateDiff = now.getUTCDate() - post.getUTCDate();
-        if (dateDiff < 1) {
-          const hourDiff = now.getUTCHours() - post.getUTCHours();
-          if (hourDiff < 1) {
-            const minuteDiff = now.getUTCMinutes() - post.getUTCMinutes();
-            if (minuteDiff < 1) {
-              return `방금전`;
-            } else {
-              return `${minuteDiff} 분전`;
-            }
-          } else {
-            return `${hourDiff} 시간전`;
-          }
-        } else {
-          return `${dateDiff} 일전`;
-        }
-      } else {
-        return `${monthDiff} 달전`;
-      }
-    } else {
-      return `${yearDiff} 년전`;
-    }
-  };
+  // const showDate = (createdAt: Date) => {
+  //   const now = new Date();
+  //   const post = new Date(createdAt);
+  //   const yearDiff = now.getUTCFullYear() - post.getUTCFullYear();
+  //   if (yearDiff < 1) {
+  //     const monthDiff = now.getUTCMonth() - post.getUTCMonth();
+  //     if (monthDiff < 1) {
+  //       const dateDiff = now.getUTCDate() - post.getUTCDate();
+  //       if (dateDiff < 1) {
+  //         const hourDiff = now.getUTCHours() - post.getUTCHours();
+  //         if (hourDiff < 1) {
+  //           const minuteDiff = now.getUTCMinutes() - post.getUTCMinutes();
+  //           if (minuteDiff < 1) {
+  //             return `방금전`;
+  //           } else {
+  //             return `${minuteDiff} 분전`;
+  //           }
+  //         } else {
+  //           return `${hourDiff} 시간전`;
+  //         }
+  //       } else {
+  //         return `${dateDiff} 일전`;
+  //       }
+  //     } else {
+  //       return `${monthDiff} 달전`;
+  //     }
+  //   } else {
+  //     return `${yearDiff} 년전`;
+  //   }
+  // };
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -79,6 +80,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   }, [props, pageNumber]);
 
   useEffect(() => {
+    console.log('init');
     setPageNumber(1);
     setHasMore(true);
   }, [props.address, props.selectedMenu]);
@@ -91,6 +93,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       const ob = (observer.current = new IntersectionObserver(
         async (entries) => {
           if (entries[0].isIntersecting && hasMore) {
+            console.log('inter');
             await fetchData();
             setPageNumber((prev) => prev + 1);
           }
@@ -122,7 +125,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
                 ) : (
                   <></>
                 )}
-                <DateText>{showDate(content.createdAt)}</DateText>
+                <DateText>{calcDateDiff(content.createdAt)}</DateText>
                 <UserText>{content.user}</UserText>
               </ContentTopTextDiv>
             </ContentTopDiv>

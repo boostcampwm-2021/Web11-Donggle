@@ -13,6 +13,23 @@ const calcTotal = (categories: ICategories) => {
   return total;
 };
 
+const calcDateDiff = (targetDate: Date) => {
+  const now = new Date();
+  const target = new Date(targetDate);
+
+  let diff = Math.floor((now.getTime() - target.getTime()) / 1000 / 60);
+  if (diff < 1) return '방금 전';
+  if (diff < 60) return `${diff}분 전`;
+
+  diff = Math.floor(diff / 60);
+  if (diff < 24) return `${diff}시간 전`;
+
+  diff = Math.floor(diff / 24);
+  if (diff < 365) return `${diff}일 전`;
+
+  return `${Math.floor(diff / 365)}년 전`;
+};
+
 const showSnackbar = (snackbar: ISnackbar) => {
   if (snackbars !== null && setSnackbars !== null) {
     snackbar.expire = Date.now() + 5000;
@@ -35,4 +52,4 @@ const getDebouncedFunction = (targetFunction: () => void, time: number) => {
   };
 };
 
-export { calcTotal, getDebouncedFunction, showSnackbar };
+export { calcTotal, calcDateDiff, getDebouncedFunction, showSnackbar };
