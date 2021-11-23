@@ -1,3 +1,4 @@
+import { ClientSession } from 'mongoose';
 import { Map, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { ReviewInsertData } from '@myTypes/Review';
@@ -41,11 +42,12 @@ const queryPolygon = async (
 const queryCenter = async (
   keyword: string,
   onlyDong: boolean,
+  session: ClientSession | null = null,
 ): Promise<MapInfo[]> => {
   const query = onlyDong
     ? { address: { $regex: RegExp(keyword, 'g') }, codeLength: 7 }
     : { address: { $regex: RegExp(keyword, 'g') } };
-  return await MapInfoModel.find(query);
+  return await MapInfoModel.find(query).session(session);
 };
 
 const queryRates = async (
@@ -107,7 +109,11 @@ const queryRates = async (
   return result;
 };
 
-const updateRates = async (code: string, review: ReviewInsertData) => {
+const updateRates = async (
+  code: string,
+  review: ReviewInsertData,
+  session: ClientSession | undefined,
+) => {
   const conditions = [
     { codeLength: 2, code: code.slice(0, 2) },
     { codeLength: 5, code: code.slice(0, 5) },
@@ -127,6 +133,7 @@ const updateRates = async (code: string, review: ReviewInsertData) => {
     {
       $inc: increment,
     },
+    { session: session },
   );
 };
 export default { queryPolygon, queryCenter, queryRates, updateRates };
