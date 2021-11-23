@@ -7,6 +7,11 @@ interface ICacheItem {
   [symCompareKey]: number;
 }
 
+const isPolygonKey = (key: string) => {
+  if (key.includes('$req') || key.includes('$err')) return false;
+  return key.includes('polygon');
+};
+
 const cacheProvider = (
   maxPolygons: number,
   policy: 'LFU' | 'LRU' = 'LFU',
@@ -15,7 +20,7 @@ const cacheProvider = (
   const generalCache = new Map();
 
   const get = (key: string) => {
-    if (!key.includes('polygon')) {
+    if (!isPolygonKey(key)) {
       return generalCache.get(key);
     } else {
       if (polygonCache.has(key)) {
@@ -32,7 +37,7 @@ const cacheProvider = (
   };
 
   const set = (key: string, value: unknown) => {
-    if (!key.includes('polygon')) {
+    if (!isPolygonKey(key)) {
       generalCache.set(key, value);
       return;
     }
@@ -57,7 +62,7 @@ const cacheProvider = (
   };
 
   const cacheDelete = (key: string) => {
-    if (!key.includes('polygon')) {
+    if (!isPolygonKey(key)) {
       generalCache.delete(key);
     } else {
       polygonCache.delete(key);
