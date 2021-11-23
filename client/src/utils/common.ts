@@ -35,4 +35,13 @@ const getDebouncedFunction = (targetFunction: () => void, time: number) => {
   };
 };
 
-export { calcTotal, getDebouncedFunction, showSnackbar };
+const getPrevPath = (to: string) => {
+  const paths = to.match(/\/[^\/]*/g);
+  if (paths === null) {
+    return '/map';
+  }
+  paths.pop();
+  return paths.join();
+};
+
+export { calcTotal, getDebouncedFunction, showSnackbar, getPrevPath };

@@ -22,7 +22,7 @@ import React, { useCallback, useState } from 'react';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 
 const ReviewModal: React.FC = () => {
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
     address: useRecoilValue(authState).address,
     oauth_email: useRecoilValue(authState).oauth_email,

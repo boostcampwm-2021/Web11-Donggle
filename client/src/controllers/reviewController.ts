@@ -7,7 +7,7 @@ import '@components/ReviewModal/alertStyle.css';
 
 const submitReview = (
   data: IReviewSubmit,
-  routeHistory: (path: string, state: { [index: string]: string }) => void,
+  routeHistory: (path: string, state?: { [index: string]: string }) => void,
 ) => {
   confirmAlert({
     message: '후기를 제출하시겠습니까?',
@@ -24,7 +24,7 @@ const submitReview = (
             headers: requestHeaders,
             body: JSON.stringify(data),
           }).then((res) => res.json());
-          routeHistory('/', {});
+          routeHistory('/map');
         },
       },
       {

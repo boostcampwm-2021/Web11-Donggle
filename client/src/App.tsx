@@ -56,7 +56,7 @@ const PrivateRoute: React.FC<RouterProps> = ({
         ) : (
           <Redirect
             to={{
-              pathname: '/signin',
+              pathname: '/map/signin',
               state: {
                 background: {
                   pathname: '/',
@@ -74,26 +74,6 @@ const App: React.FC = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
 
-  const routeAgain = useCallback((to: string) => {
-    const paths = to.match(/\/[^\/]*/);
-    if (paths === null) {
-      return <NotFoundPage />;
-    }
-    const background = { pathname: paths[0] };
-    background.pathname =
-      background.pathname === to ? '/' : background.pathname;
-    return (
-      <Redirect
-        to={{
-          pathname: to,
-          state: {
-            background,
-          },
-        }}
-      />
-    );
-  }, []);
-
   return (
     <>
       <GlobalStyle />
@@ -102,28 +82,28 @@ const App: React.FC = () => {
           <ContentWrapper>
             <Snackbar />
             <Header />
-            <Switch location={background || location}>
-              <Route exact path="/" component={MainPage} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect to={{ pathname: '/map' }} />}
+              />
+              <Route path="/map" component={MainPage} />
               <Route path="/github/callback" component={LoadingPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
-              {pathExceptions.includes(location.pathname) ? (
-                routeAgain(location.pathname)
-              ) : (
-                <Route component={NotFoundPage} />
-              )}
+              <Route component={NotFoundPage} />
             </Switch>
-            {background && (
-              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
-            )}
-            {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" component={SignInPage} />}
-            {background && <Route path="/signup" component={SignUpPage} />}
-            {background && (
-              <Route
-                path="/profile/update-address"
-                component={ProfileAddressPage}
-              />
-            )}
+            <PrivateRoute
+              path="/map/write-review"
+              component={ReviewSubmitPage}
+            />
+            <Route path="/map/ranking" render={RankingPage} />
+            <Route path="/map/signin" component={SignInPage} />
+            <PrivateRoute path="/map/signup" component={SignUpPage} />
+            <PrivateRoute
+              path="/profile/update-address"
+              component={ProfileAddressPage}
+            />
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>
