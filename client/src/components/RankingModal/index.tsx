@@ -8,7 +8,6 @@ import useRanks from '@hooks/useRanks';
 import React from 'react';
 
 const RankingModal: React.FC = () => {
-  console.log('RankingModal rendered');
   const {
     bigList,
     bigIdx,
