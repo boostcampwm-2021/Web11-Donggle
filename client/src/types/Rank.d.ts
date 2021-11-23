@@ -10,6 +10,7 @@ interface IRankItem {
   label: string;
   address: string;
   categories: ICategories;
+  rank?: number;
 }
 
 export { IRankRate, IRankItem };

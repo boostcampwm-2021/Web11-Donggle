@@ -38,10 +38,10 @@ const RankingModal: React.FC = () => {
         />
       </SelectorWrapper>
       <RankbarList>
-        {rankList.map(({ label, categories, address }, idx) => (
+        {rankList.map(({ rank, label, categories, address }) => (
           <Rankbar
             key={address}
-            rank={idx + 1}
+            rank={rank || 0}
             address={label}
             categories={categories}
           />
