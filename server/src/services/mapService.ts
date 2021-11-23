@@ -1,5 +1,5 @@
 import { ClientSession } from 'mongoose';
-import { Map, MapModel } from '@models/Map';
+import { Map as IMap, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { ReviewInsertData } from '@myTypes/Review';
 
@@ -8,8 +8,8 @@ const queryPolygon = async (
   big: string,
   medium: string,
   small: string,
-): Promise<Map[]> => {
-  let result: Map[] = [];
+): Promise<IMap[]> => {
+  let result: IMap[] = [];
 
   switch (true) {
     case scale < 9:
@@ -48,6 +48,11 @@ const queryCenter = async (
     ? { address: { $regex: RegExp(keyword, 'g') }, codeLength: 7 }
     : { address: { $regex: RegExp(keyword, 'g') } };
   return await MapInfoModel.find(query).session(session);
+};
+
+const findTop5Hashtags = (hashtags: Map<string, number>) => {
+  const candidates = hashtags.entries();
+  return new Map([...candidates].sort((a, b) => b[1] - a[1]).slice(0, 5));
 };
 
 const queryRates = async (
@@ -103,6 +108,8 @@ const queryRates = async (
   result.forEach((r) => {
     if (!r.hashtags) {
       r.hashtags = new Map();
+    } else {
+      r.hashtags = findTop5Hashtags(r.hashtags);
     }
   });
 

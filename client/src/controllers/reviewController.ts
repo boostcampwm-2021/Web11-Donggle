@@ -67,6 +67,7 @@ const fetchContentData = async (
 const parseHashtags = (text: string) =>
   Array.from(text.matchAll(/#[^#\s]*/g))
     .map((hashtag) => hashtag[0].replace('#', ''))
+    .filter((hashtag) => hashtag.length)
     .reduce((a, hashtag) => {
       if (!a.includes(hashtag)) {
         return [...a, hashtag];
