@@ -80,7 +80,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   }, [props, pageNumber]);
 
   useEffect(() => {
-    console.log('init');
     setPageNumber(1);
     setHasMore(true);
   }, [props.address, props.selectedMenu]);
@@ -93,7 +92,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
       const ob = (observer.current = new IntersectionObserver(
         async (entries) => {
           if (entries[0].isIntersecting && hasMore) {
-            console.log('inter');
             await fetchData();
             setPageNumber((prev) => prev + 1);
           }
