@@ -17,7 +17,7 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Switch,
   Route,
@@ -48,7 +48,7 @@ const PrivateRoute: React.FC<RouterProps> = ({
         ) : (
           <Redirect
             to={{
-              pathname: '/signin',
+              pathname: '/map/signin',
               state: {
                 background: {
                   pathname: '/',
@@ -74,23 +74,28 @@ const App: React.FC = () => {
           <ContentWrapper>
             <Snackbar />
             <Header />
-            <Switch location={background || location}>
-              <Route exact path="/" component={MainPage} />
-              <Route path="/review" component={ReviewPage} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect to={{ pathname: '/map' }} />}
+              />
+              <Route path="/map" component={MainPage} />
               <Route path="/github/callback" component={LoadingPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
-              <PrivateRoute path="/write-review" component={ReviewSubmitPage} />
               <Route component={NotFoundPage} />
             </Switch>
-            {background && <Route path="/ranking" render={RankingPage} />}
-            {background && <Route path="/signin" component={SignInPage} />}
-            {background && (
-              <Route
-                path="/profile/update-address"
-                component={ProfileAddressPage}
-              />
-            )}
-            {background && <Route path="/signup" component={SignUpPage} />}
+            <PrivateRoute
+              path="/map/write-review"
+              component={ReviewSubmitPage}
+            />
+            <Route path="/map/ranking" render={RankingPage} />
+            <Route path="/map/signin" component={SignInPage} />
+            <PrivateRoute path="/map/signup" component={SignUpPage} />
+            <PrivateRoute
+              path="/profile/update-address"
+              component={ProfileAddressPage}
+            />
           </ContentWrapper>
         </GlobalStore>
       </ThemeProvider>

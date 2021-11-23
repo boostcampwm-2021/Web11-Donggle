@@ -21,7 +21,7 @@ import { useRecoilState } from 'recoil';
 import { useLocation } from 'react-router-dom';
 
 const Profile: React.FC = () => {
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
   const location = useLocation();
 
   const [auth, setAuth] = useRecoilState(authState);
@@ -65,11 +65,7 @@ const Profile: React.FC = () => {
         <OauthnameWrapper>{auth.oauth_email.split('_')[0]}</OauthnameWrapper>
         <UsernameWrapper>{auth.oauth_email.split('_')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
-      <AddressWrapper
-        onClick={() =>
-          routeHistory('profile/update-address', { background: location })
-        }
-      >
+      <AddressWrapper onClick={() => routeHistory('profile/update-address')}>
         {auth.address}
       </AddressWrapper>
     </>

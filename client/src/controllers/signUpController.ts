@@ -40,10 +40,9 @@ const isSignUp = (
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory,
 ): void => {
-  const location = { pathname: '/', search: '', hash: '', state: undefined };
   if (status != 200) {
     alert(userInfo.message);
-    routeHistory('/signin', { background: location });
+    routeHistory('/map/signin');
   } else {
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
     sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
@@ -52,7 +51,7 @@ const isSignUp = (
       isLoggedin: true,
       address: userInfo.result.address,
     });
-    routeHistory('/', {});
+    routeHistory('/map');
   }
 };
 

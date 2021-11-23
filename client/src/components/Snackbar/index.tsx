@@ -11,8 +11,6 @@ let [snackbars, setSnackbars]: [
 const Snackbar: React.FC = () => {
   [snackbars, setSnackbars] = useState<ISnackbar[] | []>([]);
 
-  useEffect(() => console.log(snackbars), [snackbars]);
-
   return (
     <>
       {snackbars.map((snackbar) => (
