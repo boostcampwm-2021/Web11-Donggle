@@ -34,37 +34,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
 
-  // const showDate = (createdAt: Date) => {
-  //   const now = new Date();
-  //   const post = new Date(createdAt);
-  //   const yearDiff = now.getUTCFullYear() - post.getUTCFullYear();
-  //   if (yearDiff < 1) {
-  //     const monthDiff = now.getUTCMonth() - post.getUTCMonth();
-  //     if (monthDiff < 1) {
-  //       const dateDiff = now.getUTCDate() - post.getUTCDate();
-  //       if (dateDiff < 1) {
-  //         const hourDiff = now.getUTCHours() - post.getUTCHours();
-  //         if (hourDiff < 1) {
-  //           const minuteDiff = now.getUTCMinutes() - post.getUTCMinutes();
-  //           if (minuteDiff < 1) {
-  //             return `방금전`;
-  //           } else {
-  //             return `${minuteDiff} 분전`;
-  //           }
-  //         } else {
-  //           return `${hourDiff} 시간전`;
-  //         }
-  //       } else {
-  //         return `${dateDiff} 일전`;
-  //       }
-  //     } else {
-  //       return `${monthDiff} 달전`;
-  //     }
-  //   } else {
-  //     return `${yearDiff} 년전`;
-  //   }
-  // };
-
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     const list: IAPIResult<IReviewContent[]> = await fetchContentData(

@@ -8,10 +8,6 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
-import moment from 'moment';
-import 'moment-timezone';
-
-moment.tz.setDefault('Asia/Seoul');
 
 const stream = {
   write: (message) => {
