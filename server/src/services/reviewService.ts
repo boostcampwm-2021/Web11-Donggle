@@ -21,7 +21,7 @@ const queryReviews = async (
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
 
-  const fields = { categories: 1, text: 1, user: 1, createdAt: 1 };
+  const fields = { categories: 1, text: 1, oauth_email: 1, createdAt: 1 };
 
   const reviewData = await ReviewModel.find(
     {
@@ -46,7 +46,13 @@ const queryUserReviews = async (
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
 
-  const fields = { address: 1, categories: 1, text: 1, user: 1, createdAt: 1 };
+  const fields = {
+    address: 1,
+    categories: 1,
+    text: 1,
+    oauth_email: 1,
+    createdAt: 1,
+  };
   const reviewData = await ReviewModel.find(
     {
       oauth_email: { $eq: user_email },

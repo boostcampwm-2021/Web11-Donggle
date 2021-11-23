@@ -16,7 +16,7 @@ interface IReviewSubmit {
 interface IReviewContent {
   text: string;
   address?: string;
-  user: string;
+  oauth_email: string;
   dateDiff: number;
   createdAt: Date;
   categories: ICategories;

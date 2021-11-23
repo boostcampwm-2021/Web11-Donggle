@@ -49,6 +49,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
   }, [props, pageNumber]);
 
   useEffect(() => {
+    console.log(props.contentsData);
     setPageNumber(1);
     setHasMore(true);
   }, [props.address, props.selectedMenu]);
@@ -93,7 +94,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
                   <></>
                 )}
                 <DateText>{calcDateDiff(content.createdAt)}</DateText>
-                <UserText>{content.user}</UserText>
+                <UserText>{content.oauth_email}</UserText>
               </ContentTopTextDiv>
             </ContentTopDiv>
             <ContentTextDiv>{content.text}</ContentTextDiv>
