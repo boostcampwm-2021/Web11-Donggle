@@ -42,7 +42,6 @@ const submitReview = (
 const fetchContentData = async (
   address: string,
   menu: string,
-  user: string | undefined = undefined,
   pageNum = 0,
   itemNum = 3,
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
@@ -54,7 +53,7 @@ const fetchContentData = async (
 
   switch (menu) {
     case 'myreview':
-      fetchUrl += `/${user}?pageNum=${pageNum}&itemNum=${itemNum}`;
+      fetchUrl += `/user?pageNum=${pageNum}&itemNum=${itemNum}`;
       break;
     default:
       fetchUrl += `?address=${address}&pageNum=${pageNum}&itemNum=${itemNum}`;

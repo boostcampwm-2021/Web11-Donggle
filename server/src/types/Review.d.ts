@@ -22,11 +22,8 @@ export interface ReviewFindData {
   categories: CategoryRateType;
 }
 
-export interface ReviewRequest extends Request {
-  body: {
-    password: string;
-    type: string;
-  };
+export interface ReviewGetUserRequest extends Request {
+  id: string;
 }
 
 export interface ReviewInsertRequest extends Request {

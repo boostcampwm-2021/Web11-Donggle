@@ -1,14 +1,15 @@
 import { reviewService } from '@services/index';
 import { makeApiResponse } from '@utils/index';
 import logger from '@loaders/loggerLoader';
-import { ReviewRequest, ReviewInsertRequest } from '@myTypes/Review';
+import { AdminRequest } from '@myTypes/Admin';
+import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
 import config from '@config/index';
 import express, { Request, Response, RequestHandler } from 'express';
 import checkToken from '@middlewares/auth';
 
 const router: express.Router = express.Router();
 
-router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
+router.post('/initialize', (async (req: AdminRequest, res: Response) => {
   try {
     if (req.body.password === config.admin_password) {
       if (req.body.type === 'Drop') {
@@ -50,9 +51,12 @@ router.get('/', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', checkToken, (async (req: Request, res: Response) => {
+router.get('/:id', checkToken, (async (
+  req: ReviewGetUserRequest,
+  res: Response,
+) => {
   try {
-    const userEmail = req.params.id;
+    const userEmail = req.id;
     const pageNum: number = parseInt(req.query.pageNum as string);
     const itemNum: number = parseInt(req.query.itemNum as string);
     if (!userEmail)
@@ -70,7 +74,7 @@ router.get('/:id', checkToken, (async (req: Request, res: Response) => {
       .status(500)
       .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
   }
-}) as RequestHandler);
+}) as unknown as RequestHandler);
 
 router.post('/', checkToken, (async (
   req: ReviewInsertRequest,

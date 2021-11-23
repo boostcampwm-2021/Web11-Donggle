@@ -53,7 +53,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
 
       setSelectedMenu(menu);
       const sidebarContents: IAPIResult<IReviewContent[]> =
-        await fetchContentData(props.rateData.address, menu, auth.oauth_email);
+        await fetchContentData(props.rateData.address, menu);
 
       props.updateSidebarContents(sidebarContents.result || []);
     },
