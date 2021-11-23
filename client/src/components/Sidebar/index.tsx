@@ -27,6 +27,7 @@ import { authState } from '@stores/atoms';
 
 export interface IProps {
   sidebar: boolean;
+  sidebarAnimation: string;
   rateData: IMapInfo;
   contentsData: IReviewContent[];
   updateSidebarContents: (contentsData: IReviewContent[]) => void;
@@ -62,7 +63,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
   }, [selectedMenu]);
 
   return (
-    <Layout ref={layout} className={`${props.sidebar ? 'open' : ''}`}>
+    <Layout ref={layout} className={props.sidebarAnimation}>
       <TitleDiv>
         <SpanBackArrow onClick={() => props.closeSidebar()}>❯</SpanBackArrow>
         <SpanTitle>{props.rateData.address}</SpanTitle>

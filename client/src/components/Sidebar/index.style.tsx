@@ -12,9 +12,28 @@ const Layout = styled.div`
   background-color: white;
   transform: translateX(400px);
 
-  transition: all ease 0.3s 0s;
   &.open {
-    transform: translateX(0px);
+    animation: slide 0.3s forwards;
+  }
+  &.close {
+    animation: slideout 0.3s both;
+  }
+  @keyframes slide {
+    0% {
+      transform: translateX(400px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes slideout {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(400px);
+    }
   }
   &::-webkit-scrollbar {
     width: 10px;
