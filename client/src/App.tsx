@@ -35,14 +35,6 @@ const ContentWrapper = styled.div`
   align-items: center;
 `;
 
-const pathExceptions = [
-  '/write-review',
-  '/ranking',
-  '/signin',
-  '/signup',
-  '/profile/update-address',
-];
-
 const PrivateRoute: React.FC<RouterProps> = ({
   component: Component,
   ...rest
