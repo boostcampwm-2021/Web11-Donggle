@@ -47,7 +47,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       .map((hashtag) => hashtag[0])
       .slice(0, 5);
 
-  const onMenuClickHandler = useCallback(
+  const onMenuClick = useCallback(
     async (menu) => {
       if (menu === selectedMenu) return;
 
@@ -95,14 +95,14 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
       </HashTagDiv>
       <MenuBarDiv>
         <Menu
-          onClick={() => onMenuClickHandler('review')}
+          onClick={() => onMenuClick('review')}
           className={`${selectedMenu === 'review' && 'menu-selected'}`}
         >
           동네후기
         </Menu>
         {sessionStorage.getItem('jwt') ? (
           <Menu
-            onClick={() => onMenuClickHandler('myreview')}
+            onClick={() => onMenuClick('myreview')}
             className={`${selectedMenu === 'myreview' && 'menu-selected'}`}
           >
             내 후기
