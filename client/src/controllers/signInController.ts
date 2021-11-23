@@ -44,13 +44,12 @@ const isMember = (
 
   if (status != 200) {
     alert(userInfo.message);
-    routeHistory('/signin', { background: location });
+    routeHistory('/map/signin');
     return;
   }
 
   if (status == 200 && !userInfo.result.jwtToken) {
-    routeHistory('/signup', {
-      background: location,
+    routeHistory('/map/signup', {
       oauth_email: userInfo.result.oauthEmail,
       image: userInfo.result.image,
     });
@@ -71,7 +70,7 @@ const isMember = (
       address: userInfo.result.address,
       image: userInfo.result.image,
     });
-    routeHistory('/', {});
+    routeHistory('/map');
     return;
   }
 };

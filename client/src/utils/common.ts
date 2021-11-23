@@ -1,5 +1,5 @@
 import { ICategories } from '@myTypes/Review';
-import { ISnackbar } from '@myTypes/Common';
+import { IAPIResult } from '@myTypes/Common';
 import { snackbars, setSnackbars } from '@components/Snackbar';
 
 const calcTotal = (categories: ICategories) => {
@@ -30,9 +30,9 @@ const calcDateDiff = (targetDate: Date) => {
   return `${Math.floor(diff / 365)}년 전`;
 };
 
-const showSnackbar = (snackbar: ISnackbar) => {
+const showSnackbar = (message: string, error = false) => {
+  const snackbar = { message, error, expire: Date.now() + 5000 };
   if (snackbars !== null && setSnackbars !== null) {
-    snackbar.expire = Date.now() + 5000;
     setSnackbars((prev) => [...prev, snackbar]);
     setTimeout(() => {
       if (snackbars !== null && setSnackbars !== null) {
@@ -52,4 +52,27 @@ const getDebouncedFunction = (targetFunction: () => void, time: number) => {
   };
 };
 
-export { calcTotal, calcDateDiff, getDebouncedFunction, showSnackbar };
+const getPrevPath = (to: string) => {
+  const paths = to.match(/\/[^\/]*/g);
+  if (paths === null) {
+    return '/map';
+  }
+  paths.pop();
+  return paths.join();
+};
+
+const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
+  const response = await fetch(info, init);
+  if (response.status !== 200) throw Error('요청 실패');
+  const json: IAPIResult<T> = await response.json();
+  return json.result;
+};
+
+export {
+  calcTotal,
+  calcDateDiff,
+  getDebouncedFunction,
+  showSnackbar,
+  getPrevPath,
+  fetcher,
+};

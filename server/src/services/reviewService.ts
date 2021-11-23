@@ -127,10 +127,12 @@ const findAndModifyHashtag = async (
     throw new Error('해시태그를 업데이트하는데 condition이 이상합니다!');
   } else {
     const prevHashtags = foundDocument.hashtags ?? new Map<string, number>();
-    hashtags.forEach((hashtag) => {
-      const prevCount = prevHashtags.get(hashtag) ?? 0;
-      prevHashtags.set(hashtag, prevCount + 1);
-    });
+    hashtags
+      .filter((hashtag) => hashtag.length)
+      .forEach((hashtag) => {
+        const prevCount = prevHashtags.get(hashtag) ?? 0;
+        prevHashtags.set(hashtag, prevCount + 1);
+      });
 
     await MapInfoModel.updateOne(
       condition,

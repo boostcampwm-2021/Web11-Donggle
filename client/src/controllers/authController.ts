@@ -40,7 +40,7 @@ const checkExpired = async (routeHistory) => {
     token이 잘못되었거나 access와 refresh token이 만료된 경우로 모든 경우에 대해서 sessionStorage를 비우고 로그인 페이지로 이동시킴
     */
     sessionStorage.clear();
-    routeHistory('/signin', { background: { pathname: '/' } });
+    routeHistory('/map/signin');
   } else {
     sessionStorage.setItem('jwt', newToken.result.jwtToken);
   }

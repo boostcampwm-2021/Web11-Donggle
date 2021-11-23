@@ -19,7 +19,7 @@ const Body = styled.div`
 
 const LoadingPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
 
   useEffect(() => {
     const confirmMember = async () => {

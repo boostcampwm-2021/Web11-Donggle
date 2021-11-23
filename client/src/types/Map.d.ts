@@ -27,5 +27,10 @@ interface IPolygon extends kakao.maps.Polygon {
   onClick?: () => void;
 }
 
-export { IMap, IMapInfo, IPolygon };
+interface IRange {
+  address: string;
+  scope: 'big' | 'medium' | 'small';
+}
+
+export { IMap, IMapInfo, IPolygon, IRange };
 export type { CoordType };
