@@ -42,7 +42,7 @@ const queryPolygon = async (
 const queryCenter = async (
   keyword: string,
   onlyDong: boolean,
-  session: ClientSession | null,
+  session: ClientSession | null = null,
 ): Promise<MapInfo[]> => {
   const query = onlyDong
     ? { address: { $regex: RegExp(keyword, 'g') }, codeLength: 7 }
