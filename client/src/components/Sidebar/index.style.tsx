@@ -16,7 +16,7 @@ const Layout = styled.div`
     animation: slide 0.3s forwards;
   }
   &.close {
-    animation: slideout 0.3s both;
+    animation: slideout 0.3s forwards;
   }
   @keyframes slide {
     0% {
