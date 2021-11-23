@@ -104,19 +104,26 @@ const requestCoord = async (
     });
 };
 
+const isLike = (color1: string, color2: string) => {
+  color1 = color1.replace('#', '');
+  color2 = color2.replace('#', '');
+  return (
+    Array.from(color1).filter((_, i) => color1[i] === color2[i]).length >= 3
+  );
+};
+
 const createPolygons = (regions) => {
   const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
-  regions.forEach((region) => {
-    const colorString = colorHash.hex(region.address);
+  const keyString = '!@#$';
+  let resultString = '';
+  regions.forEach((region, i) => {
+    const color: string = colorHash.hex(resultString);
+    resultString += keyString;
     if (region.type === 'Polygon') {
-      polygons.push(
-        makeSinglePolygon(region.path, region.address, colorString),
-      );
+      polygons.push(makeSinglePolygon(region.path, region.address, color));
     } else {
-      polygons.push(
-        ...makeMultiPolygon(region.path, region.address, colorString),
-      );
+      polygons.push(...makeMultiPolygon(region.path, region.address, color));
     }
   });
   return polygons;
