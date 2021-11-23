@@ -13,9 +13,9 @@ const calcTotal = (categories: ICategories) => {
   return total;
 };
 
-const showSnackbar = (snackbar: ISnackbar) => {
+const showSnackbar = (message: string, error = false) => {
+  const snackbar = { message, error, expire: Date.now() + 5000 };
   if (snackbars !== null && setSnackbars !== null) {
-    snackbar.expire = Date.now() + 5000;
     setSnackbars((prev) => [...prev, snackbar]);
     setTimeout(() => {
       if (snackbars !== null && setSnackbars !== null) {
