@@ -47,7 +47,7 @@ const updateRefreshToken = async (
 ) => {
   return UserModel.updateOne(oauthEmail, {
     refreshToken: refreshToken,
-  }).then(() => logger.info('refreshToken을 업데이트했습니다'));
+  });
 };
 
 const findRegionInfo = async (address: string) => {
@@ -55,8 +55,7 @@ const findRegionInfo = async (address: string) => {
 };
 
 const saveUserInfo = async (userInfo: User) => {
-  const newUser = new UserModel(userInfo);
-  return await newUser.save().catch((err: Error) => {
+  return await UserModel.create(userInfo).catch((err: Error) => {
     err.message = '이미 회원가입하셨습니다.';
     throw err;
   });
