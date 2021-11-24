@@ -8,15 +8,6 @@ import LoadAnimation from '@components/Loading/index';
 import { IAuthInfo } from '@myTypes/User';
 import { refreshTokenUser } from '@controllers/loadController';
 
-const Body = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  background-color: ${(props) => props.theme.colors.green};
-  overflow: hidden;
-`;
-
 const LoadPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
   const routeHistory = useHistoryRouter();
@@ -26,13 +17,7 @@ const LoadPage: React.FC = () => {
     refreshTokenUser(auth, setAuth, routeHistory, location);
   }, []);
 
-  return (
-    <>
-      <Body>
-        <LoadAnimation />
-      </Body>
-    </>
-  );
+  return <LoadAnimation />;
 };
 
 export default LoadPage;

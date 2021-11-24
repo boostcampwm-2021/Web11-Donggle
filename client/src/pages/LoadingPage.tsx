@@ -8,15 +8,6 @@ import LoadAnimation from '@components/Loading/index';
 import { getToken, isMember } from '@controllers/signInController';
 import { IAuthInfo } from '@myTypes/User';
 
-const Body = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  background-color: ${(props) => props.theme.colors.green};
-  overflow: hidden;
-`;
-
 const LoadingPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
   const routeHistory = useHistoryRouter();
@@ -30,13 +21,7 @@ const LoadingPage: React.FC = () => {
     confirmMember();
   }, []);
 
-  return (
-    <>
-      <Body>
-        <LoadAnimation />
-      </Body>
-    </>
-  );
+  return <LoadAnimation />;
 };
 
 export default LoadingPage;
