@@ -10,7 +10,8 @@
       "@styledComponents/*": ["styledComponents/*"],
       "@utils/*": ["utils/*"],
       "@myTypes/*": ["types/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@routes/*": ["routes/*"]
     }
   }
 }

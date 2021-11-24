@@ -1,6 +1,15 @@
 // https://wsss.tistory.com/1214 참고
 import styled, { keyframes } from 'styled-components';
 
+export const Body = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: ${(props) => props.theme.colors.green};
+  overflow: hidden;
+`;
+
 const ball = keyframes`
     0%, 25%{ top: -50px; }
     35%{ top: calc(60% - 50px ); }

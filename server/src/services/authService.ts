@@ -36,15 +36,15 @@ const getOauthEmail = async (
   return { oauthEmail: data.login, image: data.avatar_url };
 };
 
-const isMember = async (oauth_email: string): Promise<User | null> => {
+const isMember = async (oauth_email: string) => {
   return await UserModel.findOne().where('oauth_email').equals(oauth_email);
 };
 
-const findRegionInfo = async (address: string): Promise<MapInfo | null> => {
+const findRegionInfo = async (address: string) => {
   return await MapInfoModel.findOne().where('address').equals(address);
 };
 
-const saveUserInfo = async (userInfo: User): Promise<User> => {
+const saveUserInfo = async (userInfo: User) => {
   const newUser = new UserModel(userInfo);
   return await newUser.save().catch((err: Error) => {
     err.message = '이미 회원가입하셨습니다.';

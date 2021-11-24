@@ -11,7 +11,7 @@ import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { authErrCheck } from '@utils/authError';
 import { AuthRequest, UserInfo } from '@myTypes/User';
-
+import { AuthMiddleRequest } from '@myTypes/User';
 const router: express.Router = express.Router();
 
 router.post('/signin', (async (req: AuthRequest, res: Response) => {
@@ -135,10 +135,42 @@ router.get('/refresh', checkToken, (req: Request, res: Response) => {
     .status(200)
     .json(
       makeApiResponse(
-        { jwtToken: newAccessToken, refreshToken },
+        { jwtToken: newAccessToken.token, refreshToken },
         '새로운 토큰을 발급했습니다',
       ),
     );
 });
+
+router.get(
+  '/info',
+  checkToken,
+  async (req: AuthMiddleRequest, res: Response) => {
+    try {
+      const userInfo = await authService.isMember(req.id as string);
+      if (userInfo) {
+        res.status(200).json(
+          makeApiResponse(
+            {
+              oauth_email: userInfo.oauth_email,
+              address: userInfo.address,
+              image: userInfo.image,
+            },
+            '회원 정보입니다',
+          ),
+        );
+      } else {
+        res
+          .status(500)
+          .json(
+            makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다'),
+          );
+      }
+    } catch (error) {
+      const err = error as Error;
+      logger.error(err.message);
+      res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
+    }
+  },
+);
 
 export default router;
