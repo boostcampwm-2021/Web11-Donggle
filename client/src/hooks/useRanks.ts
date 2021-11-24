@@ -38,13 +38,34 @@ const DEFAULT_MEDIUM_LIST = [
   },
 ];
 
+const giveRankToItems = (sortedItems: IRankItem[]) => {
+  if (sortedItems.length < 1) return;
+
+  let currentTotal = calcTotal(sortedItems[0].categories) || 0;
+  let currentRank = 1;
+  sortedItems[0].rank = 1;
+
+  for (let i = 1; i < sortedItems.length; i++) {
+    const item = sortedItems[i];
+    const total = calcTotal(item.categories) || 0;
+
+    if (total < currentTotal) {
+      currentTotal = total;
+      currentRank = i + 1;
+    }
+    item.rank = currentRank;
+  }
+};
+
 const sortRankItems = (rankItems: IRankItem[]) => {
   const items = [...rankItems];
-  return items.sort((a, b) => {
+  items.sort((a, b) => {
     const totalA = calcTotal(a.categories) || 0;
     const totalB = calcTotal(b.categories) || 0;
     return totalB - totalA;
   });
+  giveRankToItems(items);
+  return items;
 };
 
 const useRankItems = (address: string, scope: 'big' | 'medium' | 'small') => {
