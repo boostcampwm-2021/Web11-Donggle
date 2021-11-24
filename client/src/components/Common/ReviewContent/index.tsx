@@ -60,7 +60,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
 
       const ob = (observer.current = new IntersectionObserver(
         async (entries) => {
-          console.log('intersecting');
           if (entries[0].isIntersecting && hasMore) {
             await fetchData();
             setPageNumber((prev) => prev + 1);
