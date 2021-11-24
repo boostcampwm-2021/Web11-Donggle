@@ -74,7 +74,7 @@ router.get('/:id', checkToken, (async (
       .status(500)
       .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
   }
-}) as unknown as RequestHandler);
+}) as RequestHandler);
 
 router.post('/', checkToken, (async (
   req: ReviewInsertRequest,

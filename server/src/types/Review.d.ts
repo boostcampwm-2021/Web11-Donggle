@@ -19,7 +19,7 @@ export interface ReviewFindData extends ReviewInsertData {
 }
 
 export interface ReviewGetUserRequest extends Request {
-  id: string;
+  id?: string;
 }
 
 export interface ReviewInsertRequest extends Request {
