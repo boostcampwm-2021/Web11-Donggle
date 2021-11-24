@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./client
+    env_file:
+      - ./client/.env.${COMPOSE_MODE}
+    ports:
+      - 3000:3000
+
+  server:
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./server
+    env_file:
+      - ./server/.env.${COMPOSE_MODE}
+    network_mode: bridge
+    ports:
+      - 5000:5000
+    dns:
+      - 8.8.8.8
