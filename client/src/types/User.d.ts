@@ -25,4 +25,4 @@ interface ISignUp extends IToken {
   address: string;
 }
 
-export { IUserInfo, IAuthInfo, IToken, ISignUp };
+export { IUser, IUserInfo, IAuthInfo, IToken, ISignUp };
