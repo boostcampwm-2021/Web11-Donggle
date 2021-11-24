@@ -13,6 +13,28 @@ const calcTotal = (categories: ICategories) => {
   return total;
 };
 
+const calcDateDiff = (targetDate: Date) => {
+  const now = new Date();
+  const target = new Date(targetDate);
+
+  let diff = now.getUTCFullYear() - target.getUTCFullYear();
+  if (diff >= 1) return `${diff}년 전`;
+
+  diff = now.getUTCMonth() - target.getUTCMonth();
+  if (diff >= 1) return `${diff}개월 전`;
+
+  diff = now.getUTCDate() - target.getUTCDate();
+  if (diff >= 1) return `${diff}일 전`;
+
+  diff = now.getUTCHours() - target.getUTCHours();
+  if (diff >= 1) return `${diff}시간 전`;
+
+  diff = now.getUTCMinutes() - target.getUTCMinutes();
+  if (diff >= 1) return `${diff}분 전`;
+
+  return `방금 전`;
+};
+
 const showSnackbar = (message: string, error = false) => {
   const snackbar = { message, error, expire: Date.now() + 5000 };
   if (snackbars !== null && setSnackbars !== null) {
@@ -51,4 +73,11 @@ const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
   return json.result;
 };
 
-export { calcTotal, getDebouncedFunction, showSnackbar, getPrevPath, fetcher };
+export {
+  calcTotal,
+  calcDateDiff,
+  getDebouncedFunction,
+  showSnackbar,
+  getPrevPath,
+  fetcher,
+};

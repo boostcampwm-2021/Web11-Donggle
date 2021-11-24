@@ -15,10 +15,11 @@ interface IReviewSubmit {
 
 interface IReviewContent {
   text: string;
-  user: string;
-  dateDiff: number;
+  address?: string;
+  oauth_email: string;
   createdAt: Date;
   categories: ICategories;
+  image: string;
 }
 
 export { ICategories, IReviewContent, IReviewSubmit };

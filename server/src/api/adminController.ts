@@ -1,14 +1,14 @@
 import logger from '@loaders/loggerLoader';
 import { updateMapService } from '@services/index';
 import config from '@config/index';
-import { MapRequest } from '@myTypes/Admin';
+import { AdminRequest } from '@myTypes/Admin';
 import { makeApiResponse } from '@utils/index';
 
 import express, { Request, Response } from 'express';
 
 const router: express.Router = express.Router();
 
-router.post('/map-data', (req: MapRequest, res: Response) => {
+router.post('/map-data', (req: AdminRequest, res: Response) => {
   try {
     if (req.body.password === config.admin_password) {
       void updateMapService.populateMapAndSimpleMap();
@@ -25,7 +25,7 @@ router.post('/map-data', (req: MapRequest, res: Response) => {
   }
 });
 
-router.post('/rates', (req: MapRequest, res: Response) => {
+router.post('/rates', (req: AdminRequest, res: Response) => {
   const { password } = req.body;
   try {
     if (password === config.admin_password) {

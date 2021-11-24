@@ -1,7 +1,10 @@
 import { Request } from 'express';
 
-interface MapRequest extends Request {
-  body: { password?: string };
+interface AdminRequest extends Request {
+  body: {
+    password?: string;
+    type?: string;
+  };
 }
 
 type CoordType = [number, number];
@@ -34,4 +37,4 @@ interface CollectionType {
   features: FeatureType[];
 }
 
-export { MapRequest, CoordType, Point, FeatureType, CollectionType };
+export { AdminRequest, CoordType, Point, FeatureType, CollectionType };

@@ -1,6 +1,7 @@
 import mongoose, { ClientSession } from 'mongoose';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { Review, ReviewModel } from '@models/Review';
+import { UserModel } from '@models/User';
 import { ReviewFindData, ReviewInsertData } from '@myTypes/Review';
 import { mapService } from '@services/index';
 import logger from '@loaders/loggerLoader';
@@ -17,11 +18,11 @@ const queryReviews = async (
   address: string,
   pageNum: number,
   itemNum: number,
-): Promise<Review[] | []> => {
+): Promise<ReviewFindData[] | []> => {
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - 6);
 
-  const fields = { categories: 1, text: 1, user: 1, createdAt: 1 };
+  const fields = { categories: 1, text: 1, oauth_email: 1, createdAt: 1 };
 
   const reviewData = await ReviewModel.find(
     {
@@ -33,9 +34,69 @@ const queryReviews = async (
       skip: pageNum * itemNum,
       limit: itemNum,
     },
-  ).sort({ createdAt: -1 });
+  )
+    .sort({ createdAt: -1 })
+    .lean();
 
-  return reviewData;
+  const retData: ReviewFindData[] = [];
+  for (const data of reviewData) {
+    const userImage = await UserModel.findOne(
+      { oauth_email: data.oauth_email },
+      { image: 1 },
+    ).lean();
+
+    retData.push({
+      image: userImage?.image || (process.env.IMAGE_DEFAULT_USER as string),
+      ...data,
+    });
+  }
+
+  return retData;
+};
+
+const queryUserReviews = async (
+  user_email: string,
+  pageNum: number,
+  itemNum: number,
+): Promise<ReviewFindData[] | []> => {
+  const sixMonth = new Date();
+  sixMonth.setMonth(sixMonth.getMonth() - 6);
+
+  const fields = {
+    address: 1,
+    categories: 1,
+    text: 1,
+    oauth_email: 1,
+    createdAt: 1,
+  };
+  const reviewData = await ReviewModel.find(
+    {
+      oauth_email: { $eq: user_email },
+      createdAt: { $gte: sixMonth },
+    },
+    fields,
+    {
+      skip: pageNum * itemNum,
+      limit: itemNum,
+    },
+  )
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const retData: ReviewFindData[] = [];
+  for (const data of reviewData) {
+    const userImage = await UserModel.findOne(
+      { oauth_email: data.oauth_email },
+      { image: 1 },
+    ).lean();
+
+    retData.push({
+      image: userImage?.image || (process.env.IMAGE_DEFAULT_USER as string),
+      ...data,
+    });
+  }
+
+  return retData;
 };
 
 const insertReview = async (data: ReviewInsertData) => {
@@ -64,7 +125,6 @@ const insertReview = async (data: ReviewInsertData) => {
       session,
     );
   });
-  console.log('ending');
 
   await session.endSession();
 };
@@ -125,6 +185,7 @@ export default {
   dropModel,
   initializeReviewModel,
   queryReviews,
+  queryUserReviews,
   insertReview,
   updateMapInfoHashtag,
 };

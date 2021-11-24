@@ -1,14 +1,15 @@
 import { reviewService } from '@services/index';
 import { makeApiResponse } from '@utils/index';
 import logger from '@loaders/loggerLoader';
-import { ReviewRequest, ReviewInsertRequest } from '@myTypes/Review';
+import { AdminRequest } from '@myTypes/Admin';
+import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
 import config from '@config/index';
 import express, { Request, Response, RequestHandler } from 'express';
 import checkToken from '@middlewares/auth';
 
 const router: express.Router = express.Router();
 
-router.post('/initialize', (async (req: ReviewRequest, res: Response) => {
+router.post('/initialize', (async (req: AdminRequest, res: Response) => {
   try {
     if (req.body.password === config.admin_password) {
       if (req.body.type === 'Drop') {
@@ -40,6 +41,31 @@ router.get('/', (async (req: Request, res: Response) => {
     if (!address)
       throw new Error('정상적이지 않은 요청입니다. Address 값 부재');
     const data = await reviewService.queryReviews(address, pageNum, itemNum);
+    res.status(200).json(makeApiResponse(data, ''));
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res
+      .status(500)
+      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+  }
+}) as RequestHandler);
+
+router.get('/:id', checkToken, (async (
+  req: ReviewGetUserRequest,
+  res: Response,
+) => {
+  try {
+    const userEmail = req.id;
+    const pageNum: number = parseInt(req.query.pageNum as string);
+    const itemNum: number = parseInt(req.query.itemNum as string);
+    if (!userEmail)
+      throw new Error('정상적이지 않은 요청입니다. User Email 값 부재');
+    const data = await reviewService.queryUserReviews(
+      userEmail,
+      pageNum,
+      itemNum,
+    );
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
