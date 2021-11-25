@@ -189,4 +189,9 @@ router.get(
   },
 );
 
+router.get('/logout', (req: Request, res: Response) => {
+  res.clearCookie('token');
+  res.clearCookie('refreshToken');
+});
+
 export default router;
