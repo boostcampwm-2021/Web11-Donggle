@@ -62,8 +62,8 @@ const Profile: React.FC = () => {
             이미지 제거
           </ImageRemoveButton>
         </ImageWrapper>
-        <OauthnameWrapper>{auth.oauth_email.split('_')[0]}</OauthnameWrapper>
-        <UsernameWrapper>{auth.oauth_email.split('_')[1]}</UsernameWrapper>
+        <OauthnameWrapper>{auth.oauthEmail.split('_')[0]}</OauthnameWrapper>
+        <UsernameWrapper>{auth.oauthEmail.split('_')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
       <AddressWrapper onClick={() => routeHistory('profile/update-address')}>
         {auth.address}
