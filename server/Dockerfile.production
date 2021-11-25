@@ -1,0 +1,10 @@
+FROM node:16
+
+WORKDIR /server-express
+
+COPY ./package.json .
+RUN yarn
+
+COPY . .
+
+ENTRYPOINT ["yarn", "prod"]

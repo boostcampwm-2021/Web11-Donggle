@@ -1,7 +1,20 @@
 version: '3.8'
 
 services:
-  client:
+  nginx:
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./nginx
+    depends_on:
+      - client-react
+      - server-express
+    ports:
+      - 443:443
+    volumes:
+      - dist:/dist
+      - /etc/letsencrypt:/etc/letsencrypt
+
+  client-react:
     build:
       dockerfile: Dockerfile.${COMPOSE_MODE}
       context: ./client
@@ -9,15 +22,19 @@ services:
       - ./client/.env.${COMPOSE_MODE}
     ports:
       - 3000:3000
+    volumes:
+      - dist:/client-react/build
 
-  server:
+  server-express:
     build:
       dockerfile: Dockerfile.${COMPOSE_MODE}
       context: ./server
     env_file:
       - ./server/.env.${COMPOSE_MODE}
-    network_mode: bridge
     ports:
       - 5000:5000
     dns:
       - 8.8.8.8
+
+volumes:
+  dist:
