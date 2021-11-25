@@ -5,6 +5,9 @@ import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 
 const authErrCheck = (user: string | -3 | -2 | JwtPayload, res: Response) => {
+  res.clearCookie('token');
+  res.clearCookie('refreshToken');
+
   if (user === AuthError.TOKEN_INVALID) {
     logger.error('유효하지 않은 토큰입니다.');
     return res
