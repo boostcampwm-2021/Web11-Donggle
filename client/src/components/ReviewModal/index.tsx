@@ -25,7 +25,7 @@ const ReviewModal: React.FC = () => {
   const routeHistory = useHistoryRouter();
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
     address: useRecoilValue(authState).address,
-    oauth_email: useRecoilValue(authState).oauth_email,
+    oauth_email: useRecoilValue(authState).oauthEmail,
     text: '',
     categories: {
       safety: 1,

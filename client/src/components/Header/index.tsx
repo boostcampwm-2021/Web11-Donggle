@@ -30,12 +30,23 @@ const Header: React.FC = () => {
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
   const [auth, setAuth] = useRecoilState(authState);
 
+  const test = async () => {
+    const a = await fetch(
+      `${process.env.REACT_APP_API_URL as string}/api/auth/test`,
+      {
+        method: 'GET',
+        credentials: 'include',
+        mode: 'cors',
+      },
+    );
+  };
+
   const onLogoutClick = useCallback(() => {
     sessionStorage.removeItem('jwt');
     sessionStorage.removeItem('refreshToken');
     setAuth({
       ...auth,
-      oauth_email: '',
+      oauthEmail: '',
       address: '',
       image: '',
     });
@@ -52,7 +63,7 @@ const Header: React.FC = () => {
           <LogoMenuContainer>
             <LogoWrapper>
               <LinkBtn
-                onClick={() => routeHistory('/map')}
+                onClick={test}
                 className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
               >
                 <img src={logo} alt="logo" width="70px" />
