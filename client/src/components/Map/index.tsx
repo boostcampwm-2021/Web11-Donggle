@@ -5,12 +5,11 @@ import MapWrapper, {
 import Searchbar from '@components/Searchbar/index';
 import {
   getCurrentLocation,
-  coordToRegionCode,
+  coordToRegion,
   isRangeEqual,
   createPolygons,
   displayPolygons,
   deletePolygons,
-  LFURegions,
   addPolygonClickEvent,
   removePolygonClickEvent,
 } from '@controllers/mapController';
@@ -19,14 +18,20 @@ import {
   displayMarkers,
   deleteMarkers,
   createMarkerClickListener,
-  LFURates,
   findMarker,
 } from '@controllers/markerController';
 
-import { IMapInfo, IPolygon } from '@myTypes/Map';
+import { IMapInfo, IPolygon, IRange } from '@myTypes/Map';
 import './markerStyle.css';
 
-import React, { useRef, useEffect, useState } from 'react';
+import { IReviewContent } from '@myTypes/Review';
+import { fetchContentData } from '@controllers/sidebarController';
+import { IAPIResult } from '@myTypes/Common';
+import useRates from '@hooks/useRates';
+import { regionToRange } from '@utils/address';
+import usePaths from '@hooks/usePaths';
+
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -34,55 +39,62 @@ const DEFAULT_POSITION = {
   scale: 9,
 };
 
+const DEFAULT_RANGE: IRange = {
+  address: '',
+  scope: 'medium',
+};
+
 interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
   updateSidebarRate: (rateData: IMapInfo) => void;
-  toggleSidebar: () => void;
+  updateSidebarContents: (contentsData: IReviewContent[]) => void;
 }
 
 const MapComponent: React.FC<IProps> = ({
   openSidebar,
   closeSidebar,
   updateSidebarRate,
+  updateSidebarContents,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
-  const polygonCache = useRef(new Map());
-  const markerCache = useRef(new Map());
 
   const [position, setPosition] = useState(DEFAULT_POSITION);
-  const [range, setRange] = useState({
-    region: Array<string>(),
-    scale: DEFAULT_POSITION.scale,
-  });
+  const [range, setRange] = useState(DEFAULT_RANGE);
+
+  const { rates } = useRates(range);
+  const { paths } = usePaths(range);
 
   const [markers, setMarkers] = useState(Array<kakao.maps.CustomOverlay>());
   const [polygons, setPolygons] = useState(Array<IPolygon>());
 
-  const moveTo = (to: IMapInfo) => {
-    if (map === null) {
-      return;
-    }
-    const [x, y] = to.center;
-    const newCenter = new kakao.maps.LatLng(x, y);
-    map.setCenter(newCenter);
-    let newLevel = 9;
-    switch (to.codeLength) {
-      case 2:
-        newLevel = 11;
-        break;
-      case 5:
-        newLevel = 8;
-        break;
-      case 7:
-        newLevel = 6;
-        break;
-      default:
-        break;
-    }
-    map.setLevel(newLevel);
-  };
+  const moveTo = useCallback(
+    (to: IMapInfo) => {
+      if (map === null) {
+        return;
+      }
+      const [x, y] = to.center;
+      const newCenter = new kakao.maps.LatLng(x, y);
+      map.setCenter(newCenter);
+      let newLevel = 9;
+      switch (to.codeLength) {
+        case 2:
+          newLevel = 11;
+          break;
+        case 5:
+          newLevel = 8;
+          break;
+        case 7:
+          newLevel = 6;
+          break;
+        default:
+          break;
+      }
+      map.setLevel(newLevel);
+    },
+    [map],
+  );
 
   useEffect(() => {
     if (!mapWrapper.current) {
@@ -127,8 +139,12 @@ const MapComponent: React.FC<IProps> = ({
     if (!mapWrapper.current) return;
 
     const wrapper = mapWrapper.current;
-    const onClick = (rateData: IMapInfo) => {
+    const onClick = async (rateData: IMapInfo) => {
+      const sidebarContents: IAPIResult<IReviewContent[]> =
+        await fetchContentData(rateData.address, 'review');
+
       updateSidebarRate(rateData);
+      updateSidebarContents(sidebarContents.result || []);
       openSidebar();
     };
     const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
@@ -140,17 +156,13 @@ const MapComponent: React.FC<IProps> = ({
   useEffect(() => {
     const updateRange = async () => {
       const { latitude, longitude, scale } = position;
-      const region = (await coordToRegionCode(latitude, longitude)) as {
+      const region = (await coordToRegion(latitude, longitude)) as {
         result: Array<string>;
         status: string;
       };
       if (region.status !== kakao.maps.services.Status.OK) return;
 
-      const newRange = {
-        region: region.result,
-        scale: scale,
-      };
-
+      const newRange = regionToRange(region.result, scale);
       setRange((oldRange) => {
         if (isRangeEqual(oldRange, newRange)) return oldRange;
         return newRange;
@@ -160,14 +172,16 @@ const MapComponent: React.FC<IProps> = ({
   }, [position]);
 
   useEffect(() => {
-    const { scale, region } = range;
-    const updatePolygons = async () => {
-      const regions = await LFURegions(polygonCache.current, scale, region);
-      const polygons = createPolygons(regions);
-      setPolygons(polygons);
-    };
-    updatePolygons();
-  }, [range]);
+    if (!paths) return;
+    const polygons = createPolygons(paths);
+    setPolygons(polygons);
+  }, [paths]);
+
+  useEffect(() => {
+    if (!rates) return;
+    const markers = createMarkers(rates);
+    setMarkers(markers);
+  }, [rates]);
 
   useEffect(() => {
     if (!map) return;
@@ -175,20 +189,6 @@ const MapComponent: React.FC<IProps> = ({
     displayPolygons(polygons, map);
     return () => deletePolygons(polygons);
   }, [map, polygons]);
-
-  useEffect(() => {
-    const { scale, region } = range;
-    const updateMarkers = async () => {
-      const rates = (await LFURates(
-        markerCache.current,
-        scale,
-        region,
-      )) as IMapInfo[];
-      const markers = createMarkers(rates);
-      setMarkers(markers);
-    };
-    updateMarkers();
-  }, [range]);
 
   useEffect(() => {
     if (!map) return;
@@ -199,14 +199,18 @@ const MapComponent: React.FC<IProps> = ({
 
   useEffect(() => {
     polygons.forEach((polygon) => {
-      const onClick = () => {
+      const onClick = async () => {
         const matchingMarker = findMarker(markers, polygon.address);
         if (!matchingMarker) return;
 
         const markerEl = matchingMarker.getContent() as HTMLElement;
         const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
 
+        const sidebarContents: IAPIResult<IReviewContent[]> =
+          await fetchContentData(polygon.address, 'review');
+
         updateSidebarRate(sidebarRate);
+        updateSidebarContents(sidebarContents.result || []);
         openSidebar();
       };
       addPolygonClickEvent(polygon, onClick);
@@ -220,12 +224,14 @@ const MapComponent: React.FC<IProps> = ({
   }, [polygons, markers, openSidebar, updateSidebarRate]);
 
   return (
-    <MapWrapper ref={mapWrapper}>
-      <SearchbarWrapper>
-        <Searchbar onClickHandler={moveTo} />
-      </SearchbarWrapper>
+    <>
+      <MapWrapper ref={mapWrapper}>
+        <SearchbarWrapper>
+          <Searchbar onClickHandler={moveTo} />
+        </SearchbarWrapper>
+      </MapWrapper>
       <CenterMarker />
-    </MapWrapper>
+    </>
   );
 };
 

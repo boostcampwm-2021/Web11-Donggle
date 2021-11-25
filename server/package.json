@@ -27,6 +27,7 @@
     "multer": "^1.4.3",
     "pm2": "^5.1.2",
     "proj4": "^2.7.5",
+    "rand-token": "^1.0.1",
     "simplify-js": "^1.2.4",
     "tsconfig-paths": "^3.11.0",
     "uuid": "^8.3.2",

@@ -17,8 +17,6 @@ import {
   ColorBar,
   ProfileImage,
 } from './index.style';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -26,7 +24,7 @@ import useHistoryRouter from '@hooks/useHistoryRouter';
 import { useRecoilState } from 'recoil';
 
 const Header: React.FC = () => {
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
   const location = useLocation();
 
   const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
@@ -34,6 +32,7 @@ const Header: React.FC = () => {
 
   const onLogoutClick = useCallback(() => {
     sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('refreshToken');
     setAuth({
       ...auth,
       oauth_email: '',
@@ -53,7 +52,7 @@ const Header: React.FC = () => {
           <LogoMenuContainer>
             <LogoWrapper>
               <LinkBtn
-                onClick={() => routeHistory('/')}
+                onClick={() => routeHistory('/map')}
                 className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
               >
                 <img src={logo} alt="logo" width="70px" />
@@ -63,7 +62,7 @@ const Header: React.FC = () => {
               <MenuList>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/')}
+                    onClick={() => routeHistory('/map')}
                     className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
                   >
                     동네 지도
@@ -71,19 +70,7 @@ const Header: React.FC = () => {
                 </Menu>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/review')}
-                    className={`${
-                      clickedLinkBtnId === '/review' && 'link-selected'
-                    }`}
-                  >
-                    동네 후기
-                  </LinkBtn>
-                </Menu>
-                <Menu>
-                  <LinkBtn
-                    onClick={() =>
-                      routeHistory('/ranking', { background: location })
-                    }
+                    onClick={() => routeHistory('/map/ranking')}
                     className={`${
                       clickedLinkBtnId === '/ranking' && 'link-selected'
                     }`}
@@ -95,15 +82,16 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
+            <ReviewButton
+              onClick={() => {
+                console.log(location);
+                routeHistory('/map/write-review');
+              }}
+            >
+              내 동네 후기 쓰기
+            </ReviewButton>
             {sessionStorage.getItem('jwt') ? (
               <>
-                <ReviewButton
-                  onClick={() => {
-                    routeHistory('/write-review', { background: location });
-                  }}
-                >
-                  내 동네 후기 쓰기
-                </ReviewButton>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>
                   <ProfileImage src={auth.image} alt="프로필사진" />
@@ -111,18 +99,7 @@ const Header: React.FC = () => {
               </>
             ) : (
               <>
-                <ReviewButton
-                  onClick={() => {
-                    routeHistory('/write-review', { background: location });
-                  }}
-                >
-                  내 동네 후기 쓰기
-                </ReviewButton>
-                <SignInBtn
-                  onClick={() =>
-                    routeHistory('/signin', { background: location })
-                  }
-                >
+                <SignInBtn onClick={() => routeHistory('/map/signin')}>
                   로그인
                 </SignInBtn>
               </>

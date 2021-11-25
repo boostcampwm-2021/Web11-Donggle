@@ -44,18 +44,12 @@ const isMember = (
 
   if (status != 200) {
     alert(userInfo.message);
-    routeHistory('/signin', { background: location });
+    routeHistory('/map/signin');
     return;
   }
 
   if (status == 200 && !userInfo.result.jwtToken) {
-    setAuth({
-      ...auth,
-      oauth_email: userInfo.result.oauthEmail,
-      image: userInfo.result.image,
-    });
-    routeHistory('/signup', {
-      background: location,
+    routeHistory('/map/signup', {
       oauth_email: userInfo.result.oauthEmail,
       image: userInfo.result.image,
     });
@@ -68,6 +62,7 @@ const isMember = (
     sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
     */
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
+    sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
     setAuth({
       ...auth,
       isLoggedin: true,
@@ -75,7 +70,7 @@ const isMember = (
       address: userInfo.result.address,
       image: userInfo.result.image,
     });
-    routeHistory('/', {});
+    routeHistory('/map');
     return;
   }
 };

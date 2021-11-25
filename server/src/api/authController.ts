@@ -1,11 +1,17 @@
+import express, { Request, Response, RequestHandler } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+
 import { User } from '@models/User';
 import { authService } from '@services/index';
 import jwt from '@services/jwtService';
-import logger from '@loaders/loggerLoader';
-import { makeApiResponse } from '@utils/index';
-import express, { Request, Response, RequestHandler } from 'express';
-import { AuthRequest, UserInfo } from '@myTypes/User';
 
+import logger from '@loaders/loggerLoader';
+import checkToken from '@middlewares/auth';
+import { makeApiResponse } from '@utils/index';
+import { AuthError } from '@utils/authErrorEnum';
+import { authErrCheck } from '@utils/authError';
+import { AuthRequest, UserInfo } from '@myTypes/User';
+import { AuthMiddleRequest } from '@myTypes/User';
 const router: express.Router = express.Router();
 
 router.post('/signin', (async (req: AuthRequest, res: Response) => {
@@ -26,6 +32,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
     const isMember = await authService.isMember(oauthEmail.oauth_email);
     let userInfo = {
       jwtToken: '',
+      refreshToken: '',
       oauthEmail: '',
       address: '',
       image: '',
@@ -36,6 +43,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
       userInfo = {
         ...userInfo,
         jwtToken: jwtToken.token,
+        refreshToken: jwtToken.refreshToken,
         oauthEmail: isMember.oauth_email,
         address: isMember.address,
         image: isMember.image as string,
@@ -71,19 +79,98 @@ router.post('/signup', (async (req: Request, res: Response) => {
     await authService.saveUserInfo(newUserInfo);
     const jwtToken = jwt.sign({ oauth_email: oauthEmail });
 
-    res
-      .status(200)
-      .json(
-        makeApiResponse(
-          { jwtToken: jwtToken.token, address: address },
-          '성공적으로 회원가입 되었습니다.',
-        ),
-      );
+    res.status(200).json(
+      makeApiResponse(
+        {
+          jwtToken: jwtToken.token,
+          refreshToken: jwtToken.refreshToken,
+          address: address,
+        },
+        '성공적으로 회원가입 되었습니다.',
+      ),
+    );
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);
     res.status(500).json(makeApiResponse({}, err.message));
   }
 }) as RequestHandler);
+
+router.get('/refresh', checkToken, (req: Request, res: Response) => {
+  const refreshToken = req.headers.refreshtoken as string;
+
+  if (!refreshToken) {
+    return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+  }
+
+  const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
+  /*
+  2021-11-20
+  문혜현
+  token과 refresh token 모두 만료되었을 때
+  */
+  if (refreshVerify == AuthError.TOKEN_EXPIRED) {
+    return res.status(500).json(
+      makeApiResponse(
+        {
+          jwtToken: AuthError.TOKEN_EXPIRED,
+          refreshToken: AuthError.TOKEN_EXPIRED,
+        },
+        '다시 로그인해 주세요.',
+      ),
+    );
+  }
+
+  if (
+    refreshVerify === AuthError.TOKEN_INVALID ||
+    (refreshVerify as JwtPayload).oauth_email === undefined
+  ) {
+    return authErrCheck(refreshVerify, res);
+  }
+
+  const newAccessToken = jwt.sign({
+    oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
+  });
+  return res
+    .status(200)
+    .json(
+      makeApiResponse(
+        { jwtToken: newAccessToken.token, refreshToken },
+        '새로운 토큰을 발급했습니다',
+      ),
+    );
+});
+
+router.get(
+  '/info',
+  checkToken,
+  async (req: AuthMiddleRequest, res: Response) => {
+    try {
+      const userInfo = await authService.isMember(req.id as string);
+      if (userInfo) {
+        res.status(200).json(
+          makeApiResponse(
+            {
+              oauth_email: userInfo.oauth_email,
+              address: userInfo.address,
+              image: userInfo.image,
+            },
+            '회원 정보입니다',
+          ),
+        );
+      } else {
+        res
+          .status(500)
+          .json(
+            makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다'),
+          );
+      }
+    } catch (error) {
+      const err = error as Error;
+      logger.error(err.message);
+      res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
+    }
+  },
+);
 
 export default router;

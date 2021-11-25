@@ -8,24 +8,18 @@ export interface CategoryRateType {
 
 export interface ReviewInsertData {
   address: string;
-  text: string;
-  user: string;
+  text?: string;
+  oauth_email: string;
   categories: CategoryRateType;
+  hashtags?: string[];
 }
 
-export interface ReviewFindData {
-  _id: string;
-  dateDiff: number;
-  text: string;
-  user: string;
-  categories: CategoryRateType;
+export interface ReviewFindData extends ReviewInsertData {
+  image: string;
 }
 
-export interface ReviewRequest extends Request {
-  body: {
-    password: string;
-    type: string;
-  };
+export interface ReviewGetUserRequest extends Request {
+  id?: string;
 }
 
 export interface ReviewInsertRequest extends Request {

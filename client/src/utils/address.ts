@@ -1,33 +1,33 @@
-const regionToScaled = (region: string[], scale: number) => {
-  if (region.length < 3) return region.join(' ');
-  const [big, medium, small] = region;
+import { IRange } from '@myTypes/Map';
+
+const regionToRange = (region: string[], scale: number): IRange => {
+  const [big, medium] = region;
+  const range: IRange = {
+    address: '',
+    scope: 'big',
+  };
 
   switch (true) {
     case scale < 9:
-      return `${big} ${medium} ${small}`;
+      range.scope = 'small';
+      range.address = `${big} ${medium}`;
+      break;
     case 9 <= scale && scale < 12:
-      return `${big} ${medium}`;
+      range.scope = 'medium';
+      range.address = `${big}`;
+      break;
     case scale >= 12:
-      return big;
-    default:
-      return `${big} ${medium} ${small}`;
+      range.scope = 'big';
+      break;
   }
+  return range;
 };
 
-const regionToSmallest = (region: string[], scale: number) => {
-  if (region.length < 3) return region[region.length - 1] ?? '';
-  const [big, medium, small] = region;
-
-  switch (true) {
-    case scale < 9:
-      return small;
-    case 9 <= scale && scale < 12:
-      return medium;
-    case scale >= 12:
-      return big;
-    default:
-      return `${big} ${medium} ${small}`;
-  }
+const rangeToLabel = (address: string, scope: 'big' | 'medium' | 'small') => {
+  if (scope === 'big') return address;
+  if (scope === 'medium') return address.split(' ').slice(1).join(' ');
+  const tokens = address.split(' ');
+  return tokens[tokens.length - 1];
 };
 
-export { regionToScaled, regionToSmallest };
+export { regionToRange, rangeToLabel };

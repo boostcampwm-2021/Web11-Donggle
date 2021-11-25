@@ -19,6 +19,7 @@ interface IMapInfo {
   count: number;
   //현재는 리뷰 정보가 없으므로 require를 false로함
   categories: ICategories;
+  hashtags: Map<string, number> | Map;
 }
 
 interface IPolygon extends kakao.maps.Polygon {
@@ -26,5 +27,10 @@ interface IPolygon extends kakao.maps.Polygon {
   onClick?: () => void;
 }
 
-export { IMap, IMapInfo, IPolygon };
+interface IRange {
+  address: string;
+  scope: 'big' | 'medium' | 'small';
+}
+
+export { IMap, IMapInfo, IPolygon, IRange };
 export type { CoordType };

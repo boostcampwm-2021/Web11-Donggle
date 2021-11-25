@@ -1,60 +1,53 @@
-import { Map, MapModel } from '@models/Map';
+import { ClientSession } from 'mongoose';
+import { Map as IMap, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { ReviewInsertData } from '@myTypes/Review';
 
-const queryPolygon = async (
-  scale: number,
-  big: string,
-  medium: string,
-  small: string,
-): Promise<Map[]> => {
-  let result: Map[] = [];
+import { FilterQuery } from 'mongoose';
 
-  switch (true) {
-    case scale < 9:
-      result = await MapModel.find({
-        /*
-        2921-11-10
-        홍승용
-        형태소가 아닌 문장을 쿼리하려면 escape 해야함
-        */
-        // eslint-disable-next-line no-useless-escape
-        $text: { $search: `\"${big} ${medium}\"` },
-        codeLength: 7,
-      });
-      break;
-    case 9 <= scale && scale < 12:
-      result = await MapModel.find({
-        $text: { $search: `${big}` },
-        codeLength: 5,
-      });
-      break;
-    case 12 <= scale:
-      result = await MapModel.find({
-        codeLength: 2,
-      });
-      break;
-  }
+const queryPolygon = async (
+  address: string,
+  scope: 'big' | 'medium' | 'small',
+): Promise<IMap[]> => {
+  let codeLength = 2;
+  if (scope === 'big') codeLength = 2;
+  else if (scope === 'medium') codeLength = 5;
+  else if (scope === 'small') codeLength = 7;
+
+  const query: FilterQuery<IMap> = {
+    codeLength: codeLength,
+  };
+  if (scope !== 'big') query.$text = { $search: `"${address}"` };
+
+  const result = await MapModel.find(query);
   return result;
 };
 
 const queryCenter = async (
   keyword: string,
   onlyDong: boolean,
+  session: ClientSession | null = null,
 ): Promise<MapInfo[]> => {
   const query = onlyDong
     ? { address: { $regex: RegExp(keyword, 'g') }, codeLength: 7 }
     : { address: { $regex: RegExp(keyword, 'g') } };
-  return await MapInfoModel.find(query);
+  return await MapInfoModel.find(query).session(session);
+};
+
+const findTop5Hashtags = (hashtags: Map<string, number>) => {
+  const candidates = hashtags.entries();
+  return new Map([...candidates].sort((a, b) => b[1] - a[1]).slice(0, 5));
 };
 
 const queryRates = async (
-  scale: number,
-  big: string,
-  medium: string,
-  small: string,
+  address: string,
+  scope: 'big' | 'medium' | 'small',
 ) => {
-  let result: MapInfo[] = [];
+  let codeLength = 2;
+  if (scope === 'big') codeLength = 2;
+  else if (scope === 'medium') codeLength = 5;
+  else if (scope === 'small') codeLength = 7;
+
   const fields = {
     _id: 0,
     address: 1,
@@ -66,40 +59,31 @@ const queryRates = async (
     'categories.traffic': 1,
     'categories.food': 1,
     'categories.entertainment': 1,
+    hashtags: true,
   };
 
-  switch (true) {
-    case scale < 9:
-      result = await MapInfoModel.find(
-        {
-          $text: { $search: `"${big} ${medium}"` },
-          codeLength: 7,
-        },
-        fields,
-      );
-      break;
-    case 9 <= scale && scale < 12:
-      result = await MapInfoModel.find(
-        {
-          $text: { $search: `${big}` },
-          codeLength: 5,
-        },
-        fields,
-      );
-      break;
-    case 12 <= scale:
-      result = await MapInfoModel.find(
-        {
-          codeLength: 2,
-        },
-        fields,
-      );
-      break;
-  }
+  const query: FilterQuery<MapInfo> = {
+    codeLength: codeLength,
+  };
+  if (scope !== 'big') query.$text = { $search: `"${address}"` };
+
+  const result = await MapInfoModel.find(query, fields);
+  result.forEach((r) => {
+    if (!r.hashtags) {
+      r.hashtags = new Map();
+    } else {
+      r.hashtags = findTop5Hashtags(r.hashtags);
+    }
+  });
+
   return result;
 };
 
-const updateRates = async (code: string, review: ReviewInsertData) => {
+const updateRates = async (
+  code: string,
+  review: ReviewInsertData,
+  session: ClientSession | undefined,
+) => {
   const conditions = [
     { codeLength: 2, code: code.slice(0, 2) },
     { codeLength: 5, code: code.slice(0, 5) },
@@ -119,6 +103,8 @@ const updateRates = async (code: string, review: ReviewInsertData) => {
     {
       $inc: increment,
     },
+    { session: session },
   );
 };
+
 export default { queryPolygon, queryCenter, queryRates, updateRates };

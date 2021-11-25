@@ -11,7 +11,7 @@ import { IMapInfo } from '@myTypes/Map';
 
 const SignUpModal: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
   const location = useLocation();
 
   const onCancelHandler = useCallback((): void => {

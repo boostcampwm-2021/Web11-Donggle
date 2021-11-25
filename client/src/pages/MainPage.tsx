@@ -1,10 +1,11 @@
-import Map from '@components/Map/index';
+import MapComponent from '@components/Map/index';
 
-import React, { useState, useCallback, Suspense } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-const SidebarLazy = React.lazy(() => import('@components/Sidebar'));
+import Sidebar from '@components/Sidebar';
 
 import { IMapInfo } from '@myTypes/Map';
+import { IReviewContent } from '@myTypes/Review';
 
 const MainDiv = styled.div`
   width: 100vw;
@@ -20,89 +21,67 @@ const FlexContainer = styled.div`
   flex: 1 1 0;
 `;
 
-// const TemporaryReviewData: IReviewContent[] = [
-//   {
-//     categories: {
-//       safety: 4,
-//       traffic: 4,
-//       food: 5,
-//       entertainment: 3,
-//     },
-//     text: 'ㄴㅇㅁㄹ머ㅗㅇ피ㅓ멀호매asdfasdfgadfhawesfds;ㅓ두ㅗㅇ러;뮈퍼ㅠㅏㅣ너ㅠㅗㅎ머ㅣㅠ이러ㅓ',
-//     user: 'github:user1',
-//   },
-//   {
-//     categories: {
-//       safety: 4,
-//       traffic: 4,
-//       food: 4,
-//       entertainment: 4,
-//     },
-//     text: '우하하하우하하하우하하하우하하하우하하하우하하하우하하하우하하하',
-//     user: 'github:user2',
-//   },
-// ];
-
-const TemporaryHashTagData: string[] = [
-  '소음이 적은',
-  '경관이 좋은',
-  '문화시설이 가까운',
-  '체육시설이 많은',
-  '역이 가까운',
-];
-
 const DEFAULT_RATE_DATA: IMapInfo = {
   address: '',
   code: '',
   codeLength: 0,
-  center: [37.541, 126.986],
-  count: 2,
+  center: [37.541, 126.986], // 제주도
+  count: 0,
   categories: {
-    safety: 8,
-    traffic: 7,
-    food: 9,
-    entertainment: 9,
+    safety: 0,
+    traffic: 0,
+    food: 0,
+    entertainment: 0,
   },
+  hashtags: new Map(),
 };
 
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
-  const [sidebarRate, setSidebarRate] = useState(DEFAULT_RATE_DATA);
-
-  const toggleSidebar = () => {
-    setSidebar(!sidebar);
-  };
+  const [sidebarAnimation, setSidebarAnimation] = useState<string>('open');
+  const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
+  const [sidebarContents, setSidebarContents] = useState<IReviewContent[]>([]);
 
   const openSidebar = useCallback(() => {
+    setSidebarAnimation('open');
     setSidebar(true);
   }, []);
 
   const closeSidebar = useCallback(() => {
-    setSidebar(false);
+    setSidebarAnimation('close');
+    setTimeout(() => setSidebar(false), 500);
   }, []);
 
   const updateSidebarRate = useCallback((rateData: IMapInfo) => {
     setSidebarRate(rateData);
   }, []);
 
+  const updateSidebarContents = useCallback(
+    (contentsData: IReviewContent[]) => {
+      setSidebarContents(contentsData);
+    },
+    [],
+  );
+
   return (
     <MainDiv>
       <FlexContainer>
-        <Map
+        <MapComponent
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
           updateSidebarRate={updateSidebarRate}
-          toggleSidebar={toggleSidebar}
-        ></Map>
+          updateSidebarContents={updateSidebarContents}
+        ></MapComponent>
         {sidebar && (
-          <Suspense fallback="loading...">
-            <SidebarLazy
-              sidebar={sidebar}
-              rateData={sidebarRate}
-              hashTagData={TemporaryHashTagData}
-              closeSidebar={closeSidebar}
-            ></SidebarLazy>
-          </Suspense>
+          <Sidebar
+            sidebar={sidebar}
+            sidebarAnimation={sidebarAnimation}
+            rateData={sidebarRate}
+            contentsData={sidebarContents}
+            updateSidebarContents={updateSidebarContents}
+            hashTagData={sidebarRate.hashtags}
+            closeSidebar={closeSidebar}
+          ></Sidebar>
         )}
       </FlexContainer>
     </MainDiv>

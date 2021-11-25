@@ -45,9 +45,23 @@ const DateText = styled(SpanText)`
   color: ${(props) => props.theme.colors.ashgrey};
 `;
 
+const AddressText = styled(SpanText)`
+  font-size: 10px;
+  box-sizing: border-box;
+  text-decoration: underline;
+  margin-right: 8px;
+  color: ${(props) => props.theme.colors.green};
+`;
+
 const UserText = styled(SpanText)`
   font-size: 12px;
   color: ${(props) => props.theme.colors.ashgrey};
+`;
+
+const UserImage = styled.img`
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
 `;
 
 const ContentTextDiv = styled(BaseDiv)`
@@ -70,7 +84,6 @@ const ContentBottomDiv = styled(BaseDiv)`
 const RateDiv = styled(BaseDiv)`
   flex-direction: column;
   width: 100%;
-  padding-left: 60px;
   border-bottom: none;
 `;
 
@@ -90,7 +103,9 @@ export {
   ContentTopDiv,
   ContentTopTextDiv,
   DateText,
+  AddressText,
   UserText,
+  UserImage,
   ContentTextDiv,
   ContentBottomDiv,
   RateDiv,

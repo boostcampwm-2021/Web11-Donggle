@@ -5,10 +5,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 interface IProps {
   labels: string[];
   onSelected: (idx: number) => void;
+  dependingState: number | string; // 변화됐을 때 셀렉터가 초기화되는 상태를 관찰
   disabled: boolean;
 }
 
-const Selector: React.FC<IProps> = ({ labels, onSelected, disabled }) => {
+const Selector: React.FC<IProps> = ({
+  labels,
+  onSelected,
+  dependingState,
+  disabled,
+}) => {
   const [selected, setSelected] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -21,7 +27,7 @@ const Selector: React.FC<IProps> = ({ labels, onSelected, disabled }) => {
   useEffect(() => {
     setSelected(0);
     setDropdownOpen(false);
-  }, [disabled]);
+  }, [dependingState]);
 
   return (
     <div style={{ position: 'relative' }}>

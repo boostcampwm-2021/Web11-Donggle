@@ -5,7 +5,7 @@ export default () => {
   const history = useHistory();
 
   const routeHistory = useCallback(
-    (path: string, state: { [index: string]: string }) => {
+    (path: string, state: { [index: string]: string } = {}) => {
       history.push({
         pathname: path,
         state: state,
@@ -14,5 +14,5 @@ export default () => {
     [history],
   );
 
-  return [history, routeHistory];
+  return routeHistory;
 };

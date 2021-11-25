@@ -14,6 +14,12 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Noto Sans KR";
   }
 
+  #root {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+  }
+
   button {
     border: none;
   }

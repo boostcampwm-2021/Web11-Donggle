@@ -1,5 +1,4 @@
 import { IMapInfo } from '@myTypes/Map';
-import { IAPIResult } from '@myTypes/Common';
 import { calcTotal } from '@utils/common';
 
 const ratingToPercent = (rate: number) => {
@@ -87,58 +86,6 @@ const largeMarkerEl = (rateData: IMapInfo) => {
   return wrapper;
 };
 
-const random = (from: number, to: number) => {
-  return Number((Math.random() * (to - from) + from).toFixed(2));
-};
-
-const getRandomRate = () => {
-  return random(1, 5);
-};
-
-const regionToRates = (region): IMapInfo => {
-  const count = random(0, 100);
-  const safety = getRandomRate() * count;
-  const traffic = getRandomRate() * count;
-  const food = getRandomRate() * count;
-  const entertainment = getRandomRate() * count;
-
-  return {
-    address: region.address,
-    code: region.code,
-    codeLength: region.codeLength,
-    center: region.center,
-    count: count,
-    categories: {
-      safety,
-      traffic,
-      food,
-      entertainment,
-    },
-  };
-};
-
-const requestRates = async (
-  scale: number,
-  region: string[],
-): Promise<IMapInfo[]> => {
-  return await fetch(
-    `${process.env.REACT_APP_API_URL}/api/map/rates?scale=${scale}&big=${region[0]}&medium=${region[1]}&small=${region[2]}`,
-  )
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw Error('요청 실패');
-    })
-    .then((res: IAPIResult<IMapInfo[]>) => {
-      return res.result;
-    })
-    .catch((err) => {
-      console.error(err);
-      return [];
-    });
-};
-
 const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
   return rateDatas.map((rateData) => {
     const { center } = rateData;
@@ -146,6 +93,9 @@ const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
       position: new kakao.maps.LatLng(...center),
     });
 
+    rateData.hashtags = Object.fromEntries(
+      new Map(Object.entries(rateData.hashtags)).entries(),
+    );
     const defaultMarker = markerEl(rateData);
     const largeMarker = largeMarkerEl(rateData);
 
@@ -195,46 +145,6 @@ const createMarkerClickListener = (
   return onMarkerClicked;
 };
 
-const LFURates = async (
-  cache: Map<string, IMapInfo[] & { hitCount: number }>,
-  scale: number,
-  region: string[],
-) => {
-  const [big, medium] = region;
-  let key = '';
-
-  switch (true) {
-    case scale < 9:
-      key = `${big} ${medium}`;
-      break;
-    case 9 <= scale && scale < 12:
-      key = `${big}`;
-      break;
-    case 12 <= scale:
-      key = 'all';
-      break;
-  }
-
-  if (cache.has(key)) {
-    const rateData = cache.get(key);
-    if (rateData) rateData.hitCount++;
-    return rateData;
-  } else {
-    const rates = (await requestRates(scale, region)) as IMapInfo[] & {
-      hitCount: number;
-    };
-    rates.hitCount = 1;
-    if (cache.size > 10) {
-      const mostUnusedRates = Array.from(cache.entries()).sort(
-        ([, rates1], [, rates2]) => rates1.hitCount - rates2.hitCount,
-      )[0][0];
-      cache.delete(mostUnusedRates);
-    }
-    cache.set(key, rates);
-    return rates;
-  }
-};
-
 const findMarker = (markers: kakao.maps.CustomOverlay[], address: string) => {
   return markers.find((marker) => {
     const markerEl = marker.getContent() as HTMLElement;
@@ -243,12 +153,9 @@ const findMarker = (markers: kakao.maps.CustomOverlay[], address: string) => {
 };
 
 export {
-  requestRates,
   createMarkers,
   displayMarkers,
   deleteMarkers,
-  regionToRates,
   createMarkerClickListener,
-  LFURates,
   findMarker,
 };

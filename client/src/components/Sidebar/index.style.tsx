@@ -12,9 +12,28 @@ const Layout = styled.div`
   background-color: white;
   transform: translateX(400px);
 
-  transition: all ease 0.3s 0s;
   &.open {
-    transform: translateX(0px);
+    animation: slide 0.3s forwards;
+  }
+  &.close {
+    animation: slideout 0.3s forwards;
+  }
+  @keyframes slide {
+    0% {
+      transform: translateX(400px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes slideout {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(400px);
+    }
   }
   &::-webkit-scrollbar {
     width: 10px;
@@ -77,17 +96,29 @@ const SpanReviewTitle = styled(SpanTitle)`
 `;
 
 const RateDiv = styled(BaseDiv)`
+  display: flex;
   flex-direction: column;
   width: 100%;
-  padding-left: 60px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
 `;
 
 const HashTagDiv = styled(BaseDiv)`
   position: relative;
   width: 100%;
-  padding: 10px 55px;
+  padding: 10px 10px;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: center;
+`;
+
+const HashTagNo = styled.div`
+  width: 100%;
+  height: 28px;
+  display: flex;
+  color: ${(props) => props.theme.colors.lightgrey};
+  align-items: center;
+  justify-content: center;
 `;
 
 const MenuBarDiv = styled(BaseDiv)`
@@ -137,6 +168,7 @@ export {
   SpanReviewTitle,
   RateDiv,
   HashTagDiv,
+  HashTagNo,
   MenuBarDiv,
   Menu,
   ReviewContentDiv,

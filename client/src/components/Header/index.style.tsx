@@ -89,10 +89,11 @@ const SignInBtn = styled.button`
   height: 40px;
   text-align: center;
   cursor: pointer;
+  color: ${(props) => props.theme.colors.lightgreen};
 
   &:hover {
-    background: ${(props) => props.theme.colors.lightgreen};
-    color: ${(props) => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.green};
+    border: 1px solid ${(props) => props.theme.colors.green};
   }
 `;
 
@@ -103,8 +104,8 @@ const ReviewButton = styled(SignInBtn)`
   margin-right: 10px;
 
   &:hover {
-    background: ${(props) => props.theme.colors.white};
-    color: ${(props) => props.theme.colors.lightgreen};
+    background: ${(props) => props.theme.colors.green};
+    color: ${(props) => props.theme.colors.white};
   }
 `;
 
@@ -114,10 +115,10 @@ const LogoutBtn = styled(SignInBtn)`
 
 const UserProfile = styled.div`
   margin: 0 15px;
-  width: 60px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
-  border-radius: 30%;
+  border-radius: 999px;
   overflow: hidden;
 `;
 

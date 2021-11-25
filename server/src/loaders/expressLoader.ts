@@ -42,6 +42,7 @@ export default ({ app }: { app: Application }) => {
 
   // error 처리
   app.use((err, req: Request, res: Response, next: NextFunction) => {
-    return next(err);
+    console.error(err);
+    res.status(500).send('Something broke!');
   });
 };

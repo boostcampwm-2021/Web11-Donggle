@@ -6,6 +6,7 @@ import useHistoryRouter from '@hooks/useHistoryRouter';
 
 import React from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 const AddressWrapper = styled.div`
   width: 100%;
@@ -13,7 +14,8 @@ const AddressWrapper = styled.div`
 `;
 
 const ProfileAddressPage: React.FC = () => {
-  const [history, routeHistory] = useHistoryRouter();
+  const routeHistory = useHistoryRouter();
+  const location = useLocation();
 
   const [auth, setAuth] = useRecoilState(authState);
 
@@ -22,7 +24,7 @@ const ProfileAddressPage: React.FC = () => {
       <AddressModal
         title="우리 동네를 입력해주세요!"
         onSubmitHandler={updateAddress(auth, setAuth)}
-        onCancelHandler={() => history.goBack()}
+        onCancelHandler={() => routeHistory(location.pathname, {})}
       />
     </AddressWrapper>
   );

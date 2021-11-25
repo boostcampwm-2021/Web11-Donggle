@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const BaseDiv = styled.div`
   position: relative;
   display: flex;
-  width: 100%;
+  width: 80%;
   justify-content: space-between;
   align-items: center;
 `;
@@ -27,10 +27,11 @@ const RateCategoryTitle = styled.span`
 `;
 
 const RateCategoryUnit = styled.div`
-  width: 80%;
+  width: 90%;
   height: 6px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: relative;
   background-color: ${(props) => props.theme.colors.lightgrey};
   border-radius: 5px;
@@ -38,9 +39,6 @@ const RateCategoryUnit = styled.div`
 `;
 
 const RateCategoryBar = styled.span<{ rate: number }>`
-  position: absolute;
-  left: 0px;
-  top: 0px;
   height: 6px;
   width: ${(props) => props.rate * 20}%;
   background-color: ${(props) => props.theme.colors.green};
@@ -50,7 +48,7 @@ const RateCategoryBar = styled.span<{ rate: number }>`
 
 const RateCategoryNum = styled(RateCategoryTitle)`
   position: relative;
-  left: 105%;
+  left: 25px;
 `;
 
 export {
