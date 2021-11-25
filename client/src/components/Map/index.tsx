@@ -160,7 +160,7 @@ const MapComponent: React.FC<IProps> = ({
 
     wrapper.addEventListener('click', onMarkerClicked);
     return () => wrapper.removeEventListener('click', onMarkerClicked);
-  }, [openSidebar, closeSidebar, updateSidebarRate]);
+  }, [openSidebar, closeSidebar, updateSidebarRate, updateSidebarContents]);
 
   useEffect(() => {
     if (!paths) return;
@@ -212,7 +212,13 @@ const MapComponent: React.FC<IProps> = ({
         removePolygonClickEvent(polygon);
       });
     };
-  }, [polygons, markers, openSidebar, updateSidebarRate]);
+  }, [
+    polygons,
+    markers,
+    openSidebar,
+    updateSidebarRate,
+    updateSidebarContents,
+  ]);
 
   return (
     <>
