@@ -46,15 +46,24 @@ const App: React.FC = () => {
                   path="/"
                   component={() => <Redirect to={{ pathname: '/map' }} />}
                 />
-                <Route path="/map" render={() => <MainPage />} />
+                <PrivateRoute
+                  path="/map"
+                  component={MainPage}
+                  needSignIn={false}
+                />
                 <Route path="/github/callback" render={() => <LoadingPage />} />
                 <Route path="/loading" render={() => <LoadPage />} />
-                <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute
+                  path="/profile"
+                  component={ProfilePage}
+                  needSignIn={true}
+                />
                 <Route render={() => <NotFoundPage />} />
               </Switch>
               <PrivateRoute
                 path="/map/write-review"
                 component={ReviewSubmitPage}
+                needSignIn={true}
               />
               <Route path="/map/ranking" render={() => <RankingPage />} />
               <Route path="/map/signin" render={() => <SignInPage />} />
@@ -62,6 +71,7 @@ const App: React.FC = () => {
               <PrivateRoute
                 path="/profile/update-address"
                 component={ProfileAddressPage}
+                needSignIn={true}
               />
             </Suspense>
           </ContentWrapper>
