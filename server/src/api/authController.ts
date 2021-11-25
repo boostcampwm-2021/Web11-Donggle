@@ -118,43 +118,54 @@ router.post('/signup', (async (req: Request, res: Response) => {
 }) as RequestHandler);
 
 router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
-  const refreshToken = (req.cookies as Token).refreshToken;
+  try {
+    const refreshToken = (req.cookies as Token).refreshToken;
 
-  if (!refreshToken) {
-    return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+    if (!refreshToken) {
+      res.clearCookie('token');
+      return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+    }
+
+    const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
+    /*
+    2021-11-20
+    문혜현
+    token과 refresh token 모두 만료되었을 때
+    */
+    if (refreshVerify == AuthError.TOKEN_EXPIRED) {
+      res.clearCookie('token');
+      res.clearCookie('refreshToken');
+      return res.status(500).json(makeApiResponse({}, '다시 로그인해 주세요.'));
+    }
+
+    if (
+      refreshVerify === AuthError.TOKEN_INVALID ||
+      (refreshVerify as JwtPayload).oauth_email === undefined
+    ) {
+      return authErrCheck(refreshVerify, res);
+    }
+
+    const newAccessToken = jwt.sign({
+      oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
+    });
+
+    res.cookie('token', newAccessToken.token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 300e3,
+    });
+
+    return res
+      .status(200)
+      .json(makeApiResponse({}, '새로운 토큰을 발급했습니다'));
+  } catch (error) {
+    const err = error as Error;
+    logger.error(err.message);
+    res.clearCookie('token');
+    res.clearCookie('refreshToken');
+    res.status(500).json(makeApiResponse({}, '다시 로그인해 주세요.'));
   }
-
-  const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
-  /*
-  2021-11-20
-  문혜현
-  token과 refresh token 모두 만료되었을 때
-  */
-  if (refreshVerify == AuthError.TOKEN_EXPIRED) {
-    return res.status(500).json(makeApiResponse({}, '다시 로그인해 주세요.'));
-  }
-
-  if (
-    refreshVerify === AuthError.TOKEN_INVALID ||
-    (refreshVerify as JwtPayload).oauth_email === undefined
-  ) {
-    return authErrCheck(refreshVerify, res);
-  }
-
-  const newAccessToken = jwt.sign({
-    oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
-  });
-
-  res.cookie('token', newAccessToken.token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 300e3,
-  });
-
-  return res
-    .status(200)
-    .json(makeApiResponse({}, '새로운 토큰을 발급했습니다'));
 });
 
 router.get(
@@ -175,6 +186,8 @@ router.get(
           ),
         );
       } else {
+        res.clearCookie('token');
+        res.clearCookie('refreshToken');
         res
           .status(500)
           .json(
@@ -184,7 +197,13 @@ router.get(
     } catch (error) {
       const err = error as Error;
       logger.error(err.message);
-      res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
+      res.clearCookie('token');
+      res.clearCookie('refreshToken');
+      res
+        .status(500)
+        .json(
+          makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다.'),
+        );
     }
   },
 );
