@@ -96,4 +96,4 @@ const Searchbar: React.FC<SearchbarProps> = ({
   );
 };
 
-export default Searchbar;
+export default React.memo(Searchbar);
