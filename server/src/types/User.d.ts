@@ -17,4 +17,9 @@ interface AuthMiddleRequest extends Request {
   id?: string;
 }
 
-export { UserInfo, AuthRequest, AuthMiddleRequest };
+interface Token {
+  token: string;
+  refreshToken: string;
+}
+
+export { UserInfo, AuthRequest, AuthMiddleRequest, Token };
