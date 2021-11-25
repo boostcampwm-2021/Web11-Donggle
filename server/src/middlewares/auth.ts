@@ -16,6 +16,7 @@ const checkToken = (
 
   if (!token) {
     logger.error('토큰이 없습니다.');
+    res.clearCookie('refreshToken');
     return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
   }
 
