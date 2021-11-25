@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect, useLocation, RouterProps } from 'react-router-dom';
-import { isJwtExpired } from 'jwt-check-expiration';
 import { useRecoilValue } from 'recoil';
 import { authState } from '@stores/atoms';
 
@@ -14,9 +13,9 @@ const PrivateRoute: React.FC<RouterProps> = ({
 
   const checkAll = () => {
     try {
-      const token = sessionStorage.getItem('jwt');
+      const expireTime = sessionStorage.getItem('timer');
 
-      if (!token) {
+      if (!expireTime) {
         //로그인을 안 한 상태
         if (needSignIn) {
           return <Redirect to={{ pathname: '/map/signin' }} />;
@@ -29,7 +28,9 @@ const PrivateRoute: React.FC<RouterProps> = ({
         return <Redirect to={{ pathname: '/loading', state: location }} />;
       }
 
-      if (isJwtExpired(token)) {
+      const now = new Date();
+      const currentTime = now.getTime();
+      if (currentTime - Number(expireTime) > 300e3) {
         //로그인한 상태인데 token이 만료
         return <Redirect to={{ pathname: '/loading', state: location }} />;
       } else {
