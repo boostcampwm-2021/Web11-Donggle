@@ -13,7 +13,7 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
   if (!continueMember) {
     setAuth({
       isLoggedin: false,
-      oauth_email: '',
+      oauthEmail: '',
       address: '',
       image: '',
     });
@@ -33,20 +33,19 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
     문혜현
     user 정보도 재발급하는 경우
     */
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/info`,
       {
         method: 'GET',
-        headers: requestHeaders,
+        credentials: 'include',
+        mode: 'cors',
       },
     );
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();
     setAuth({
       isLoggedin: true,
-      oauth_email: userInfo.result.oauth_email,
+      oauthEmail: userInfo.result.oauthEmail,
       address: userInfo.result.address,
       image: userInfo.result.image,
     });
