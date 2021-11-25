@@ -22,6 +22,7 @@ export default ({ app }: { app: Application }) => {
     const allowedOrigins = [`${config.react_url}`];
     const options: cors.CorsOptions = {
       origin: allowedOrigins,
+      credentials: true,
     };
     app.use(cors(options));
   }
