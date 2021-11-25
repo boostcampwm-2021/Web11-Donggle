@@ -6,7 +6,6 @@ import {
   ContentTopTextDiv,
   DateText,
   AddressText,
-  UserText,
   UserImage,
   ContentTextDiv,
   ContentBottomDiv,
@@ -68,7 +67,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
         },
         { threshold: 0.7 },
       ));
-      if (node) ob.observe(node);
+      if (node && hasMore) ob.observe(node);
     },
     [isLoading, hasMore, fetchData],
   );
@@ -95,7 +94,6 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
                 )}
                 <DateText>{calcDateDiff(content.createdAt)}</DateText>
                 <UserImage src={content.image}></UserImage>
-                {/* <UserText>{content.oauth_email}</UserText> */}
               </ContentTopTextDiv>
             </ContentTopDiv>
             <ContentTextDiv>{content.text || ''}</ContentTextDiv>
