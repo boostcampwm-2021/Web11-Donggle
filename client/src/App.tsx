@@ -9,9 +9,11 @@ import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
+import LoadAnimation from '@components/Loading';
+import { LoadingPage } from '@pages/index';
+
 const MainPage = lazy(() => import('@pages/MainPage'));
 const LoadPage = lazy(() => import('@pages/LoadPage'));
-const LoadingPage = lazy(() => import('@pages/LoadingPage'));
 const RankingPage = lazy(() => import('@pages/RankingPage'));
 const SignInPage = lazy(() => import('@pages/SignInPage'));
 const SignUpPage = lazy(() => import('@pages/SignUpPage'));
@@ -35,7 +37,7 @@ const App: React.FC = () => {
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
           <ContentWrapper>
-            <Suspense fallback={<p>...Loading</p>}>
+            <Suspense fallback={<LoadAnimation />}>
               <Snackbar />
               <Header />
               <Switch>
@@ -55,7 +57,7 @@ const App: React.FC = () => {
                 component={ReviewSubmitPage}
               />
               <Route path="/map/ranking" render={() => <RankingPage />} />
-              <Route path="/map/signin" component={SignInPage} />
+              <Route path="/map/signin" render={() => <SignInPage />} />
               <Route path="/map/signup" render={() => <SignUpPage />} />
               <PrivateRoute
                 path="/profile/update-address"
