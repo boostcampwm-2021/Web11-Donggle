@@ -22,4 +22,6 @@ export default {
   jwt_refresh_algorithm: process.env.JWT_REFRESH_ALGORITHM || '',
   jwt_expire: process.env.JWT_EXPIRE || '',
   jwt_refresh_expire: process.env.JWT_REFRESH_EXPIRE || '',
+  jwt_cookie_expire: process.env.JWT_COOKIE_EXPIRE || '',
+  jwt_refresh_cookie_expire: process.env.JWT_REFRESH_COOKIE_EXPIRE || '',
 };
