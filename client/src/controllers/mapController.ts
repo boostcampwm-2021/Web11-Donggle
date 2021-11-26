@@ -22,6 +22,9 @@ function getCurrentLocation(callback: (coord: CoordType) => void) {
 }
 
 const coordToRegion = (latitude: number, longitude: number) => {
+  console.log(kakao);
+  console.log(kakao.maps);
+  console.log(kakao.maps.services);
   const geocoder = new kakao.maps.services.Geocoder();
 
   return new Promise((resolve, reject) => {
