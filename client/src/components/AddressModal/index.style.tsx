@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 interface SubmitButton {
@@ -12,11 +13,11 @@ const ModalSizer = styled.div`
   justify-content: flex-start;
 `;
 
-const TitleWrapper = styled.div`
+const TitleWrapper = React.memo(styled.div`
   font-size: 20px;
   margin-bottom: 20px;
   font-weight: bold;
-`;
+`);
 
 const ButtonWrapper = styled.div`
   position: fixed;
@@ -27,7 +28,7 @@ const ButtonWrapper = styled.div`
   justify-content: space-around;
 `;
 
-const SubmitButton = styled.button<SubmitButton>`
+const SubmitButton = React.memo(styled.button<SubmitButton>`
   width: 80px;
   height: 60px;
   border: none;
@@ -43,6 +44,6 @@ const SubmitButton = styled.button<SubmitButton>`
     color: ${(props) =>
       props.cancel ? props.theme.colors.green : props.theme.colors.white};
   }
-`;
+`);
 
 export { ModalSizer, TitleWrapper, ButtonWrapper, SubmitButton };

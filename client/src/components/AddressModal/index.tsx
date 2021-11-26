@@ -23,7 +23,11 @@ const AddressModal: React.FC<AddressModalProps> = ({
 }) => {
   const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
-  const onClickHandler = useCallback((mapInfo: IMapInfo) => {
+  const onSubmitClick = useCallback(async () => {
+    await onSubmitHandler(mapInfo);
+  }, [onSubmitHandler, mapInfo]);
+
+  const onItemClick = useCallback((mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
   }, []);
 
@@ -32,18 +36,13 @@ const AddressModal: React.FC<AddressModalProps> = ({
       <ModalSizer>
         <TitleWrapper>{title}</TitleWrapper>
         <Searchbar
-          onClickHandler={onClickHandler}
+          onClickHandler={onItemClick}
           valueState={mapInfo.address}
           onlyDong={true}
         />
       </ModalSizer>
       <ButtonWrapper>
-        <SubmitButton
-          cancel={false}
-          onClick={async () => {
-            await onSubmitHandler(mapInfo);
-          }}
-        >
+        <SubmitButton cancel={false} onClick={onSubmitClick}>
           제출
         </SubmitButton>
         <SubmitButton cancel={true} onClick={onCancelHandler}>
