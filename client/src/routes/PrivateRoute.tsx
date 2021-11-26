@@ -30,7 +30,10 @@ const PrivateRoute: React.FC<RouterProps> = ({
 
       const now = new Date();
       const currentTime = now.getTime();
-      if (currentTime - Number(expireTime) > 300e3) {
+      if (
+        currentTime - Number(expireTime) >
+        Number(process.env.REACT_APP_TIMER)
+      ) {
         //로그인한 상태인데 token이 만료
         return <Redirect to={{ pathname: '/loading', state: location }} />;
       } else {

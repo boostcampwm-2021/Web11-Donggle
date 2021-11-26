@@ -10,6 +10,7 @@ import checkToken from '@middlewares/auth';
 import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { authErrCheck } from '@utils/authError';
+import config from '@config/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
 const router: express.Router = express.Router();
@@ -48,13 +49,13 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        maxAge: 300e3,
+        maxAge: Number(config.jwt_cookie_expire),
       });
       res.cookie('refreshToken', jwtToken.refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        maxAge: 1800e3,
+        maxAge: Number(config.jwt_refresh_cookie_expire),
       });
 
       res.status(200).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
@@ -93,13 +94,13 @@ router.post('/signup', (async (req: Request, res: Response) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 300e3,
+      maxAge: Number(config.jwt_cookie_expire),
     });
     res.cookie('refreshToken', jwtToken.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 1800e3,
+      maxAge: Number(config.jwt_refresh_cookie_expire),
     });
 
     res.status(200).json(
@@ -153,7 +154,7 @@ router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 300e3,
+      maxAge: Number(config.jwt_cookie_expire),
     });
 
     return res
