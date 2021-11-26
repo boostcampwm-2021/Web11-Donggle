@@ -10,7 +10,14 @@ import { spreadDropdown } from '@controllers/searchbarController';
 import { IMapInfo } from '@myTypes/Map';
 import { getDebouncedFunction } from '@utils/common';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  ChangeEvent,
+  useMemo,
+} from 'react';
 
 interface SearchbarProps {
   onClickHandler: (mapInfo: IMapInfo) => void | Promise<void>;
@@ -32,6 +39,11 @@ const Searchbar: React.FC<SearchbarProps> = ({
   const [dropdownTop, setDropdownTop] = useState(0);
   const [spreadFlag, setSpreadFlag] = useState(new Date());
 
+  const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    input.current = e.target.value;
+    setSpreadFlag(new Date());
+  }, []);
+
   const debouncedSpreadDropdown = useCallback(
     getDebouncedFunction(
       () =>
@@ -46,7 +58,7 @@ const Searchbar: React.FC<SearchbarProps> = ({
 
   useEffect(() => {
     debouncedSpreadDropdown();
-  }, [spreadFlag]);
+  }, [spreadFlag, debouncedSpreadDropdown]);
 
   useEffect(() => {
     if (inputTagRef.current !== null && valueState) {
@@ -58,38 +70,36 @@ const Searchbar: React.FC<SearchbarProps> = ({
     if (dropdownTagRef.current !== null) {
       setDropdownTop(getTop(dropdownTagRef.current));
     }
-  }, [dropdownTagRef.current]);
+  }, []);
+
+  const dropdownList = useMemo(() => {
+    return results.map((result, i) => (
+      <DropdownItem
+        key={i}
+        onClick={() => {
+          onClickHandler(result);
+          setResults([]);
+          if (inputTagRef.current !== null && !valueState) {
+            inputTagRef.current.value = '';
+          }
+        }}
+      >
+        {result.address}
+      </DropdownItem>
+    ));
+  }, [results, onClickHandler, valueState]);
 
   return (
     <div style={{ position: 'relative' }}>
       <SearchbarWrapper>
-        <SearchbarInput
-          onChange={(e) => {
-            input.current = e.target.value;
-            setSpreadFlag(new Date());
-          }}
-          ref={inputTagRef}
-        />
+        <SearchbarInput onChange={onInputChange} ref={inputTagRef} />
         <SearchbarButton>
           <SearchImg />
         </SearchbarButton>
       </SearchbarWrapper>
       {results.length > 0 && (
         <DropdownWrapper ref={dropdownTagRef} top={dropdownTop}>
-          {results.map((result, i) => (
-            <DropdownItem
-              key={i}
-              onClick={(e) => {
-                onClickHandler(result);
-                setResults([]);
-                if (inputTagRef.current !== null && !valueState) {
-                  inputTagRef.current.value = '';
-                }
-              }}
-            >
-              {result.address}
-            </DropdownItem>
-          ))}
+          {dropdownList}
         </DropdownWrapper>
       )}
     </div>

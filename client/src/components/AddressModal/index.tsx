@@ -8,7 +8,7 @@ import {
 } from '@components/AddressModal/index.style';
 import { IMapInfo } from '@myTypes/Map';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 interface AddressModalProps {
   title: string;
@@ -23,9 +23,9 @@ const AddressModal: React.FC<AddressModalProps> = ({
 }) => {
   const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
-  const onClickHandler = (mapInfo: IMapInfo) => {
+  const onClickHandler = useCallback((mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
-  };
+  }, []);
 
   return (
     <Modal>
