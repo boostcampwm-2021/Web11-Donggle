@@ -210,8 +210,35 @@ router.get(
 );
 
 router.get('/logout', (req: Request, res: Response) => {
-  res.clearCookie('token');
-  res.clearCookie('refreshToken');
+  res.cookie('token', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 0,
+  });
+  res.cookie('refreshToken', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 0,
+  });
+  res.status(200).json({});
+});
+
+router.get('/unload', (req: Request, res: Response) => {
+  res.cookie('token', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 0,
+  });
+  res.cookie('refreshToken', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 0,
+  });
+  res.status(200).json({});
 });
 
 export default router;

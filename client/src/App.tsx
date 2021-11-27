@@ -5,7 +5,7 @@ import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -31,6 +31,19 @@ const ContentWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const deleteCookie = () => {
+      fetch(`${process.env.REACT_APP_API_URL as string}/api/auth/unload`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+    };
+    window.addEventListener('unload', deleteCookie);
+    return () => {
+      window.removeEventListener('unload', deleteCookie);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyle />
