@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   nginx:
+    image: ghcr.io/isanghaessi/web11-donggle_nginx
     build:
       dockerfile: Dockerfile.${COMPOSE_MODE}
       context: ./nginx
@@ -17,6 +18,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
 
   client-react:
+    image: ghcr.io/isanghaessi/web11-donggle_client-react
     build:
       dockerfile: Dockerfile.${COMPOSE_MODE}
       context: ./client
@@ -28,6 +30,7 @@ services:
       - dist:/client-react/build
 
   server-express:
+    image: ghcr.io/isanghaessi/web11-donggle_server-express
     build:
       dockerfile: Dockerfile.${COMPOSE_MODE}
       context: ./server
