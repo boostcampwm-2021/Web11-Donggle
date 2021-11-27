@@ -6,18 +6,23 @@ import { authState } from '@stores/atoms';
 
 const PrivateRoute: React.FC<RouterProps> = ({
   component: Component,
+  needSignIn: needSignIn,
   ...rest
 }) => {
   const auth = useRecoilValue(authState);
   const location = useLocation();
 
-  const checkAll = (props) => {
+  const checkAll = () => {
     try {
       const token = sessionStorage.getItem('jwt');
 
       if (!token) {
         //로그인을 안 한 상태
-        return <Redirect to={{ pathname: '/map/signin' }} />;
+        if (needSignIn) {
+          return <Redirect to={{ pathname: '/map/signin' }} />;
+        } else {
+          return <Component />;
+        }
       }
       if (!auth.isLoggedin) {
         //로그인은 했지만 새로고침
@@ -29,7 +34,7 @@ const PrivateRoute: React.FC<RouterProps> = ({
         return <Redirect to={{ pathname: '/loading', state: location }} />;
       } else {
         //로그인한 상태이며 token이 유효한 상태
-        return <Component {...props} />;
+        return <Component />;
       }
     } catch (error) {
       alert(error);

@@ -64,7 +64,6 @@ const isMember = (
     sessionStorage.setItem('jwt', userInfo.result.jwtToken);
     sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
     setAuth({
-      ...auth,
       isLoggedin: true,
       oauth_email: userInfo.result.oauthEmail,
       address: userInfo.result.address,

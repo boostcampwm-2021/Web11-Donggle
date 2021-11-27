@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: ghcr.io/isanghaessi/web11-donggle_nginx
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./nginx
+    depends_on:
+      - client-react
+      - server-express
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - dist:/dist
+      - ./nginx/tls:/tls
+      - /etc/letsencrypt:/etc/letsencrypt
+
+  client-react:
+    image: ghcr.io/isanghaessi/web11-donggle_client-react
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./client
+    env_file:
+      - ./client/.env.${COMPOSE_MODE}
+    expose:
+      - 3000
+    volumes:
+      - dist:/client-react/build
+
+  server-express:
+    image: ghcr.io/isanghaessi/web11-donggle_server-express
+    build:
+      dockerfile: Dockerfile.${COMPOSE_MODE}
+      context: ./server
+    env_file:
+      - ./server/.env.${COMPOSE_MODE}
+    expose:
+      - 5000
+    dns:
+      - 8.8.8.8
+
+volumes:
+  dist:

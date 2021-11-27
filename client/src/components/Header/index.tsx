@@ -84,7 +84,6 @@ const Header: React.FC = () => {
           <ProfileWrapper>
             <ReviewButton
               onClick={() => {
-                console.log(location);
                 routeHistory('/map/write-review');
               }}
             >
