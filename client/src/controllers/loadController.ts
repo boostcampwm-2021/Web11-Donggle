@@ -1,6 +1,7 @@
 import { IUser } from '@myTypes/User';
 import { IAPIResult } from '@myTypes/Common';
 import { newIssuedToken } from '@controllers/authController';
+import { getOptions } from '@utils/common';
 
 const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
   /*
@@ -35,11 +36,7 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
     */
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/info`,
-      {
-        method: 'GET',
-        credentials: 'include',
-        mode: 'cors',
-      },
+      getOptions('GET', undefined, 'same-origin'),
     );
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();

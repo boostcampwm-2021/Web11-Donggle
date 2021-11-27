@@ -4,6 +4,7 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
+import { getOptions } from '@utils/common';
 
 import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -33,10 +34,10 @@ const ContentWrapper = styled.div`
 const App: React.FC = () => {
   useEffect(() => {
     const deleteCookie = () => {
-      fetch(`${process.env.REACT_APP_API_URL as string}/api/auth/unload`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+      fetch(
+        `${process.env.REACT_APP_API_URL as string}/api/auth/unload`,
+        getOptions('GET', undefined, 'same-origin'),
+      );
     };
     window.addEventListener('unload', deleteCookie);
     return () => {

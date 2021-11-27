@@ -1,6 +1,6 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IToken } from '@myTypes/User';
-
+import { getOptions } from '@utils/common';
 /*
 2021-11-24
 문혜현
@@ -12,11 +12,7 @@ token이 잘못되었거나 access와 refresh token이 만료된 경우로 모�
 const newIssuedToken = async () => {
   const newTokenRes = await fetch(
     `${process.env.REACT_APP_API_URL as string}/api/auth/refresh`,
-    {
-      method: 'GET',
-      credentials: 'include',
-      mode: 'cors',
-    },
+    getOptions('GET', undefined, 'same-origin'),
   );
 
   const newToken: IAPIResult<IToken | Record<string, never>> =
