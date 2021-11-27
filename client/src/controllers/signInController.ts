@@ -17,7 +17,7 @@ const getToken = async (): Promise<
   try {
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/signin`,
-      getOptions('POST', { code }, 'same-origin'),
+      getOptions('POST', { code }, 'include'),
     );
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();

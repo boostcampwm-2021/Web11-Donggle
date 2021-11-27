@@ -12,7 +12,7 @@ token이 잘못되었거나 access와 refresh token이 만료된 경우로 모�
 const newIssuedToken = async () => {
   const newTokenRes = await fetch(
     `${process.env.REACT_APP_API_URL as string}/api/auth/refresh`,
-    getOptions('GET', undefined, 'same-origin'),
+    getOptions('GET', undefined, 'include'),
   );
 
   const newToken: IAPIResult<IToken | Record<string, never>> =

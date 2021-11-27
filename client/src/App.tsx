@@ -36,7 +36,7 @@ const App: React.FC = () => {
     const deleteCookie = () => {
       fetch(
         `${process.env.REACT_APP_API_URL as string}/api/auth/unload`,
-        getOptions('GET', undefined, 'same-origin'),
+        getOptions('GET', undefined, 'include'),
       );
     };
     window.addEventListener('unload', deleteCookie);

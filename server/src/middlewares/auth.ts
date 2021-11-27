@@ -6,6 +6,7 @@ import { AuthMiddleRequest, Token } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
 import { AuthError } from '@utils/authErrorEnum';
 import { authErrCheck } from '@utils/authError';
+import { removeCookie } from '@utils/index';
 
 const checkToken = (
   req: AuthMiddleRequest,
@@ -16,8 +17,9 @@ const checkToken = (
 
   if (!token) {
     logger.error('토큰이 없습니다.');
-    res.clearCookie('refreshToken');
-    return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+    return removeCookie(res)
+      .status(500)
+      .json(makeApiResponse({}, '토큰이 없습니다.'));
   }
 
   const user = jwt.verify(token);
