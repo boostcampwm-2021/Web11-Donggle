@@ -12,6 +12,7 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
 
   if (!continueMember) {
     setAuth({
+      ...auth,
       isLoggedin: false,
       oauth_email: '',
       address: '',
@@ -45,6 +46,7 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();
     setAuth({
+      ...auth,
       isLoggedin: true,
       oauth_email: userInfo.result.oauth_email,
       address: userInfo.result.address,

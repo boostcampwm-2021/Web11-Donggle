@@ -148,11 +148,10 @@ const updateMapInfoHashtag = async (
       { codeLength: 5, code: code.slice(0, 5) },
       { codeLength: 7, code: code },
     ];
-    const promises = conditions.map((condition) =>
-      findAndModifyHashtag(condition, hashtags, session),
-    );
 
-    await Promise.all(promises);
+    for (const condition of conditions) {
+      await findAndModifyHashtag(condition, hashtags, session);
+    }
   }
 };
 

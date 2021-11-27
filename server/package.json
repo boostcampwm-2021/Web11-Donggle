@@ -9,7 +9,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --ignore test.json -r tsconfig-paths/register ./src/app.ts",
-    "prod": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist && pm2-runtime start ecosystem.config.js --env production"
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "prod": "pm2 reload ecosystem.config.js --env production",
+    "test": "cross-env NODE_ENV=production pm2 reload ecosystem.config.js --update-env"
   },
   "dependencies": {
     "aws-sdk": "^2.1026.0",

@@ -36,7 +36,7 @@ const mapInfoSchema = new Schema<MapInfo>({
   count: { type: Number, required: true, default: 0 },
   //현재는 리뷰 정보가 없으므로 require를 false로함
   categories: { type: rateSchema, required: true },
-  hashtags: { type: Schema.Types.Map, of: String, required: true },
+  hashtags: { type: 'Map', required: true },
 });
 
 const MapInfoModel = model<MapInfo>('MapInfo', mapInfoSchema);
