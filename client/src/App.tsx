@@ -4,6 +4,7 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
+import ProtectRoute from '@routes/ProtectRoute';
 import { getOptions } from '@utils/common';
 
 import React, { lazy, Suspense, useEffect } from 'react';
@@ -66,7 +67,7 @@ const App: React.FC = () => {
                   needSignIn={false}
                 />
                 <Route path="/github/callback" render={() => <LoadingPage />} />
-                <Route path="/loading" render={() => <LoadPage />} />
+                <ProtectRoute path="/loading" component={LoadPage} />
                 <PrivateRoute
                   path="/profile"
                   component={ProfilePage}
@@ -81,7 +82,7 @@ const App: React.FC = () => {
               />
               <Route path="/map/ranking" render={() => <RankingPage />} />
               <Route path="/map/signin" render={() => <SignInPage />} />
-              <Route path="/map/signup" render={() => <SignUpPage />} />
+              <ProtectRoute path="/map/signup" component={SignUpPage} />
               <PrivateRoute
                 path="/profile/update-address"
                 component={ProfileAddressPage}
