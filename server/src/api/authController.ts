@@ -18,9 +18,10 @@ const router: express.Router = express.Router();
 
 router.post('/signin', (async (req: AuthRequest, res: Response) => {
   const { code } = req.body;
-  if (!code) throw new Error('비정상적인 접근입니다');
 
   try {
+    if (!code) throw new Error('비정상적인 접근입니다');
+
     const accessToken = await authService.getAccessToken(code);
     const oauthInfo = await authService.getOauthEmail(accessToken);
     if (!oauthInfo.oauthEmail) {

@@ -45,6 +45,7 @@ const isMember = (
     routeHistory('/map/signup', {
       oauthEmail: userInfo.result.oauthEmail,
       image: userInfo.result.image,
+      isRoute: true,
     });
     return;
   }
