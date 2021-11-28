@@ -1,6 +1,7 @@
 import qs from 'qs';
 import { IAPIResult } from '@myTypes/Common';
 import { IUser } from '@myTypes/User';
+import { getOptions } from '@utils/common';
 
 const getToken = async (): Promise<
   [number, IAPIResult<IUser | Record<string, never>>]
@@ -16,16 +17,7 @@ const getToken = async (): Promise<
   try {
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/signin`,
-      {
-        credentials: 'include',
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-
-        body: JSON.stringify({ code }),
-      },
+      getOptions('POST', { code }, 'include'),
     );
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();
@@ -53,6 +45,7 @@ const isMember = (
     routeHistory('/map/signup', {
       oauthEmail: userInfo.result.oauthEmail,
       image: userInfo.result.image,
+      isRoute: true,
     });
     return;
   }

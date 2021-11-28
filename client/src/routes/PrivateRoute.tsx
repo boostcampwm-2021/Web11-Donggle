@@ -25,7 +25,11 @@ const PrivateRoute: React.FC<RouterProps> = ({
       }
       if (!auth.isLoggedin) {
         //로그인은 했지만 새로고침
-        return <Redirect to={{ pathname: '/loading', state: location }} />;
+        return (
+          <Redirect
+            to={{ pathname: '/loading', state: { isRoute: true, ...location } }}
+          />
+        );
       }
 
       const now = new Date();
@@ -35,7 +39,11 @@ const PrivateRoute: React.FC<RouterProps> = ({
         Number(process.env.REACT_APP_TIMER)
       ) {
         //로그인한 상태인데 token이 만료
-        return <Redirect to={{ pathname: '/loading', state: location }} />;
+        return (
+          <Redirect
+            to={{ pathname: '/loading', state: { isRoute: true, ...location } }}
+          />
+        );
       } else {
         //로그인한 상태이며 token이 유효한 상태
         return <Component />;

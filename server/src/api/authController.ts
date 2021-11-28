@@ -10,6 +10,7 @@ import checkToken from '@middlewares/auth';
 import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { authErrCheck } from '@utils/authError';
+import { getCookieOption, removeCookie } from '@utils/index';
 import config from '@config/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
@@ -17,9 +18,10 @@ const router: express.Router = express.Router();
 
 router.post('/signin', (async (req: AuthRequest, res: Response) => {
   const { code } = req.body;
-  if (!code) throw new Error('비정상적인 접근입니다');
 
   try {
+    if (!code) throw new Error('비정상적인 접근입니다');
+
     const accessToken = await authService.getAccessToken(code);
     const oauthInfo = await authService.getOauthEmail(accessToken);
     if (!oauthInfo.oauthEmail) {
@@ -45,18 +47,17 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
         image: isMember.image as string,
       };
 
-      res.cookie('token', jwtToken.token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: Number(config.jwt_cookie_expire),
-      });
-      res.cookie('refreshToken', jwtToken.refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: Number(config.jwt_refresh_cookie_expire),
-      });
+      res.cookie(
+        'token',
+        jwtToken.token,
+        getCookieOption(Number(config.jwt_cookie_expire)),
+      );
+
+      res.cookie(
+        'refreshToken',
+        jwtToken.refreshToken,
+        getCookieOption(Number(config.jwt_refresh_cookie_expire)),
+      );
 
       res.status(200).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
     } else {
@@ -90,18 +91,16 @@ router.post('/signup', (async (req: Request, res: Response) => {
     await authService.saveUserInfo(newUserInfo);
     const jwtToken = jwt.sign({ oauth_email: oauthEmail });
 
-    res.cookie('token', jwtToken.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: Number(config.jwt_cookie_expire),
-    });
-    res.cookie('refreshToken', jwtToken.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: Number(config.jwt_refresh_cookie_expire),
-    });
+    res.cookie(
+      'token',
+      jwtToken.token,
+      getCookieOption(Number(config.jwt_cookie_expire)),
+    );
+    res.cookie(
+      'refreshToken',
+      jwtToken.refreshToken,
+      getCookieOption(Number(config.jwt_refresh_cookie_expire)),
+    );
 
     res.status(200).json(
       makeApiResponse(
@@ -123,8 +122,9 @@ router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
     const refreshToken = (req.cookies as Token).refreshToken;
 
     if (!refreshToken) {
-      res.clearCookie('token');
-      return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+      return removeCookie(res)
+        .status(500)
+        .json(makeApiResponse({}, '토큰이 없습니다.'));
     }
 
     const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
@@ -134,9 +134,9 @@ router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
     token과 refresh token 모두 만료되었을 때
     */
     if (refreshVerify == AuthError.TOKEN_EXPIRED) {
-      res.clearCookie('token');
-      res.clearCookie('refreshToken');
-      return res.status(500).json(makeApiResponse({}, '다시 로그인해 주세요.'));
+      return removeCookie(res)
+        .status(500)
+        .json(makeApiResponse({}, '다시 로그인해 주세요.'));
     }
 
     if (
@@ -150,12 +150,11 @@ router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
       oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
     });
 
-    res.cookie('token', newAccessToken.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: Number(config.jwt_cookie_expire),
-    });
+    res.cookie(
+      'token',
+      newAccessToken.token,
+      getCookieOption(Number(config.jwt_cookie_expire)),
+    );
 
     return res
       .status(200)
@@ -163,9 +162,9 @@ router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
   } catch (error) {
     const err = error as Error;
     logger.error(err.message);
-    res.clearCookie('token');
-    res.clearCookie('refreshToken');
-    res.status(500).json(makeApiResponse({}, '다시 로그인해 주세요.'));
+    removeCookie(res)
+      .status(500)
+      .json(makeApiResponse({}, '다시 로그인해 주세요.'));
   }
 });
 
@@ -187,9 +186,7 @@ router.get(
           ),
         );
       } else {
-        res.clearCookie('token');
-        res.clearCookie('refreshToken');
-        res
+        removeCookie(res)
           .status(500)
           .json(
             makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다'),
@@ -198,9 +195,7 @@ router.get(
     } catch (error) {
       const err = error as Error;
       logger.error(err.message);
-      res.clearCookie('token');
-      res.clearCookie('refreshToken');
-      res
+      removeCookie(res)
         .status(500)
         .json(
           makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다.'),
@@ -210,35 +205,11 @@ router.get(
 );
 
 router.get('/logout', (req: Request, res: Response) => {
-  res.cookie('token', '', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 0,
-  });
-  res.cookie('refreshToken', '', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 0,
-  });
-  res.status(200).json({});
+  removeCookie(res).status(200).json({});
 });
 
 router.get('/unload', (req: Request, res: Response) => {
-  res.cookie('token', '', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 0,
-  });
-  res.cookie('refreshToken', '', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 0,
-  });
-  res.status(200).json({});
+  removeCookie(res).status(200).json({});
 });
 
 export default router;

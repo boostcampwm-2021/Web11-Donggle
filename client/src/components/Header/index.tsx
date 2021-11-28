@@ -21,6 +21,7 @@ import {
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
+import { getOptions } from '@utils/common';
 import { useRecoilState } from 'recoil';
 
 const Header: React.FC = () => {
@@ -31,11 +32,10 @@ const Header: React.FC = () => {
   const [auth, setAuth] = useRecoilState(authState);
 
   const onLogoutClick = useCallback(() => {
-    fetch(`${process.env.REACT_APP_API_URL as string}/api/auth/logout`, {
-      method: 'GET',
-      credentials: 'include',
-      mode: 'cors',
-    });
+    fetch(
+      `${process.env.REACT_APP_API_URL as string}/api/auth/logout`,
+      getOptions('GET', undefined, 'include'),
+    );
     sessionStorage.removeItem('timer');
     setAuth({
       isLoggedin: false,

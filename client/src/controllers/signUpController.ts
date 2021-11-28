@@ -4,6 +4,7 @@ import { IAPIResult } from '@myTypes/Common';
 import { ISignUp } from '@myTypes/User';
 import { IMapInfo } from '@myTypes/Map';
 import { IAuthInfo } from '@myTypes/User';
+import { getOptions } from '@utils/common';
 
 const signUpAdress = async (
   mapInfo: IMapInfo,
@@ -12,21 +13,17 @@ const signUpAdress = async (
 ): Promise<[number, IAPIResult<ISignUp | Record<string, never>>]> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/auth/signup`,
-    {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify({
+    getOptions(
+      'POST',
+      {
         oauthEmail: location.state.oauthEmail,
         address: mapInfo.address,
         code: mapInfo.code,
         center: mapInfo.center,
         image: location.state.image,
-      }),
-    },
+      },
+      'include',
+    ),
   );
 
   const userInfo: IAPIResult<ISignUp | Record<string, never>> =
