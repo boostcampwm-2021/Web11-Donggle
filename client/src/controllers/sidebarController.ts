@@ -18,7 +18,7 @@ const submitReview = (
         onClick: () => {
           fetch(
             `${process.env.REACT_APP_API_URL}/api/review`,
-            getOptions('POST', data, 'include'),
+            getOptions('POST', data, 'same-origin'),
           ).then((res) => res.json());
           routeHistory('/map');
         },
@@ -52,7 +52,7 @@ const fetchContentData = async (
       break;
   }
 
-  return await fetch(`${fetchUrl}`, getOptions('GET', undefined, 'include'))
+  return await fetch(`${fetchUrl}`, getOptions('GET', undefined, 'same-origin'))
     .then(async (response) => {
       if (response.status === 200) {
         return await response.json();

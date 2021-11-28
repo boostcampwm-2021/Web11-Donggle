@@ -36,7 +36,7 @@ const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
     */
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/info`,
-      getOptions('GET', undefined, 'include'),
+      getOptions('GET', undefined, 'same-origin'),
     );
     const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();
