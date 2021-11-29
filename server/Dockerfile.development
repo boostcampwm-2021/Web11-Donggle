@@ -1,10 +1,7 @@
 FROM node:16
 
-WORKDIR /donggle-server
+WORKDIR /donggle-server-development
 
-COPY ./package.json .
 RUN yarn
-
-COPY . .
 
 CMD ["yarn", "dev"]
