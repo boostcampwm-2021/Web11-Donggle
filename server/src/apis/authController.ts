@@ -15,7 +15,7 @@ import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { getCookieOption, removeCookie } from '@utils/index';
 import createError from '@utils/error';
-import config from '@config/index';
+import config from 'configs/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
 const router: express.Router = express.Router();
