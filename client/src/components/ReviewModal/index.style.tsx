@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 const BaseDiv = styled.div`
-  position: relative;
   width: 100%;
   ${(props) => props.theme.flexRow};
   justify-content: center;

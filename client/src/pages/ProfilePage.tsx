@@ -3,11 +3,13 @@ import Profile from '@components/Profile/index';
 import React from 'react';
 import styled from 'styled-components';
 
-const ProfileWrapper = styled.div`
-  position: relative;
+const ProfilePageDiv = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - ${(props) => props.theme.componentSize.header});
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ProfileContainer = styled.div`
@@ -17,11 +19,11 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePage: React.FC = () => (
-  <ProfileWrapper>
+  <ProfilePageDiv>
     <ProfileContainer>
       <Profile />
     </ProfileContainer>
-  </ProfileWrapper>
+  </ProfilePageDiv>
 );
 
 export default ProfilePage;

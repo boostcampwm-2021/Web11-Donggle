@@ -15,13 +15,11 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 500px;
-  height: auto;
-  max-height: 90%;
+  height: fit-content;
   top: 50%;
   left: 50%;
-  overflow-y: scroll;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;
@@ -33,23 +31,6 @@ const ModalWrapper = styled.div`
   background-color: ${(props) => props.theme.colors.white};
 
   z-index: 3000;
-
-  ::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 5px;
-    background-color: ${({ theme }) => theme?.colors?.lightgrey ?? '#70C49D'};
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme?.colors?.ashgrey ?? '#666362'};
-    border-radius: 5px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: ${({ theme }) => theme?.colors?.lightgrey ?? '#70C49D'};
-    border-radius: 5px;
-    box-shadow: inset 0px 0px 5px white;
-  }
 `;
 
 const ModalCloseBtnDiv = styled.div`

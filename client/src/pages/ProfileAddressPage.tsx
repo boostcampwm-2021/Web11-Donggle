@@ -5,14 +5,8 @@ import { useRecoilState } from 'recoil';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 
 import React from 'react';
-import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { getPrevPath } from '@utils/common';
-
-const AddressWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;
 
 const ProfileAddressPage: React.FC = () => {
   const routeHistory = useHistoryRouter();
@@ -21,7 +15,7 @@ const ProfileAddressPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState(authState);
 
   return (
-    <AddressWrapper>
+    <>
       <AddressModal
         title="우리 동네를 입력해주세요!"
         onSubmitHandler={async () => {
@@ -30,7 +24,7 @@ const ProfileAddressPage: React.FC = () => {
         }}
         onCancelHandler={() => routeHistory(getPrevPath(location.pathname), {})}
       />
-    </AddressWrapper>
+    </>
   );
 };
 

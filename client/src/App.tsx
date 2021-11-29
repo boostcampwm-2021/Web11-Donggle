@@ -1,15 +1,15 @@
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
-import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
 
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
 import LoadAnimation from '@components/Loading';
+import Header from '@components/Header';
 import { LoadingPage } from '@pages/index';
 
 const MainPage = lazy(() => import('@pages/MainPage'));
@@ -22,59 +22,49 @@ const ProfileAddressPage = lazy(() => import('@pages/ProfileAddressPage'));
 const ReviewSubmitPage = lazy(() => import('@pages/ReviewSubmitPage'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
-          <ContentWrapper>
-            <Suspense fallback={<LoadAnimation />}>
-              <Snackbar />
-              <Header />
-              <Switch>
-                <Route
-                  exact
-                  path="/"
-                  component={() => <Redirect to={{ pathname: '/map' }} />}
-                />
-                <PrivateRoute
-                  path="/map"
-                  component={MainPage}
-                  needSignIn={false}
-                />
-                <Route path="/github/callback" render={() => <LoadingPage />} />
-                <Route path="/loading" render={() => <LoadPage />} />
-                <PrivateRoute
-                  path="/profile"
-                  component={ProfilePage}
-                  needSignIn={true}
-                />
-                <Route render={() => <NotFoundPage />} />
-              </Switch>
+          <Suspense fallback={<LoadAnimation />}>
+            <Snackbar />
+            <Header />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect to={{ pathname: '/map' }} />}
+              />
               <PrivateRoute
-                path="/:back/write-review"
-                component={ReviewSubmitPage}
+                path="/map"
+                component={MainPage}
+                needSignIn={false}
+              />
+              <Route path="/github/callback" render={() => <LoadingPage />} />
+              <Route path="/loading" render={() => <LoadPage />} />
+              <PrivateRoute
+                path="/profile"
+                component={ProfilePage}
                 needSignIn={true}
               />
-              <Route path="/:back/ranking" render={() => <RankingPage />} />
-              <Route path="/:back/signin" render={() => <SignInPage />} />
-              <Route path="/:back/signup" render={() => <SignUpPage />} />
-              <PrivateRoute
-                path="/:back/update-address"
-                component={ProfileAddressPage}
-                needSignIn={true}
-              />
-            </Suspense>
-          </ContentWrapper>
+              <Route render={() => <NotFoundPage />} />
+            </Switch>
+            <PrivateRoute
+              path="/:back/write-review"
+              component={ReviewSubmitPage}
+              needSignIn={true}
+            />
+            <Route path="/:back/ranking" render={() => <RankingPage />} />
+            <Route path="/:back/signin" render={() => <SignInPage />} />
+            <Route path="/:back/signup" render={() => <SignUpPage />} />
+            <PrivateRoute
+              path="/:back/update-address"
+              component={ProfileAddressPage}
+              needSignIn={true}
+            />
+          </Suspense>
         </GlobalStore>
       </ThemeProvider>
     </>
