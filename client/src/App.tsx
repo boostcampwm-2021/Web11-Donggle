@@ -24,7 +24,7 @@ const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 const ContentWrapper = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

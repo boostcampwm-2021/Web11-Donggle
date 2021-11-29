@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const MapWrapper = styled.div`
   width: 100%;
-  height: calc(100% - ${(props) => props.theme.componentSize.header});
+  height: 100%;
 `;
 
 const TestDiv = styled.div`

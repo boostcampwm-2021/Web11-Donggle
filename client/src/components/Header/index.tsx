@@ -22,6 +22,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 import { useRecoilState } from 'recoil';
+import { getPrevPath } from '@utils/common';
 
 const Header: React.FC = () => {
   const routeHistory = useHistoryRouter();
@@ -70,7 +71,7 @@ const Header: React.FC = () => {
                 </Menu>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/map/ranking')}
+                    onClick={() => routeHistory(`${location.pathname}/ranking`)}
                     className={`${
                       clickedLinkBtnId === '/ranking' && 'link-selected'
                     }`}
@@ -84,7 +85,7 @@ const Header: React.FC = () => {
           <ProfileWrapper>
             <ReviewButton
               onClick={() => {
-                routeHistory('/map/write-review');
+                routeHistory(`${location.pathname}/write-review`);
               }}
             >
               내 동네 후기 쓰기
@@ -98,7 +99,9 @@ const Header: React.FC = () => {
               </>
             ) : (
               <>
-                <SignInBtn onClick={() => routeHistory('/map/signin')}>
+                <SignInBtn
+                  onClick={() => routeHistory(`${location.pathname}/signin`)}
+                >
                   로그인
                 </SignInBtn>
               </>

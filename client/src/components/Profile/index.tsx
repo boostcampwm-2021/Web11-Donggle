@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
         <OauthnameWrapper>{auth.oauth_email.split('_')[0]}</OauthnameWrapper>
         <UsernameWrapper>{auth.oauth_email.split('_')[1]}</UsernameWrapper>
       </ImageUsernameWrapper>
-      <AddressWrapper onClick={() => routeHistory('profile/update-address')}>
+      <AddressWrapper onClick={() => routeHistory('/profile/update-address')}>
         {auth.address}
       </AddressWrapper>
     </>
