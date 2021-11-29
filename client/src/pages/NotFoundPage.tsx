@@ -1,12 +1,8 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => {
-  return (
-    <>
-      <h1>Error Code 404</h1>
-      <h2>{window.location.href} Not Found!</h2>
-    </>
-  );
+  return <Redirect to="/map" />;
 };
 
 export default NotFoundPage;

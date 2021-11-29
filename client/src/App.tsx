@@ -61,15 +61,15 @@ const App: React.FC = () => {
                 <Route render={() => <NotFoundPage />} />
               </Switch>
               <PrivateRoute
-                path="/map/write-review"
+                path="/:back/write-review"
                 component={ReviewSubmitPage}
                 needSignIn={true}
               />
-              <Route path="/map/ranking" render={() => <RankingPage />} />
-              <Route path="/map/signin" render={() => <SignInPage />} />
-              <Route path="/map/signup" render={() => <SignUpPage />} />
+              <Route path="/:back/ranking" render={() => <RankingPage />} />
+              <Route path="/:back/signin" render={() => <SignInPage />} />
+              <Route path="/:back/signup" render={() => <SignUpPage />} />
               <PrivateRoute
-                path="/profile/update-address"
+                path="/:back/update-address"
                 component={ProfileAddressPage}
                 needSignIn={true}
               />
