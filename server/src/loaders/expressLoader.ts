@@ -8,6 +8,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJson from '@utils/swagger.json';
 
 const stream = {
   write: (message) => {
@@ -35,6 +37,8 @@ export default ({ app }: { app: Application }) => {
 
   app.use('/api', apiController);
   app.use('/admin', adminController);
+
+  app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
   // 404 에러 처리
   app.use((req: Request, res: Response, next: NextFunction) => {

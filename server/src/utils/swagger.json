@@ -1,0 +1,588 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Donggle Swagger API!",
+    "version": "0.1.0",
+    "title": "Donggle",
+    "contact": {
+      "email": "notready@donggle"
+    }
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign in to service",
+        "description": "",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Sign in Objects",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sign in success"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign up to service",
+        "description": "",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Sing up Objects",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sign up success"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/map/polygon": {
+      "get": {
+        "tags": ["map"],
+        "summary": "Get map polygon coordinates",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "scale",
+            "in": "query",
+            "description": "Map scale",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 15
+          },
+          {
+            "name": "big",
+            "in": "query",
+            "description": "Map region level(도, 시)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "description": "Map region level(시, 군, 구)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "small",
+            "in": "query",
+            "description": "Map region level(읍, 면, 동)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Map"
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/map/rates": {
+      "get": {
+        "tags": ["map"],
+        "summary": "Get map rates info",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "scale",
+            "in": "query",
+            "description": "Map 축척",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 15
+          },
+          {
+            "name": "big",
+            "in": "query",
+            "description": "Map region level(도, 시)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "description": "Map region level(시, 군, 구)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "small",
+            "in": "query",
+            "description": "Map region level(읍, 면, 동)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Map"
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/map/search": {
+      "get": {
+        "tags": ["map"],
+        "summary": "Get map polygon coordinates",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "Map 축척",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "onlydong",
+            "in": "query",
+            "description": "동 정보만 반환 여부",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Map"
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/rank": {
+      "get": {
+        "tags": ["rank"],
+        "summary": "Get rates data from Map and calculate rank",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "주소",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Map 축척 수준",
+            "required": true,
+            "type": "string",
+            "enum": ["big", "medium", "small"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/MapInfo"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/review": {
+      "get": {
+        "tags": ["review"],
+        "summary": "Get review data",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "주소",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "Pagination 번호",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "itemNum",
+            "in": "query",
+            "description": "Fetch할 review 개수",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/Review"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["review"],
+        "summary": "Review insert and update Map Info",
+        "description": "",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Sing up Objects",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReviewInsert"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/user/profile-image": {
+      "patch": {
+        "tags": ["user"],
+        "summary": "Patch current user's profile image",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Profile Image object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfileImage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "Delete current user's profile image",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Profile Image object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfileImage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/user/profile-address": {
+      "patch": {
+        "tags": ["user"],
+        "summary": "Patch current user's profile address",
+        "description": "",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Profile address object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfileAddress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Categories": {
+      "type": "object",
+      "properties": {
+        "safety": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "traffic": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "food": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "entertainment": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "oauth_email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "center": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "image": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Map": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "code": {
+          "type": "string"
+        },
+        "codeLength": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "center": {
+          "type": "string",
+          "enum": ["Polygon | MultiPolygon"]
+        }
+      }
+    },
+    "MapInfo": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "codeLength": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "center": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "categories": {
+          "$ref": "#/definitions/Categories"
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "codeLength": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "center": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "categories": {
+          "$ref": "#/definitions/Categories"
+        },
+        "text": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ReviewInsert": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string",
+          "format": "int64"
+        },
+        "categories": {
+          "$ref": "#/definitions/Categories"
+        }
+      }
+    },
+    "UserProfileImage": {
+      "type": "object",
+      "properties": {
+        "oauth_email": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      }
+    },
+    "UserProfileAddress": {
+      "type": "object",
+      "properties": {
+        "oauth_email": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
