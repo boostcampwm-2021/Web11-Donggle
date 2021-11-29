@@ -46,8 +46,8 @@ export default ({ app }: { app: Application }) => {
   });
 
   // error 처리
-  app.use((err, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    logger.error(err.stack);
     res.status(500).send('Something broke!');
   });
 };

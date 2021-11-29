@@ -1,17 +1,33 @@
 import { mapService } from '@services/index';
 import { makeApiResponse, isRangeValid } from '@utils/index';
 import logger from '@loaders/loggerLoader';
-import express, { Request, Response, RequestHandler } from 'express';
+import express, {
+  Request,
+  Response,
+  RequestHandler,
+  NextFunction,
+} from 'express';
+import createError from '@utils/error';
 
 const router: express.Router = express.Router();
 const POLYGON_MAX_AGE = 60 * 60 * 1;
 
-router.get('/polygon', (async (req: Request, res: Response) => {
+router.get('/polygon', (async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const address = req.query.address as string;
   const scope = req.query.scope as string;
   try {
     if (!isRangeValid(address, scope)) {
-      throw Error(`잘못된 폴리곤 요청: address=${address}&scope=${scope}`);
+      return next(
+        createError(
+          'BadRequest',
+          new Error(`잘못된 폴리곤 요청: address=${address}&scope=${scope}`)
+            .stack,
+        ),
+      );
     }
     const paths = await mapService.queryPolygon(
       address,
@@ -21,17 +37,25 @@ router.get('/polygon', (async (req: Request, res: Response) => {
     res.status(200).json(makeApiResponse(paths, ''));
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res.status(500).json(makeApiResponse({}, '맵 정보를 받아오지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 
-router.get('/rates', (async (req: Request, res: Response) => {
+router.get('/rates', (async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const address = req.query.address as string;
   const scope = req.query.scope as string;
   try {
     if (!isRangeValid(address, scope)) {
-      throw Error(`잘못된 평점 요청: address=${address}&scope=${scope}`);
+      return next(
+        createError(
+          'InternalServerError',
+          `잘못된 평점 요청: address=${address}&scope=${scope}`,
+        ),
+      );
     }
     const rates = await mapService.queryRates(
       address,
@@ -40,14 +64,15 @@ router.get('/rates', (async (req: Request, res: Response) => {
     res.status(200).json(makeApiResponse(rates, ''));
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, '평점 정보를 받아오지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 
-router.get('/search', (async (req: Request, res: Response) => {
+router.get('/search', (async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { keyword, onlyDong } = req.query;
   try {
     if (typeof keyword === 'string' && keyword.length > 0) {
@@ -58,10 +83,7 @@ router.get('/search', (async (req: Request, res: Response) => {
     }
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, '검색 정보를 받아오지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 

@@ -4,12 +4,22 @@ import logger from '@loaders/loggerLoader';
 import { AdminRequest } from '@myTypes/Admin';
 import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
 import config from '@config/index';
-import express, { Request, Response, RequestHandler } from 'express';
+import express, {
+  Request,
+  Response,
+  RequestHandler,
+  NextFunction,
+} from 'express';
 import checkToken from '@middlewares/auth';
+import createError from '@utils/error';
 
 const router: express.Router = express.Router();
 
-router.post('/initialize', (async (req: AdminRequest, res: Response) => {
+router.post('/initialize', (async (
+  req: AdminRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (req.body.password === config.admin_password) {
       if (req.body.type === 'Drop') {
@@ -17,50 +27,60 @@ router.post('/initialize', (async (req: AdminRequest, res: Response) => {
       }
       await reviewService.initializeReviewModel();
     } else {
-      throw Error('관리자 암호가 잘못되었습니다.');
+      return next(
+        createError(
+          'NotFound',
+          new Error('Review Model 초기화 중 오류가 발생했습니다.').stack,
+        ),
+      );
     }
     res
-      .status(200)
+      .status(201)
       .json(
         makeApiResponse({}, 'Review Model이 정상적으로 초기화 되었습니다.'),
       );
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, 'Review Model 초기화 중 오류가 발생했습니다.'));
+    next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 
-router.get('/', (async (req: Request, res: Response) => {
+router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
   try {
     const address = req.query.address as string;
     const pageNum: number = parseInt(req.query.pageNum as string);
     const itemNum: number = parseInt(req.query.itemNum as string);
     if (!address)
-      throw new Error('정상적이지 않은 요청입니다. Address 값 부재');
+      return next(
+        createError(
+          'NotFound',
+          new Error('정상적이지 않은 요청입니다. Address 값 부재').stack,
+        ),
+      );
     const data = await reviewService.queryReviews(address, pageNum, itemNum);
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 
 router.get('/:id', checkToken, (async (
   req: ReviewGetUserRequest,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const userEmail = req.id;
     const pageNum: number = parseInt(req.query.pageNum as string);
     const itemNum: number = parseInt(req.query.itemNum as string);
     if (!userEmail)
-      throw new Error('정상적이지 않은 요청입니다. User Email 값 부재');
+      return next(
+        createError(
+          'NotFound',
+          new Error('정상적이지 않은 요청입니다. User Email 값 부재').stack,
+        ),
+      );
     const data = await reviewService.queryUserReviews(
       userEmail,
       pageNum,
@@ -69,30 +89,31 @@ router.get('/:id', checkToken, (async (
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, '후기 정보를 가져오지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 
 router.post('/', checkToken, (async (
   req: ReviewInsertRequest,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const insertData = req.body;
-    if (!insertData) throw Error('비정상적인 후기 정보가 입력되었습니다.');
+    if (!insertData)
+      return next(
+        createError(
+          'BadRequest',
+          new Error('비정상적인 후기 정보가 입력되었습니다.').stack,
+        ),
+      );
     await reviewService.insertReview(insertData);
     res
       .status(200)
       .json(makeApiResponse({}, '후기를 정상적으로 저장하였습니다.'));
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res
-      .status(500)
-      .json(makeApiResponse({}, '후기를 정상적으로 저장하지 못했습니다.'));
+    return next(createError('InternalServerError', err.stack));
   }
 }) as RequestHandler);
 

@@ -1,32 +1,47 @@
-import express, { Request, Response, RequestHandler } from 'express';
+import express, {
+  Request,
+  Response,
+  RequestHandler,
+  NextFunction,
+} from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
 import { User } from '@models/User';
 import { authService } from '@services/index';
 import jwt from '@services/jwtService';
 
-import logger from '@loaders/loggerLoader';
 import checkToken from '@middlewares/auth';
 import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
-import { authErrCheck } from '@utils/authError';
 import { getCookieOption, removeCookie } from '@utils/index';
+import createError from '@utils/error';
 import config from '@config/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
 const router: express.Router = express.Router();
 
-router.post('/signin', (async (req: AuthRequest, res: Response) => {
+router.post('/signin', (async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const { code } = req.body;
 
   try {
-    if (!code) throw new Error('비정상적인 접근입니다');
+    if (!code) {
+      return next(
+        createError(
+          'BadRequest',
+          new Error('authroization code가 없습니다').stack,
+        ),
+      );
+    }
 
     const accessToken = await authService.getAccessToken(code);
     const oauthInfo = await authService.getOauthEmail(accessToken);
     if (!oauthInfo.oauthEmail) {
-      throw new Error(
-        `oauthInfo 데이터가 비어있습니다. 전달된 code 값 : ${code}`,
+      return next(
+        createError('BadRequest', new Error('잘못된 JWT입니다').stack),
       );
     }
 
@@ -59,7 +74,7 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
         getCookieOption(Number(config.jwt_refresh_cookie_expire)),
       );
 
-      res.status(200).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
+      res.status(201).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
     } else {
       userInfo = {
         ...userInfo,
@@ -71,12 +86,17 @@ router.post('/signin', (async (req: AuthRequest, res: Response) => {
     }
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res.status(500).json(makeApiResponse({}, '로그인에 실패했습니다.'));
+    return next(
+      createError('InternalServerError', err.stack, '다시 로그인해 주세요.'),
+    );
   }
 }) as RequestHandler);
 
-router.post('/signup', (async (req: Request, res: Response) => {
+router.post('/signup', (async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { oauthEmail, address, code, center, image }: UserInfo =
       req.body as UserInfo;
@@ -101,7 +121,6 @@ router.post('/signup', (async (req: Request, res: Response) => {
       jwtToken.refreshToken,
       getCookieOption(Number(config.jwt_refresh_cookie_expire)),
     );
-
     res.status(200).json(
       makeApiResponse(
         {
@@ -112,66 +131,81 @@ router.post('/signup', (async (req: Request, res: Response) => {
     );
   } catch (error) {
     const err = error as Error;
-    logger.error(err.message);
-    res.status(500).json(makeApiResponse({}, err.message));
+    return next(
+      createError('InternalServerError', err.stack, '다시 회원가입 해주세요.'),
+    );
   }
 }) as RequestHandler);
 
-router.get('/refresh', checkToken, (req: AuthMiddleRequest, res: Response) => {
-  try {
-    const refreshToken = (req.cookies as Token).refreshToken;
+router.get(
+  '/refresh',
+  checkToken,
+  (req: AuthMiddleRequest, res: Response, next: NextFunction) => {
+    try {
+      const refreshToken = (req.cookies as Token).refreshToken;
 
-    if (!refreshToken) {
-      return removeCookie(res)
-        .status(500)
-        .json(makeApiResponse({}, '토큰이 없습니다.'));
-    }
+      if (!refreshToken) {
+        return next(
+          createError(
+            'Unauthorized',
+            new Error('리프레시토큰이 없습니다').stack,
+          ),
+        );
+      }
 
-    const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
-    /*
+      const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
+      /*
     2021-11-20
     문혜현
     token과 refresh token 모두 만료되었을 때
     */
-    if (refreshVerify == AuthError.TOKEN_EXPIRED) {
-      return removeCookie(res)
-        .status(500)
-        .json(makeApiResponse({}, '다시 로그인해 주세요.'));
+      if (refreshVerify == AuthError.TOKEN_EXPIRED) {
+        return next(
+          createError(
+            'Unauthorized',
+            new Error('리프레시토큰이 만료되었습니다').stack,
+          ),
+        );
+      }
+
+      if (
+        refreshVerify === AuthError.TOKEN_INVALID ||
+        (refreshVerify as JwtPayload).oauth_email === undefined
+      ) {
+        return next(
+          createError(
+            'Unauthorized',
+            new Error('리프레시토큰이 유효하지 않습니다').stack,
+          ),
+        );
+      }
+
+      const newAccessToken = jwt.sign({
+        oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
+      });
+
+      res.cookie(
+        'token',
+        newAccessToken.token,
+        getCookieOption(Number(config.jwt_cookie_expire)),
+      );
+
+      return res
+        .status(200)
+        .json(makeApiResponse({}, '새로운 토큰을 발급했습니다'));
+    } catch (error) {
+      const err = error as Error;
+      return next(
+        createError('InternalServerError', err.stack, '다시 로그인해 주세요'),
+      );
     }
-
-    if (
-      refreshVerify === AuthError.TOKEN_INVALID ||
-      (refreshVerify as JwtPayload).oauth_email === undefined
-    ) {
-      return authErrCheck(refreshVerify, res);
-    }
-
-    const newAccessToken = jwt.sign({
-      oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
-    });
-
-    res.cookie(
-      'token',
-      newAccessToken.token,
-      getCookieOption(Number(config.jwt_cookie_expire)),
-    );
-
-    return res
-      .status(200)
-      .json(makeApiResponse({}, '새로운 토큰을 발급했습니다'));
-  } catch (error) {
-    const err = error as Error;
-    logger.error(err.message);
-    removeCookie(res)
-      .status(500)
-      .json(makeApiResponse({}, '다시 로그인해 주세요.'));
-  }
-});
+  },
+);
 
 router.get(
   '/info',
   checkToken,
-  async (req: AuthMiddleRequest, res: Response) => {
+  async (req: AuthMiddleRequest, res: Response, next: NextFunction) => {
     try {
       const userInfo = await authService.isMember(req.id as string);
       if (userInfo) {
@@ -186,20 +220,18 @@ router.get(
           ),
         );
       } else {
-        removeCookie(res)
-          .status(500)
-          .json(
-            makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다'),
-          );
+        return next(
+          createError(
+            'Unauthorized',
+            new Error('회원가입 되어있지 않습니다').stack,
+          ),
+        );
       }
     } catch (error) {
       const err = error as Error;
-      logger.error(err.message);
-      removeCookie(res)
-        .status(500)
-        .json(
-          makeApiResponse({}, '회원 정보를 불러오는데 오류가 발생했습니다.'),
-        );
+      return next(
+        createError('InternalServerError', err.stack, '다시 로그인 해주세요'),
+      );
     }
   },
 );
