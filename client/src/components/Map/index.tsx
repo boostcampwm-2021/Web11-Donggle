@@ -59,8 +59,6 @@ const MapComponent: React.FC<IProps> = ({
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
-
-  const [position, setPosition] = useState(DEFAULT_POSITION);
   const [range, setRange] = useState(DEFAULT_RANGE);
 
   const { rates } = useRates(range);
@@ -115,23 +113,34 @@ const MapComponent: React.FC<IProps> = ({
 
     const onCurrentLocation = ([lat, lng]: [number, number]) => {
       kakaoMap.setCenter(new kakao.maps.LatLng(lat, lng));
-      setPosition((prevPos) => {
-        return { ...prevPos, latitude: lat, longitude: lng };
-      });
     };
     getCurrentLocation(onCurrentLocation);
 
-    const updatePosition = () => {
+    const updateRange = async () => {
       const latlng = kakaoMap.getCenter();
-      const latitude = latlng.getLat();
-      const longitude = latlng.getLng();
+      const [latitude, longitude] = [latlng.getLat(), latlng.getLng()];
       const scale = kakaoMap.getLevel();
-      setPosition({ latitude, longitude, scale });
+
+      try {
+        const region = (await coordToRegion(latitude, longitude)) as {
+          result: Array<string>;
+          status: string;
+        };
+        if (region.status !== kakao.maps.services.Status.OK) return;
+
+        const newRange = regionToRange(region.result, scale);
+        setRange((oldRange) => {
+          if (isRangeEqual(oldRange, newRange)) return oldRange;
+          return newRange;
+        });
+      } catch (e) {
+        return;
+      }
     };
 
-    kakao.maps.event.addListener(kakaoMap, 'idle', updatePosition);
+    kakao.maps.event.addListener(kakaoMap, 'idle', updateRange);
     return () => {
-      kakao.maps.event.removeListener(kakaoMap, 'idle', updatePosition);
+      kakao.maps.event.removeListener(kakaoMap, 'idle', updateRange);
     };
   }, []);
 
@@ -151,25 +160,7 @@ const MapComponent: React.FC<IProps> = ({
 
     wrapper.addEventListener('click', onMarkerClicked);
     return () => wrapper.removeEventListener('click', onMarkerClicked);
-  }, [openSidebar, closeSidebar, updateSidebarRate]);
-
-  useEffect(() => {
-    const updateRange = async () => {
-      const { latitude, longitude, scale } = position;
-      const region = (await coordToRegion(latitude, longitude)) as {
-        result: Array<string>;
-        status: string;
-      };
-      if (region.status !== kakao.maps.services.Status.OK) return;
-
-      const newRange = regionToRange(region.result, scale);
-      setRange((oldRange) => {
-        if (isRangeEqual(oldRange, newRange)) return oldRange;
-        return newRange;
-      });
-    };
-    updateRange();
-  }, [position]);
+  }, [openSidebar, closeSidebar, updateSidebarRate, updateSidebarContents]);
 
   useEffect(() => {
     if (!paths) return;
@@ -221,7 +212,13 @@ const MapComponent: React.FC<IProps> = ({
         removePolygonClickEvent(polygon);
       });
     };
-  }, [polygons, markers, openSidebar, updateSidebarRate]);
+  }, [
+    polygons,
+    markers,
+    openSidebar,
+    updateSidebarRate,
+    updateSidebarContents,
+  ]);
 
   return (
     <>
@@ -235,4 +232,4 @@ const MapComponent: React.FC<IProps> = ({
   );
 };
 
-export default MapComponent;
+export default React.memo(MapComponent);

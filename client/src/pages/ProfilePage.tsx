@@ -15,4 +15,4 @@ const ProfilePage: React.FC = () => (
   </ProfileWrapper>
 );
 
-export default ProfilePage;
+export default React.memo(ProfilePage);

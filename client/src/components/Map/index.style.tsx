@@ -1,23 +1,18 @@
 import marker from '@assets/icons/marker.svg';
 
+import React from 'react';
 import styled from 'styled-components';
+import isEqual from 'react-fast-compare';
 
-const MapWrapper = styled.div`
-  width: 100%;
-  height: calc(100% - ${(props) => props.theme.componentSize.header});
-`;
+const MapWrapper = React.memo(
+  styled.div`
+    width: 100%;
+    height: calc(100% - ${(props) => props.theme.componentSize.header});
+  `,
+  isEqual,
+);
 
-const TestDiv = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: inline;
-  z-index: 10;
-  cursor: pointer;
-  background-color: white;
-`;
-
-const CenterMarker = styled.img`
+const Marker = styled.img`
   position: fixed;
   left: calc(50% - 25px);
   top: calc(51%);
@@ -27,13 +22,17 @@ const CenterMarker = styled.img`
   user-select: none;
   pointer-events: none;
 `;
-CenterMarker.defaultProps = { src: marker };
+Marker.defaultProps = { src: marker };
+const CenterMarker = React.memo(Marker);
 
-const SearchbarWrapper = styled.div`
-  position: relative;
-  top: 20px;
-  left: 20px;
-`;
+const SearchbarWrapper = React.memo(
+  styled.div`
+    position: relative;
+    top: 20px;
+    left: 20px;
+  `,
+  isEqual,
+);
 
 export default MapWrapper;
-export { TestDiv, CenterMarker, SearchbarWrapper };
+export { CenterMarker, SearchbarWrapper };
