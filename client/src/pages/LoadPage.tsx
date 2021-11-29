@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { authState } from '@stores/atoms';
 import useHistoryRouter from '@hooks/useHistoryRouter';

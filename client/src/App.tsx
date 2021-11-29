@@ -4,8 +4,10 @@ import myTheme from '@styledComponents/theme';
 import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
+import ProtectRoute from '@routes/ProtectRoute';
+import { getOptions } from '@utils/common';
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -31,6 +33,19 @@ const ContentWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const deleteCookie = () => {
+      fetch(
+        `${process.env.REACT_APP_API_URL as string}/api/auth/unload`,
+        getOptions('GET', undefined, 'same-origin'),
+      );
+    };
+    window.addEventListener('unload', deleteCookie);
+    return () => {
+      window.removeEventListener('unload', deleteCookie);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -52,7 +67,7 @@ const App: React.FC = () => {
                   needSignIn={false}
                 />
                 <Route path="/github/callback" render={() => <LoadingPage />} />
-                <Route path="/loading" render={() => <LoadPage />} />
+                <ProtectRoute path="/loading" component={LoadPage} />
                 <PrivateRoute
                   path="/profile"
                   component={ProfilePage}
@@ -67,7 +82,7 @@ const App: React.FC = () => {
               />
               <Route path="/map/ranking" render={() => <RankingPage />} />
               <Route path="/map/signin" render={() => <SignInPage />} />
-              <Route path="/map/signup" render={() => <SignUpPage />} />
+              <ProtectRoute path="/map/signup" component={SignUpPage} />
               <PrivateRoute
                 path="/profile/update-address"
                 component={ProfileAddressPage}

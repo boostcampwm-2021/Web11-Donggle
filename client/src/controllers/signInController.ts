@@ -1,9 +1,10 @@
 import qs from 'qs';
 import { IAPIResult } from '@myTypes/Common';
-import { IUserInfo } from '@myTypes/User';
+import { IUser } from '@myTypes/User';
+import { getOptions } from '@utils/common';
 
 const getToken = async (): Promise<
-  [number, IAPIResult<IUserInfo | Record<string, never>>]
+  [number, IAPIResult<IUser | Record<string, never>>]
 > => {
   const { code } = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -16,15 +17,9 @@ const getToken = async (): Promise<
   try {
     const userInfoResponse = await fetch(
       `${process.env.REACT_APP_API_URL as string}/api/auth/signin`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      },
+      getOptions('POST', { code }, 'same-origin'),
     );
-    const userInfo: IAPIResult<IUserInfo | Record<string, never>> =
+    const userInfo: IAPIResult<IUser | Record<string, never>> =
       await userInfoResponse.json();
 
     return [userInfoResponse.status, userInfo];
@@ -35,37 +30,37 @@ const getToken = async (): Promise<
 
 const isMember = (
   status: number,
-  userInfo: IAPIResult<IUserInfo | Record<string, never>>,
+  userInfo: IAPIResult<IUser | Record<string, never>>,
   routeHistory,
   auth,
   setAuth,
 ): void => {
-  const location = { pathname: '/', search: '', hash: '', state: undefined };
-
   if (status != 200) {
     alert(userInfo.message);
     routeHistory('/map/signin');
     return;
   }
 
-  if (status == 200 && !userInfo.result.jwtToken) {
+  if (status == 200 && !userInfo.result.address) {
     routeHistory('/map/signup', {
-      oauth_email: userInfo.result.oauthEmail,
+      oauthEmail: userInfo.result.oauthEmail,
       image: userInfo.result.image,
+      isRoute: true,
     });
     return;
   }
-  if (status == 200 && userInfo.result.jwtToken) {
+  if (status == 200 && userInfo.result.address) {
     /*
     2021-11-16
     문혜현
-    sessionstorage에 jwt토큰 값을 저장 && recoil update && 메인페이지로 routing
+    recoil update && 메인페이지로 routing
     */
-    sessionStorage.setItem('jwt', userInfo.result.jwtToken);
-    sessionStorage.setItem('refreshToken', userInfo.result.refreshToken);
+    const now = new Date();
+    const time = now.getTime();
+    sessionStorage.setItem('timer', time.toString());
     setAuth({
       isLoggedin: true,
-      oauth_email: userInfo.result.oauthEmail,
+      oauthEmail: userInfo.result.oauthEmail,
       address: userInfo.result.address,
       image: userInfo.result.image,
     });

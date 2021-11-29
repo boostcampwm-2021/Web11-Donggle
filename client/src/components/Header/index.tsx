@@ -21,6 +21,7 @@ import {
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
+import { getOptions } from '@utils/common';
 import { useRecoilState } from 'recoil';
 
 const Header: React.FC = () => {
@@ -31,11 +32,14 @@ const Header: React.FC = () => {
   const [auth, setAuth] = useRecoilState(authState);
 
   const onLogoutClick = useCallback(() => {
-    sessionStorage.removeItem('jwt');
-    sessionStorage.removeItem('refreshToken');
+    fetch(
+      `${process.env.REACT_APP_API_URL as string}/api/auth/logout`,
+      getOptions('GET', undefined, 'same-origin'),
+    );
+    sessionStorage.removeItem('timer');
     setAuth({
-      ...auth,
-      oauth_email: '',
+      isLoggedin: false,
+      oauthEmail: '',
       address: '',
       image: '',
     });
@@ -89,7 +93,7 @@ const Header: React.FC = () => {
             >
               내 동네 후기 쓰기
             </ReviewButton>
-            {sessionStorage.getItem('jwt') ? (
+            {sessionStorage.getItem('timer') ? (
               <>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={() => routeHistory('profile')}>

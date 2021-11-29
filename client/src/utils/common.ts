@@ -73,6 +73,22 @@ const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
   return json.result;
 };
 
+const getOptions = <T>(
+  fetchMethod: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'UPDATE',
+  data: T,
+  credential: 'omit' | 'same-origin' | 'include' = 'omit',
+): RequestInit => {
+  return {
+    method: fetchMethod,
+    mode: 'cors',
+    credentials: credential,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+};
+
 export {
   calcTotal,
   calcDateDiff,
@@ -80,4 +96,5 @@ export {
   showSnackbar,
   getPrevPath,
   fetcher,
+  getOptions,
 };

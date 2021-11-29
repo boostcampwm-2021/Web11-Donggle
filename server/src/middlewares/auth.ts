@@ -2,27 +2,30 @@ import { Response, NextFunction } from 'express';
 import logger from '@loaders/loggerLoader';
 import jwt from '@services/jwtService';
 import { makeApiResponse } from '@utils/index';
-import { AuthMiddleRequest } from '@myTypes/User';
+import { AuthMiddleRequest, Token } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
 import { AuthError } from '@utils/authErrorEnum';
 import { authErrCheck } from '@utils/authError';
+import { removeCookie } from '@utils/index';
 
 const checkToken = (
   req: AuthMiddleRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  const token: string = req.headers.token as string;
+  const token = (req.cookies as Token).token;
 
   if (!token) {
     logger.error('토큰이 없습니다.');
-    return res.status(500).json(makeApiResponse({}, '토큰이 없습니다.'));
+    return removeCookie(res)
+      .status(500)
+      .json(makeApiResponse({}, '토큰이 없습니다.'));
   }
 
   const user = jwt.verify(token);
 
   if (user == AuthError.TOKEN_EXPIRED) {
-    logger.error('유효기간이 만료되었습니다.');
+    logger.error('Access Token의 유효기간이 만료되었습니다.');
     return next();
   }
 
