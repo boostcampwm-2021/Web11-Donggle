@@ -3,7 +3,7 @@ import { makeApiResponse } from '@utils/index';
 import logger from '@loaders/loggerLoader';
 import { AdminRequest } from '@myTypes/Admin';
 import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
-import config from '@config/index';
+import config from 'configs/index';
 import express, {
   Request,
   Response,

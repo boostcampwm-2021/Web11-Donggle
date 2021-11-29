@@ -1,6 +1,6 @@
 import logger from '@loaders/loggerLoader';
 import { updateMapService } from '@services/index';
-import config from '@config/index';
+import config from 'configs/index';
 import { AdminRequest } from '@myTypes/Admin';
 import { makeApiResponse } from '@utils/index';
 import createError from '@utils/error';
