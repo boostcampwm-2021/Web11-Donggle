@@ -1,6 +1,6 @@
 import { logger } from './index';
 
-import config from '@config/index';
+import config from 'configs/index';
 import mongoose from 'mongoose';
 
 const dbLoader = async () => {

@@ -1,6 +1,6 @@
 import { User, UserModel } from '@models/User';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
-import config from '@config/index';
+import config from 'configs/index';
 import axios, { AxiosResponse } from 'axios';
 
 const getAccessToken = async (code: string): Promise<string> => {
