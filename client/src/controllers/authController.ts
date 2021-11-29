@@ -1,6 +1,6 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IToken } from '@myTypes/User';
-
+import { getOptions } from '@utils/common';
 /*
 2021-11-24
 문혜현
@@ -10,19 +10,9 @@ import { IToken } from '@myTypes/User';
 token이 잘못되었거나 access와 refresh token이 만료된 경우로 모든 경우에 대해서 sessionStorage를 비우고 로그인 페이지로 이동시킴
 */
 const newIssuedToken = async () => {
-  const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
-  requestHeaders.set(
-    'refreshToken',
-    sessionStorage.getItem('refreshToken') as string,
-  );
-
   const newTokenRes = await fetch(
     `${process.env.REACT_APP_API_URL as string}/api/auth/refresh`,
-    {
-      method: 'GET',
-      headers: requestHeaders,
-    },
+    getOptions('GET', undefined, 'same-origin'),
   );
 
   const newToken: IAPIResult<IToken | Record<string, never>> =
@@ -38,7 +28,9 @@ const newIssuedToken = async () => {
     sessionStorage.clear();
     return false;
   } else {
-    sessionStorage.setItem('jwt', newToken.result.jwtToken);
+    const now = new Date();
+    const time = now.getTime();
+    sessionStorage.setItem('timer', time.toString());
     return true;
   }
 };

@@ -1,6 +1,7 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IReviewContent, IReviewSubmit } from '@myTypes/Review';
 import { confirmAlert } from 'react-confirm-alert';
+import { getOptions } from '@utils/common';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '@components/ReviewModal/alertStyle.css';
@@ -15,15 +16,10 @@ const submitReview = (
       {
         label: '제출',
         onClick: () => {
-          const requestHeaders: HeadersInit = new Headers();
-          requestHeaders.set('Content-Type', 'application/json');
-          requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
-
-          fetch(`${process.env.REACT_APP_API_URL}/api/review`, {
-            method: 'POST',
-            headers: requestHeaders,
-            body: JSON.stringify(data),
-          }).then((res) => res.json());
+          fetch(
+            `${process.env.REACT_APP_API_URL}/api/review`,
+            getOptions('POST', data, 'same-origin'),
+          ).then((res) => res.json());
           routeHistory('/map');
         },
       },
@@ -47,10 +43,6 @@ const fetchContentData = async (
 ): Promise<IAPIResult<IReviewContent[] | []>> => {
   let fetchUrl = `${process.env.REACT_APP_API_URL}/api/review`;
 
-  const requestHeaders: HeadersInit = new Headers();
-  requestHeaders.set('Content-Type', 'application/json');
-  requestHeaders.set('token', sessionStorage.getItem('jwt') as string);
-
   switch (menu) {
     case 'myreview':
       fetchUrl += `/user?pageNum=${pageNum}&itemNum=${itemNum}`;
@@ -60,10 +52,7 @@ const fetchContentData = async (
       break;
   }
 
-  return await fetch(`${fetchUrl}`, {
-    method: 'GET',
-    headers: requestHeaders,
-  })
+  return await fetch(`${fetchUrl}`, getOptions('GET', undefined, 'same-origin'))
     .then(async (response) => {
       if (response.status === 200) {
         return await response.json();

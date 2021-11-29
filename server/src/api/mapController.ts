@@ -4,6 +4,7 @@ import logger from '@loaders/loggerLoader';
 import express, { Request, Response, RequestHandler } from 'express';
 
 const router: express.Router = express.Router();
+const POLYGON_MAX_AGE = 60 * 60 * 1;
 
 router.get('/polygon', (async (req: Request, res: Response) => {
   const address = req.query.address as string;
@@ -16,6 +17,7 @@ router.get('/polygon', (async (req: Request, res: Response) => {
       address,
       scope as 'big' | 'medium' | 'small',
     );
+    res.setHeader('Cache-Control', `max-age=${POLYGON_MAX_AGE}`);
     res.status(200).json(makeApiResponse(paths, ''));
   } catch (error) {
     const err = error as Error;

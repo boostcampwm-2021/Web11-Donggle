@@ -6,7 +6,7 @@ const uploadImage = async (e, auth, setAuth) => {
   const image = e.target.files[0];
   const formData = new FormData();
   formData.append('file', image);
-  formData.append('oauth_email', auth.oauth_email);
+  formData.append('oauth_email', auth.oauthEmail);
   formData.append('image', auth.image);
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile-image`,
@@ -29,7 +29,7 @@ const uploadImage = async (e, auth, setAuth) => {
 const deleteImage = async (auth, setAuth) => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile-image?oauth_email=${
-      auth.oauth_email
+      auth.oauthEmail
     }&image=${encodeURIComponent(auth.image)}`,
     {
       method: 'DELETE',
@@ -53,7 +53,7 @@ const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
       method: 'PATCH',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
-        oauth_email: auth.oauth_email,
+        oauth_email: auth.oauthEmail,
         address: mapInfo.address,
       }),
     },
