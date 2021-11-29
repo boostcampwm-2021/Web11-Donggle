@@ -3,7 +3,7 @@ import { IReviewContent, IReviewSubmit } from '@myTypes/Review';
 import { confirmAlert } from 'react-confirm-alert';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import '@components/ReviewModal/alertStyle.css';
+import '@modals/ReviewSubmitModal/alertStyle.css';
 
 const submitReview = (
   data: IReviewSubmit,

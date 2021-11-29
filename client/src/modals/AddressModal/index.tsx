@@ -5,7 +5,7 @@ import {
   ButtonWrapper,
   SubmitButton,
   ModalSizer,
-} from '@components/AddressModal/index.style';
+} from './index.style';
 import { IMapInfo } from '@myTypes/Map';
 
 import React, { useState } from 'react';

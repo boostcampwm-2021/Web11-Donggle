@@ -1,7 +1,7 @@
 import Modal from '@components/Common/Modal/index';
-import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
-import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
-import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
+// import { ReactComponent as GoogleIcon } from '@assets/icons/google.svg';
+// import { ReactComponent as NaverIcon } from '@assets/icons/naver.svg';
+// import { ReactComponent as FacebookIcon } from '@assets/icons/facebook.svg';
 import { ReactComponent as GithubIcon } from '@assets/icons/github.svg';
 
 import {

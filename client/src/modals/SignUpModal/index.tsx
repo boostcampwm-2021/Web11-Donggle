@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { authState } from '@stores/atoms';
 import useHistoryRouter from '@hooks/useHistoryRouter';
-import AdressModal from '@components/AddressModal/index';
+import AddressModal from '@modals/AddressModal/index';
 import { signUpAdress, isSignUp } from '@controllers/signUpController';
 import { IAuthInfo } from '@myTypes/User';
 import { IMapInfo } from '@myTypes/Map';
@@ -27,11 +27,11 @@ const SignUpModal: React.FC = () => {
   );
 
   return (
-    <AdressModal
+    <AddressModal
       title="회원가입을 위해서 우리 동네 정보를 입력해주세요!"
       onSubmitHandler={onSubmitHandler}
       onCancelHandler={onCancelHandler}
-    ></AdressModal>
+    ></AddressModal>
   );
 };
 

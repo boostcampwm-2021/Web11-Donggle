@@ -1,4 +1,4 @@
-import AddressModal from '@components/AddressModal/index';
+import AddressModal from '@modals/AddressModal/index';
 import { updateAddress } from '@controllers/profileController';
 import { authState } from '@stores/atoms';
 import { useRecoilState } from 'recoil';
@@ -8,7 +8,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { getPrevPath } from '@utils/common';
 
-const ProfileAddressPage: React.FC = () => {
+const ProfileAddressModal: React.FC = () => {
   const routeHistory = useHistoryRouter();
   const location = useLocation();
 
@@ -28,4 +28,4 @@ const ProfileAddressPage: React.FC = () => {
   );
 };
 
-export default ProfileAddressPage;
+export default ProfileAddressModal;

@@ -5,6 +5,7 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@controllers/*": ["controllers/*"],
+      "@modals/*": ["modals/*"],
       "@pages/*": ["pages/*"],
       "@stores/*": ["stores/*"],
       "@styledComponents/*": ["styledComponents/*"],

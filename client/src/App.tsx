@@ -14,12 +14,12 @@ import { LoadingPage } from '@pages/index';
 
 const MainPage = lazy(() => import('@pages/MainPage'));
 const LoadPage = lazy(() => import('@pages/LoadPage'));
-const RankingPage = lazy(() => import('@pages/RankingPage'));
-const SignInPage = lazy(() => import('@pages/SignInPage'));
-const SignUpPage = lazy(() => import('@pages/SignUpPage'));
+const RankingModal = lazy(() => import('@modals/RankingModal'));
+const SignInModal = lazy(() => import('@modals/SignInModal'));
+const SignUpModal = lazy(() => import('@modals/SignUpModal'));
 const ProfilePage = lazy(() => import('@pages/ProfilePage'));
-const ProfileAddressPage = lazy(() => import('@pages/ProfileAddressPage'));
-const ReviewSubmitPage = lazy(() => import('@pages/ReviewSubmitPage'));
+const ProfileAddressModal = lazy(() => import('@modals/ProfileAddressModal'));
+const ReviewSubmitModal = lazy(() => import('@modals/ReviewSubmitModal'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 const App: React.FC = () => {
@@ -53,15 +53,15 @@ const App: React.FC = () => {
             </Switch>
             <PrivateRoute
               path="/:back/write-review"
-              component={ReviewSubmitPage}
+              component={ReviewSubmitModal}
               needSignIn={true}
             />
-            <Route path="/:back/ranking" render={() => <RankingPage />} />
-            <Route path="/:back/signin" render={() => <SignInPage />} />
-            <Route path="/:back/signup" render={() => <SignUpPage />} />
+            <Route path="/:back/ranking" render={() => <RankingModal />} />
+            <Route path="/:back/signin" render={() => <SignInModal />} />
+            <Route path="/:back/signup" render={() => <SignUpModal />} />
             <PrivateRoute
               path="/:back/update-address"
-              component={ProfileAddressPage}
+              component={ProfileAddressModal}
               needSignIn={true}
             />
           </Suspense>
