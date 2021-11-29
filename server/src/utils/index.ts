@@ -19,7 +19,7 @@ const isRangeValid = (
 
 const getCookieOption = (
   maxAge: number,
-  sameSite: 'lax' | 'none' | 'strict' = 'none',
+  sameSite: 'lax' | 'none' | 'strict' = 'lax',
 ): CookieOptions => {
   return {
     httpOnly: true,
@@ -30,8 +30,8 @@ const getCookieOption = (
 };
 
 const removeCookie = (res: Response): Response => {
-  res.cookie('token', '', getCookieOption(0, 'none'));
-  res.cookie('refreshToken', '', getCookieOption(0, 'none'));
+  res.cookie('token', '', getCookieOption(0, 'lax'));
+  res.cookie('refreshToken', '', getCookieOption(0, 'lax'));
   return res;
 };
 

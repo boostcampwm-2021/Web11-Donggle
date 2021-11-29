@@ -22,7 +22,7 @@ const signUpAdress = async (
         center: mapInfo.center,
         image: location.state.image,
       },
-      'include',
+      'same-origin',
     ),
   );
 
