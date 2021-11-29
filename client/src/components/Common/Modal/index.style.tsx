@@ -17,13 +17,11 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 500px;
-  height: auto;
-  max-height: 90%;
+  height: fit-content;
   top: 50%;
   left: 50%;
-  overflow: visible;
   transform: translate(-50%, -50%);
   ${(props) => props.theme.common.flexColumn};
   justify-content: space-between;

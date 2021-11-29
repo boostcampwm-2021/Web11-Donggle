@@ -67,6 +67,16 @@ const DropdownWrapper = React.memo(styled.div<{ top: number }>`
     background: #c5c5c5;
     border-radius: 999px;
   }
+  > *:not(:last-child) {
+    ::after {
+      margin-top: 20px;
+      display: block;
+      top: 50px;
+      content: '';
+      width: 280px;
+      border-bottom: solid 1px #c5c5c5;
+    }
+  }
 `);
 
 const DropdownItem = styled.div`
@@ -79,14 +89,6 @@ const DropdownItem = styled.div`
   cursor: pointer;
   :hover {
     background: #c5c5c5;
-  }
-  ::after {
-    margin-top: 20px;
-    display: block;
-    top: 50px;
-    content: '';
-    width: 280px;
-    border-bottom: solid 1px #c5c5c5;
   }
 `;
 

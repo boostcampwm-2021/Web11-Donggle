@@ -34,8 +34,8 @@ const Header: React.FC = () => {
   }, [routeHistory]);
 
   const onRankClick = useCallback(() => {
-    routeHistory('/map/ranking');
-  }, [routeHistory]);
+    routeHistory(`${pathname}/ranking`);
+  }, [routeHistory, pathname]);
 
   const onLogoutClick = useCallback(() => {
     fetch(
@@ -52,16 +52,16 @@ const Header: React.FC = () => {
   }, [setAuth]);
 
   const onWriteReviewClick = useCallback(() => {
-    routeHistory('/map/write-review');
-  }, [routeHistory]);
+    routeHistory(`${pathname}/write-review`);
+  }, [routeHistory, pathname]);
 
   const onProfileClick = useCallback(() => {
     routeHistory('/profile');
   }, [routeHistory]);
 
   const onSignInClick = useCallback(() => {
-    routeHistory('/map/signin');
-  }, [routeHistory]);
+    routeHistory(`${pathname}/signin`);
+  }, [routeHistory, pathname]);
 
   return (
     <>

@@ -7,13 +7,15 @@ import Sidebar from '@components/Sidebar';
 import { IMapInfo } from '@myTypes/Map';
 import { IReviewContent } from '@myTypes/Review';
 
-const MainDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
+const MainPageDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FlexContainer = styled.div`
-  position: relative;
   display: flex;
   width: 100%;
   min-width: 1000px;
@@ -64,7 +66,7 @@ const MainPage: React.FC = () => {
   );
 
   return (
-    <MainDiv>
+    <MainPageDiv>
       <FlexContainer>
         <MapComponent
           openSidebar={openSidebar}
@@ -84,7 +86,7 @@ const MainPage: React.FC = () => {
           ></Sidebar>
         )}
       </FlexContainer>
-    </MainDiv>
+    </MainPageDiv>
   );
 };
 

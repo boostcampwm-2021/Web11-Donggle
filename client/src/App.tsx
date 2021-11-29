@@ -1,7 +1,6 @@
 import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
-import Header from '@components/Header/index';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
 import ProtectRoute from '@routes/ProtectRoute';
@@ -9,28 +8,21 @@ import { getOptions } from '@utils/common';
 
 import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
 import LoadAnimation from '@components/Loading';
+import Header from '@components/Header';
 import { LoadingPage } from '@pages/index';
 
 const MainPage = lazy(() => import('@pages/MainPage'));
 const LoadPage = lazy(() => import('@pages/LoadPage'));
-const RankingPage = lazy(() => import('@pages/RankingPage'));
-const SignInPage = lazy(() => import('@pages/SignInPage'));
-const SignUpPage = lazy(() => import('@pages/SignUpPage'));
+const RankingModal = lazy(() => import('@modals/RankingModal'));
+const SignInModal = lazy(() => import('@modals/SignInModal'));
+const SignUpModal = lazy(() => import('@modals/SignUpModal'));
 const ProfilePage = lazy(() => import('@pages/ProfilePage'));
-const ProfileAddressPage = lazy(() => import('@pages/ProfileAddressPage'));
-const ReviewSubmitPage = lazy(() => import('@pages/ReviewSubmitPage'));
+const ProfileAddressModal = lazy(() => import('@modals/ProfileAddressModal'));
+const ReviewSubmitModal = lazy(() => import('@modals/ReviewSubmitModal'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -51,45 +43,43 @@ const App: React.FC = () => {
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
-          <ContentWrapper>
-            <Suspense fallback={<LoadAnimation />}>
-              <Snackbar />
-              <Header />
-              <Switch>
-                <Route
-                  exact
-                  path="/"
-                  component={() => <Redirect to={{ pathname: '/map' }} />}
-                />
-                <PrivateRoute
-                  path="/map"
-                  component={MainPage}
-                  needSignIn={false}
-                />
-                <Route path="/github/callback" render={() => <LoadingPage />} />
-                <ProtectRoute path="/loading" component={LoadPage} />
-                <PrivateRoute
-                  path="/profile"
-                  component={ProfilePage}
-                  needSignIn={true}
-                />
-                <Route render={() => <NotFoundPage />} />
-              </Switch>
+          <Suspense fallback={<LoadAnimation />}>
+            <Snackbar />
+            <Header />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={() => <Redirect to={{ pathname: '/map' }} />}
+              />
               <PrivateRoute
-                path="/map/write-review"
-                component={ReviewSubmitPage}
+                path="/map"
+                component={MainPage}
+                needSignIn={false}
+              />
+              <Route path="/github/callback" render={() => <LoadingPage />} />
+              <ProtectRoute path="/loading" component={LoadPage} />
+              <PrivateRoute
+                path="/profile"
+                component={ProfilePage}
                 needSignIn={true}
               />
-              <Route path="/map/ranking" render={() => <RankingPage />} />
-              <Route path="/map/signin" render={() => <SignInPage />} />
-              <ProtectRoute path="/map/signup" component={SignUpPage} />
-              <PrivateRoute
-                path="/profile/update-address"
-                component={ProfileAddressPage}
-                needSignIn={true}
-              />
-            </Suspense>
-          </ContentWrapper>
+              <Route render={() => <NotFoundPage />} />
+            </Switch>
+            <PrivateRoute
+              path="/:back/write-review"
+              component={ReviewSubmitModal}
+              needSignIn={true}
+            />
+            <Route path="/:back/ranking" render={() => <RankingModal />} />
+            <Route path="/:back/signin" render={() => <SignInModal />} />
+            <ProtectRoute path="/:back/signup" compoent={SignUpModal} />
+            <PrivateRoute
+              path="/:back/update-address"
+              component={ProfileAddressModal}
+              needSignIn={true}
+            />
+          </Suspense>
         </GlobalStore>
       </ThemeProvider>
     </>

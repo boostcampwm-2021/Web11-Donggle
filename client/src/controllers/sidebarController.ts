@@ -4,7 +4,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { getOptions } from '@utils/common';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import '@components/ReviewModal/alertStyle.css';
+import '@modals/ReviewSubmitModal/alertStyle.css';
 
 const submitReview = (
   data: IReviewSubmit,
