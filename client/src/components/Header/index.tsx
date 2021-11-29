@@ -18,33 +18,50 @@ import {
   ProfileImage,
 } from './index.style';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
+import { getOptions } from '@utils/common';
 import { useRecoilState } from 'recoil';
-import { getPrevPath } from '@utils/common';
 
 const Header: React.FC = () => {
   const routeHistory = useHistoryRouter();
-  const location = useLocation();
-
-  const [clickedLinkBtnId, setClickedLinkBtnId] = useState('/');
+  const { pathname } = useLocation();
   const [auth, setAuth] = useRecoilState(authState);
 
+  const onMapClick = useCallback(() => {
+    routeHistory('/map');
+  }, [routeHistory]);
+
+  const onRankClick = useCallback(() => {
+    routeHistory(`${pathname}/ranking`);
+  }, [routeHistory, pathname]);
+
   const onLogoutClick = useCallback(() => {
-    sessionStorage.removeItem('jwt');
-    sessionStorage.removeItem('refreshToken');
+    fetch(
+      `${process.env.REACT_APP_API_URL as string}/api/auth/logout`,
+      getOptions('GET', undefined, 'same-origin'),
+    );
+    sessionStorage.removeItem('timer');
     setAuth({
-      ...auth,
-      oauth_email: '',
+      isLoggedin: false,
+      oauthEmail: '',
       address: '',
       image: '',
     });
-  }, []);
+  }, [setAuth]);
 
-  useEffect(() => {
-    setClickedLinkBtnId(location.pathname);
-  }, [clickedLinkBtnId, location]);
+  const onWriteReviewClick = useCallback(() => {
+    routeHistory(`${pathname}/write-review`);
+  }, [routeHistory, pathname]);
+
+  const onProfileClick = useCallback(() => {
+    routeHistory('/profile');
+  }, [routeHistory]);
+
+  const onSignInClick = useCallback(() => {
+    routeHistory(`${pathname}/signin`);
+  }, [routeHistory, pathname]);
 
   return (
     <>
@@ -53,8 +70,8 @@ const Header: React.FC = () => {
           <LogoMenuContainer>
             <LogoWrapper>
               <LinkBtn
-                onClick={() => routeHistory('/map')}
-                className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
+                onClick={onMapClick}
+                className={`${pathname === '/map' && 'link-selected'}`}
               >
                 <img src={logo} alt="logo" width="70px" />
               </LinkBtn>
@@ -63,17 +80,17 @@ const Header: React.FC = () => {
               <MenuList>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory('/map')}
-                    className={`${clickedLinkBtnId === '/' && 'link-selected'}`}
+                    onClick={onMapClick}
+                    className={`${pathname === '/map' && 'link-selected'}`}
                   >
                     동네 지도
                   </LinkBtn>
                 </Menu>
                 <Menu>
                   <LinkBtn
-                    onClick={() => routeHistory(`${location.pathname}/ranking`)}
+                    onClick={onRankClick}
                     className={`${
-                      clickedLinkBtnId === '/ranking' && 'link-selected'
+                      pathname === '/map/ranking' && 'link-selected'
                     }`}
                   >
                     동네 랭킹
@@ -83,27 +100,19 @@ const Header: React.FC = () => {
             </MenuWrapper>
           </LogoMenuContainer>
           <ProfileWrapper>
-            <ReviewButton
-              onClick={() => {
-                routeHistory(`${location.pathname}/write-review`);
-              }}
-            >
+            <ReviewButton onClick={onWriteReviewClick}>
               내 동네 후기 쓰기
             </ReviewButton>
-            {sessionStorage.getItem('jwt') ? (
+            {sessionStorage.getItem('timer') ? (
               <>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
-                <UserProfile onClick={() => routeHistory('profile')}>
+                <UserProfile onClick={onProfileClick}>
                   <ProfileImage src={auth.image} alt="프로필사진" />
                 </UserProfile>
               </>
             ) : (
               <>
-                <SignInBtn
-                  onClick={() => routeHistory(`${location.pathname}/signin`)}
-                >
-                  로그인
-                </SignInBtn>
+                <SignInBtn onClick={onSignInClick}>로그인</SignInBtn>
               </>
             )}
           </ProfileWrapper>
@@ -114,4 +123,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

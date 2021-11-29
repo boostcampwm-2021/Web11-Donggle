@@ -1,0 +1,9 @@
+FROM node:latest
+
+WORKDIR /donggle-client-development
+
+RUN yarn
+
+ENV NODE_OPTIONS --openssl-legacy-provider
+
+CMD ["yarn", "start"]

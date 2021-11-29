@@ -8,8 +8,7 @@ interface ICacheItem {
 }
 
 const isPolygonKey = (key: string) => {
-  if (key.includes('$req') || key.includes('$err')) return false;
-  return key.includes('polygon');
+  return key.startsWith(`${process.env.REACT_APP_API_URL}/api/map/polygon`);
 };
 
 const cacheProvider = (

@@ -1,44 +1,53 @@
 import search from '@assets/icons/search.svg';
 
+import React from 'react';
+import isEqual from 'react-fast-compare';
 import styled from 'styled-components';
 
-const SearchbarWrapper = styled.div`
-  position: relative;
-  width: 400px;
-  height: 60px;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  border: solid 2px #33ab74;
-  border-radius: 20px;
-  z-index: 1000;
-`;
+const SearchbarWrapper = React.memo(
+  styled.div`
+    position: relative;
+    width: 400px;
+    height: 60px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: solid 2px #33ab74;
+    border-radius: 20px;
+    z-index: 1000;
+  `,
+  isEqual,
+);
 
-const SearchbarInput = styled.input`
+const SearchbarInput = React.memo(styled.input`
   width: 300px;
   height: 50px;
   outline: none;
   border: none;
-`;
+`);
 
-const SearchbarButton = styled.button`
-  width: 60px;
-  height: 60px;
-  border-radius: 20px;
-  border: none;
-  background-color: #33ab74;
-`;
+const SearchbarButton = React.memo(
+  styled.button`
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    border: none;
+    background-color: #33ab74;
+  `,
+  isEqual,
+);
 
-const SearchImg = styled.img`
+const LensImg = styled.img`
   width: 80%;
   height: 80%;
 `;
-SearchImg.defaultProps = { src: search };
+LensImg.defaultProps = { src: search };
+const SearchImg = React.memo(LensImg);
 
-const DropdownWrapper = styled.div<{ top: number }>`
+const DropdownWrapper = React.memo(styled.div<{ top: number }>`
   position: absolute;
   left: 20px;
   width: 310px;
@@ -68,7 +77,7 @@ const DropdownWrapper = styled.div<{ top: number }>`
       border-bottom: solid 1px #c5c5c5;
     }
   }
-`;
+`);
 
 const DropdownItem = styled.div`
   position: relative;

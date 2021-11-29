@@ -40,7 +40,7 @@ const DEFAULT_RATE_DATA: IMapInfo = {
 
 const MainPage: React.FC = () => {
   const [sidebar, setSidebar] = useState<boolean>(false);
-  const [sidebarAnimation, setSidebarAnimation] = useState<string>('open');
+  const [sidebarAnimation, setSidebarAnimation] = useState<string>('close');
   const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
   const [sidebarContents, setSidebarContents] = useState<IReviewContent[]>([]);
 
@@ -90,4 +90,4 @@ const MainPage: React.FC = () => {
   );
 };
 
-export default MainPage;
+export default React.memo(MainPage);

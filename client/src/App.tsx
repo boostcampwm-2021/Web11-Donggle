@@ -3,8 +3,10 @@ import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
+import ProtectRoute from '@routes/ProtectRoute';
+import { getOptions } from '@utils/common';
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -23,6 +25,19 @@ const ReviewSubmitModal = lazy(() => import('@modals/ReviewSubmitModal'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const deleteCookie = () => {
+      fetch(
+        `${process.env.REACT_APP_API_URL as string}/api/auth/unload`,
+        getOptions('GET', undefined, 'same-origin'),
+      );
+    };
+    window.addEventListener('unload', deleteCookie);
+    return () => {
+      window.removeEventListener('unload', deleteCookie);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -43,7 +58,7 @@ const App: React.FC = () => {
                 needSignIn={false}
               />
               <Route path="/github/callback" render={() => <LoadingPage />} />
-              <Route path="/loading" render={() => <LoadPage />} />
+              <ProtectRoute path="/loading" component={LoadPage} />
               <PrivateRoute
                 path="/profile"
                 component={ProfilePage}
@@ -58,7 +73,7 @@ const App: React.FC = () => {
             />
             <Route path="/:back/ranking" render={() => <RankingModal />} />
             <Route path="/:back/signin" render={() => <SignInModal />} />
-            <Route path="/:back/signup" render={() => <SignUpModal />} />
+            <ProtectRoute path="/:back/signup" compoent={SignUpModal} />
             <PrivateRoute
               path="/:back/update-address"
               component={ProfileAddressModal}

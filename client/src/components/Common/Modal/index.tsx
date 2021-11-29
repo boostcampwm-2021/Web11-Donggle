@@ -8,7 +8,7 @@ import {
 } from '@components/Common/Modal/index.style';
 import { getPrevPath } from '@utils/common';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, MouseEvent } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 
@@ -18,7 +18,15 @@ const Modal: React.FC = ({ children }) => {
   const routeHistory = useHistoryRouter();
   const location = useLocation();
 
-  const onClick = () => routeHistory(getPrevPath(location.pathname));
+  const onClick = useCallback(
+    () => routeHistory(getPrevPath(location.pathname)),
+    [location.pathname, routeHistory],
+  );
+
+  const preventPropagation = useCallback(
+    (e: MouseEvent) => e.stopPropagation(),
+    [],
+  );
 
   // scroll 작동 금지
   // https://medium.com/@bestseob93/%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%AA%A8%EB%8B%AC-react-modal-%EB%A7%8C%EB%93%A4%EA%B8%B0-bd003458e9d 참고
@@ -33,11 +41,7 @@ const Modal: React.FC = ({ children }) => {
 
   return (
     <ModalOverlay className="modalOverlay" onClick={onClick}>
-      <ModalWrapper
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
+      <ModalWrapper onClick={preventPropagation}>
         <ModalCloseBtnDiv>
           <ModalCloseBtn onClick={onClick}>
             <ModalCloseImage />

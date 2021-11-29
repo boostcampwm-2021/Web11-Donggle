@@ -8,7 +8,7 @@ import {
 } from './index.style';
 import { IMapInfo } from '@myTypes/Map';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 interface AddressModalProps {
   title: string;
@@ -23,27 +23,26 @@ const AddressModal: React.FC<AddressModalProps> = ({
 }) => {
   const [mapInfo, setMapInfo] = useState<IMapInfo>({} as IMapInfo);
 
-  const onClickHandler = (mapInfo: IMapInfo) => {
+  const onSubmitClick = useCallback(async () => {
+    await onSubmitHandler(mapInfo);
+  }, [onSubmitHandler, mapInfo]);
+
+  const onItemClick = useCallback((mapInfo: IMapInfo) => {
     setMapInfo(mapInfo);
-  };
+  }, []);
 
   return (
     <Modal>
       <ModalSizer>
         <TitleWrapper>{title}</TitleWrapper>
         <Searchbar
-          onClickHandler={onClickHandler}
+          onClickHandler={onItemClick}
           valueState={mapInfo.address}
           onlyDong={true}
         />
       </ModalSizer>
       <ButtonWrapper>
-        <SubmitButton
-          cancel={false}
-          onClick={async () => {
-            await onSubmitHandler(mapInfo);
-          }}
-        >
+        <SubmitButton cancel={false} onClick={onSubmitClick}>
           제출
         </SubmitButton>
         <SubmitButton cancel={true} onClick={onCancelHandler}>

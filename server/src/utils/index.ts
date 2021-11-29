@@ -1,3 +1,5 @@
+import { CookieOptions, Response } from 'express';
+
 const makeApiResponse = <T>(result: T, message: string) => {
   return {
     result,
@@ -15,4 +17,22 @@ const isRangeValid = (
   return true;
 };
 
-export { makeApiResponse, isRangeValid };
+const getCookieOption = (
+  maxAge: number,
+  sameSite: 'lax' | 'none' | 'strict' = 'lax',
+): CookieOptions => {
+  return {
+    httpOnly: true,
+    secure: true,
+    sameSite: sameSite,
+    maxAge: maxAge,
+  };
+};
+
+const removeCookie = (res: Response): Response => {
+  res.cookie('token', '', getCookieOption(0, 'lax'));
+  res.cookie('refreshToken', '', getCookieOption(0, 'lax'));
+  return res;
+};
+
+export { makeApiResponse, isRangeValid, getCookieOption, removeCookie };

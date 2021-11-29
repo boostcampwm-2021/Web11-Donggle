@@ -1,29 +1,37 @@
+import React from 'react';
+import isEqual from 'react-fast-compare';
 import styled from 'styled-components';
 
-const ImageUsernameWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-`;
+const ImageUsernameWrapper = React.memo(
+  styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+  `,
+  isEqual,
+);
 
-const ImageWrapper = styled.div`
-  width: 360px;
-  height: 440px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-right: solid 1px ${(props) => props.theme.colors.grey};
-`;
+const ImageWrapper = React.memo(
+  styled.div`
+    width: 360px;
+    height: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: solid 1px ${(props) => props.theme.colors.grey};
+  `,
+  isEqual,
+);
 
-const UserImage = styled.img`
+const UserImage = React.memo(styled.img`
   width: 280px;
   height: 280px;
   border-radius: 999px;
-`;
+`);
 
-const ImageUploadButton = styled.button`
+const ImageUploadButton = React.memo(styled.button`
   width: 200px;
   height: 60px;
   margin-top: 10px;
@@ -35,9 +43,9 @@ const ImageUploadButton = styled.button`
   :hover {
     background: ${(props) => props.theme.colors.green};
   }
-`;
+`);
 
-const ImageRemoveButton = styled.button`
+const ImageRemoveButton = React.memo(styled.button`
   width: 200px;
   height: 60px;
   margin-top: 10px;
@@ -49,24 +57,24 @@ const ImageRemoveButton = styled.button`
   :hover {
     color: ${(props) => props.theme.colors.green};
   }
-`;
+`);
 
-const OauthnameWrapper = styled.div`
+const OauthnameWrapper = React.memo(styled.div`
   margin-left: 20px;
   font-size: 20px;
   color: ${(props) => props.theme.colors.lightgreen};
-`;
+`);
 
-const UsernameWrapper = styled.div`
+const UsernameWrapper = React.memo(styled.div`
   width: 600px;
   height: 460px;
   font-size: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`);
 
-const AddressWrapper = styled.div`
+const AddressWrapper = React.memo(styled.div`
   width: 900px;
   height: 100px;
   display: flex;
@@ -80,7 +88,7 @@ const AddressWrapper = styled.div`
   :hover {
     background: ${(props) => props.theme.colors.grey};
   }
-`;
+`);
 
 export {
   ImageUsernameWrapper,

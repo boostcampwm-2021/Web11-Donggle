@@ -1,4 +1,6 @@
 import xIcon from '@assets/icons/x.svg';
+import React from 'react';
+import isEqual from 'react-fast-compare';
 
 import styled from 'styled-components';
 
@@ -33,23 +35,30 @@ const ModalWrapper = styled.div`
   z-index: 3000;
 `;
 
-const ModalCloseBtnDiv = styled.div`
-  ${(props) => props.theme.common.flexRow};
-  justify-content: flex-end;
-  width: 100%;
-`;
+const ModalCloseBtnDiv = React.memo(
+  styled.div`
+    ${(props) => props.theme.common.flexRow};
+    justify-content: flex-end;
+    width: 100%;
+  `,
+  isEqual,
+);
 
-const ModalCloseImage = styled.img`
+const CrossImage = styled.img`
   width: 100%;
   height: 100%;
 `;
-ModalCloseImage.defaultProps = { src: xIcon };
+CrossImage.defaultProps = { src: xIcon };
+const ModalCloseImage = React.memo(CrossImage);
 
-const ModalCloseBtn = styled.button`
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
+const ModalCloseBtn = React.memo(
+  styled.button`
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  `,
+  isEqual,
+);
 
 const ChildrenWrapper = styled.div`
   position: relative;

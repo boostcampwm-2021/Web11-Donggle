@@ -1,12 +1,4 @@
 interface IUser {
-  oauth_email: string;
-  address: string;
-  image: string;
-}
-
-interface IUserInfo extends IUser {
-  jwtToken: string;
-  refreshToken: string;
   oauthEmail: string;
   address: string;
   image: string;
@@ -25,4 +17,4 @@ interface ISignUp extends IToken {
   address: string;
 }
 
-export { IUser, IUserInfo, IAuthInfo, IToken, ISignUp };
+export { IUser, IAuthInfo, IToken, ISignUp };

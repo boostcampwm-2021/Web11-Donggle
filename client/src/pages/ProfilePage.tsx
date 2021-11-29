@@ -26,4 +26,4 @@ const ProfilePage: React.FC = () => (
   </ProfilePageDiv>
 );
 
-export default ProfilePage;
+export default React.memo(ProfilePage);
