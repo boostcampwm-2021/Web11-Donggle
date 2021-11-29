@@ -28,6 +28,7 @@ services:
       - 3000
     volumes:
       - dist:/client-react/build
+      - ./client/:/donggle-client-development
 
   server-express:
     image: ghcr.io/isanghaessi/web11-donggle_server-express
@@ -40,6 +41,8 @@ services:
       - 5000
     dns:
       - 8.8.8.8
+    volumes:
+      - ./server:/donggle-server-development
 
 volumes:
   dist:

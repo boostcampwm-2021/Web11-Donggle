@@ -1,11 +1,8 @@
 FROM node:latest
 
-WORKDIR /donggle-client
+WORKDIR /donggle-client-development
 
-COPY ./package.json .
 RUN yarn
-
-COPY . .
 
 ENV NODE_OPTIONS --openssl-legacy-provider
 
