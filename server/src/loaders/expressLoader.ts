@@ -47,8 +47,15 @@ export default ({ app }: { app: Application }) => {
   });
 
   // error 처리
-  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    logger.error(err.stack);
-    res.status(500).json(makeApiResponse({}, err.message));
-  });
+  app.use(
+    (
+      err: Error & { status: number },
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ) => {
+      logger.error(err.stack);
+      res.status(err.status).json(makeApiResponse({}, err.message));
+    },
+  );
 };
