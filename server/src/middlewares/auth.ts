@@ -2,11 +2,11 @@ import { Response, NextFunction } from 'express';
 import logger from '@loaders/loggerLoader';
 import jwt from '@services/jwtService';
 import { makeApiResponse } from '@utils/index';
+import { AuthError } from '@utils/authErrorEnum';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
-import { AuthError } from '@utils/authErrorEnum';
-import { authErrCheck } from '@utils/authError';
 import { removeCookie } from '@utils/index';
+import createError from '@utils/error';
 
 const checkToken = (
   req: AuthMiddleRequest,
@@ -16,10 +16,9 @@ const checkToken = (
   const token = (req.cookies as Token).token;
 
   if (!token) {
-    logger.error('토큰이 없습니다.');
-    return removeCookie(res)
-      .status(500)
-      .json(makeApiResponse({}, '토큰이 없습니다.'));
+    return next(
+      createError('Unauthorized', new Error('Token이 없습니다').stack),
+    );
   }
 
   const user = jwt.verify(token);
@@ -33,7 +32,12 @@ const checkToken = (
     user === AuthError.TOKEN_INVALID ||
     (user as JwtPayload).oauth_email === undefined
   ) {
-    return authErrCheck(user, res);
+    return next(
+      createError(
+        'Unauthorized',
+        new Error('리프레시토큰이 유효하지 않습니다').stack,
+      ),
+    );
   }
 
   req.id = (user as JwtPayload).oauth_email as string;
