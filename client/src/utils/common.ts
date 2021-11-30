@@ -17,36 +17,22 @@ const calcDateDiff = (targetDate: Date) => {
   const now = new Date();
   const target = new Date(targetDate);
 
-  let diff = Math.floor((now.getTime() - target.getTime()) / 1000 / 60);
-  if (diff < 1) return '방금 전';
-  if (diff < 60) return `${diff}분 전`;
+  let diff = now.getUTCFullYear() - target.getUTCFullYear();
+  if (diff >= 1) return `${diff}년 전`;
 
-  diff = Math.floor(diff / 60);
-  if (diff < 24) return `${diff}시간 전`;
+  diff = now.getUTCMonth() - target.getUTCMonth();
+  if (diff >= 1) return `${diff}개월 전`;
 
-  diff = Math.floor(diff / 24);
-  if (diff < 30) return `${diff}일 전`;
+  diff = now.getUTCDate() - target.getUTCDate();
+  if (diff >= 1) return `${diff}일 전`;
 
-  diff = Math.floor(diff / 30);
-  if (diff < 12) return `${diff}개월 전`;
+  diff = now.getUTCHours() - target.getUTCHours();
+  if (diff >= 1) return `${diff}시간 전`;
 
-  return `${diff / 12}년 전`;
-  // let diff = now.getUTCFullYear() - target.getUTCFullYear();
-  // if (diff >= 1) return `${diff}년 전`;
+  diff = now.getUTCMinutes() - target.getUTCMinutes();
+  if (diff >= 1) return `${diff}분 전`;
 
-  // diff = now.getUTCMonth() - target.getUTCMonth();
-  // if (diff >= 1) return `${diff}개월 전`;
-
-  // diff = now.getUTCDate() - target.getUTCDate();
-  // if (diff >= 1) return `${diff}일 전`;
-
-  // diff = now.getUTCHours() - target.getUTCHours();
-  // if (diff >= 1) return `${diff}시간 전`;
-
-  // diff = now.getUTCMinutes() - target.getUTCMinutes();
-  // if (diff >= 1) return `${diff}분 전`;
-
-  // return `방금 전`;
+  return `방금 전`;
 };
 
 const showSnackbar = (message: string, error = false) => {
