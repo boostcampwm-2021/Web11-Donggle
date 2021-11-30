@@ -22,7 +22,9 @@ router.post(
         return next(
           createCustomError(
             'NotFound',
-            new Error('Map data 업데이트 중 오류가 발생했습니다.'),
+            new Error(
+              'Admin 암호가 잘못되어 Map 정보를 업데이트 하지 못했습니다.',
+            ),
           ),
         );
       }
