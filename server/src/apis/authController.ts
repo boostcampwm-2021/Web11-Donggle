@@ -76,7 +76,7 @@ router.post('/signin', (async (
         image: oauthInfo.image,
       };
 
-      res.json(makeApiResponse(userInfo, '회원이 아닙니다.'));
+      res.status(201).json(makeApiResponse(userInfo, '회원이 아닙니다.'));
     }
   } catch (error) {
     const err = error as Error;
@@ -111,7 +111,7 @@ router.post('/signup', (async (
       getCookieOption(Number(config.jwt_cookie_expire)),
     );
 
-    res.status(200).json(
+    res.status(201).json(
       makeApiResponse(
         {
           address: address,
