@@ -5,7 +5,7 @@ import { authState } from '@stores/atoms';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 import LoadAnimation from '@components/Loading/index';
 import { IAuthInfo } from '@myTypes/User';
-import { refreshTokenUser } from '@controllers/loadController';
+import { checkUserSignIn } from '@controllers/loadController';
 
 const LoadPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
@@ -13,7 +13,7 @@ const LoadPage: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    refreshTokenUser(auth, setAuth, routeHistory, location);
+    checkUserSignIn(setAuth, routeHistory, location);
   }, []);
 
   return <LoadAnimation />;
