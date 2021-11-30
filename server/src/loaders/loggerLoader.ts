@@ -1,4 +1,4 @@
-import config from '@config/index';
+import config from 'configs/index';
 import path from 'path';
 import { format, createLogger, transports } from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';

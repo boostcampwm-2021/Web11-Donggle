@@ -1,4 +1,4 @@
-import config from '@config/index';
+import config from 'configs/index';
 import { expressLoader, logger, dbLoader } from '@loaders/index';
 
 import express from 'express';

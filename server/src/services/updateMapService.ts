@@ -1,5 +1,5 @@
 import logger from '@loaders/loggerLoader';
-import config from '@config/index';
+import config from 'configs/index';
 import { Map, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { CoordType, Point, FeatureType, CollectionType } from '@myTypes/Admin';

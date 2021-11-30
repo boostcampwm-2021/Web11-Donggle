@@ -1,7 +1,7 @@
-import mapController from '@api/mapController';
-import authController from '@api/authController';
-import userController from '@api/userController';
-import reviewController from '@api/reviewController';
+import mapController from 'apis/mapController';
+import authController from 'apis/authController';
+import userController from 'apis/userController';
+import reviewController from 'apis/reviewController';
 
 import express, { Request, Response } from 'express';
 

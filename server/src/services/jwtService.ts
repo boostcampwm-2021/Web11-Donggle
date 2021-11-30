@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { jwtConfig, jwtRefreshConfig } from '@config/secretKey';
+import { jwtConfig, jwtRefreshConfig } from 'configs/secretKey';
 import { AuthError } from '@utils/authErrorEnum';
 
 export default {

@@ -1,4 +1,4 @@
-import config from '@config/index';
+import config from 'configs/index';
 import jwt from 'jsonwebtoken';
 
 interface Config {

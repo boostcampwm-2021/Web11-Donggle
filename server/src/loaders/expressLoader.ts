@@ -1,7 +1,7 @@
-import config from '@config/index';
+import config from 'configs/index';
 import { logger } from '@loaders/index';
-import apiController from '@api/indexController';
-import adminController from '@api/adminController';
+import apiController from 'apis/indexController';
+import adminController from 'apis/adminController';
 
 import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
@@ -10,6 +10,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJson from '@utils/swagger.json';
+import { makeApiResponse } from '@utils/index';
 
 const stream = {
   write: (message) => {
@@ -46,8 +47,15 @@ export default ({ app }: { app: Application }) => {
   });
 
   // error 처리
-  app.use((err, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
-    res.status(500).send('Something broke!');
-  });
+  app.use(
+    (
+      err: Error & { status: number; clientMsg: string },
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ) => {
+      logger.error(err.stack);
+      res.status(err.status).json(makeApiResponse({}, err.clientMsg));
+    },
+  );
 };
