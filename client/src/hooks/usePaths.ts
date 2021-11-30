@@ -1,5 +1,5 @@
 import { IMap, IRange } from '@myTypes/Map';
-import { fetcher } from '@utils/common';
+import { fetcher, showSnackbar } from '@utils/common';
 import useSWRImmutable from 'swr/immutable';
 
 const usePaths = (range: IRange) => {
@@ -7,7 +7,11 @@ const usePaths = (range: IRange) => {
   const query = `?address=${range.address}&scope=${range.scope}`;
 
   const key = path + query;
-  const { data, error } = useSWRImmutable<IMap[]>(key, fetcher);
+  const { data, error } = useSWRImmutable<IMap[], Error>(key, fetcher);
+  if (error) {
+    const message = error.message || '폴리곤 정보를 불러오는 데 실패했습니다.';
+    showSnackbar(message, true);
+  }
 
   return {
     paths: data,

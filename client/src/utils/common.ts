@@ -17,22 +17,36 @@ const calcDateDiff = (targetDate: Date) => {
   const now = new Date();
   const target = new Date(targetDate);
 
-  let diff = now.getUTCFullYear() - target.getUTCFullYear();
-  if (diff >= 1) return `${diff}년 전`;
+  let diff = Math.floor((now.getTime() - target.getTime()) / 1000 / 60);
+  if (diff < 1) return '방금 전';
+  if (diff < 60) return `${diff}분 전`;
 
-  diff = now.getUTCMonth() - target.getUTCMonth();
-  if (diff >= 1) return `${diff}개월 전`;
+  diff = Math.floor(diff / 60);
+  if (diff < 24) return `${diff}시간 전`;
 
-  diff = now.getUTCDate() - target.getUTCDate();
-  if (diff >= 1) return `${diff}일 전`;
+  diff = Math.floor(diff / 24);
+  if (diff < 30) return `${diff}일 전`;
 
-  diff = now.getUTCHours() - target.getUTCHours();
-  if (diff >= 1) return `${diff}시간 전`;
+  diff = Math.floor(diff / 30);
+  if (diff < 12) return `${diff}개월 전`;
 
-  diff = now.getUTCMinutes() - target.getUTCMinutes();
-  if (diff >= 1) return `${diff}분 전`;
+  return `${diff / 12}년 전`;
+  // let diff = now.getUTCFullYear() - target.getUTCFullYear();
+  // if (diff >= 1) return `${diff}년 전`;
 
-  return `방금 전`;
+  // diff = now.getUTCMonth() - target.getUTCMonth();
+  // if (diff >= 1) return `${diff}개월 전`;
+
+  // diff = now.getUTCDate() - target.getUTCDate();
+  // if (diff >= 1) return `${diff}일 전`;
+
+  // diff = now.getUTCHours() - target.getUTCHours();
+  // if (diff >= 1) return `${diff}시간 전`;
+
+  // diff = now.getUTCMinutes() - target.getUTCMinutes();
+  // if (diff >= 1) return `${diff}분 전`;
+
+  // return `방금 전`;
 };
 
 const showSnackbar = (message: string, error = false) => {
@@ -66,13 +80,6 @@ const getPrevPath = (to: string) => {
   return paths.join();
 };
 
-const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
-  const response = await fetch(info, init);
-  if (response.status !== 200) throw Error('요청 실패');
-  const json: IAPIResult<T> = await response.json();
-  return json.result;
-};
-
 const getOptions = <T>(
   fetchMethod: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'UPDATE',
   data: T,
@@ -87,6 +94,26 @@ const getOptions = <T>(
     },
     body: JSON.stringify(data),
   };
+};
+
+const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
+  let response: Response;
+  let json: IAPIResult<T>;
+
+  try {
+    response = await fetch(info, {
+      ...getOptions('GET', undefined),
+      ...init,
+    });
+    json = await response.json();
+  } catch (error) {
+    throw Error();
+  }
+
+  if (response.status / 100 !== 2) {
+    throw Error(json.message);
+  }
+  return json.result;
 };
 
 export {
