@@ -6,6 +6,16 @@ const ratingToPercent = (rate: number) => {
   return rate * 20;
 };
 
+const markerTitleHTML = (region: string, rate: number) => {
+  return `
+    <div class="title">
+      <span>${region}</span>
+      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
+      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
+    </div>
+  `;
+};
+
 const starRateHTML = (rate: number) => {
   return `
     <div class="star-ratings">
@@ -32,13 +42,7 @@ const markerEl = (rateData: IMapInfo) => {
 
   wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
-  wrapper.innerHTML = `
-    <div class="title">
-      <span>${smallestRegion}</span>
-      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
-      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
-    </div>
-  `;
+  wrapper.innerHTML = markerTitleHTML(smallestRegion, rate);
   return wrapper;
 };
 
@@ -53,13 +57,7 @@ const largeMarkerEl = (rateData: IMapInfo) => {
   wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
 
-  let wrapperHTML = `
-   <div class="title">
-      <span>${address}</span>
-      <span class="star-rating-single">${!count ? '' : '★'}</span>
-      <span>${!count ? '' : averageRate.toFixed(1)}</span>
-    </div>
-  `;
+  let wrapperHTML = markerTitleHTML(address, averageRate);
   wrapperHTML += Object.keys(categories)
     .map((category) => {
       const score = categories[category] / count;
