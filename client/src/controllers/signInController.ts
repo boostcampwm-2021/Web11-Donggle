@@ -35,13 +35,13 @@ const isMember = (
   auth,
   setAuth,
 ): void => {
-  if (status != 200) {
+  if (status != 201) {
     alert(userInfo.message);
     routeHistory('/map/signin');
     return;
   }
 
-  if (status == 200 && !userInfo.result.address) {
+  if (status == 201 && !userInfo.result.address) {
     routeHistory('/map/signup', {
       oauthEmail: userInfo.result.oauthEmail,
       image: userInfo.result.image,
@@ -49,7 +49,7 @@ const isMember = (
     });
     return;
   }
-  if (status == 200 && userInfo.result.address) {
+  if (status == 201 && userInfo.result.address) {
     /*
     2021-11-16
     문혜현

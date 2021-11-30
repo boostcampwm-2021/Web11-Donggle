@@ -60,7 +60,7 @@ router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createCustomError('InternalServerError', err));
+    return next(createCustomError('InternalServerError', err, '서버 오류로 후기 정보를 받아오지 못했습니다.'));
   }
 }) as RequestHandler);
 
@@ -88,7 +88,7 @@ router.get('/:id', checkToken, (async (
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createCustomError('InternalServerError', err));
+    return next(createCustomError('InternalServerError', err, '서버 오류로 후기 정보를 받아오지 못했습니다.'));
   }
 }) as RequestHandler);
 
@@ -112,7 +112,7 @@ router.post('/', checkToken, (async (
       .json(makeApiResponse({}, '후기를 정상적으로 저장하였습니다.'));
   } catch (error) {
     const err = error as Error;
-    return next(createCustomError('InternalServerError', err));
+    return next(createCustomError('InternalServerError', err, '오류가 발생하여 후기를 저장하지 못했습니다.'));
   }
 }) as RequestHandler);
 
