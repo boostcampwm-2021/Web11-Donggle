@@ -6,10 +6,10 @@ const ratingToPercent = (rate: number) => {
   return rate * 20;
 };
 
-const markerTitleHTML = (region: string, rate: number): string => {
+const markerTitleHTML = (address: string, rate: number): string => {
   return `
     <div class="title">
-      <span>${region}</span>
+      <span>${address}</span>
       <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
       <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
     </div>
@@ -29,26 +29,12 @@ const starRateHTML = (rate: number): string => {
   `;
 };
 
-const markerEl = (rateData: IMapInfo): HTMLDivElement => {
+const markerEl = (
+  rateData: IMapInfo,
+  type: 'small' | 'large' = 'small',
+): HTMLDivElement => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
-
-  const { address, count, categories } = rateData;
-  const total = calcTotal(categories);
-  const rate = total / count;
-
-  const region = address.split(' ');
-  const smallestRegion = region[region.length - 1];
-
-  wrapper.dataset.address = address;
-  wrapper.dataset.rateData = JSON.stringify(rateData);
-  wrapper.innerHTML = markerTitleHTML(smallestRegion, rate);
-  return wrapper;
-};
-
-const largeMarkerEl = (rateData: IMapInfo): HTMLDivElement => {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'customoverlay customoverlay_large';
 
   const { address, count, categories } = rateData;
   const total = calcTotal(categories);
@@ -57,21 +43,31 @@ const largeMarkerEl = (rateData: IMapInfo): HTMLDivElement => {
   wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
 
-  let wrapperHTML = markerTitleHTML(address, averageRate);
-  wrapperHTML += Object.keys(categories)
-    .map((category) => {
-      const score = categories[category] / count;
-      return `
+  let displayAddress: string;
+  if (type === 'large') {
+    displayAddress = address;
+  } else {
+    const regions = address.split(' ');
+    displayAddress = regions[regions.length - 1];
+  }
+
+  let innerHTML = markerTitleHTML(displayAddress, averageRate);
+  if (type === 'large') {
+    innerHTML += Object.keys(categories)
+      .map((category) => {
+        const score = categories[category] / count;
+        return `
       <div class="content">
         <span>${Category[category]} </span>
         ${starRateHTML(score || 0)}
         <span>${!count ? 'N/A' : score.toFixed(1)}</span>
       </div>
     `;
-    })
-    .join('');
+      })
+      .join('');
+  }
 
-  wrapper.innerHTML = wrapperHTML;
+  wrapper.innerHTML = innerHTML;
   return wrapper;
 };
 
@@ -80,13 +76,14 @@ const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
     const { center } = rateData;
     const marker = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(...center),
+      yAnchor: 1,
     });
 
     rateData.hashtags = Object.fromEntries(
       new Map(Object.entries(rateData.hashtags)).entries(),
     );
     const defaultMarker = markerEl(rateData);
-    const largeMarker = largeMarkerEl(rateData);
+    const largeMarker = markerEl(rateData, 'large');
 
     defaultMarker.addEventListener('mouseenter', () => {
       marker.setContent(largeMarker);
