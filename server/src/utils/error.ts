@@ -1,5 +1,3 @@
-import logger from '@loaders/loggerLoader';
-
 enum ErrorStatus {
   BadRequest = 400,
   Unauthorized = 401,
