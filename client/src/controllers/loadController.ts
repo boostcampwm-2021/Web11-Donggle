@@ -1,6 +1,7 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IUser } from '@myTypes/User';
 import { getOptions } from '@utils/common';
+import { showSnackbar } from '@utils/common';
 
 const checkUserSignIn = async (setAuth, routeHistory, location) => {
   const userInfoRes = await fetch(
@@ -11,7 +12,7 @@ const checkUserSignIn = async (setAuth, routeHistory, location) => {
     await userInfoRes.json();
 
   if (userInfoRes.status !== 200) {
-    alert(userInfo.message);
+    showSnackbar(userInfo.message, true);
     /*
     2021-11-20
     문혜현
