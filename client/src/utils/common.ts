@@ -110,7 +110,7 @@ const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
     throw Error();
   }
 
-  if (response.status / 100 !== 2) {
+  if (Math.floor(response.status / 100) !== 2) {
     throw Error(json.message);
   }
   return json.result;
