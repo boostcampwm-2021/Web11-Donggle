@@ -44,9 +44,6 @@ const isSignUp = (
     alert(userInfo.message);
     routeHistory('/map/signin');
   } else {
-    const now = new Date();
-    const time = now.getTime();
-    sessionStorage.setItem('timer', time.toString());
     setAuth({
       ...auth,
       isLoggedin: true,

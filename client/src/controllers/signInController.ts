@@ -34,16 +34,15 @@ const isMember = (
   status: number,
   userInfo: IAPIResult<IUser | Record<string, never>>,
   routeHistory: UseRouteHistoryType,
-  auth: IAuthInfo,
   setAuth: SetterOrUpdater<IAuthInfo>,
 ): void => {
-  if (status != 201) {
+  if (status !== 201) {
     alert(userInfo.message);
     routeHistory('/map/signin');
     return;
   }
 
-  if (status == 201 && !userInfo.result.address) {
+  if (!userInfo.result.address) {
     routeHistory('/map/signup', {
       oauthEmail: userInfo.result.oauthEmail,
       image: userInfo.result.image,
@@ -51,15 +50,12 @@ const isMember = (
     });
     return;
   }
-  if (status == 201 && userInfo.result.address) {
+  if (userInfo.result.address) {
     /*
     2021-11-16
     문혜현
     recoil update && 메인페이지로 routing
     */
-    const now = new Date();
-    const time = now.getTime();
-    sessionStorage.setItem('timer', time.toString());
     setAuth({
       isLoggedin: true,
       oauthEmail: userInfo.result.oauthEmail,
