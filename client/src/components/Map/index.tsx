@@ -78,10 +78,10 @@ const MapComponent: React.FC<IProps> = ({
       let newLevel = 9;
       switch (to.codeLength) {
         case 2:
-          newLevel = 11;
+          newLevel = 9;
           break;
         case 5:
-          newLevel = 8;
+          newLevel = 6;
           break;
         case 7:
           newLevel = 6;
