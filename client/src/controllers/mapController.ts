@@ -5,7 +5,7 @@ function getCurrentLocation(callback: (coord: CoordType) => void) {
   let coord: CoordType = [37.5642135, 127.0016985];
 
   const successCallback: PositionCallback = (position) => {
-    const { latitude, longitude } = position.coords; // (처음 접속)현재 사용자위치
+    const { latitude, longitude } = position.coords;
     coord = [latitude, longitude];
     callback(coord);
   };
@@ -51,7 +51,7 @@ const createPolygons = (regions: IMap[]) => {
   const colorHash = new ColorHash();
   const keyString = '!@#$';
   let resultString = '';
-  regions.forEach((region, i) => {
+  regions.forEach((region) => {
     const color: string = colorHash.hex(resultString);
     resultString += keyString;
     if (region.type === 'Polygon') {
@@ -95,6 +95,14 @@ const addPolygonEvent = (
   kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
 };
 
+const polygonOptions: kakao.maps.PolygonOptions = {
+  strokeWeight: 2,
+  strokeColor: '#004c80',
+  strokeOpacity: 0.8,
+  fillColor: '#fff',
+  fillOpacity: 0.7,
+};
+
 const makeSinglePolygon = (
   coords: [number, number][],
   address: string,
@@ -105,12 +113,10 @@ const makeSinglePolygon = (
   );
 
   const polygon = new kakao.maps.Polygon({
+    ...polygonOptions,
     path: coordObjects,
-    strokeWeight: 2,
     strokeColor: colorString,
-    strokeOpacity: 0.8,
     fillColor: colorString,
-    fillOpacity: 0.7,
   }) as IPolygon;
 
   addPolygonEvent(
@@ -143,12 +149,10 @@ const makeMultiPolygon = (
   const polygons = coordObjectsArray.map(
     (coordObjects) =>
       new kakao.maps.Polygon({
+        ...polygonOptions,
         path: coordObjects,
-        strokeWeight: 2,
         strokeColor: colorString,
-        strokeOpacity: 0.8,
         fillColor: colorString,
-        fillOpacity: 0.7,
       }) as IPolygon,
   );
 
