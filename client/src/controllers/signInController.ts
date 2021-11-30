@@ -1,7 +1,9 @@
 import qs from 'qs';
 import { IAPIResult } from '@myTypes/Common';
-import { IUser } from '@myTypes/User';
+import { IAuthInfo, IUser } from '@myTypes/User';
 import { getOptions } from '@utils/common';
+import { SetterOrUpdater } from 'recoil';
+import { UseRouteHistoryType } from '@hooks/useHistoryRouter';
 
 const getToken = async (): Promise<
   [number, IAPIResult<IUser | Record<string, never>>]
@@ -31,9 +33,9 @@ const getToken = async (): Promise<
 const isMember = (
   status: number,
   userInfo: IAPIResult<IUser | Record<string, never>>,
-  routeHistory,
-  auth,
-  setAuth,
+  routeHistory: UseRouteHistoryType,
+  auth: IAuthInfo,
+  setAuth: SetterOrUpdater<IAuthInfo>,
 ): void => {
   if (status != 200) {
     alert(userInfo.message);

@@ -2,11 +2,11 @@ import { IAPIResult } from '@myTypes/Common';
 import { IMapInfo } from '@myTypes/Map';
 
 const spreadDropdown = async (
-  keyword,
-  isSpread,
-  setResults,
+  keyword: string,
+  isSpread: boolean,
+  setResults: React.Dispatch<React.SetStateAction<IMapInfo[]>>,
   onlyDong = false,
-) => {
+): Promise<void> => {
   const searchRegions = async (): Promise<IAPIResult<IMapInfo[] | []>> => {
     const onlyDongQuery = onlyDong ? '&onlyDong=true' : '';
     return await fetch(

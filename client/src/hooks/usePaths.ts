@@ -2,7 +2,13 @@ import { IMap, IRange } from '@myTypes/Map';
 import { fetcher } from '@utils/common';
 import useSWRImmutable from 'swr/immutable';
 
-const usePaths = (range: IRange) => {
+export type UsePathsType = {
+  paths: IMap[] | undefined;
+  isLoading: boolean;
+  isError: any;
+};
+
+const usePaths = (range: IRange): UsePathsType => {
   const path = `${process.env.REACT_APP_API_URL}/api/map/polygon`;
   const query = `?address=${range.address}&scope=${range.scope}`;
 

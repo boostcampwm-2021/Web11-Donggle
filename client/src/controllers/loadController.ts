@@ -1,9 +1,17 @@
 import { IUser } from '@myTypes/User';
-import { IAPIResult } from '@myTypes/Common';
+import { IAPIResult, ILocationBase } from '@myTypes/Common';
 import { newIssuedToken } from '@controllers/authController';
 import { getOptions } from '@utils/common';
+import { IAuthInfo } from '@myTypes/User';
+import { SetterOrUpdater } from 'recoil';
+import { UseRouteHistoryType } from '@hooks/useHistoryRouter';
 
-const refreshTokenUser = async (auth, setAuth, routeHistory, location) => {
+const refreshTokenUser = async (
+  auth: IAuthInfo,
+  setAuth: SetterOrUpdater<IAuthInfo>,
+  routeHistory: UseRouteHistoryType,
+  location: ILocationBase,
+): Promise<void> => {
   /*
     2021-11-24
     문혜현

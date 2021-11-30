@@ -9,7 +9,7 @@ import '@modals/ReviewSubmitModal/alertStyle.css';
 const submitReview = (
   data: IReviewSubmit,
   routeHistory: (path: string, state?: { [index: string]: string }) => void,
-) => {
+): void => {
   confirmAlert({
     message: '후기를 제출하시겠습니까?',
     buttons: [
@@ -65,7 +65,7 @@ const fetchContentData = async (
     });
 };
 
-const parseHashtags = (text: string) =>
+const parseHashtags = (text: string): string[] =>
   Array.from(text.matchAll(/#[^#\s]*/g))
     .map((hashtag) => hashtag[0].replace('#', ''))
     .reduce((a, hashtag) => {

@@ -2,7 +2,13 @@ import { IMapInfo, IRange } from '@myTypes/Map';
 import { fetcher } from '@utils/common';
 import useSWR from 'swr';
 
-const useRates = (range: IRange) => {
+export type UseRatesType = {
+  rates: IMapInfo[] | undefined;
+  isLoading: boolean;
+  isError: any;
+};
+
+const useRates = (range: IRange): UseRatesType => {
   const path = `${process.env.REACT_APP_API_URL}/api/map/rates`;
   const query = `?address=${range.address}&scope=${range.scope}`;
 

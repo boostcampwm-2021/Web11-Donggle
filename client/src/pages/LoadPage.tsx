@@ -6,11 +6,12 @@ import useHistoryRouter from '@hooks/useHistoryRouter';
 import LoadAnimation from '@components/Loading/index';
 import { IAuthInfo } from '@myTypes/User';
 import { refreshTokenUser } from '@controllers/loadController';
+import { ILocationBase } from '@myTypes/Common';
 
 const LoadPage: React.FC = () => {
   const [auth, setAuth] = useRecoilState<IAuthInfo>(authState);
   const routeHistory = useHistoryRouter();
-  const location = useLocation();
+  const location = useLocation<ILocationBase>();
 
   useEffect(() => {
     refreshTokenUser(auth, setAuth, routeHistory, location);

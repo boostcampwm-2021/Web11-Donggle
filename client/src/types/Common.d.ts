@@ -3,10 +3,18 @@ interface IAPIResult<T> {
   message: string;
 }
 
+interface ILocationBase {
+  pathname: string;
+  state: { pathname: string, [index: string]: string };
+  search: string;
+  hash: string;
+  key: string;
+}
+
 interface ISnackbar {
   message: string;
   error?: boolean;
   expire: number;
 }
 
-export { IAPIResult, ISnackbar };
+export { IAPIResult, ILocationBase, ISnackbar };

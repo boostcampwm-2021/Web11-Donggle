@@ -1,9 +1,16 @@
+import { ChangeEvent } from 'react';
+import { SetterOrUpdater } from 'recoil';
 import { IMapInfo } from '@myTypes/Map';
+import { IAuthInfo } from '@myTypes/User';
 import { showSnackbar } from '@utils/common';
 
-const uploadImage = async (e, auth, setAuth) => {
+const uploadImage = async (
+  e: ChangeEvent,
+  auth: IAuthInfo,
+  setAuth: SetterOrUpdater<IAuthInfo>,
+): Promise<void> => {
   showSnackbar('이미지 크기에 따라 시간이 걸릴수 있어요.');
-  const image = e.target.files[0];
+  const image = (e.target as HTMLInputElement).files![0];
   const formData = new FormData();
   formData.append('file', image);
   formData.append('oauth_email', auth.oauthEmail);
@@ -26,7 +33,10 @@ const uploadImage = async (e, auth, setAuth) => {
   }
 };
 
-const deleteImage = async (auth, setAuth) => {
+const deleteImage = async (
+  auth: IAuthInfo,
+  setAuth: SetterOrUpdater<IAuthInfo>,
+): Promise<void> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile-image?oauth_email=${
       auth.oauthEmail
@@ -46,24 +56,26 @@ const deleteImage = async (auth, setAuth) => {
   }
 };
 
-const updateAddress = (auth, setAuth) => async (mapInfo: IMapInfo) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
-    {
-      method: 'PATCH',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        oauth_email: auth.oauthEmail,
-        address: mapInfo.address,
-      }),
-    },
-  );
-  const result = await response.json();
-  if (response.status === 200) {
-    setAuth((prev) => ({ ...prev, address: result.result }));
-  } else {
-    console.error(result.message);
-  }
-};
+const updateAddress =
+  (auth: IAuthInfo, setAuth: SetterOrUpdater<IAuthInfo>) =>
+  async (mapInfo: IMapInfo): Promise<void> => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          oauth_email: auth.oauthEmail,
+          address: mapInfo.address,
+        }),
+      },
+    );
+    const result = await response.json();
+    if (response.status === 200) {
+      setAuth((prev) => ({ ...prev, address: result.result }));
+    } else {
+      console.error(result.message);
+    }
+  };
 
 export { uploadImage, deleteImage, updateAddress };

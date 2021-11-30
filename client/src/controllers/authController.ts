@@ -9,7 +9,7 @@ import { getOptions } from '@utils/common';
 위의 경우를 가정함
 token이 잘못되었거나 access와 refresh token이 만료된 경우로 모든 경우에 대해서 sessionStorage를 비우고 로그인 페이지로 이동시킴
 */
-const newIssuedToken = async () => {
+const newIssuedToken = async (): Promise<boolean> => {
   const newTokenRes = await fetch(
     `${process.env.REACT_APP_API_URL as string}/api/auth/refresh`,
     getOptions('GET', undefined, 'same-origin'),
