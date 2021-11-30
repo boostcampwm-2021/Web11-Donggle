@@ -6,7 +6,7 @@ import { AuthError } from '@utils/authErrorEnum';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
 import { JwtPayload } from 'jsonwebtoken';
 import { removeCookie } from '@utils/index';
-import createError from '@utils/error';
+import createCustomError from '@utils/error';
 
 const checkToken = (
   req: AuthMiddleRequest,
@@ -17,7 +17,7 @@ const checkToken = (
 
   if (!token) {
     return next(
-      createError('Unauthorized', new Error('Token이 없습니다').stack),
+      createCustomError('Unauthorized', new Error('Token이 없습니다')),
     );
   }
 
@@ -33,9 +33,9 @@ const checkToken = (
     (user as JwtPayload).oauth_email === undefined
   ) {
     return next(
-      createError(
+      createCustomError(
         'Unauthorized',
-        new Error('리프레시토큰이 유효하지 않습니다').stack,
+        new Error('리프레시토큰이 유효하지 않습니다'),
       ),
     );
   }

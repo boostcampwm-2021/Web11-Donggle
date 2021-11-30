@@ -14,7 +14,7 @@ import checkToken from '@middlewares/auth';
 import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { getCookieOption, removeCookie } from '@utils/index';
-import createError from '@utils/error';
+import createCustomError from '@utils/error';
 import config from 'configs/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest, Token } from '@myTypes/User';
@@ -30,9 +30,9 @@ router.post('/signin', (async (
   try {
     if (!code) {
       return next(
-        createError(
+        createCustomError(
           'BadRequest',
-          new Error('authroization code가 없습니다').stack,
+          new Error('authroization code가 없습니다'),
         ),
       );
     }
@@ -41,7 +41,7 @@ router.post('/signin', (async (
     const oauthInfo = await authService.getOauthEmail(accessToken);
     if (!oauthInfo.oauthEmail) {
       return next(
-        createError('BadRequest', new Error('잘못된 JWT입니다').stack),
+        createCustomError('BadRequest', new Error('잘못된 JWT입니다')),
       );
     }
 
@@ -87,7 +87,7 @@ router.post('/signin', (async (
   } catch (error) {
     const err = error as Error;
     return next(
-      createError('InternalServerError', err.stack, '다시 로그인해 주세요.'),
+      createCustomError('InternalServerError', err, '다시 로그인해 주세요.'),
     );
   }
 }) as RequestHandler);
@@ -132,7 +132,7 @@ router.post('/signup', (async (
   } catch (error) {
     const err = error as Error;
     return next(
-      createError('InternalServerError', err.stack, '다시 회원가입 해주세요.'),
+      createCustomError('InternalServerError', err, '다시 회원가입 해주세요.'),
     );
   }
 }) as RequestHandler);
@@ -146,9 +146,9 @@ router.get(
 
       if (!refreshToken) {
         return next(
-          createError(
+          createCustomError(
             'Unauthorized',
-            new Error('리프레시토큰이 없습니다').stack,
+            new Error('리프레시토큰이 없습니다'),
           ),
         );
       }
@@ -161,9 +161,9 @@ router.get(
     */
       if (refreshVerify == AuthError.TOKEN_EXPIRED) {
         return next(
-          createError(
+          createCustomError(
             'Unauthorized',
-            new Error('리프레시토큰이 만료되었습니다').stack,
+            new Error('리프레시토큰이 만료되었습니다'),
           ),
         );
       }
@@ -173,9 +173,9 @@ router.get(
         (refreshVerify as JwtPayload).oauth_email === undefined
       ) {
         return next(
-          createError(
+          createCustomError(
             'Unauthorized',
-            new Error('리프레시토큰이 유효하지 않습니다').stack,
+            new Error('리프레시토큰이 유효하지 않습니다'),
           ),
         );
       }
@@ -196,7 +196,7 @@ router.get(
     } catch (error) {
       const err = error as Error;
       return next(
-        createError('InternalServerError', err.stack, '다시 로그인해 주세요'),
+        createCustomError('InternalServerError', err, '다시 로그인해 주세요'),
       );
     }
   },
@@ -221,16 +221,16 @@ router.get(
         );
       } else {
         return next(
-          createError(
+          createCustomError(
             'Unauthorized',
-            new Error('회원가입 되어있지 않습니다').stack,
+            new Error('회원가입 되어있지 않습니다'),
           ),
         );
       }
     } catch (error) {
       const err = error as Error;
       return next(
-        createError('InternalServerError', err.stack, '다시 로그인 해주세요'),
+        createCustomError('InternalServerError', err, '다시 로그인 해주세요'),
       );
     }
   },

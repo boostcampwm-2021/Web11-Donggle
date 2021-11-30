@@ -1,7 +1,6 @@
 import { userService } from '@services/index';
 import { makeApiResponse } from '@utils/index';
-import logger from '@loaders/loggerLoader';
-import createError from '@utils/error';
+import createCustomError from '@utils/error';
 
 import express, {
   Request,
@@ -9,7 +8,7 @@ import express, {
   Response,
   NextFunction,
 } from 'express';
-import multer, { FileFilterCallback } from 'multer';
+import multer from 'multer';
 import path from 'path';
 
 interface ProfileImageBody {
@@ -70,13 +69,13 @@ router.patch(
           .json(makeApiResponse(image, '이미지를 성공적으로 업데이트했어요.'));
       } catch (error) {
         const err = error as Error;
-        return next(createError('InternalServerError', err.stack));
+        return next(createCustomError('InternalServerError', err));
       }
     } else {
       return next(
-        createError(
+        createCustomError(
           'BadRequest',
-          new Error('프로필 이미지 업데이트에 필요한 정보가 없습니다.').stack,
+          new Error('프로필 이미지 업데이트에 필요한 정보가 없습니다.'),
         ),
       );
     }
@@ -102,13 +101,13 @@ router.delete('/profile-image', (async (
         .json(makeApiResponse('', '성공적으로 이미지를 삭제했어요.'));
     } catch (error) {
       const err = error as Error;
-      return next(createError('InternalServerError', err.stack));
+      return next(createCustomError('InternalServerError', err));
     }
   } else {
     return next(
-      createError(
+      createCustomError(
         'BadRequest',
-        new Error('유저 정보, 이미지가 비었습니다!').stack,
+        new Error('유저 정보, 이미지가 비었습니다!'),
       ),
     );
   }
@@ -133,21 +132,21 @@ router.patch('/profile-address', (async (
           .json(makeApiResponse(address, '주소 업데이트에 성공했어요.'));
       } else {
         return next(
-          createError(
+          createCustomError(
             'BadRequest',
-            new Error('주소 업데이트에 실패했습니다!').stack,
+            new Error('주소 업데이트에 실패했습니다!'),
           ),
         );
       }
     } catch (error) {
       const err = error as Error;
-      return next(createError('InternalServerError', err.stack));
+      return next(createCustomError('InternalServerError', err));
     }
   } else {
     return next(
-      createError(
+      createCustomError(
         'BadRequest',
-        new Error('유저 정보, 이메일이 비었습니다!').stack,
+        new Error('유저 정보, 이메일이 비었습니다!'),
       ),
     );
   }

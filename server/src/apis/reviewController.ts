@@ -1,6 +1,5 @@
 import { reviewService } from '@services/index';
 import { makeApiResponse } from '@utils/index';
-import logger from '@loaders/loggerLoader';
 import { AdminRequest } from '@myTypes/Admin';
 import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
 import config from 'configs/index';
@@ -11,7 +10,7 @@ import express, {
   NextFunction,
 } from 'express';
 import checkToken from '@middlewares/auth';
-import createError from '@utils/error';
+import createCustomError from '@utils/error';
 
 const router: express.Router = express.Router();
 
@@ -28,9 +27,9 @@ router.post('/initialize', (async (
       await reviewService.initializeReviewModel();
     } else {
       return next(
-        createError(
+        createCustomError(
           'NotFound',
-          new Error('Review Model 초기화 중 오류가 발생했습니다.').stack,
+          new Error('Review Model 초기화 중 오류가 발생했습니다.'),
         ),
       );
     }
@@ -41,7 +40,7 @@ router.post('/initialize', (async (
       );
   } catch (error) {
     const err = error as Error;
-    next(createError('InternalServerError', err.stack));
+    next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 
@@ -52,16 +51,16 @@ router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
     const itemNum: number = parseInt(req.query.itemNum as string);
     if (!address)
       return next(
-        createError(
+        createCustomError(
           'NotFound',
-          new Error('정상적이지 않은 요청입니다. Address 값 부재').stack,
+          new Error('정상적이지 않은 요청입니다. Address 값 부재'),
         ),
       );
     const data = await reviewService.queryReviews(address, pageNum, itemNum);
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 
@@ -76,9 +75,9 @@ router.get('/:id', checkToken, (async (
     const itemNum: number = parseInt(req.query.itemNum as string);
     if (!userEmail)
       return next(
-        createError(
+        createCustomError(
           'NotFound',
-          new Error('정상적이지 않은 요청입니다. User Email 값 부재').stack,
+          new Error('정상적이지 않은 요청입니다. User Email 값 부재'),
         ),
       );
     const data = await reviewService.queryUserReviews(
@@ -89,7 +88,7 @@ router.get('/:id', checkToken, (async (
     res.status(200).json(makeApiResponse(data, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 
@@ -102,9 +101,9 @@ router.post('/', checkToken, (async (
     const insertData = req.body;
     if (!insertData)
       return next(
-        createError(
+        createCustomError(
           'BadRequest',
-          new Error('비정상적인 후기 정보가 입력되었습니다.').stack,
+          new Error('비정상적인 후기 정보가 입력되었습니다.'),
         ),
       );
     await reviewService.insertReview(insertData);
@@ -113,7 +112,7 @@ router.post('/', checkToken, (async (
       .json(makeApiResponse({}, '후기를 정상적으로 저장하였습니다.'));
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 

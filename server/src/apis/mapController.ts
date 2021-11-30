@@ -7,7 +7,7 @@ import express, {
   RequestHandler,
   NextFunction,
 } from 'express';
-import createError from '@utils/error';
+import createCustomError from '@utils/error';
 
 const router: express.Router = express.Router();
 const POLYGON_MAX_AGE = 60 * 60 * 1;
@@ -22,10 +22,9 @@ router.get('/polygon', (async (
   try {
     if (!isRangeValid(address, scope)) {
       return next(
-        createError(
+        createCustomError(
           'BadRequest',
-          new Error(`잘못된 폴리곤 요청: address=${address}&scope=${scope}`)
-            .stack,
+          new Error(`잘못된 폴리곤 요청: address=${address}&scope=${scope}`),
         ),
       );
     }
@@ -37,7 +36,7 @@ router.get('/polygon', (async (
     res.status(200).json(makeApiResponse(paths, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 
@@ -51,9 +50,9 @@ router.get('/rates', (async (
   try {
     if (!isRangeValid(address, scope)) {
       return next(
-        createError(
+        createCustomError(
           'InternalServerError',
-          `잘못된 평점 요청: address=${address}&scope=${scope}`,
+          new Error(`잘못된 평점 요청: address=${address}&scope=${scope}`),
         ),
       );
     }
@@ -64,7 +63,7 @@ router.get('/rates', (async (
     res.status(200).json(makeApiResponse(rates, ''));
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 
@@ -83,7 +82,7 @@ router.get('/search', (async (
     }
   } catch (error) {
     const err = error as Error;
-    return next(createError('InternalServerError', err.stack));
+    return next(createCustomError('InternalServerError', err));
   }
 }) as RequestHandler);
 

@@ -49,13 +49,13 @@ export default ({ app }: { app: Application }) => {
   // error 처리
   app.use(
     (
-      err: Error & { status: number },
+      err: Error & { status: number; clientMsg: string },
       req: Request,
       res: Response,
       next: NextFunction,
     ) => {
       logger.error(err.stack);
-      res.status(err.status).json(makeApiResponse({}, err.message));
+      res.status(err.status).json(makeApiResponse({}, err.clientMsg));
     },
   );
 };
