@@ -10,13 +10,21 @@ export const Body = styled.div`
   overflow: hidden;
 `;
 
+// const ball = keyframes`
+//     0%, 25%{ top: -50px; }
+//     35%{ top: calc(60% - 50px ); }
+//     40%{ top: calc(45% - 50px ); }
+//     45%{ top: calc(55% - 50px ); }
+//     50%, 70%{ top: calc(50% - 25px); }
+//     80%, 100%{ top: 100%; }
+// `;
 const ball = keyframes`
-    0%, 25%{ top: -50px; }
-    35%{ top: calc(60% - 50px ); }
-    40%{ top: calc(45% - 50px ); }
-    45%{ top: calc(55% - 50px ); }
-    50%, 70%{ top: calc(50% - 25px); }
-    80%, 100%{ top: 100%; }
+    0%, 25%{ transform: translateY(0px); }
+    35%{ transform: translateY(calc(60vh - 50px)); }
+    40%{ transform: translateY(calc(45vh - 50px)); }
+    45%{ transform: translateY(calc(55vh - 50px)); }
+    50%, 70%{ transform: translateY(calc(50vh - 25px)); }
+    80%, 100%{ transform: translateY(100vh); }
 `;
 
 export const BallWrapper = styled.div`
