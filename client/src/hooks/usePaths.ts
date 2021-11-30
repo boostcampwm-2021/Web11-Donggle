@@ -5,7 +5,7 @@ import useSWRImmutable from 'swr/immutable';
 export type UsePathsType = {
   paths: IMap[] | undefined;
   isLoading: boolean;
-  isError: any;
+  isError: Error | undefined;
 };
 
 const usePaths = (range: IRange): UsePathsType => {
@@ -13,7 +13,7 @@ const usePaths = (range: IRange): UsePathsType => {
   const query = `?address=${range.address}&scope=${range.scope}`;
 
   const key = path + query;
-  const { data, error } = useSWRImmutable<IMap[]>(key, fetcher);
+  const { data, error } = useSWRImmutable<IMap[], Error>(key, fetcher);
 
   return {
     paths: data,

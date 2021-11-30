@@ -5,7 +5,7 @@ import useSWR from 'swr';
 export type UseRatesType = {
   rates: IMapInfo[] | undefined;
   isLoading: boolean;
-  isError: any;
+  isError: Error | undefined;
 };
 
 const useRates = (range: IRange): UseRatesType => {
@@ -13,7 +13,7 @@ const useRates = (range: IRange): UseRatesType => {
   const query = `?address=${range.address}&scope=${range.scope}`;
 
   const key = path + query;
-  const { data, error } = useSWR<IMapInfo[]>(key, fetcher);
+  const { data, error } = useSWR<IMapInfo[], Error>(key, fetcher);
 
   return {
     rates: data,
