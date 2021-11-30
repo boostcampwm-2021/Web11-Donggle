@@ -90,7 +90,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
         >
           동네후기
         </Menu>
-        {sessionStorage.getItem('jwt') ? (
+        {auth.isLoggedin ? (
           <Menu
             onClick={() => onMenuClick('myreview')}
             className={`${selectedMenu === 'myreview' && 'menu-selected'}`}
