@@ -18,9 +18,7 @@ const MainPageDiv = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   width: 100%;
-  min-width: 1000px;
   height: 100%;
-  flex: 1 1 0;
 `;
 
 const DEFAULT_RATE_DATA: IMapInfo = {

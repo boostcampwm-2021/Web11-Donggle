@@ -6,6 +6,7 @@ import isEqual from 'react-fast-compare';
 
 const MapWrapper = React.memo(
   styled.div`
+    positon: relative;
     width: 100%;
     height: calc(100% - ${(props) => props.theme.componentSize.header});
   `,
@@ -13,9 +14,9 @@ const MapWrapper = React.memo(
 );
 
 const Marker = styled.img`
-  position: fixed;
+  position: absolute;
   left: calc(50% - 25px);
-  top: calc(51%);
+  top: calc(50% - 50px);
   width: 50px;
   height: 50px;
   z-index: 2000;
