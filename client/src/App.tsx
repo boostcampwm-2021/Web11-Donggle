@@ -4,9 +4,8 @@ import myTheme from '@styledComponents/theme';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
 import ProtectRoute from '@routes/ProtectRoute';
-import { getOptions } from '@utils/common';
 
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -25,19 +24,6 @@ const ReviewSubmitModal = lazy(() => import('@modals/ReviewSubmitModal'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 const App: React.FC = () => {
-  useEffect(() => {
-    const deleteCookie = () => {
-      fetch(
-        `${process.env.REACT_APP_API_URL as string}/api/auth/unload`,
-        getOptions('GET', undefined, 'same-origin'),
-      );
-    };
-    window.addEventListener('unload', deleteCookie);
-    return () => {
-      window.removeEventListener('unload', deleteCookie);
-    };
-  }, []);
-
   return (
     <>
       <GlobalStyle />
@@ -52,18 +38,10 @@ const App: React.FC = () => {
                 path="/"
                 component={() => <Redirect to={{ pathname: '/map' }} />}
               />
-              <PrivateRoute
-                path="/map"
-                component={MainPage}
-                needSignIn={false}
-              />
+              <Route path="/map" render={() => <MainPage />} />
               <Route path="/github/callback" render={() => <LoadingPage />} />
               <ProtectRoute path="/loading" component={LoadPage} />
-              <PrivateRoute
-                path="/profile"
-                component={ProfilePage}
-                needSignIn={true}
-              />
+              <PrivateRoute path="/profile" component={ProfilePage} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
           </Suspense>
@@ -71,7 +49,6 @@ const App: React.FC = () => {
             <PrivateRoute
               path="/:back/write-review"
               component={ReviewSubmitModal}
-              needSignIn={true}
             />
             <Route path="/:back/ranking" render={() => <RankingModal />} />
             <Route path="/:back/signin" render={() => <SignInModal />} />
@@ -79,7 +56,6 @@ const App: React.FC = () => {
             <PrivateRoute
               path="/:back/update-address"
               component={ProfileAddressModal}
-              needSignIn={true}
             />
           </Suspense>
         </GlobalStore>
