@@ -48,7 +48,7 @@ const upload = multer({
 const router: express.Router = express.Router();
 
 router.patch(
-  '/profile-image',
+  '/profile/image',
   upload.single('file'),
   async (req: Request, res: Response, next: NextFunction) => {
     const body: ProfileImageBody = req.body as ProfileImageBody;
@@ -66,7 +66,7 @@ router.patch(
         );
         res
           .status(200)
-          .json(makeApiResponse(image, '이미지를 성공적으로 업데이트했어요.'));
+          .json(makeApiResponse(image, '이미지를 성공적으로 업데이트했습니다.'));
       } catch (error) {
         const err = error as Error;
         return next(createCustomError('InternalServerError', err));
@@ -82,7 +82,7 @@ router.patch(
   },
 );
 
-router.delete('/profile-image', (async (
+router.delete('/profile/image', (async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -98,7 +98,7 @@ router.delete('/profile-image', (async (
       );
       res
         .status(200)
-        .json(makeApiResponse('', '성공적으로 이미지를 삭제했어요.'));
+        .json(makeApiResponse('', '성공적으로 이미지를 삭제했습니다.'));
     } catch (error) {
       const err = error as Error;
       return next(createCustomError('InternalServerError', err));
@@ -113,7 +113,7 @@ router.delete('/profile-image', (async (
   }
 }) as RequestHandler);
 
-router.patch('/profile-address', (async (
+router.patch('/profile/address', (async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -129,7 +129,7 @@ router.patch('/profile-address', (async (
       if (updateResult) {
         res
           .status(200)
-          .json(makeApiResponse(address, '주소 업데이트에 성공했어요.'));
+          .json(makeApiResponse(address, '주소 업데이트에 성공했습니다.'));
       } else {
         return next(
           createCustomError(

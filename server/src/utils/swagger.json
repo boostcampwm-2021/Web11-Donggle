@@ -2,23 +2,30 @@
   "swagger": "2.0",
   "info": {
     "description": "Donggle Swagger API!",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "title": "Donggle",
     "contact": {
       "email": "notready@donggle"
     }
   },
-  "host": "localhost:3001",
-  "basePath": "/",
-  "schemes": ["http"],
+  "host": "boost.boost-donggle.kro.kr",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
   "paths": {
     "/auth/signin": {
       "post": {
-        "tags": ["auth"],
-        "summary": "Sign in to service",
-        "description": "",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "tags": [
+          "auth"
+        ],
+        "summary": "동글 서비스 로그인",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -26,27 +33,89 @@
             "description": "Sign in Objects",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Sign in success"
+          "201": {
+            "description": "로그인 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "oauthEmail": {
+                      "type": "object"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 수행 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "서버 오류 발생 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "재로그인이 필요합니다."
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/signup": {
       "post": {
-        "tags": ["auth"],
-        "summary": "Sign up to service",
-        "description": "",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "tags": [
+          "auth"
+        ],
+        "summary": "동글 서비스 회원가입",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -54,135 +123,369 @@
             "description": "Sing up Objects",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "type": "object",
+              "properties": {
+                "oauth_email": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "center": {
+                  "type": "array",
+                  "example": [
+                    0,
+                    0
+                  ],
+                  "items": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                },
+                "image": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Sign up success"
+          "201": {
+            "description": "회원 가입 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": "성공적으로 회원가입 되었습니다."
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "서버 오류 발생 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "회원가입 중 오류가 발생했습니다. 다시 시도해 주세요."
+                }
+              }
+            }
           }
         }
       }
     },
-    "/map/polygon": {
+    "/auth/info": {
       "get": {
-        "tags": ["map"],
-        "summary": "Get map polygon coordinates",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "auth"
+        ],
+        "summary": "회원 정보 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "회원 정보 성공적으로 반환 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "oauthEmail": {
+                      "type": "object"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "회원 가입 되어 있지 않은 경우 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "회원 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "재로그인이 필요합니다."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signout": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "회원 정보 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "로그아웃 성공적으로 반환 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/map/polygons": {
+      "get": {
+        "tags": [
+          "map"
+        ],
+        "summary": "Map 폴리곤 정보 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "scale",
+            "name": "address",
             "in": "query",
-            "description": "Map scale",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "minimum": 1,
-            "maximum": 15
-          },
-          {
-            "name": "big",
-            "in": "query",
-            "description": "Map region level(도, 시)",
+            "description": "Map 지역 주소",
             "required": true,
             "type": "string"
           },
           {
-            "name": "medium",
+            "name": "scope",
             "in": "query",
-            "description": "Map region level(시, 군, 구)",
+            "description": "Map 축척 수준",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "small",
-            "in": "query",
-            "description": "Map region level(읍, 면, 동)",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "big",
+              "medium",
+              "small"
+            ]
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "폴리곤 정보 성공적으로 반환 시 반환",
             "schema": {
-              "$ref": "#/definitions/Map"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Map"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 폴리곤 정보 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
             }
           },
           "500": {
-            "description": "Server error"
+            "description": "폴리곤 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "내부 서버 오류입니다."
+                }
+              }
+            }
           }
         }
       }
     },
     "/map/rates": {
       "get": {
-        "tags": ["map"],
-        "summary": "Get map rates info",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "map"
+        ],
+        "summary": "Map 평점 정보 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "scale",
+            "name": "address",
             "in": "query",
-            "description": "Map 축척",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "minimum": 1,
-            "maximum": 15
-          },
-          {
-            "name": "big",
-            "in": "query",
-            "description": "Map region level(도, 시)",
+            "description": "Map 지역 주소",
             "required": true,
             "type": "string"
           },
           {
-            "name": "medium",
+            "name": "scope",
             "in": "query",
-            "description": "Map region level(시, 군, 구)",
+            "description": "Map 축척 수준",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "small",
-            "in": "query",
-            "description": "Map region level(읍, 면, 동)",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "big",
+              "medium",
+              "small"
+            ]
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "평점 정보 성공적으로 반환 시 반환",
             "schema": {
-              "$ref": "#/definitions/Map"
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/MapInfo"
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 평점 정보 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
             }
           },
           "500": {
-            "description": "Server error"
+            "description": "평점 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "내부 서버 오류입니다."
+                }
+              }
+            }
           }
         }
       }
     },
-    "/map/search": {
+    "/map/address": {
       "get": {
-        "tags": ["map"],
-        "summary": "Get map polygon coordinates",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "map"
+        ],
+        "summary": "Map 지역 정보 검색 결과 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "keyword",
             "in": "query",
-            "description": "Map 축척",
+            "description": "Map 지역 이름",
             "required": true,
             "type": "string"
           },
@@ -196,70 +499,56 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Map"
-            }
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
-    "/rank": {
-      "get": {
-        "tags": ["rank"],
-        "summary": "Get rates data from Map and calculate rank",
-        "description": "",
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "address",
-            "in": "query",
-            "description": "주소",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "scope",
-            "in": "query",
-            "description": "Map 축척 수준",
-            "required": true,
-            "type": "string",
-            "enum": ["big", "medium", "small"]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
+            "description": "지역 정보 반환 성공 시 반환",
             "schema": {
               "type": "object",
-              "items": {
-                "$ref": "#/definitions/MapInfo"
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/MapInfo"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
               }
             }
           },
           "500": {
-            "description": "Server error"
+            "description": "지역 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "검색결과를 받아오지 못했습니다."
+                }
+              }
+            }
           }
         }
       }
     },
     "/review": {
       "get": {
-        "tags": ["review"],
-        "summary": "Get review data",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "review"
+        ],
+        "summary": "특정 지역의 후기 데이터 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "address",
             "in": "query",
-            "description": "주소",
+            "description": "Map 지역 이름",
             "required": true,
             "type": "string"
           },
@@ -282,25 +571,66 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "후기 정보 반환 성공 시 반환",
             "schema": {
               "type": "object",
-              "items": {
-                "$ref": "#/definitions/Review"
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Review"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다."
+                }
               }
             }
           },
           "500": {
-            "description": "Server error"
+            "description": "후기 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "후기 정보를 받아오지 못했습니다."
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": ["review"],
-        "summary": "Review insert and update Map Info",
+        "tags": [
+          "review"
+        ],
+        "summary": "특정 지역 후기 데이터 제출 요청",
         "description": "",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -313,21 +643,157 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successful operation"
+          "201": {
+            "description": "후기 정보 전달 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "후기를 정상적으로 저장하였습니다."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다."
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "후기 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "오류가 발생하여 후기를 저장하지 못했습니다."
+                }
+              }
+            }
           }
         }
       }
     },
-    "/user/profile-image": {
+    "/review/user": {
+      "get": {
+        "tags": [
+          "review"
+        ],
+        "summary": "특정 유저가 작성한 후기 데이터 요청",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "사용자 Email 정보",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "Pagination 번호",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "itemNum",
+            "in": "query",
+            "description": "Fetch할 review 개수",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "후기 정보 반환 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/Review"
+                },
+                "message": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "후기 정보 반환 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "후기 정보를 받아오지 못했습니다."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/profile/image": {
       "patch": {
-        "tags": ["user"],
-        "summary": "Patch current user's profile image",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "user"
+        ],
+        "summary": "유저의 Profile Image 업데이트",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -341,18 +807,70 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "유저 프로필 업데이트 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "image": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": "이미지를 성공적으로 업데이트 했습니다."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "유저 프로필 업데이트 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "내부 서버 오류입니다!"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": ["user"],
-        "summary": "Delete current user's profile image",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "user"
+        ],
+        "summary": "유저의 Profile Image 삭제",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -366,20 +884,68 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "유저 프로필 이미지 업데이트 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "성공적으로 이미지를 삭제했습니다."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "유저 프로필 이미지 업데이트 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "내부 서버 오류입니다!"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/user/profile-address": {
+    "/user/profile/address": {
       "patch": {
-        "tags": ["user"],
-        "summary": "Patch current user's profile address",
-        "description": "",
-        "produces": ["application/json"],
+        "tags": [
+          "user"
+        ],
+        "summary": "유저의 Profile address 업데이트",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -393,10 +959,56 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "유저 프로필 주소 업데이트 성공 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": "주소 업데이트에 성공했습니다."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "비정상적인 요청 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "잘못된 요청입니다!"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server Error"
+            "description": "유저 프로필 주소 업데이트 실패 시 반환",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "object",
+                  "example": "{}"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "내부 서버 오류입니다!"
+                }
+              }
+            }
           }
         }
       }
@@ -476,7 +1088,9 @@
         },
         "center": {
           "type": "string",
-          "enum": ["Polygon | MultiPolygon"]
+          "enum": [
+            "Polygon | MultiPolygon"
+          ]
         }
       }
     },
@@ -515,28 +1129,20 @@
         "address": {
           "type": "string"
         },
-        "code": {
+        "text": {
           "type": "string"
         },
-        "codeLength": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "center": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "int64"
-          }
+        "oauth_email": {
+          "type": "string"
         },
         "categories": {
           "$ref": "#/definitions/Categories"
         },
-        "text": {
-          "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
+        "hastags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "createdAt": {
           "type": "string",
@@ -553,12 +1159,18 @@
         "text": {
           "type": "string"
         },
-        "user": {
+        "oauth_email": {
           "type": "string",
           "format": "int64"
         },
         "categories": {
           "$ref": "#/definitions/Categories"
+        },
+        "hastags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

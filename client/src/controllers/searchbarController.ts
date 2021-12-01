@@ -11,7 +11,7 @@ const spreadDropdown = async (
   const searchRegions = async (): Promise<IAPIResult<IMapInfo[] | []>> => {
     const onlyDongQuery = onlyDong ? '&onlyDong=true' : '';
     return await fetch(
-      `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}${onlyDongQuery}`,
+      `${process.env.REACT_APP_API_URL}/api/map/address?keyword=${keyword}${onlyDongQuery}`,
       getOptions('GET', undefined),
     )
       .then(async (response) => {

@@ -1,8 +1,6 @@
 import { reviewService } from '@services/index';
 import { makeApiResponse } from '@utils/index';
-import { AdminRequest } from '@myTypes/Admin';
 import { ReviewInsertRequest, ReviewGetUserRequest } from '@myTypes/Review';
-import config from 'configs/index';
 import express, {
   Request,
   Response,
@@ -13,36 +11,6 @@ import checkToken from '@middlewares/auth';
 import createCustomError from '@utils/error';
 
 const router: express.Router = express.Router();
-
-router.post('/initialize', (async (
-  req: AdminRequest,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    if (req.body.password === config.admin_password) {
-      if (req.body.type === 'Drop') {
-        await reviewService.dropModel();
-      }
-      await reviewService.initializeReviewModel();
-    } else {
-      return next(
-        createCustomError(
-          'NotFound',
-          new Error('Review Model 초기화 중 오류가 발생했습니다.'),
-        ),
-      );
-    }
-    res
-      .status(201)
-      .json(
-        makeApiResponse({}, 'Review Model이 정상적으로 초기화 되었습니다.'),
-      );
-  } catch (error) {
-    const err = error as Error;
-    next(createCustomError('InternalServerError', err));
-  }
-}) as RequestHandler);
 
 router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -64,13 +32,13 @@ router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
       createCustomError(
         'InternalServerError',
         err,
-        '서버 오류로 후기 정보를 받아오지 못했습니다.',
+        '후기 정보를 받아오지 못했습니다.',
       ),
     );
   }
 }) as RequestHandler);
 
-router.get('/:id', checkToken, (async (
+router.get('/user', checkToken, (async (
   req: ReviewGetUserRequest,
   res: Response,
   next: NextFunction,
@@ -98,7 +66,7 @@ router.get('/:id', checkToken, (async (
       createCustomError(
         'InternalServerError',
         err,
-        '서버 오류로 후기 정보를 받아오지 못했습니다.',
+        '후기 정보를 받아오지 못했습니다.',
       ),
     );
   }

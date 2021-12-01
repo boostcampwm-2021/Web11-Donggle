@@ -1,11 +1,9 @@
-import logger from '@loaders/loggerLoader';
-import { updateMapService } from '@services/index';
+import { updateMapService, reviewService } from '@services/index';
 import config from 'configs/index';
 import { AdminRequest } from '@myTypes/Admin';
 import { makeApiResponse } from '@utils/index';
 import createCustomError from '@utils/error';
-
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, RequestHandler, } from 'express';
 
 const router: express.Router = express.Router();
 
@@ -34,5 +32,35 @@ router.post(
     }
   },
 );
+
+router.post('/review', (async (
+  req: AdminRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (req.body.password === config.admin_password) {
+      if (req.body.type === 'Drop') {
+        await reviewService.dropModel();
+      }
+      await reviewService.initializeReviewModel();
+    } else {
+      return next(
+        createCustomError(
+          'NotFound',
+          new Error('Review Model 초기화 중 오류가 발생했습니다.'),
+        ),
+      );
+    }
+    res
+      .status(201)
+      .json(
+        makeApiResponse({}, 'Review Model이 정상적으로 초기화 되었습니다.'),
+      );
+  } catch (error) {
+    const err = error as Error;
+    next(createCustomError('InternalServerError', err));
+  }
+}) as RequestHandler);
 
 export default router;

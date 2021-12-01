@@ -68,7 +68,7 @@ router.post('/signin', (async (
         getCookieOption(Number(config.jwt_cookie_expire)),
       );
 
-      res.status(201).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
+      res.status(201).json(makeApiResponse(userInfo, '')); // 로그인 성공 
     } else {
       userInfo = {
         ...userInfo,
@@ -76,12 +76,12 @@ router.post('/signin', (async (
         image: oauthInfo.image,
       };
 
-      res.status(201).json(makeApiResponse(userInfo, '회원이 아닙니다.'));
+      res.status(201).json(makeApiResponse(userInfo, '')); // 회원가입 페이지로 Route
     }
   } catch (error) {
     const err = error as Error;
     return next(
-      createCustomError('InternalServerError', err, '다시 로그인해 주세요.'),
+      createCustomError('InternalServerError', err, '재로그인이 필요합니다.'),
     );
   }
 }) as RequestHandler);
@@ -116,13 +116,13 @@ router.post('/signup', (async (
         {
           address: address,
         },
-        '성공적으로 회원가입 되었습니다.',
+        '',
       ),
     );
   } catch (error) {
     const err = error as Error;
     return next(
-      createCustomError('InternalServerError', err, '다시 회원가입 해주세요.'),
+      createCustomError('InternalServerError', err, '회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.'),
     );
   }
 }) as RequestHandler);
@@ -141,7 +141,7 @@ router.get(
               address: userInfo.address,
               image: userInfo.image,
             },
-            '회원 정보입니다',
+            '',
           ),
         );
       } else {
@@ -155,13 +155,13 @@ router.get(
     } catch (error) {
       const err = error as Error;
       return next(
-        createCustomError('InternalServerError', err, '다시 로그인 해주세요'),
+        createCustomError('InternalServerError', err, '재로그인이 필요합니다.'),
       );
     }
   },
 );
 
-router.get('/logout', (req: Request, res: Response) => {
+router.get('/signout', (req: Request, res: Response) => {
   removeCookie(res).status(200).json({});
 });
 

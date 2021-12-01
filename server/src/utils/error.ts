@@ -6,10 +6,10 @@ enum ErrorStatus {
 }
 
 enum ErrorMessage {
-  BadRequest = '잘못된 요청입니다!',
-  Unauthorized = '권한이 없습니다!',
+  BadRequest = '잘못된 요청입니다.',
+  Unauthorized = '권한이 없습니다.',
   NotFound = '요청을 찾지 못했습니다.',
-  InternalServerError = '내부 서버 오류입니다!',
+  InternalServerError = '내부 서버 오류입니다.',
 }
 
 /*

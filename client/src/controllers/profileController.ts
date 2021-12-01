@@ -16,7 +16,7 @@ const uploadImage = async (
   formData.append('oauth_email', auth.oauthEmail);
   formData.append('image', auth.image);
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/profile-image`,
+    `${process.env.REACT_APP_API_URL}/api/user/profile/image`,
     getOptions('PATCH', formData, 'same-origin'),
   );
   const result = await response.json();
@@ -35,7 +35,7 @@ const deleteImage = async (
   setAuth: SetterOrUpdater<IAuthInfo>,
 ): Promise<void> => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/user/profile-image?oauth_email=${
+    `${process.env.REACT_APP_API_URL}/api/user/profile/image?oauth_email=${
       auth.oauthEmail
     }&image=${encodeURIComponent(auth.image)}`,
     getOptions('DELETE', undefined),
@@ -55,7 +55,7 @@ const updateAddress =
   (auth: IAuthInfo, setAuth: SetterOrUpdater<IAuthInfo>) =>
   async (mapInfo: IMapInfo) => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
+      `${process.env.REACT_APP_API_URL}/api/user/profile/address`,
       {
         ...getOptions('PATCH', {
           oauth_email: auth.oauthEmail,
