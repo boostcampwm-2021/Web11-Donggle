@@ -1,6 +1,5 @@
 import { mapService } from '@services/index';
 import { makeApiResponse, isRangeValid } from '@utils/index';
-import logger from '@loaders/loggerLoader';
 import express, {
   Request,
   Response,
@@ -12,7 +11,7 @@ import createCustomError from '@utils/error';
 const router: express.Router = express.Router();
 const POLYGON_MAX_AGE = 60 * 60 * 1;
 
-router.get('/polygon', (async (
+router.get('/polygons', (async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -51,7 +50,7 @@ router.get('/rates', (async (
     if (!isRangeValid(address, scope)) {
       return next(
         createCustomError(
-          'InternalServerError',
+          'BadRequest',
           new Error(`잘못된 평점 요청: address=${address}&scope=${scope}`),
         ),
       );
@@ -67,7 +66,7 @@ router.get('/rates', (async (
   }
 }) as RequestHandler);
 
-router.get('/search', (async (
+router.get('/address', (async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -82,7 +81,7 @@ router.get('/search', (async (
     }
   } catch (error) {
     const err = error as Error;
-    return next(createCustomError('InternalServerError', err, '검색결과를 받아오지 못했어요!'));
+    return next(createCustomError('InternalServerError', err, '검색결과를 받아오지 못했습니다.'));
   }
 }) as RequestHandler);
 

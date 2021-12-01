@@ -39,7 +39,7 @@ const Header: React.FC = () => {
 
   const onLogoutClick = useCallback(() => {
     fetch(
-      `${process.env.REACT_APP_API_URL as string}/api/auth/logout`,
+      `${process.env.REACT_APP_API_URL as string}/api/auth/signout`,
       getOptions('GET', undefined, 'same-origin'),
     );
     setAuth({

@@ -9,7 +9,7 @@ export type UsePathsType = {
 };
 
 const usePaths = (range: IRange): UsePathsType => {
-  const path = `${process.env.REACT_APP_API_URL}/api/map/polygon`;
+  const path = `${process.env.REACT_APP_API_URL}/api/map/polygons`;
   const query = `?address=${range.address}&scope=${range.scope}`;
 
   const key = path + query;
