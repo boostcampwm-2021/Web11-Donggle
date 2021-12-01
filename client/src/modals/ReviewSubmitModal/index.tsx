@@ -23,9 +23,10 @@ import useHistoryRouter from '@hooks/useHistoryRouter';
 
 const ReviewModal: React.FC = () => {
   const routeHistory = useHistoryRouter();
+  const auth = useRecoilValue(authState);
   const [reviewData, setReviewData] = useState<IReviewSubmit>({
-    address: useRecoilValue(authState).address,
-    oauth_email: useRecoilValue(authState).oauthEmail,
+    address: auth.address,
+    oauth_email: auth.oauthEmail,
     text: '',
     categories: {
       safety: 1,
@@ -83,7 +84,7 @@ const ReviewModal: React.FC = () => {
     <Modal>
       <TitleDiv>
         <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
-        <span style={{ marginLeft: '10px' }}>{reviewData.address}</span>
+        <span style={{ marginLeft: '10px' }}>{auth.address}</span>
       </TitleDiv>
       <StarRateDiv>{RatingStars}</StarRateDiv>
       <TextAreaDiv>
