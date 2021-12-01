@@ -4,6 +4,7 @@ import myTheme from '@styledComponents/theme';
 import Snackbar from '@components/Snackbar';
 import PrivateRoute from '@routes/PrivateRoute';
 import ProtectRoute from '@routes/ProtectRoute';
+import PublicRoute from '@routes/PublicRoute';
 
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -38,7 +39,7 @@ const App: React.FC = () => {
                 path="/"
                 component={() => <Redirect to={{ pathname: '/map' }} />}
               />
-              <Route path="/map" render={() => <MainPage />} />
+              <PublicRoute path="/map" component={MainPage} />
               <Route path="/github/callback" render={() => <LoadingPage />} />
               <ProtectRoute path="/loading" component={LoadPage} />
               <PrivateRoute path="/profile" component={ProfilePage} />
@@ -52,10 +53,10 @@ const App: React.FC = () => {
             />
             <Route path="/:back/ranking" render={() => <RankingModal />} />
             <Route path="/:back/signin" render={() => <SignInModal />} />
-            <ProtectRoute path="/:back/signup" compoent={SignUpModal} />
-            <PrivateRoute
-              path="/:back/update-address"
-              component={ProfileAddressModal}
+            <ProtectRoute path="/map/signup" component={SignUpModal} />
+            <Route
+              path="/profile/update-address"
+              render={() => <ProfileAddressModal />}
             />
           </Suspense>
         </GlobalStore>

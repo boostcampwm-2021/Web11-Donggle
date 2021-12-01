@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { showSnackbar } from '@utils/common';
 import { IAPIResult } from '@myTypes/Common';
 import { IAuthInfo, IUser } from '@myTypes/User';
 import { getOptions } from '@utils/common';
@@ -37,7 +38,7 @@ const isMember = (
   setAuth: SetterOrUpdater<IAuthInfo>,
 ): void => {
   if (status !== 201) {
-    alert(userInfo.message);
+    showSnackbar(userInfo.message, true);
     routeHistory('/map/signin');
     return;
   }

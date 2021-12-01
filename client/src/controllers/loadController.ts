@@ -4,6 +4,7 @@ import { getOptions } from '@utils/common';
 import { IAuthInfo } from '@myTypes/User';
 import { SetterOrUpdater } from 'recoil';
 import { UseRouteHistoryType } from '@hooks/useHistoryRouter';
+import { showSnackbar } from '@utils/common';
 
 const checkUserSignIn = async (
   setAuth: SetterOrUpdater<IAuthInfo>,
@@ -18,7 +19,7 @@ const checkUserSignIn = async (
     await userInfoRes.json();
 
   if (userInfoRes.status !== 200) {
-    alert(userInfo.message);
+    showSnackbar(userInfo.message, true);
     /*
     2021-11-20
     문혜현
