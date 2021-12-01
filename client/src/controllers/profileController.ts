@@ -17,7 +17,7 @@ const uploadImage = async (
   formData.append('image', auth.image);
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile/image`,
-    getOptions('PATCH', formData, 'same-origin'),
+    getOptions('PATCH', formData, 'same-origin', false, null),
   );
   const result = await response.json();
   if (response.status === 200) {
@@ -55,6 +55,7 @@ const updateAddress =
   (auth: IAuthInfo, setAuth: SetterOrUpdater<IAuthInfo>) =>
   async (mapInfo: IMapInfo) => {
     const response = await fetch(
+<<<<<<< HEAD
       `${process.env.REACT_APP_API_URL}/api/user/profile/address`,
       {
         ...getOptions('PATCH', {
@@ -63,6 +64,13 @@ const updateAddress =
         }),
         headers: { 'Content-type': 'application/json' },
       },
+=======
+      `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
+      getOptions('PATCH', {
+        oauth_email: auth.oauthEmail,
+        address: mapInfo.address,
+      }),
+>>>>>>> Fix: #223 - 프로필 이미지 업데이트, 삭제 버그 수정
     );
     const result = await response.json();
     if (response.status === 200) {
