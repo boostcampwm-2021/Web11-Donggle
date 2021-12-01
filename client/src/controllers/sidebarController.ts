@@ -1,7 +1,7 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IReviewContent, IReviewSubmit } from '@myTypes/Review';
 import { confirmAlert } from 'react-confirm-alert';
-import { getOptions } from '@utils/common';
+import { getOptions, showSnackbar } from '@utils/common';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '@modals/ReviewSubmitModal/alertStyle.css';
@@ -19,7 +19,13 @@ const submitReview = (
           fetch(
             `${process.env.REACT_APP_API_URL}/api/review`,
             getOptions('POST', data, 'same-origin'),
-          ).then((res) => res.json());
+          )
+            .then(async (res) => {
+              const resJson = await res.json();
+              if (res.status === 201) showSnackbar(resJson.message);
+              else throw new Error(resJson.message);
+            })
+            .catch((err) => showSnackbar(err.message, true));
           routeHistory('/map');
         },
       },
@@ -54,13 +60,12 @@ const fetchContentData = async (
 
   return await fetch(`${fetchUrl}`, getOptions('GET', undefined, 'same-origin'))
     .then(async (response) => {
-      if (response.status === 200) {
-        return await response.json();
-      }
-      throw new Error(`Contents 정보를 받아오는데 실패했습니다!`);
+      const resJson = await response.json();
+      if (response.status === 200) return resJson;
+      else throw new Error(resJson.message);
     })
     .catch((err) => {
-      console.error(err);
+      showSnackbar(err.message, true);
       return { result: null, message: err };
     });
 };
