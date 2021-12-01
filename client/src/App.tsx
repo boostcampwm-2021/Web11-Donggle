@@ -43,9 +43,9 @@ const App: React.FC = () => {
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
         <GlobalStore>
+          <Snackbar />
+          <Header />
           <Suspense fallback={<LoadAnimation />}>
-            <Snackbar />
-            <Header />
             <Switch>
               <Route
                 exact
@@ -66,6 +66,8 @@ const App: React.FC = () => {
               />
               <Route render={() => <NotFoundPage />} />
             </Switch>
+          </Suspense>
+          <Suspense fallback={null}>
             <PrivateRoute
               path="/:back/write-review"
               component={ReviewSubmitModal}
