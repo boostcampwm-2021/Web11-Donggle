@@ -52,7 +52,7 @@ router.get('/', (async (req: Request, res: Response, next: NextFunction) => {
     if (!address)
       return next(
         createCustomError(
-          'NotFound',
+          'BadRequest',
           new Error('정상적이지 않은 요청입니다. Address 값 부재'),
         ),
       );
@@ -76,7 +76,7 @@ router.get('/:id', checkToken, (async (
     if (!userEmail)
       return next(
         createCustomError(
-          'NotFound',
+          'BadRequest',
           new Error('정상적이지 않은 요청입니다. User Email 값 부재'),
         ),
       );
