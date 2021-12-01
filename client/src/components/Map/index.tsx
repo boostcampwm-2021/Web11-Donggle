@@ -59,6 +59,7 @@ const MapComponent: React.FC<IProps> = ({
   updateSidebarContents,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
+  const currentAddress = useRef<string>('');
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [range, setRange] = useState(DEFAULT_RANGE);
 
@@ -151,6 +152,8 @@ const MapComponent: React.FC<IProps> = ({
 
     const wrapper = mapWrapper.current;
     const onClick = async (rateData: IMapInfo) => {
+      if (currentAddress.current === rateData.address) return;
+      currentAddress.current = rateData.address;
       const sidebarContents: IAPIResult<IReviewContent[]> =
         await fetchContentData(rateData.address, 'review');
 
@@ -198,6 +201,8 @@ const MapComponent: React.FC<IProps> = ({
 
         const markerEl = matchingMarker.getContent() as HTMLElement;
         const sidebarRate = JSON.parse(markerEl.dataset.rateData as string);
+        if (currentAddress.current === sidebarRate.address) return;
+        currentAddress.current = sidebarRate.address;
 
         const sidebarContents: IAPIResult<IReviewContent[]> =
           await fetchContentData(polygon.address, 'review');
