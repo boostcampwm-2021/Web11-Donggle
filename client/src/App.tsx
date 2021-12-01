@@ -29,37 +29,35 @@ const App: React.FC = () => {
     <>
       <GlobalStyle />
       <ThemeProvider theme={myTheme}>
-        <GlobalStore>
-          <Snackbar />
-          <Header />
-          <Suspense fallback={<LoadAnimation />}>
-            <Switch>
-              <Route
-                exact
-                path="/"
-                component={() => <Redirect to={{ pathname: '/map' }} />}
-              />
-              <PublicRoute path="/map" component={MainPage} />
-              <Route path="/github/callback" render={() => <LoadingPage />} />
-              <ProtectRoute path="/loading" component={LoadPage} />
-              <PrivateRoute path="/profile" component={ProfilePage} />
-              <Route render={() => <NotFoundPage />} />
-            </Switch>
-          </Suspense>
-          <Suspense fallback={null}>
-            <PrivateRoute
-              path="/:back/write-review"
-              component={ReviewSubmitModal}
-            />
-            <Route path="/:back/ranking" render={() => <RankingModal />} />
-            <Route path="/:back/signin" render={() => <SignInModal />} />
-            <ProtectRoute path="/map/signup" component={SignUpModal} />
+        <Snackbar />
+        <Header />
+        <Suspense fallback={<LoadAnimation />}>
+          <Switch>
             <Route
-              path="/profile/update-address"
-              render={() => <ProfileAddressModal />}
+              exact
+              path="/"
+              component={() => <Redirect to={{ pathname: '/map' }} />}
             />
-          </Suspense>
-        </GlobalStore>
+            <PublicRoute path="/map" component={MainPage} />
+            <Route path="/github/callback" render={() => <LoadingPage />} />
+            <ProtectRoute path="/loading" component={LoadPage} />
+            <PrivateRoute path="/profile" component={ProfilePage} />
+            <Route render={() => <NotFoundPage />} />
+          </Switch>
+        </Suspense>
+        <Suspense fallback={null}>
+          <PrivateRoute
+            path="/:back/write-review"
+            component={ReviewSubmitModal}
+          />
+          <Route path="/:back/ranking" render={() => <RankingModal />} />
+          <Route path="/:back/signin" render={() => <SignInModal />} />
+          <ProtectRoute path="/map/signup" component={SignUpModal} />
+          <Route
+            path="/profile/update-address"
+            render={() => <ProfileAddressModal />}
+          />
+        </Suspense>
       </ThemeProvider>
     </>
   );
