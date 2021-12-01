@@ -2,7 +2,7 @@ import { ChangeEvent } from 'react';
 import { SetterOrUpdater } from 'recoil';
 import { IMapInfo } from '@myTypes/Map';
 import { IAuthInfo } from '@myTypes/User';
-import { showSnackbar } from '@utils/common';
+import { showSnackbar, getOptions } from '@utils/common';
 
 const uploadImage = async (
   e: ChangeEvent,
@@ -17,10 +17,7 @@ const uploadImage = async (
   formData.append('image', auth.image);
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile-image`,
-    {
-      method: 'PATCH',
-      body: formData,
-    },
+    getOptions('PATCH', formData, 'same-origin'),
   );
   const result = await response.json();
   if (response.status === 200) {
@@ -41,9 +38,7 @@ const deleteImage = async (
     `${process.env.REACT_APP_API_URL}/api/user/profile-image?oauth_email=${
       auth.oauthEmail
     }&image=${encodeURIComponent(auth.image)}`,
-    {
-      method: 'DELETE',
-    },
+    getOptions('DELETE', undefined),
   );
   const result = await response.json();
   if (response.status === 200) {
@@ -52,29 +47,28 @@ const deleteImage = async (
       image: result.result,
     }));
   } else {
-    console.error(result.message);
+    showSnackbar(result.message, true);
   }
 };
 
 const updateAddress =
   (auth: IAuthInfo, setAuth: SetterOrUpdater<IAuthInfo>) =>
-  async (mapInfo: IMapInfo): Promise<void> => {
+  async (mapInfo: IMapInfo) => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/profile-address`,
       {
-        method: 'PATCH',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({
+        ...getOptions('PATCH', {
           oauth_email: auth.oauthEmail,
           address: mapInfo.address,
         }),
+        headers: { 'Content-type': 'application/json' },
       },
     );
     const result = await response.json();
     if (response.status === 200) {
       setAuth((prev) => ({ ...prev, address: result.result }));
     } else {
-      console.error(result.message);
+      showSnackbar(result.message, true);
     }
   };
 

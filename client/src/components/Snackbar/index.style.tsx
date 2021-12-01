@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const SnackbarDiv = styled.div<{ error: boolean }>`
   position: fixed;
   top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   padding: 10px;
   display: flex;
   align-items: center;
@@ -19,16 +21,16 @@ const SnackbarDiv = styled.div<{ error: boolean }>`
 
   @keyframes pop {
     0% {
-      top: -50px;
+      transform: translateY(0px);
     }
     20% {
-      top: 0px;
+      transform: translateY(50px);
     }
     80% {
-      top: 0px;
+      transform: translateY(50px);
     }
     100% {
-      top: -50px;
+      transform: translateY(0px);
     }
   }
 `;

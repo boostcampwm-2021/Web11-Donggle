@@ -90,7 +90,7 @@ const Header: React.FC = () => {
                   <LinkBtn
                     onClick={onRankClick}
                     className={`${
-                      pathname === '/map/ranking' && 'link-selected'
+                      pathname.includes('/ranking') && 'link-selected'
                     }`}
                   >
                     동네 랭킹

@@ -1,5 +1,6 @@
 import { IAPIResult } from '@myTypes/Common';
 import { IMapInfo } from '@myTypes/Map';
+import { showSnackbar, getOptions } from '@utils/common';
 
 const spreadDropdown = async (
   keyword: string,
@@ -11,15 +12,17 @@ const spreadDropdown = async (
     const onlyDongQuery = onlyDong ? '&onlyDong=true' : '';
     return await fetch(
       `${process.env.REACT_APP_API_URL}/api/map/search?keyword=${keyword}${onlyDongQuery}`,
+      getOptions('GET', undefined),
     )
       .then(async (response) => {
         if (response.status === 200) {
           return await response.json();
         }
-        throw new Error('검색 결과를 받아오는데 실패했습니다!');
+        throw new Error();
       })
       .catch((err) => {
-        console.error(err);
+        showSnackbar('검색결과를 받아오지 못했어요!', true);
+        return { result: [] };
       });
   };
 
