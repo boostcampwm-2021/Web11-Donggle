@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { jwtConfig, jwtRefreshConfig } from 'configs/secretKey';
+import { jwtConfig } from 'configs/secretKey';
 import { AuthError } from '@utils/authErrorEnum';
 
 export default {
@@ -7,26 +7,18 @@ export default {
     const payload = {
       oauth_email: user.oauth_email,
     };
-    const token: { token: string; refreshToken: string } = {
+    const token: { token: string } = {
       token: jwt.sign(payload, jwtConfig.secretKey, jwtConfig.options),
-      refreshToken: jwt.sign(
-        payload,
-        jwtRefreshConfig.secretKey,
-        jwtRefreshConfig.options,
-      ),
     };
     return token;
   },
-  verify: (token: string, kind = 'jwt') => {
-    let decoded: string | jwt.JwtPayload;
+  verify: (token: string) => {
     try {
-      if (kind === 'jwt') {
-        decoded = jwt.verify(token, jwtConfig.secretKey);
-      } else {
-        decoded = jwt.verify(token, jwtRefreshConfig.secretKey);
-      }
+      const decoded = jwt.verify(token, jwtConfig.secretKey);
+      return decoded;
     } catch (err) {
       const errMsg = (err as Error).message;
+
       if (errMsg === 'jwt expired') {
         return AuthError.TOKEN_EXPIRED;
       } else if (errMsg === 'invalid token') {
@@ -35,6 +27,5 @@ export default {
         return AuthError.TOKEN_INVALID;
       }
     }
-    return decoded;
   },
 };

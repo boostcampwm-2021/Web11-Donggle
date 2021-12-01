@@ -29,9 +29,11 @@ const getCookieOption = (
   };
 };
 
-const removeCookie = (res: Response): Response => {
-  res.cookie('token', '', getCookieOption(0, 'lax'));
-  res.cookie('refreshToken', '', getCookieOption(0, 'lax'));
+const removeCookie = (
+  res: Response,
+  sameSite: 'lax' | 'none' | 'strict' = 'lax',
+): Response => {
+  res.cookie('token', '', getCookieOption(0, sameSite));
   return res;
 };
 

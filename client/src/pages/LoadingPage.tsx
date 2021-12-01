@@ -14,7 +14,7 @@ const LoadingPage: React.FC = () => {
   useEffect(() => {
     const confirmMember = async () => {
       const [status, userInfo] = await getToken();
-      isMember(status, userInfo, routeHistory, auth, setAuth);
+      isMember(status, userInfo, routeHistory, setAuth);
     };
 
     confirmMember();

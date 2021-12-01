@@ -1,53 +1,32 @@
 import { IUser } from '@myTypes/User';
 import { IAPIResult, ILocationBase } from '@myTypes/Common';
-import { newIssuedToken } from '@controllers/authController';
 import { getOptions } from '@utils/common';
 import { IAuthInfo } from '@myTypes/User';
 import { SetterOrUpdater } from 'recoil';
 import { UseRouteHistoryType } from '@hooks/useHistoryRouter';
+import { showSnackbar } from '@utils/common';
 
-const refreshTokenUser = async (
-  auth: IAuthInfo,
+const checkUserSignIn = async (
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory: UseRouteHistoryType,
   location: ILocationBase,
 ): Promise<void> => {
-  /*
-    2021-11-24
-    문혜현
-    access token을 재발급
-    */
-  const continueMember = await newIssuedToken();
+  const userInfoRes = await fetch(
+    `${process.env.REACT_APP_API_URL as string}/api/auth/info`,
+    getOptions('GET', undefined, 'same-origin'),
+  );
+  const userInfo: IAPIResult<IUser | Record<string, never>> =
+    await userInfoRes.json();
 
-  if (!continueMember) {
-    setAuth({
-      isLoggedin: false,
-      oauthEmail: '',
-      address: '',
-      image: '',
-    });
+  if (userInfoRes.status !== 200) {
+    showSnackbar(userInfo.message, true);
+    /*
+    2021-11-20
+    문혜현
+    쿠키가 만료/token 만료 또는 로그인을 안 한 상태
+    */
     routeHistory('/map/signin');
-  }
-
-  if (auth.isLoggedin) {
-    /*
-    2021-11-24
-    문혜현
-    access token만 재발급하는 경우
-    */
-    routeHistory(location.state.pathname);
   } else {
-    /*
-    2021-11-24
-    문혜현
-    user 정보도 재발급하는 경우
-    */
-    const userInfoResponse = await fetch(
-      `${process.env.REACT_APP_API_URL as string}/api/auth/info`,
-      getOptions('GET', undefined, 'same-origin'),
-    );
-    const userInfo: IAPIResult<IUser | Record<string, never>> =
-      await userInfoResponse.json();
     setAuth({
       isLoggedin: true,
       oauthEmail: userInfo.result.oauthEmail,
@@ -59,4 +38,4 @@ const refreshTokenUser = async (
   }
 };
 
-export { refreshTokenUser };
+export { checkUserSignIn };

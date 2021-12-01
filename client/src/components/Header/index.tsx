@@ -42,7 +42,6 @@ const Header: React.FC = () => {
       `${process.env.REACT_APP_API_URL as string}/api/auth/logout`,
       getOptions('GET', undefined, 'same-origin'),
     );
-    sessionStorage.removeItem('timer');
     setAuth({
       isLoggedin: false,
       oauthEmail: '',
@@ -103,7 +102,7 @@ const Header: React.FC = () => {
             <ReviewButton onClick={onWriteReviewClick}>
               내 동네 후기 쓰기
             </ReviewButton>
-            {sessionStorage.getItem('timer') ? (
+            {auth.isLoggedin ? (
               <>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={onProfileClick}>

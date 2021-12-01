@@ -1,6 +1,7 @@
 import { SetterOrUpdater } from 'recoil';
 
 import { IAPIResult, ILocationBase } from '@myTypes/Common';
+import { showSnackbar } from '@utils/common';
 import { ISignUp } from '@myTypes/User';
 import { IMapInfo } from '@myTypes/Map';
 import { IAuthInfo } from '@myTypes/User';
@@ -40,13 +41,10 @@ const isSignUp = (
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory: UseRouteHistoryType,
 ): void => {
-  if (status != 200) {
-    alert(userInfo.message);
+  if (status != 201) {
+    showSnackbar(userInfo.message, true);
     routeHistory('/map/signin');
   } else {
-    const now = new Date();
-    const time = now.getTime();
-    sessionStorage.setItem('timer', time.toString());
     setAuth({
       ...auth,
       isLoggedin: true,

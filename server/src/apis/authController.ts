@@ -17,7 +17,7 @@ import { getCookieOption, removeCookie } from '@utils/index';
 import createCustomError from '@utils/error';
 import config from 'configs/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
-import { AuthMiddleRequest, Token } from '@myTypes/User';
+import { AuthMiddleRequest } from '@myTypes/User';
 const router: express.Router = express.Router();
 
 router.post('/signin', (async (
@@ -41,7 +41,7 @@ router.post('/signin', (async (
     const oauthInfo = await authService.getOauthEmail(accessToken);
     if (!oauthInfo.oauthEmail) {
       return next(
-        createCustomError('BadRequest', new Error('잘못된 JWT입니다')),
+        createCustomError('BadRequest', new Error('잘못된 접근입니다')),
       );
     }
 
@@ -68,12 +68,6 @@ router.post('/signin', (async (
         getCookieOption(Number(config.jwt_cookie_expire)),
       );
 
-      res.cookie(
-        'refreshToken',
-        jwtToken.refreshToken,
-        getCookieOption(Number(config.jwt_refresh_cookie_expire)),
-      );
-
       res.status(201).json(makeApiResponse(userInfo, '로그인에 성공했습니다.'));
     } else {
       userInfo = {
@@ -82,7 +76,7 @@ router.post('/signin', (async (
         image: oauthInfo.image,
       };
 
-      res.json(makeApiResponse(userInfo, '회원이 아닙니다.'));
+      res.status(201).json(makeApiResponse(userInfo, '회원이 아닙니다.'));
     }
   } catch (error) {
     const err = error as Error;
@@ -116,12 +110,8 @@ router.post('/signup', (async (
       jwtToken.token,
       getCookieOption(Number(config.jwt_cookie_expire)),
     );
-    res.cookie(
-      'refreshToken',
-      jwtToken.refreshToken,
-      getCookieOption(Number(config.jwt_refresh_cookie_expire)),
-    );
-    res.status(200).json(
+
+    res.status(201).json(
       makeApiResponse(
         {
           address: address,
@@ -136,71 +126,6 @@ router.post('/signup', (async (
     );
   }
 }) as RequestHandler);
-
-router.get(
-  '/refresh',
-  checkToken,
-  (req: AuthMiddleRequest, res: Response, next: NextFunction) => {
-    try {
-      const refreshToken = (req.cookies as Token).refreshToken;
-
-      if (!refreshToken) {
-        return next(
-          createCustomError(
-            'Unauthorized',
-            new Error('리프레시토큰이 없습니다'),
-          ),
-        );
-      }
-
-      const refreshVerify = jwt.verify(refreshToken, 'refreshToken');
-      /*
-    2021-11-20
-    문혜현
-    token과 refresh token 모두 만료되었을 때
-    */
-      if (refreshVerify == AuthError.TOKEN_EXPIRED) {
-        return next(
-          createCustomError(
-            'Unauthorized',
-            new Error('리프레시토큰이 만료되었습니다'),
-          ),
-        );
-      }
-
-      if (
-        refreshVerify === AuthError.TOKEN_INVALID ||
-        (refreshVerify as JwtPayload).oauth_email === undefined
-      ) {
-        return next(
-          createCustomError(
-            'Unauthorized',
-            new Error('리프레시토큰이 유효하지 않습니다'),
-          ),
-        );
-      }
-
-      const newAccessToken = jwt.sign({
-        oauth_email: (refreshVerify as JwtPayload).oauth_email as string,
-      });
-
-      res.cookie(
-        'token',
-        newAccessToken.token,
-        getCookieOption(Number(config.jwt_cookie_expire)),
-      );
-
-      return res
-        .status(200)
-        .json(makeApiResponse({}, '새로운 토큰을 발급했습니다'));
-    } catch (error) {
-      const err = error as Error;
-      return next(
-        createCustomError('InternalServerError', err, '다시 로그인해 주세요'),
-      );
-    }
-  },
-);
 
 router.get(
   '/info',
@@ -237,10 +162,6 @@ router.get(
 );
 
 router.get('/logout', (req: Request, res: Response) => {
-  removeCookie(res).status(200).json({});
-});
-
-router.get('/unload', (req: Request, res: Response) => {
   removeCookie(res).status(200).json({});
 });
 

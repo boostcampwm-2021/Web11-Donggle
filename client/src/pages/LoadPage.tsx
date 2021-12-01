@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { authState } from '@stores/atoms';
 import useHistoryRouter from '@hooks/useHistoryRouter';
 import LoadAnimation from '@components/Loading/index';
+import { checkUserSignIn } from '@controllers/loadController';
 import { IAuthInfo } from '@myTypes/User';
-import { refreshTokenUser } from '@controllers/loadController';
 import { ILocationBase } from '@myTypes/Common';
 
 const LoadPage: React.FC = () => {
@@ -14,7 +14,7 @@ const LoadPage: React.FC = () => {
   const location = useLocation<ILocationBase>();
 
   useEffect(() => {
-    refreshTokenUser(auth, setAuth, routeHistory, location);
+    checkUserSignIn(setAuth, routeHistory, location);
   }, []);
 
   return <LoadAnimation />;
