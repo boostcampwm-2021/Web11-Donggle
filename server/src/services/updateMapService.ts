@@ -1,5 +1,5 @@
 import logger from '@loaders/loggerLoader';
-import config from 'configs/index';
+import configs from '@configs/index';
 import { Map, MapModel } from '@models/Map';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
 import { CoordType, Point, FeatureType, CollectionType } from '@myTypes/Admin';
@@ -9,7 +9,7 @@ import proj4 from 'proj4';
 import simplify from 'simplify-js';
 
 const getAuthToken = async () => {
-  const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${config.kosis_consumer_key}&consumer_secret=${config.kosis_consumer_secret}`;
+  const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${configs.kosis_consumer_key}&consumer_secret=${configs.kosis_consumer_secret}`;
   const token = await axios
     .request<{ result: { accessToken: string } }>({
       url: url,

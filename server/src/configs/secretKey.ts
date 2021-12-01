@@ -1,4 +1,4 @@
-import config from 'configs/index';
+import configs from '@configs/index';
 import jwt from 'jsonwebtoken';
 
 interface Config {
@@ -7,10 +7,10 @@ interface Config {
 }
 
 const jwtConfig: Config = {
-  secretKey: config.jwt_secret,
+  secretKey: configs.jwt_secret,
   options: {
-    algorithm: config.jwt_algorithm as jwt.Algorithm,
-    expiresIn: config.jwt_expire,
+    algorithm: configs.jwt_algorithm as jwt.Algorithm,
+    expiresIn: configs.jwt_expire,
   },
 };
 

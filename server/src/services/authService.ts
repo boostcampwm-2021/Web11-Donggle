@@ -1,10 +1,10 @@
 import { User, UserModel } from '@models/User';
 import { MapInfo, MapInfoModel } from '@models/MapInfo';
-import config from 'configs/index';
+import configs from '@configs/index';
 import axios, { AxiosResponse } from 'axios';
 
 const getAccessToken = async (code: string): Promise<string> => {
-  const TOKEN_URL = `https://github.com/login/oauth/access_token?client_id=${config.client_id}&client_secret=${config.client_secret}&code=${code}`;
+  const TOKEN_URL = `https://github.com/login/oauth/access_token?client_id=${configs.client_id}&client_secret=${configs.client_secret}&code=${code}`;
 
   const tokenResponse: AxiosResponse = await axios.post(TOKEN_URL, {
     headers: {

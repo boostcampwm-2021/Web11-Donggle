@@ -15,7 +15,7 @@ import { makeApiResponse } from '@utils/index';
 import { AuthError } from '@utils/authErrorEnum';
 import { getCookieOption, removeCookie } from '@utils/index';
 import createCustomError from '@utils/error';
-import config from 'configs/index';
+import configs from '@configs/index';
 import { AuthRequest, UserInfo } from '@myTypes/User';
 import { AuthMiddleRequest } from '@myTypes/User';
 const router: express.Router = express.Router();
@@ -65,7 +65,7 @@ router.post('/signin', (async (
       res.cookie(
         'token',
         jwtToken.token,
-        getCookieOption(Number(config.jwt_cookie_expire)),
+        getCookieOption(Number(configs.jwt_cookie_expire)),
       );
 
       res.status(201).json(makeApiResponse(userInfo, '')); // 로그인 성공 
@@ -108,7 +108,7 @@ router.post('/signup', (async (
     res.cookie(
       'token',
       jwtToken.token,
-      getCookieOption(Number(config.jwt_cookie_expire)),
+      getCookieOption(Number(configs.jwt_cookie_expire)),
     );
 
     res.status(201).json(

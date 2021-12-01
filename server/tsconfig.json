@@ -5,8 +5,8 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "@api/*": ["api/*"],
-      "@config/*": ["config/*"],
+      "@apis/*": ["apis/*"],
+      "@configs/*": ["configs/*"],
       "@loaders/*": ["loaders/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
