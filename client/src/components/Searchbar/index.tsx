@@ -92,7 +92,7 @@ const Searchbar: React.FC<SearchbarProps> = ({
   return (
     <div style={{ position: 'relative' }}>
       <SearchbarWrapper>
-        <SearchbarInput onChange={onInputChange} ref={inputTagRef} />
+        <SearchbarInput onChange={onInputChange} ref={inputTagRef} autoFocus />
         <SearchbarButton>
           <SearchImg />
         </SearchbarButton>
