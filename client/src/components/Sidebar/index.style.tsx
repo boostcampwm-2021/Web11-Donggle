@@ -7,7 +7,7 @@ const Layout = styled.div`
   width: 400px;
   height: calc(100% - ${(props) => props.theme.componentSize.header});
   right: 0;
-  z-index: 1;
+  z-index: 2000;
   overflow-y: scroll;
   background-color: white;
   transform: translateX(400px);

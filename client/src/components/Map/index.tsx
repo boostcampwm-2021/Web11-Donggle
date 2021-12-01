@@ -228,8 +228,8 @@ const MapComponent: React.FC<IProps> = ({
         <SearchbarWrapper>
           <Searchbar onClickHandler={moveTo} />
         </SearchbarWrapper>
+        <CenterMarker />
       </MapWrapper>
-      <CenterMarker />
     </>
   );
 };
