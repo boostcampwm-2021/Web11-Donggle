@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const SnackbarDiv = styled.div<{ error: boolean }>`
   position: fixed;
   top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   padding: 10px;
   display: flex;
   align-items: center;
