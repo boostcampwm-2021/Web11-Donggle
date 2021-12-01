@@ -1,5 +1,5 @@
 import { IMapInfo, IRange } from '@myTypes/Map';
-import { fetcher } from '@utils/common';
+import { fetcher, showSnackbar } from '@utils/common';
 import useSWR from 'swr';
 
 const useRates = (range: IRange) => {
@@ -7,7 +7,11 @@ const useRates = (range: IRange) => {
   const query = `?address=${range.address}&scope=${range.scope}`;
 
   const key = path + query;
-  const { data, error } = useSWR<IMapInfo[]>(key, fetcher);
+  const { data, error } = useSWR<IMapInfo[], Error>(key, fetcher);
+  if (error) {
+    const message = error.message || '평점 정보를 불러오는 데 실패했습니다.';
+    showSnackbar(message, true);
+  }
 
   return {
     rates: data,

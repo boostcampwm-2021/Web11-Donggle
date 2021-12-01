@@ -66,13 +66,6 @@ const getPrevPath = (to: string) => {
   return paths.join();
 };
 
-const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
-  const response = await fetch(info, init);
-  if (response.status !== 200) throw Error('요청 실패');
-  const json: IAPIResult<T> = await response.json();
-  return json.result;
-};
-
 const getOptions = <T>(
   fetchMethod: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'UPDATE',
   data: T,
@@ -87,6 +80,26 @@ const getOptions = <T>(
     },
     body: JSON.stringify(data),
   };
+};
+
+const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
+  let response: Response;
+  let json: IAPIResult<T>;
+
+  try {
+    response = await fetch(info, {
+      ...getOptions('GET', undefined),
+      ...init,
+    });
+    json = await response.json();
+  } catch (error) {
+    throw Error();
+  }
+
+  if (Math.floor(response.status / 100) !== 2) {
+    throw Error(json.message);
+  }
+  return json.result;
 };
 
 export {

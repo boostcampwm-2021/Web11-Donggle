@@ -32,6 +32,7 @@ import { regionToRange } from '@utils/address';
 import usePaths from '@hooks/usePaths';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { showSnackbar } from '@utils/common';
 
 const DEFAULT_POSITION = {
   latitude: 37.541,
@@ -126,14 +127,15 @@ const MapComponent: React.FC<IProps> = ({
           result: Array<string>;
           status: string;
         };
-        if (region.status !== kakao.maps.services.Status.OK) return;
+        if (region.status !== kakao.maps.services.Status.OK) throw Error();
 
         const newRange = regionToRange(region.result, scale);
         setRange((oldRange) => {
           if (isRangeEqual(oldRange, newRange)) return oldRange;
           return newRange;
         });
-      } catch (e) {
+      } catch (error) {
+        showSnackbar('지역 정보를 불러오는 데 실패했습니다.', true);
         return;
       }
     };

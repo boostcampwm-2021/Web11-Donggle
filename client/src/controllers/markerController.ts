@@ -1,8 +1,19 @@
 import { IMapInfo } from '@myTypes/Map';
 import { calcTotal } from '@utils/common';
+import { Category } from '@utils/enum';
 
 const ratingToPercent = (rate: number) => {
   return rate * 20;
+};
+
+const markerTitleHTML = (region: string, rate: number) => {
+  return `
+    <div class="title">
+      <span>${region}</span>
+      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
+      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
+    </div>
+  `;
 };
 
 const starRateHTML = (rate: number) => {
@@ -31,13 +42,7 @@ const markerEl = (rateData: IMapInfo) => {
 
   wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
-  wrapper.innerHTML = `
-    <div class="title">
-      <span>${smallestRegion}</span>
-      <span class="star-rating-single">${isNaN(rate) ? '' : '★'}</span>
-      <span>${isNaN(rate) ? '' : rate.toFixed(1)}</span>
-    </div>
-  `;
+  wrapper.innerHTML = markerTitleHTML(smallestRegion, rate);
   return wrapper;
 };
 
@@ -49,40 +54,24 @@ const largeMarkerEl = (rateData: IMapInfo) => {
   const total = calcTotal(categories);
   const averageRate = total / count;
 
-  const safety = categories.safety / count;
-  const traffic = categories.traffic / count;
-  const food = categories.food / count;
-  const entertainment = categories.entertainment / count;
-
   wrapper.dataset.address = address;
   wrapper.dataset.rateData = JSON.stringify(rateData);
-  wrapper.innerHTML = `
-    <div class="title">
-      <span>${address}</span>
-      <span class="star-rating-single">${!count ? '' : '★'}</span>
-      <span>${!count ? '' : averageRate.toFixed(1)}</span>
-    </div>
-    <div class="content">
-      <span>안전 </span>
-      ${starRateHTML(safety || 0)}
-      <span>${!count ? 'N/A' : safety.toFixed(1)}</span>
-    </div>
-    <div class="content">
-      <span>교통 </span>
-      ${starRateHTML(traffic || 0)}
-      <span>${!count ? 'N/A' : traffic.toFixed(1)}</span>
-    </div>
-    <div class="content">
-      <span>먹거리 </span>
-      ${starRateHTML(food || 0)}
-      <span>${!count ? 'N/A' : food.toFixed(1)}</span>
-    </div>
-    <div class="content">
-      <span>놀거리 </span>
-      ${starRateHTML(entertainment || 0)}
-      <span>${!count ? 'N/A' : entertainment.toFixed(1)}</span>
-    </div>
-  `;
+
+  let wrapperHTML = markerTitleHTML(address, averageRate);
+  wrapperHTML += Object.keys(categories)
+    .map((category) => {
+      const score = categories[category] / count;
+      return `
+      <div class="content">
+        <span>${Category[category]} </span>
+        ${starRateHTML(score || 0)}
+        <span>${!count ? 'N/A' : score.toFixed(1)}</span>
+      </div>
+    `;
+    })
+    .join('');
+
+  wrapper.innerHTML = wrapperHTML;
   return wrapper;
 };
 
@@ -131,12 +120,6 @@ const createMarkerClickListener = (
     const target = e.target as HTMLElement;
     const markerEl = target.closest('.customoverlay') as HTMLElement;
     if (!markerEl) {
-      /*
-          2021-11-11
-          송명회
-          폴리곤 클릭시 사이드바 닫힘 방지
-          Polygon은 HTML path 엘리먼트로 구현되어 있으므로 의도대로 동작함
-       */
       if (!target.closest('path')) onOutsideClick();
       return;
     }
