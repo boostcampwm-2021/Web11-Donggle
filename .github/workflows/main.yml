@@ -3,7 +3,7 @@ name: continuous-deploy-by-docker
 on:
   push:
     branches:
-      - main
+      - feat/gzip
 
 jobs:
   build-push-pull-down_up:
