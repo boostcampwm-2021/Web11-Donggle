@@ -2,7 +2,7 @@ import { ICategories } from '@myTypes/Review';
 import { IAPIResult } from '@myTypes/Common';
 import { snackbars, setSnackbars } from '@components/Snackbar';
 
-const calcTotal = (categories: ICategories) => {
+const calcTotal = (categories: ICategories): number => {
   const total =
     Object.keys(categories)
       .filter((category) => category !== '_id')
@@ -13,7 +13,7 @@ const calcTotal = (categories: ICategories) => {
   return total;
 };
 
-const calcDateDiff = (targetDate: Date) => {
+const calcDateDiff = (targetDate: Date): string => {
   const now = new Date();
   const target = new Date(targetDate);
 
@@ -35,7 +35,7 @@ const calcDateDiff = (targetDate: Date) => {
   return `방금 전`;
 };
 
-const showSnackbar = (message: string, error = false) => {
+const showSnackbar = (message: string, error = false): void => {
   const snackbar = { message, error, expire: Date.now() + 5000 };
   if (snackbars !== null && setSnackbars !== null) {
     setSnackbars((prev) => [...prev, snackbar]);
@@ -49,7 +49,10 @@ const showSnackbar = (message: string, error = false) => {
   }
 };
 
-const getDebouncedFunction = (targetFunction: () => void, time: number) => {
+const getDebouncedFunction = (
+  targetFunction: () => void,
+  time: number,
+): (() => void) => {
   let timeoutId: NodeJS.Timeout;
   return () => {
     clearTimeout(timeoutId);
@@ -57,7 +60,7 @@ const getDebouncedFunction = (targetFunction: () => void, time: number) => {
   };
 };
 
-const getPrevPath = (to: string) => {
+const getPrevPath = (to: string): string => {
   const paths = to.match(/\/[^\/]*/g);
   if (paths === null) {
     return '/map';
@@ -82,7 +85,10 @@ const getOptions = <T>(
   };
 };
 
-const fetcher = async <T>(info: RequestInfo, init?: RequestInit) => {
+const fetcher = async <T>(
+  info: RequestInfo,
+  init?: RequestInit,
+): Promise<T> => {
   let response: Response;
   let json: IAPIResult<T>;
 

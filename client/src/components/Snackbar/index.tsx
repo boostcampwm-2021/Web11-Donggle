@@ -1,7 +1,7 @@
 import { SnackbarDiv } from '@components/Snackbar/index.style';
 import { ISnackbar } from '@myTypes/Common';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 let [snackbars, setSnackbars]: [
   ISnackbar[] | [] | null,

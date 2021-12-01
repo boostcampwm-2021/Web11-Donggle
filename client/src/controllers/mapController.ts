@@ -1,7 +1,7 @@
 import ColorHash from 'color-hash';
 import { CoordType, IMap, IPolygon, IRange } from '@myTypes/Map';
 
-function getCurrentLocation(callback: (coord: CoordType) => void) {
+function getCurrentLocation(callback: (coord: CoordType) => void): void {
   let coord: CoordType = [37.5642135, 127.0016985];
 
   const successCallback: PositionCallback = (position) => {
@@ -21,7 +21,10 @@ function getCurrentLocation(callback: (coord: CoordType) => void) {
   }
 }
 
-const coordToRegion = (latitude: number, longitude: number) => {
+const coordToRegion = (
+  latitude: number,
+  longitude: number,
+): Promise<unknown> => {
   const geocoder = new kakao.maps.services.Geocoder();
 
   return new Promise((resolve, reject) => {
@@ -40,13 +43,13 @@ const coordToRegion = (latitude: number, longitude: number) => {
   });
 };
 
-const isRangeEqual = (range1: IRange, range2: IRange) => {
+const isRangeEqual = (range1: IRange, range2: IRange): boolean => {
   if (range1.scope !== range2.scope) return false;
   if (range1.address !== range2.address) return false;
   return true;
 };
 
-const createPolygons = (regions: IMap[]) => {
+const createPolygons = (regions: IMap[]): IPolygon[] => {
   const polygons = Array<IPolygon>();
   const colorHash = new ColorHash();
   const keyString = '!@#$';
@@ -71,7 +74,7 @@ const createPolygons = (regions: IMap[]) => {
   return polygons;
 };
 
-const addPolygonClickEvent = (polygon: IPolygon, onClick: () => void) => {
+const addPolygonClickEvent = (polygon: IPolygon, onClick: () => void): void => {
   if (polygon.onClick) {
     kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
   }
@@ -79,7 +82,7 @@ const addPolygonClickEvent = (polygon: IPolygon, onClick: () => void) => {
   kakao.maps.event.addListener(polygon, 'click', onClick);
 };
 
-const removePolygonClickEvent = (polygon: IPolygon) => {
+const removePolygonClickEvent = (polygon: IPolygon): void => {
   if (polygon.onClick) {
     kakao.maps.event.removeListener(polygon, 'click', polygon.onClick);
   }
@@ -90,7 +93,7 @@ const addPolygonEvent = (
   polygon: kakao.maps.Polygon,
   callbackIn: () => void,
   callbackOut: () => void,
-) => {
+): void => {
   kakao.maps.event.addListener(polygon, 'mouseover', callbackIn);
   kakao.maps.event.addListener(polygon, 'mouseout', callbackOut);
 };
@@ -107,7 +110,7 @@ const makeSinglePolygon = (
   coords: [number, number][],
   address: string,
   colorString: string,
-) => {
+): IPolygon => {
   const coordObjects = coords.map(
     (coord: [number, number]) => new kakao.maps.LatLng(...coord),
   );
@@ -139,7 +142,7 @@ const makeMultiPolygon = (
   coordsArray: [number, number][][][],
   address: string,
   colorString: string,
-) => {
+): IPolygon[] => {
   const coordObjectsArray = coordsArray.map((coords: [number, number][][]) =>
     coords.map((coord: [number, number][]) =>
       coord.map((c: [number, number]) => new kakao.maps.LatLng(...c)),
@@ -179,11 +182,11 @@ const makeMultiPolygon = (
 const displayPolygons = (
   polygons: Array<kakao.maps.Polygon>,
   map: kakao.maps.Map,
-) => {
+): void => {
   polygons.forEach((polygon) => polygon.setMap(map));
 };
 
-const deletePolygons = (polygons: Array<kakao.maps.Polygon>) => {
+const deletePolygons = (polygons: Array<kakao.maps.Polygon>): void => {
   polygons.forEach((polygon) => polygon.setMap(null));
 };
 

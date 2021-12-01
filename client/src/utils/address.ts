@@ -23,7 +23,10 @@ const regionToRange = (region: string[], scale: number): IRange => {
   return range;
 };
 
-const rangeToLabel = (address: string, scope: 'big' | 'medium' | 'small') => {
+const rangeToLabel = (
+  address: string,
+  scope: 'big' | 'medium' | 'small',
+): string => {
   if (scope === 'big') return address;
   if (scope === 'medium') return address.split(' ').slice(1).join(' ');
   const tokens = address.split(' ');

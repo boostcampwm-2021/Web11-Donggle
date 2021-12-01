@@ -5,6 +5,26 @@ import { IRankItem } from '@myTypes/Rank';
 import { calcTotal } from '@utils/common';
 import { IRange } from '@myTypes/Map';
 
+type RankListType = {
+  label: string;
+  address: string;
+  categories: {
+    safety: number;
+    traffic: number;
+    food: number;
+    entertainment: number;
+  };
+};
+
+export type UseRankType = {
+  bigList: RankListType[];
+  bigIdx: number;
+  mediumList: RankListType[];
+  rankList: IRankItem[];
+  onBigSelected: (idx: number) => void;
+  onMediumSelected: (idx: number) => void;
+};
+
 const DEFAULT_CATEGORIES = {
   safety: 0,
   traffic: 0,
@@ -92,7 +112,7 @@ const useRankItems = (address: string, scope: 'big' | 'medium' | 'small') => {
   return rankItems;
 };
 
-const useRanks = () => {
+const useRanks = (): UseRankType => {
   const bigRankItems = useRankItems('', 'big');
   const bigList = useMemo(
     () => [...DEFAULT_BIG_LIST, ...bigRankItems],

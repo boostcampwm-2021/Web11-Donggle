@@ -82,7 +82,7 @@ router.get('/search', (async (
     }
   } catch (error) {
     const err = error as Error;
-    return next(createCustomError('InternalServerError', err));
+    return next(createCustomError('InternalServerError', err, '검색결과를 받아오지 못했어요!'));
   }
 }) as RequestHandler);
 

@@ -1,15 +1,16 @@
 import { SetterOrUpdater } from 'recoil';
 
-import { IAPIResult } from '@myTypes/Common';
+import { IAPIResult, ILocationBase } from '@myTypes/Common';
 import { ISignUp } from '@myTypes/User';
 import { IMapInfo } from '@myTypes/Map';
 import { IAuthInfo } from '@myTypes/User';
 import { getOptions } from '@utils/common';
+import { UseRouteHistoryType } from '@hooks/useHistoryRouter';
 
 const signUpAdress = async (
   mapInfo: IMapInfo,
   auth: IAuthInfo,
-  location,
+  location: ILocationBase,
 ): Promise<[number, IAPIResult<ISignUp | Record<string, never>>]> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/auth/signup`,
@@ -37,7 +38,7 @@ const isSignUp = (
   userInfo: IAPIResult<ISignUp | Record<string, never>>,
   auth: IAuthInfo,
   setAuth: SetterOrUpdater<IAuthInfo>,
-  routeHistory,
+  routeHistory: UseRouteHistoryType,
 ): void => {
   if (status != 200) {
     alert(userInfo.message);

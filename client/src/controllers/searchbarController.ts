@@ -3,11 +3,11 @@ import { IMapInfo } from '@myTypes/Map';
 import { showSnackbar, getOptions } from '@utils/common';
 
 const spreadDropdown = async (
-  keyword,
-  isSpread,
-  setResults,
+  keyword: string,
+  isSpread: boolean,
+  setResults: React.Dispatch<React.SetStateAction<IMapInfo[]>>,
   onlyDong = false,
-) => {
+): Promise<void> => {
   const searchRegions = async (): Promise<IAPIResult<IMapInfo[] | []>> => {
     const onlyDongQuery = onlyDong ? '&onlyDong=true' : '';
     return await fetch(
@@ -15,13 +15,14 @@ const spreadDropdown = async (
       getOptions('GET', undefined),
     )
       .then(async (response) => {
+        const resJson = await response.json();
         if (response.status === 200) {
-          return await response.json();
+          return resJson;
         }
-        throw new Error();
+        throw new Error(resJson.message);
       })
       .catch((err) => {
-        showSnackbar('검색결과를 받아오지 못했어요!', true);
+        showSnackbar(err.message, true);
         return { result: [] };
       });
   };

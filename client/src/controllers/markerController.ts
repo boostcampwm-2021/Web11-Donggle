@@ -6,7 +6,7 @@ const ratingToPercent = (rate: number) => {
   return rate * 20;
 };
 
-const markerTitleHTML = (region: string, rate: number) => {
+const markerTitleHTML = (region: string, rate: number): string => {
   return `
     <div class="title">
       <span>${region}</span>
@@ -16,7 +16,7 @@ const markerTitleHTML = (region: string, rate: number) => {
   `;
 };
 
-const starRateHTML = (rate: number) => {
+const starRateHTML = (rate: number): string => {
   return `
     <div class="star-ratings">
       <div class="star-ratings-fill" style="width: ${ratingToPercent(rate)}%">
@@ -29,7 +29,7 @@ const starRateHTML = (rate: number) => {
   `;
 };
 
-const markerEl = (rateData: IMapInfo) => {
+const markerEl = (rateData: IMapInfo): HTMLDivElement => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay';
 
@@ -46,7 +46,7 @@ const markerEl = (rateData: IMapInfo) => {
   return wrapper;
 };
 
-const largeMarkerEl = (rateData: IMapInfo) => {
+const largeMarkerEl = (rateData: IMapInfo): HTMLDivElement => {
   const wrapper = document.createElement('div');
   wrapper.className = 'customoverlay customoverlay_large';
 
@@ -104,18 +104,18 @@ const createMarkers = (rateDatas: IMapInfo[]): kakao.maps.CustomOverlay[] => {
 const displayMarkers = (
   markers: kakao.maps.CustomOverlay[],
   map: kakao.maps.Map,
-) => {
+): void => {
   markers.forEach((marker) => marker.setMap(map));
 };
 
-const deleteMarkers = (markers: kakao.maps.CustomOverlay[]) => {
+const deleteMarkers = (markers: kakao.maps.CustomOverlay[]): void => {
   markers.forEach((marker) => marker.setMap(null));
 };
 
 const createMarkerClickListener = (
   onClick: (rateData: IMapInfo) => void,
   onOutsideClick: () => void,
-) => {
+): ((e: MouseEvent) => void) => {
   const onMarkerClicked = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     const markerEl = target.closest('.customoverlay') as HTMLElement;
@@ -128,7 +128,10 @@ const createMarkerClickListener = (
   return onMarkerClicked;
 };
 
-const findMarker = (markers: kakao.maps.CustomOverlay[], address: string) => {
+const findMarker = (
+  markers: kakao.maps.CustomOverlay[],
+  address: string,
+): kakao.maps.CustomOverlay | undefined => {
   return markers.find((marker) => {
     const markerEl = marker.getContent() as HTMLElement;
     return address === markerEl.dataset.address;
