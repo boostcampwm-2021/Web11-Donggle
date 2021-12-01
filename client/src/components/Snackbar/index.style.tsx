@@ -19,16 +19,16 @@ const SnackbarDiv = styled.div<{ error: boolean }>`
 
   @keyframes pop {
     0% {
-      top: -50px;
+      transform: translateY(0px);
     }
     20% {
-      top: 0px;
+      transform: translateY(50px);
     }
     80% {
-      top: 0px;
+      transform: translateY(50px);
     }
     100% {
-      top: -50px;
+      transform: translateY(0px);
     }
   }
 `;
