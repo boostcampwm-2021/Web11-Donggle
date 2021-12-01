@@ -106,7 +106,14 @@ const Header: React.FC = () => {
               <>
                 <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={onProfileClick}>
-                  <ProfileImage src={auth.image} alt="프로필사진" />
+                  <ProfileImage
+                    src={
+                      auth.image.length > 0
+                        ? auth.image
+                        : process.env.REACT_APP_IMAGE_DEFAULT_USER
+                    }
+                    alt="프로필사진"
+                  />
                 </UserProfile>
               </>
             ) : (
