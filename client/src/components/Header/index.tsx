@@ -1,5 +1,5 @@
 import { authState } from '@stores/atoms';
-import logo from '@assets/images/logo.png';
+import logo from '@assets/images/logo.webp';
 import {
   LinkBtn,
   Layout,
