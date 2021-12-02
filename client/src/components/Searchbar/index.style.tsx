@@ -44,7 +44,7 @@ const LensImg = styled.img`
   width: 80%;
   height: 80%;
 `;
-LensImg.defaultProps = { src: search };
+LensImg.defaultProps = { src: search, alt: 'Lens' };
 const SearchImg = React.memo(LensImg);
 
 const DropdownWrapper = React.memo(styled.div<{ top: number }>`
