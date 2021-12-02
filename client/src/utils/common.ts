@@ -73,16 +73,19 @@ const getOptions = <T>(
   fetchMethod: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'UPDATE',
   data: T,
   credential: 'omit' | 'same-origin' | 'include' = 'omit',
+  isStringify = true,
+  contentType: string | null | undefined = 'application/json',
 ): RequestInit => {
-  return {
+  const options: RequestInit = {
     method: fetchMethod,
     mode: 'cors',
     credentials: credential,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    body: (isStringify ? JSON.stringify(data) : data) as BodyInit,
   };
+  if (contentType) {
+    options.headers = { 'Content-Type': contentType };
+  }
+  return options;
 };
 
 const fetcher = async <T>(
