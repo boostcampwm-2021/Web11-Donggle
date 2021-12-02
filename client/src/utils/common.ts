@@ -75,12 +75,14 @@ const getOptions = <T>(
   credential: 'omit' | 'same-origin' | 'include' = 'omit',
   isStringify = true,
   contentType: string | null | undefined = 'application/json',
+  signal?: AbortSignal,
 ): RequestInit => {
   const options: RequestInit = {
     method: fetchMethod,
     mode: 'cors',
     credentials: credential,
     body: (isStringify ? JSON.stringify(data) : data) as BodyInit,
+    signal: signal,
   };
   if (contentType) {
     options.headers = { 'Content-Type': contentType };
@@ -110,6 +112,12 @@ const fetcher = async <T>(
   }
   return json.result;
 };
+const controller = new AbortController();
+const signal = controller.signal;
+
+const abortSingleController = () => {
+  return { controller, signal };
+};
 
 export {
   calcTotal,
@@ -119,4 +127,5 @@ export {
   getPrevPath,
   fetcher,
   getOptions,
+  abortSingleController,
 };
