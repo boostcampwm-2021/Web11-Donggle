@@ -61,6 +61,7 @@ const MapComponent: React.FC<IProps> = ({
   updateSidebarContents,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
+  const isDragged = useRef(false);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [range, setRange] = useState(DEFAULT_RANGE);
 
@@ -142,17 +143,27 @@ const MapComponent: React.FC<IProps> = ({
       }
     };
 
+    const notifyDragend = () => {
+      isDragged.current = true;
+      setTimeout(() => {
+        isDragged.current = false;
+      });
+    };
+
+    kakao.maps.event.addListener(kakaoMap, 'dragend', notifyDragend);
     kakao.maps.event.addListener(kakaoMap, 'idle', updateRange);
     return () => {
+      kakao.maps.event.removeListener(kakaoMap, 'dragend', notifyDragend);
       kakao.maps.event.removeListener(kakaoMap, 'idle', updateRange);
     };
   }, []);
 
   useEffect(() => {
     if (!mapWrapper.current) return;
-
     const wrapper = mapWrapper.current;
+
     const onClick = async (rateData: IMapInfo) => {
+      if (isDragged.current) return;
       if (currentAddress.current === rateData.address) return;
       currentAddress.current = rateData.address;
       const sidebarContents: IAPIResult<IReviewContent[]> =
@@ -162,8 +173,13 @@ const MapComponent: React.FC<IProps> = ({
       updateSidebarContents(sidebarContents.result || []);
       openSidebar();
     };
-    const onMarkerClicked = createMarkerClickListener(onClick, closeSidebar);
 
+    const onOutsideClick = () => {
+      if (isDragged.current) return;
+      closeSidebar();
+    };
+
+    const onMarkerClicked = createMarkerClickListener(onClick, onOutsideClick);
     wrapper.addEventListener('click', onMarkerClicked);
     return () => wrapper.removeEventListener('click', onMarkerClicked);
   }, [openSidebar, closeSidebar, updateSidebarRate, updateSidebarContents]);
