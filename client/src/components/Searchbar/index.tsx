@@ -70,7 +70,7 @@ const Searchbar: React.FC<SearchbarProps> = ({
     if (dropdownTagRef.current !== null) {
       setDropdownTop(getTop(dropdownTagRef.current));
     }
-  }, []);
+  }, [dropdownTagRef.current]);
 
   const dropdownList = useMemo(() => {
     return results.map((result, i) => (
