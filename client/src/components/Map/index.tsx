@@ -48,6 +48,7 @@ const DEFAULT_RANGE: IRange = {
 interface IProps {
   openSidebar: () => void;
   closeSidebar: () => void;
+  currentAddress: React.MutableRefObject<string>;
   updateSidebarRate: (rateData: IMapInfo) => void;
   updateSidebarContents: (contentsData: IReviewContent[]) => void;
 }
@@ -55,11 +56,11 @@ interface IProps {
 const MapComponent: React.FC<IProps> = ({
   openSidebar,
   closeSidebar,
+  currentAddress,
   updateSidebarRate,
   updateSidebarContents,
 }) => {
   const mapWrapper = useRef<HTMLDivElement | null>(null);
-  const currentAddress = useRef<string>('');
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [range, setRange] = useState(DEFAULT_RANGE);
 
