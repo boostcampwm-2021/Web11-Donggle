@@ -59,7 +59,7 @@ const queryUserReviews = async (
   pageNum: number,
   itemNum: number,
   address: string | undefined = undefined,
-  period: number = 6,
+  period = 6,
 ): Promise<ReviewFindData[] | []> => {
   const sixMonth = new Date();
   sixMonth.setMonth(sixMonth.getMonth() - period);
@@ -72,17 +72,17 @@ const queryUserReviews = async (
     createdAt: 1,
   };
 
-  const pipeline = { oauth_email: { $eq: user_email }, createdAt: { $gte: sixMonth }};
-  address !== undefined && Object.assign(pipeline, { address: { $regex: RegExp(address, 'g') }});
+  const pipeline = {
+    oauth_email: { $eq: user_email },
+    createdAt: { $gte: sixMonth },
+  };
+  address !== undefined &&
+    Object.assign(pipeline, { address: { $regex: RegExp(address, 'g') } });
 
-  const reviewData = await ReviewModel.find(
-    pipeline,
-    fields,
-    {
-      skip: pageNum * itemNum,
-      limit: itemNum,
-    },
-  )
+  const reviewData = await ReviewModel.find(pipeline, fields, {
+    skip: pageNum * itemNum,
+    limit: itemNum,
+  })
     .sort({ createdAt: -1 })
     .lean();
 

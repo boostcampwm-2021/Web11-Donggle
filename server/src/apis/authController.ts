@@ -68,7 +68,7 @@ router.post('/signin', (async (
         getCookieOption(Number(configs.jwt_cookie_expire)),
       );
 
-      res.status(201).json(makeApiResponse(userInfo, '')); // 로그인 성공 
+      res.status(201).json(makeApiResponse(userInfo, '')); // 로그인 성공
     } else {
       userInfo = {
         ...userInfo,
@@ -114,7 +114,9 @@ router.post('/signup', (async (
     res.status(201).json(
       makeApiResponse(
         {
+          oauthEmail,
           address: address,
+          image,
         },
         '',
       ),
@@ -122,7 +124,11 @@ router.post('/signup', (async (
   } catch (error) {
     const err = error as Error;
     return next(
-      createCustomError('InternalServerError', err, '회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.'),
+      createCustomError(
+        'InternalServerError',
+        err,
+        '회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.',
+      ),
     );
   }
 }) as RequestHandler);
