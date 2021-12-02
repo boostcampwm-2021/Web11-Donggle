@@ -64,7 +64,7 @@ const Header: React.FC = () => {
                 onClick={onMapClick}
                 className={`${pathname === '/map' && 'link-selected'}`}
               >
-                <img src={logo} alt="logo" width="70px" />
+                <img src={logo} alt="logo" width="70px" height="70px" />
               </LinkBtn>
             </LogoWrapper>
             <MenuWrapper>
