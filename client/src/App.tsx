@@ -1,4 +1,3 @@
-import { GlobalStore } from '@stores/index';
 import GlobalStyle from '@styledComponents/GlobalStyle';
 import myTheme from '@styledComponents/theme';
 import Snackbar from '@components/Snackbar';
@@ -39,9 +38,9 @@ const App: React.FC = () => {
               component={() => <Redirect to={{ pathname: '/map' }} />}
             />
             <PublicRoute path="/map" component={MainPage} />
-            <Route path="/github/callback" render={() => <LoadingPage />} />
             <ProtectRoute path="/loading" component={LoadPage} />
             <PrivateRoute path="/profile" component={ProfilePage} />
+            <Route path="/github/callback" render={() => <LoadingPage />} />
             <Route render={() => <NotFoundPage />} />
           </Switch>
         </Suspense>
@@ -50,9 +49,9 @@ const App: React.FC = () => {
             path="/:back/write-review"
             component={ReviewSubmitModal}
           />
+          <ProtectRoute path="/map/signup" component={SignUpModal} />
           <Route path="/:back/ranking" render={() => <RankingModal />} />
           <Route path="/:back/signin" render={() => <SignInModal />} />
-          <ProtectRoute path="/map/signup" component={SignUpModal} />
           <Route
             path="/profile/update-address"
             render={() => <ProfileAddressModal />}
