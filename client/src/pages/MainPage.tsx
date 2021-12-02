@@ -51,7 +51,7 @@ const MainPage: React.FC = () => {
   const closeSidebar = useCallback(() => {
     currentAddress.current = '';
     setSidebarAnimation('close');
-    setTimeout(() => setSidebar(false), 500);
+    setTimeout(() => setSidebar(false), 100);
   }, []);
 
   const updateSidebarRate = useCallback((rateData: IMapInfo) => {
