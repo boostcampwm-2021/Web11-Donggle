@@ -11,7 +11,8 @@ const submitReview = (
   routeHistory: (path: string, state?: { [index: string]: string }) => void,
 ): void => {
   confirmAlert({
-    message: '후기를 제출하시겠습니까?',
+    title: '후기를 제출하시겠습니까?',
+    message: `3개월 내 동일 지역 후기 추가 제출은 불가합니다.`,
     buttons: [
       {
         label: '제출',
