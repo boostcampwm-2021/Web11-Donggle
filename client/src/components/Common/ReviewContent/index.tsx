@@ -46,7 +46,7 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
     }
     hasMoreRef.current = list.result && list.result.length > 0;
     setIsLoading(false);
-  }, [props, pageNumber]);
+  }, [props]);
 
   useEffect(() => {
     pageNumber.current = 1;
@@ -60,16 +60,16 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
 
       const ob = (observer.current = new IntersectionObserver(
         async (entries) => {
-          if (entries[0].isIntersecting && hasMoreRef) {
+          if (entries[0].isIntersecting && hasMoreRef.current) {
             await fetchData();
             pageNumber.current += 1;
           }
         },
-        { threshold: 1 },
+        { threshold: 0.9 },
       ));
-      if (node && hasMoreRef) ob.observe(node);
+      if (node && hasMoreRef.current) ob.observe(node);
     },
-    [hasMoreRef, props.contentsData],
+    [isLoading, props.contentsData],
   );
 
   return (

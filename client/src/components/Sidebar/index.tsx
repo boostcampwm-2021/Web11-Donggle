@@ -60,7 +60,7 @@ const Sidebar: React.FC<IProps> = (props: IProps) => {
 
   useEffect(() => {
     if (layout.current !== null) layout.current.scrollTo(0, 0);
-  }, [selectedMenu]);
+  }, [props.rateData.address, selectedMenu]);
 
   return (
     <Layout ref={layout} className={props.sidebarAnimation}>
