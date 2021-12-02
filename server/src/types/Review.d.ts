@@ -12,6 +12,7 @@ export interface ReviewInsertData {
   oauth_email: string;
   categories: CategoryRateType;
   hashtags?: string[];
+  createdAt?: Date;
 }
 
 export interface ReviewFindData extends ReviewInsertData {
