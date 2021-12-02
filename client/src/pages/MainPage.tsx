@@ -1,6 +1,6 @@
 import MapComponent from '@components/Map/index';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import Sidebar from '@components/Sidebar';
 
@@ -37,6 +37,7 @@ const DEFAULT_RATE_DATA: IMapInfo = {
 };
 
 const MainPage: React.FC = () => {
+  const currentAddress = useRef<string>('');
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [sidebarAnimation, setSidebarAnimation] = useState<string>('close');
   const [sidebarRate, setSidebarRate] = useState<IMapInfo>(DEFAULT_RATE_DATA);
@@ -48,6 +49,7 @@ const MainPage: React.FC = () => {
   }, []);
 
   const closeSidebar = useCallback(() => {
+    currentAddress.current = '';
     setSidebarAnimation('close');
     setTimeout(() => setSidebar(false), 500);
   }, []);
@@ -69,6 +71,7 @@ const MainPage: React.FC = () => {
         <MapComponent
           openSidebar={openSidebar}
           closeSidebar={closeSidebar}
+          currentAddress={currentAddress}
           updateSidebarRate={updateSidebarRate}
           updateSidebarContents={updateSidebarContents}
         ></MapComponent>
