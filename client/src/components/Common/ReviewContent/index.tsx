@@ -29,8 +29,8 @@ interface IProps {
 }
 
 const RegionContent: React.FC<IProps> = (props: IProps) => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const pageNumber = useRef<number>(1);
+  const hasMoreRef = useRef<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const observer = useRef<null | IntersectionObserver>(null);
 
@@ -39,18 +39,18 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
     const list: IAPIResult<IReviewContent[]> = await fetchContentData(
       props.address,
       props.selectedMenu,
-      pageNumber,
+      pageNumber.current,
     );
     if (list.result) {
       props.updateSidebarContents([...props.contentsData, ...list.result]);
     }
-    setHasMore(list.result.length > 0);
+    hasMoreRef.current = list.result && list.result.length > 0;
     setIsLoading(false);
   }, [props, pageNumber]);
 
   useEffect(() => {
-    setPageNumber(1);
-    setHasMore(true);
+    pageNumber.current = 1;
+    hasMoreRef.current = true;
   }, [props.address, props.selectedMenu]);
 
   const lastItemRef = useCallback(
@@ -60,16 +60,16 @@ const RegionContent: React.FC<IProps> = (props: IProps) => {
 
       const ob = (observer.current = new IntersectionObserver(
         async (entries) => {
-          if (entries[0].isIntersecting && hasMore) {
+          if (entries[0].isIntersecting && hasMoreRef) {
             await fetchData();
-            setPageNumber((prev) => prev + 1);
+            pageNumber.current += 1;
           }
         },
-        { threshold: 0.7 },
+        { threshold: 1 },
       ));
-      if (node && hasMore) ob.observe(node);
+      if (node && hasMoreRef) ob.observe(node);
     },
-    [isLoading, hasMore, fetchData],
+    [hasMoreRef, props.contentsData],
   );
 
   return (

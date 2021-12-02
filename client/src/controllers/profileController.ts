@@ -17,7 +17,7 @@ const uploadImage = async (
   formData.append('image', auth.image);
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/user/profile/image`,
-    getOptions('PATCH', formData, 'same-origin'),
+    getOptions('PATCH', formData, 'same-origin', false, null),
   );
   const result = await response.json();
   if (response.status === 200) {
@@ -56,13 +56,10 @@ const updateAddress =
   async (mapInfo: IMapInfo) => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/profile/address`,
-      {
-        ...getOptions('PATCH', {
-          oauth_email: auth.oauthEmail,
-          address: mapInfo.address,
-        }),
-        headers: { 'Content-type': 'application/json' },
-      },
+      getOptions('PATCH', {
+        oauth_email: auth.oauthEmail,
+        address: mapInfo.address,
+      }),
     );
     const result = await response.json();
     if (response.status === 200) {
