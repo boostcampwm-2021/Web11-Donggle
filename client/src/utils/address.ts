@@ -8,11 +8,11 @@ const regionToRange = (region: string[], scale: number): IRange => {
   };
 
   switch (true) {
-    case scale < 9:
+    case scale < 7:
       range.scope = 'small';
       range.address = `${big} ${medium}`;
       break;
-    case 9 <= scale && scale < 12:
+    case 7 <= scale && scale < 12:
       range.scope = 'medium';
       range.address = `${big}`;
       break;
