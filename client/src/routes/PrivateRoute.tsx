@@ -12,14 +12,18 @@ const PrivateRoute: React.FC<RouterProps> = ({
 
   const checkAll = () => {
     if (!auth.isLoggedin) {
-      //로그인을 하지 않은 상태 또는 로그인은 했지만 새로고침
+      /*
+      2021-12-02
+      문혜현
+      요청을 취소하는 명령어이지만 publicRoute의 useEffect에서 요청이 시작되기 바로 직전에 선언하니까 요청자체가 가지 않는 현상이 일어남
+      */
+      //abortSingleController().controller.abort();
       return (
         <Redirect
           to={{ pathname: '/loading', state: { isRoute: true, ...location } }}
         />
       );
     }
-    //로그인한 상태
     return <Component />;
   };
 

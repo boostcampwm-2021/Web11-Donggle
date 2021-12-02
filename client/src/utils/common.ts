@@ -73,16 +73,21 @@ const getOptions = <T>(
   fetchMethod: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'UPDATE',
   data: T,
   credential: 'omit' | 'same-origin' | 'include' = 'omit',
+  isStringify = true,
+  contentType: string | null | undefined = 'application/json',
+  signal?: AbortSignal,
 ): RequestInit => {
-  return {
+  const options: RequestInit = {
     method: fetchMethod,
     mode: 'cors',
     credentials: credential,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    body: (isStringify ? JSON.stringify(data) : data) as BodyInit,
+    signal: signal,
   };
+  if (contentType) {
+    options.headers = { 'Content-Type': contentType };
+  }
+  return options;
 };
 
 const fetcher = async <T>(
@@ -107,6 +112,12 @@ const fetcher = async <T>(
   }
   return json.result;
 };
+const controller = new AbortController();
+const signal = controller.signal;
+
+const abortSingleController = () => {
+  return { controller, signal };
+};
 
 export {
   calcTotal,
@@ -116,4 +127,5 @@ export {
   getPrevPath,
   fetcher,
   getOptions,
+  abortSingleController,
 };

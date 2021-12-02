@@ -21,8 +21,8 @@ import {
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import useHistoryRouter from '@hooks/useHistoryRouter';
-import { getOptions } from '@utils/common';
 import { useRecoilState } from 'recoil';
+import { signOut } from '@controllers/headerController';
 
 const Header: React.FC = () => {
   const routeHistory = useHistoryRouter();
@@ -37,18 +37,10 @@ const Header: React.FC = () => {
     routeHistory(`${pathname}/ranking`);
   }, [routeHistory, pathname]);
 
-  const onLogoutClick = useCallback(() => {
-    fetch(
-      `${process.env.REACT_APP_API_URL as string}/api/auth/signout`,
-      getOptions('GET', undefined, 'same-origin'),
-    );
-    setAuth({
-      isLoggedin: false,
-      oauthEmail: '',
-      address: '',
-      image: '',
-    });
-  }, [setAuth]);
+  const onSignOutClick = useCallback(() => {
+    signOut(setAuth);
+    routeHistory('/map');
+  }, []);
 
   const onWriteReviewClick = useCallback(() => {
     routeHistory(`${pathname}/write-review`);
@@ -72,7 +64,7 @@ const Header: React.FC = () => {
                 onClick={onMapClick}
                 className={`${pathname === '/map' && 'link-selected'}`}
               >
-                <img src={logo} alt="logo" width="70px" />
+                <img src={logo} alt="logo" width="70px" height="70px" />
               </LinkBtn>
             </LogoWrapper>
             <MenuWrapper>
@@ -104,9 +96,16 @@ const Header: React.FC = () => {
             </ReviewButton>
             {auth.isLoggedin ? (
               <>
-                <LogoutBtn onClick={onLogoutClick}>로그아웃</LogoutBtn>
+                <LogoutBtn onClick={onSignOutClick}>로그아웃</LogoutBtn>
                 <UserProfile onClick={onProfileClick}>
-                  <ProfileImage src={auth.image} alt="프로필사진" />
+                  <ProfileImage
+                    src={
+                      auth.image.length > 0
+                        ? auth.image
+                        : process.env.REACT_APP_IMAGE_DEFAULT_USER
+                    }
+                    alt="프로필사진"
+                  />
                 </UserProfile>
               </>
             ) : (

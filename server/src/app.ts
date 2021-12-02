@@ -1,4 +1,4 @@
-import config from 'configs/index';
+import configs from '@configs/index';
 import { expressLoader, logger, dbLoader } from '@loaders/index';
 
 import express from 'express';
@@ -16,10 +16,10 @@ const startServer = async () => {
   }
 
   http
-    .listen(config.port, () => {
+    .listen(configs.port, () => {
       logger.info(`
     ################################################
-    🛡️  Server listening on port: ${config.port} 🛡️
+    🛡️  Server listening on port: ${configs.port} 🛡️
     ################################################
     `);
     })

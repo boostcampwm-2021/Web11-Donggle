@@ -1,5 +1,13 @@
 .react-confirm-alert-body {
-  text-align: center;
+  text-align: center; 
+  font-size: 12px;
+  font-weight: bold;
+  color: #FA8072;
+}
+
+.react-confirm-alert-body > h1 {
+  font-size: 20px;
+  color: #666362;
 }
 
 .react-confirm-alert-button-group {

@@ -1,7 +1,7 @@
-import config from 'configs/index';
+import configs from '@configs/index';
 import { logger } from '@loaders/index';
-import apiController from 'apis/indexController';
-import adminController from 'apis/adminController';
+import apiController from '@apis/indexController';
+import adminController from '@apis/adminController';
 
 import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
@@ -18,11 +18,11 @@ const stream = {
   },
 };
 
-const morganFormat = config.node_env !== 'production' ? 'dev' : 'combined';
+const morganFormat = configs.node_env !== 'production' ? 'dev' : 'combined';
 
 export default ({ app }: { app: Application }) => {
   if (morganFormat == 'dev') {
-    const allowedOrigins = [`${config.react_url}`];
+    const allowedOrigins = [`${configs.react_url}`];
     const options: cors.CorsOptions = {
       origin: allowedOrigins,
       credentials: true,

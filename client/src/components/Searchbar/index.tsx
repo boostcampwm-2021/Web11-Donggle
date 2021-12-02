@@ -38,8 +38,10 @@ const Searchbar: React.FC<SearchbarProps> = ({
   const dropdownTagRef = useRef<HTMLDivElement>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
   const [spreadFlag, setSpreadFlag] = useState(new Date());
+  const [isFocus, setIsFocus] = useState(false);
 
   const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setIsFocus(true);
     input.current = e.target.value;
     setSpreadFlag(new Date());
   }, []);
@@ -70,6 +72,16 @@ const Searchbar: React.FC<SearchbarProps> = ({
     if (dropdownTagRef.current !== null) {
       setDropdownTop(getTop(dropdownTagRef.current));
     }
+  }, [dropdownTagRef.current]);
+
+  useEffect(() => {
+    const updateFocus = (e) => {
+      if (inputTagRef.current) {
+        setIsFocus(e.target === inputTagRef.current);
+      }
+    };
+    window.addEventListener('click', updateFocus);
+    return () => window.removeEventListener('click', updateFocus);
   }, []);
 
   const dropdownList = useMemo(() => {
@@ -92,12 +104,18 @@ const Searchbar: React.FC<SearchbarProps> = ({
   return (
     <div style={{ position: 'relative' }}>
       <SearchbarWrapper>
-        <SearchbarInput onChange={onInputChange} ref={inputTagRef} />
-        <SearchbarButton>
+        <label htmlFor="searchbar_input" />
+        <SearchbarInput
+          id="searchbar_input"
+          onChange={onInputChange}
+          ref={inputTagRef}
+          autoFocus
+        />
+        <SearchbarButton aria-label="Search bar button">
           <SearchImg />
         </SearchbarButton>
       </SearchbarWrapper>
-      {results.length > 0 && (
+      {isFocus && results.length > 0 && (
         <DropdownWrapper ref={dropdownTagRef} top={dropdownTop}>
           {dropdownList}
         </DropdownWrapper>

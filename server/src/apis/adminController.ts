@@ -1,5 +1,5 @@
 import { updateMapService, reviewService } from '@services/index';
-import config from 'configs/index';
+import configs from '@configs/index';
 import { AdminRequest } from '@myTypes/Admin';
 import { makeApiResponse } from '@utils/index';
 import createCustomError from '@utils/error';
@@ -11,7 +11,7 @@ router.post(
   '/map-data',
   (req: AdminRequest, res: Response, next: NextFunction) => {
     try {
-      if (req.body.password === config.admin_password) {
+      if (req.body.password === configs.admin_password) {
         void updateMapService.populateMapAndSimpleMap();
         res
           .status(201)
@@ -39,7 +39,7 @@ router.post('/review', (async (
   next: NextFunction,
 ) => {
   try {
-    if (req.body.password === config.admin_password) {
+    if (req.body.password === configs.admin_password) {
       if (req.body.type === 'Drop') {
         await reviewService.dropModel();
       }

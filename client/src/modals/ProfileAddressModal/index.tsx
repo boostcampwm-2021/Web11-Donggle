@@ -7,16 +7,20 @@ import useHistoryRouter from '@hooks/useHistoryRouter';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getPrevPath } from '@utils/common';
+import { IMapInfo } from '@myTypes/Map';
 
 const ProfileAddressModal: React.FC = () => {
   const routeHistory = useHistoryRouter();
   const { pathname } = useLocation();
   const [auth, setAuth] = useRecoilState(authState);
 
-  const onSubmitHandler = useCallback(() => {
-    updateAddress(auth, setAuth);
-    routeHistory(getPrevPath(pathname), {});
-  }, [auth, setAuth, routeHistory, pathname]);
+  const onSubmitHandler = useCallback(
+    (mapInfo: IMapInfo) => {
+      updateAddress(auth, setAuth)(mapInfo);
+      routeHistory(getPrevPath(pathname), {});
+    },
+    [auth, setAuth, routeHistory, pathname],
+  );
 
   const onCancelHandler = useCallback(
     () => routeHistory(getPrevPath(pathname)),

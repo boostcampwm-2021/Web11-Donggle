@@ -29,7 +29,7 @@ const reviewSchema = new Schema<Review>({
   },
   text: { type: String },
   oauth_email: { type: String, required: true, index: true },
-  createdAt: { type: Date, required: true, default: new Date() },
+  createdAt: { type: Date, required: true, default: () => new Date() },
 });
 
 const ReviewModel = model<Review>('Review', reviewSchema);

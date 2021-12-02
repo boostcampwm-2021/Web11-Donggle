@@ -23,7 +23,7 @@ const Marker = styled.img`
   user-select: none;
   pointer-events: none;
 `;
-Marker.defaultProps = { src: marker };
+Marker.defaultProps = { src: marker, alt: 'Marker' };
 const CenterMarker = React.memo(Marker);
 
 const SearchbarWrapper = React.memo(

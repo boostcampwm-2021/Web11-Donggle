@@ -30,6 +30,7 @@ const RateStarBaseDiv = styled.div`
   z-index: 0;
   padding: 0;
   position: absolute;
+  display: flex;
   left: 0px;
 `;
 
@@ -37,7 +38,7 @@ const RateStarFillDiv = styled.div<{ rate: number }>`
   color: gold;
   padding: 0;
   position: relative;
-  bottom: 2px;
+  top: 0px;
   z-index: 1;
   display: flex;
   width: ${(props) => props.rate * 20}%;

@@ -34,21 +34,23 @@ const RateCategoryUnit = styled.div`
   justify-content: space-between;
   position: relative;
   background-color: ${(props) => props.theme.colors.lightgrey};
-  border-radius: 5px;
+  border-radius: 999px;
   margin: 5px 0 15px 0;
 `;
 
-const RateCategoryBar = styled.span<{ rate: number }>`
+const RateCategoryBar = styled.div<{ rate: number }>`
+  position: absolute;
+  left: 0px;
   height: 6px;
   width: ${(props) => props.rate * 20}%;
   background-color: ${(props) => props.theme.colors.green};
-  border-radius: 3px;
+  border-radius: 999px;
   z-index: 1;
 `;
 
 const RateCategoryNum = styled(RateCategoryTitle)`
-  position: relative;
-  left: 25px;
+  position: absolute;
+  right: -25px;
 `;
 
 export {

@@ -51,6 +51,7 @@ const Profile: React.FC = () => {
                 ? auth.image
                 : process.env.REACT_APP_IMAGE_DEFAULT_USER
             }
+            alt="프로필사진"
           />
           <div>
             <input
