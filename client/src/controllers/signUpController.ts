@@ -2,7 +2,7 @@ import { SetterOrUpdater } from 'recoil';
 
 import { IAPIResult, ILocationBase } from '@myTypes/Common';
 import { showSnackbar } from '@utils/common';
-import { ISignUp } from '@myTypes/User';
+import { IUser } from '@myTypes/User';
 import { IMapInfo } from '@myTypes/Map';
 import { IAuthInfo } from '@myTypes/User';
 import { getOptions } from '@utils/common';
@@ -12,7 +12,7 @@ const signUpAdress = async (
   mapInfo: IMapInfo,
   auth: IAuthInfo,
   location: ILocationBase,
-): Promise<[number, IAPIResult<ISignUp | Record<string, never>>]> => {
+): Promise<[number, IAPIResult<IUser | Record<string, never>>]> => {
   const response = await fetch(
     `${process.env.REACT_APP_API_URL}/api/auth/signup`,
     getOptions(
@@ -28,7 +28,7 @@ const signUpAdress = async (
     ),
   );
 
-  const userInfo: IAPIResult<ISignUp | Record<string, never>> =
+  const userInfo: IAPIResult<IUser | Record<string, never>> =
     await response.json();
 
   return [response.status, userInfo];
@@ -36,19 +36,20 @@ const signUpAdress = async (
 
 const isSignUp = (
   status: number,
-  userInfo: IAPIResult<ISignUp | Record<string, never>>,
+  userInfo: IAPIResult<IUser | Record<string, never>>,
   auth: IAuthInfo,
   setAuth: SetterOrUpdater<IAuthInfo>,
   routeHistory: UseRouteHistoryType,
 ): void => {
-  if (status != 201) {
+  if (status !== 201) {
     showSnackbar(userInfo.message, true);
     routeHistory('/map/signin');
   } else {
     setAuth({
-      ...auth,
       isLoggedin: true,
+      oauthEmail: userInfo.result.oauthEmail,
       address: userInfo.result.address,
+      image: userInfo.result.image,
     });
     routeHistory('/map');
   }
