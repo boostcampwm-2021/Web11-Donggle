@@ -86,7 +86,7 @@ router.post('/', checkToken, (async (
           new Error('비정상적인 후기 정보가 입력되었습니다.'),
         ),
       );
-    const recentUserReview = await reviewService.queryUserReviews(insertData.oauth_email, 1, 1, insertData.address, 3);
+    const recentUserReview = await reviewService.queryUserReviews(insertData.oauth_email, 0, 0, insertData.address, 3);
     if (recentUserReview.length >= 1) return next(createCustomError('BadRequest', new Error('3개월 이내 동일 지역 후기를 남길 수 없습니다.'), '3개월 이내 동일 지역 후기를 남길 수 없습니다.'));
 
     await reviewService.insertReview(insertData);
