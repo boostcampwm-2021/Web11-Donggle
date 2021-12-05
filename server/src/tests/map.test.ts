@@ -6,10 +6,11 @@ import { expressLoader } from '@loaders/index';
 import request from 'supertest';
 
 let app;
+let http;
 beforeAll(async() => {
   const url = process.env.MONGO_HOST || '';
   app = express();
-  const http = _http.createServer(app);
+  http = _http.createServer(app);
   expressLoader({ app });
   http
     .listen(process.env.PORT, () => {
@@ -23,7 +24,7 @@ beforeAll(async() => {
       console.error(err);
       process.exit(1);
     });
-  // await mongoose.connect(url);
+  await mongoose.connect(url);
 });
 
 test('GET /api/map/polygons 요청 시 200 반환', async() => {
@@ -55,4 +56,9 @@ test('GET /api/map/address 요청 시 200 반환', async() => {
   const response = await request(app).get(url);
 
   expect(response.statusCode).toBe(200);
+});
+
+afterAll(async () => {
+  await http.close();
+  await mongoose.disconnect();
 });
