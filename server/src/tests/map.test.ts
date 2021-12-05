@@ -23,7 +23,7 @@ beforeAll(async() => {
       console.error(err);
       process.exit(1);
     });
-  await mongoose.connect(url);
+  // await mongoose.connect(url);
 });
 
 test('GET /api/map/polygons 요청 시 200 반환', async() => {
@@ -31,8 +31,28 @@ test('GET /api/map/polygons 요청 시 200 반환', async() => {
   const scope = "medium";
   const url = `/api/map/polygons?address=${address}&scope=${scope}`;
   const response = await request(app).get(url);
-  // console.log(response);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.body.result.length).toBe(5);
+});
+
+
+test('GET /api/map/rates 요청 시 200 반환', async() => {
+  const address = encodeURI("대전광역시");
+  const scope = "medium";
+  const url = `/api/map/rates?address=${address}&scope=${scope}`;
+  const response = await request(app).get(url);
+  console.log(response.body);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.body.result.length).toBe(5);
+});
+
+test('GET /api/map/address 요청 시 200 반환', async() => {
+  const keyword = encodeURI("대전광역시");
+  const onlyDong = false;
+  const url = `/api/map/address?keyword=${keyword}${onlyDong ? `&onlyDong=${onlyDong}` : ''}`;
+  const response = await request(app).get(url);
 
   expect(response.statusCode).toBe(200);
 });
-
