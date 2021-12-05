@@ -69,10 +69,12 @@ const Searchbar: React.FC<SearchbarProps> = ({
   }, [valueState]);
 
   useEffect(() => {
-    if (dropdownTagRef.current !== null) {
-      setDropdownTop(getTop(dropdownTagRef.current));
+    if (inputTagRef.current !== null) {
+      setDropdownTop(
+        getTop(inputTagRef.current) + inputTagRef.current.offsetHeight,
+      );
     }
-  }, [dropdownTagRef.current]);
+  }, []);
 
   useEffect(() => {
     const updateFocus = (e) => {
