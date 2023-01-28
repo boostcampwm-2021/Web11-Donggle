@@ -2,7 +2,12 @@
 
 ## 목차
 
+- [목차](#목차)
 - [🗺 프로젝트 소개](#-프로젝트-소개)
+  - [데모](#데모)
+  - [프로젝트 시작 계기](#프로젝트-시작-계기)
+  - [프로젝트 내용](#프로젝트-내용)
+  - [기술적 도전](#기술적-도전)
 - [🛠 기술 스택](#-기술-스택)
 - [🗿 프로젝트 멤버](#-프로젝트-멤버)
 - [📚 위키](#-위키)
@@ -11,9 +16,17 @@
 
 ## 🗺 프로젝트 소개
 
-### 배포링크
+<div align="center"><img width="75%" alt="image" src="https://user-images.githubusercontent.com/55529617/215254756-7548067c-54fc-4b1f-858a-531c51202030.png"></div>
 
-- https://boost.boost-donggle.kro.kr/
+내 동네를 평가하고 지도에서 한눈에 다른 동네의 평점과 후기를 볼 수 있는 서비스 입니다.
+
+프로젝트 및 기술, 협업 관련 자세한 내용은 [Donggle Notion](https://cooperative-decision-4e6.notion.site/d2eb2062764c4e45a229af84bae35515)에서 확인하실 수 있습니다.
+
+
+### 데모
+
+- [데모영상](https://www.youtube.com/watch?v=GMe61zuP8po)
+- https://boost.boost-donggle.kro.kr/ (미운영)
 
 ### 프로젝트 시작 계기
 
