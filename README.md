@@ -1,3 +1,7 @@
+<div align="right">
+  <b>한국어</b> | <a href="https://github.com/boostcampwm-2021/Web11-Donggle/blob/main/README_en.md">English</a>
+</div>
+
 <div align="center"><img src="https://user-images.githubusercontent.com/31230442/139629313-9558b15d-ee66-44d8-a5ab-20e07a0d332c.png" width="200px" alt="동글" /></div>
 
 ## 목차
@@ -13,6 +17,8 @@
 - [📚 위키](#-위키)
 
 <br/>
+
+
 
 ## 🗺 프로젝트 소개
 
